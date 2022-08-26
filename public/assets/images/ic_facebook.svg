@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="41px" height="40px" viewBox="0 0 41 40" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 55.2 (78181) - https://sketchapp.com -->
+    <title>ic_facebook</title>
+    <desc>Created with Sketch.</desc>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="02_Login" transform="translate(-730.000000, -563.000000)">
+            <g id="Group-6" transform="translate(475.000000, 80.000000)">
+                <g id="Group" transform="translate(195.000000, 483.000000)">
+                    <g id="Group-3-Copy" transform="translate(60.000000, 0.000000)">
+                        <rect id="Rectangle-4" fill="#3D64FF" x="0.177941176" y="0" width="40" height="40" rx="20"></rect>
+                        <g id="Group-3" transform="translate(16.000000, 10.756250)" fill="#FFFFFF">
+                            <g id="Group-4">
+                                <path d="M6.33677174,6.14749312 L6.33677174,4.49922572 C6.33677174,3.70880474 6.86033425,3.51952613 7.23929765,3.51952613 L9.54435371,3.51952613 L9.54435371,1.24344979e-14 L6.37048445,1.24344979e-14 C2.83999154,1.24344979e-14 2.04916437,2.60603343 2.04916437,4.29898033 L2.04916437,6.14749312 L0,6.14749312 L0,8.63086101 L0,10.2571948 L2.07150413,10.2571948 L2.07150413,20.5253565 L6.18120584,20.5253565 L6.18120584,10.2571948 L9.22144278,10.2571948 L9.3550751,8.64223398 L9.6,6.14749312 L6.33677174,6.14749312 Z" id="Fill-1"></path>
+                            </g>
+                        </g>
+                    </g>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

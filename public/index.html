@@ -40,6 +40,16 @@
   <script src="assets/js/vendor.min.js"></script>
   <script src="https://unpkg.com/v-tooltip"></script>
 
+  <script src="https://cdn.onesignal.com/sdks/OneSignalSDK.js" async=""></script>
+  <script>
+    window.OneSignal = window.OneSignal || [];
+    OneSignal.push(function () {
+      OneSignal.init({
+        appId: "92a6fc17-75ce-4b77-b397-bd33dbcf7c67",
+      });
+    });
+  </script>
+
 </body>
 
 </html>

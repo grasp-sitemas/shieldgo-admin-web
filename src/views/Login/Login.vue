@@ -57,6 +57,7 @@ import Spinner from '../../components/layout/Spinner'
 import Toast from '../../components/layout/Toast'
 import ModalForgotPassword from './Modal/ModalForgotPassword'
 import ModalNewPassword from './Modal/ModalNewPassword'
+import OneSignalVue from 'onesignal-vue'
 
 export default {
     name: 'Home',
@@ -83,10 +84,12 @@ export default {
         }
     },
     methods: Controller.methods,
+    beforeCreate() {
+        this.$OneSignal.showSlidedownPrompt()
+    },
     created() {
         Controller.init(this)
-
-        // this.data.email = 'development.grasp@gmail.com'
+        // this.data.email = 'dev@grasp.com.br'
         // this.data.password = '12345678'
     },
 }

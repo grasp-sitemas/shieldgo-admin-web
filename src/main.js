@@ -11,6 +11,7 @@ import crono from 'vue-crono'
 import JwPagination from 'jw-vue-pagination'
 import Multiselect from 'vue-multiselect'
 import VTooltip from 'v-tooltip'
+import OneSignalVue from 'onesignal-vue'
 
 Vue.use(VTooltip)
 Vue.use(crono)
@@ -20,6 +21,7 @@ Vue.use(BootstrapVue)
 Vue.use(VueTheMask)
 Vue.use(VueSimpleAlert)
 Vue.use(money, { precision: 2 })
+Vue.use(OneSignalVue)
 Vue.use(VueGoogleMaps, {
   load: {
     key: 'AIzaSyAK0UC-aEr68h1RX7BT6jvM1dQXZHQMq8g',
@@ -32,5 +34,8 @@ Vue.config.silent = true
 new Vue({
   router,
   i18n,
-  render: h => h(App)
+  render: h => h(App),
+  beforeMount() {
+    this.$OneSignal.init({ appId: '92a6fc17-75ce-4b77-b397-bd33dbcf7c67' });
+  }
 }).$mount('#app')

@@ -29,6 +29,7 @@
     "jspdf": "^2.5.1",
     "jw-vue-pagination": "^1.0.3",
     "mdbvue": "^6.7.1",
+    "onesignal-vue": "^1.0.2",
     "qrcode.vue": "^1.7.0",
     "v-money": "^0.8.1",
     "v-tooltip": "^2.0.3",

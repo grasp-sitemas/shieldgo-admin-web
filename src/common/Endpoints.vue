@@ -1,6 +1,6 @@
 <script>
-// const domain = 'https://api-gateway-shield.herokuapp.com'
-const domain = 'http://localhost:3000'
+const domain = 'https://api-gateway-shield.herokuapp.com'
+// const domain = 'http://localhost:3000'
 
 export default {
     domain: domain,

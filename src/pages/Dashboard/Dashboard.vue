@@ -2,7 +2,7 @@
     <div>
         <!-- BEGIN breadcrumb -->
         <ol class="breadcrumb float-xl-end">
-            <li class="breadcrumb-item active">
+            <li class="breadcrumb-item">
                 <a href="javascript:;">{{ $t('str.breadcrumb.dashboard') }}</a>
             </li>
         </ol>

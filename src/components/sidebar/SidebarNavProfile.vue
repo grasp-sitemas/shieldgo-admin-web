@@ -19,13 +19,13 @@
             <div class="menu-item pt-5px">
                 <a href="javascript:;" class="menu-link">
                     <div class="menu-icon"><i class="fa fa-cog"></i></div>
-                    <div class="menu-text">Configurações</div>
+                    <div class="menu-text">{{ $t('str.sidebar.menu.settings') }}</div>
                 </a>
             </div>
             <div class="menu-item">
                 <a href="javascript:;" class="menu-link">
                     <div class="menu-icon"><i class="fa fa-pencil-alt"></i></div>
-                    <div class="menu-text">Dados cadastrais</div>
+                    <div class="menu-text">{{ $t('str.sidebar.menu.register.data') }}</div>
                 </a>
             </div>
             <!-- <div class="menu-item pb-5px">

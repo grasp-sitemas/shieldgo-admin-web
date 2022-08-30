@@ -4,7 +4,7 @@
         <div class="menu-search mb-n3" v-if="appOptions.appSidebarSearch">
             <input type="text" v-on:keyup="handleSidebarFilter" class="form-control" placeholder="Sidebar menu filter..." />
         </div>
-        <div class="menu-header">Navigation</div>
+        <div class="menu-header">{{ $t('str.sidebar.menu.navigation.title') }}</div>
         <template v-for="menu in menus">
             <sidebar-nav-list
                 ref="sidebarNavList"

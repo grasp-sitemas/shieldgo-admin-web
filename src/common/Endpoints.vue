@@ -1,6 +1,7 @@
 <script>
 const domain = 'https://api-gateway-shield.herokuapp.com'
 // const domain = 'http://localhost:3000'
+const viaCepDomain = 'https://viacep.com.br/ws/'
 
 export default {
     domain: domain,
@@ -24,6 +25,7 @@ export default {
     },
     companies: {
         company: `${domain}/api/company/v1/`,
+        formData: `${domain}/api/company/formdata/v1/`,
         filter: `${domain}/api/company/filter/v1/`,
         delete: `${domain}/api/company/delete/v1/`,
     },
@@ -46,7 +48,7 @@ export default {
         delete: `${domain}/api/collects/delete/v1/`,
     },
     cep: {
-        find: `https://viacep.com.br/ws/`,
+        find: `${viaCepDomain}`,
     },
     helpers: {
         companyType: `${domain}/api/helpers/data/company/types/v1/`,

@@ -6,6 +6,7 @@ import Companies from '../pages/Company/Company/Company.vue'
 import Dashboard from '../pages/Dashboard/Dashboard.vue'
 import Schedule from '../pages/Schedule/Schedule.vue'
 import Login from '../pages/Login/Login.vue'
+import PageNotFound from '../pages/PageNotFound/PageNotFound.vue'
 
 Vue.use(VueSession)
 
@@ -24,6 +25,8 @@ const checkSession = () => {
 
 const routes = [
     { path: '/', component: Login },
+    { path: '/404', component: PageNotFound },
+    { path: '*', redirect: '/404' },
     {
         path: '/dashboard',
         name: 'dashboard',

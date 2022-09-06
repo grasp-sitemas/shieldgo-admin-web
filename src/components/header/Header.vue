@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div :key="valuekey">
         <!-- BEGIN #header -->
         <div id="header" class="app-header" v-bind:class="{ 'app-header-inverse': appOptions.appHeaderInverse }">
             <!-- BEGIN navbar-header -->
@@ -51,19 +51,25 @@
                 </b-nav-item-dropdown> -->
                 <b-nav-item-dropdown class="navbar-item" toggle-class="navbar-link dropdown-toggle" no-caret v-if="appOptions.appHeaderLanguageBar">
                     <template slot="button-content">
-                        <span class="flag-icon flag-icon-br me-1" title="br"></span>
-                        <span class="name d-none d-sm-inline me-1">{{ $t('str.language.br') }}</span>
+                        <span v-if="this.$i18n.locale === 'pt'">
+                            <span class="flag-icon flag-icon-br me-1" title="br"></span>
+                            <span class="name d-none d-sm-inline me-1">{{ $t('str.language.br') }}</span>
+                        </span>
+                        <span v-else-if="this.$i18n.locale === 'en'">
+                            <span class="flag-icon flag-icon-us me-1" title="usa"></span>
+                            <span class="name d-none d-sm-inline me-1">{{ $t('str.language.usa') }}</span>
+                        </span>
                         <b class="caret"></b>
                     </template>
-                    <b-dropdown-item><span class="flag-icon flag-icon-br"></span> {{ $t('str.language.portuguese') }}</b-dropdown-item>
-                    <b-dropdown-item><span class="flag-icon flag-icon-us"></span> {{ $t('str.language.english') }}</b-dropdown-item>
+                    <b-dropdown-item @click="changeLanguage('pt')"><span class="flag-icon flag-icon-br"></span> {{ $t('str.language.portuguese') }}</b-dropdown-item>
+                    <b-dropdown-item @click="changeLanguage('en')"><span class="flag-icon flag-icon-us"></span> {{ $t('str.language.english') }}</b-dropdown-item>
                 </b-nav-item-dropdown>
                 <b-nav-item-dropdown right menu-class="me-1" class="navbar-item navbar-user dropdown" toggle-class="navbar-link dropdown-toggle d-flex align-items-center" no-caret>
                     <template slot="button-content">
                         <div class="image image-icon bg-gray-800 text-gray-600">
                             <i class="fa fa-user"></i>
                         </div>
-                        <span class="d-none d-md-inline">Thiago Simon</span>
+                        <span class="d-none d-md-inline">{{ `${this.user?.firstName} ${this.user?.lastName}` }}</span>
                         <b class="caret"></b>
                     </template>
                     <a href="javascript:;" class="dropdown-item">{{ $t('str.header.menu.edit.profile') }}</a>
@@ -92,6 +98,7 @@
 
 <script>
 import AppOptions from '../../config/AppOptions.vue'
+import Controller from './CrtHeader.vue'
 import HeaderMegaMenu from './HeaderMegaMenu.vue'
 
 export default {
@@ -102,31 +109,17 @@ export default {
     data() {
         return {
             appOptions: AppOptions,
+            user: null,
+            valuekey: 0,
         }
     },
-    methods: {
-        logout() {
-            this.$session.destroy()
-            this.$router.push('/')
-        },
-        toggleSidebarMobile() {
-            this.appOptions.appSidebarMobileToggled = !this.appOptions.appSidebarMobileToggled
-        },
-        toggleSidebarEnd() {
-            this.appOptions.appSidebarEndToggled = !this.appOptions.appSidebarEndToggled
-        },
-        toggleSidebarEndMobile() {
-            this.appOptions.appSidebarEndMobileToggled = !this.appOptions.appSidebarEndMobileToggled
-        },
-        toggleTopMenuMobile() {
-            this.appOptions.appTopMenuMobileToggled = !this.appOptions.appTopMenuMobileToggled
-        },
-        toggleHeaderMegaMenuMobile() {
-            this.appOptions.appHeaderMegaMenuMobileToggled = !this.appOptions.appHeaderMegaMenuMobileToggled
-        },
-        checkForm: function (e) {
-            e.preventDefault()
-            this.$router.push({ path: '/extra/search' })
+    methods: Controller.methods,
+    mounted() {
+        Controller.init(this)
+    },
+    computed: {
+        getLanguage: function () {
+            return this.$session.get('user')?.language === 'en' ? 'en' : 'pt'
         },
     },
 }

@@ -19,21 +19,10 @@ export default {
         payload.domain = Endpoints.domain
     },
     methods: {
-        onChangeDocument() {
-            this.data.document = ''
-        },
-        hasUnderline() {
-            return this.data.address.cep.indexOf('_') > -1
-        },
         inputCep() {
-            this.removeRequiredField('cep')
             if (this.data.address.cep.length === 9) this.loadInfosByCEP()
         },
         loadInfosByCEP() {
-            if (this.hasUnderline() || this.data.address.cep.length < 9) {
-                return
-            }
-
             Request.do(
                 this,
                 'get',
@@ -58,10 +47,11 @@ export default {
             )
         },
         clearForm() {
+            this.errors = []
             this.data = {
                 name: '',
                 fantasyName: '',
-                DocumentType: '',
+                personType: '',
                 document: '',
                 email: '',
                 primaryPhone: '',
@@ -81,6 +71,7 @@ export default {
                 type: 'ACCOUNT',
                 status: 'ACTIVE',
             }
+            this.isLoading = false
         },
         save() {
             const data = JSON.parse(JSON.stringify(this.data))
@@ -101,7 +92,7 @@ export default {
                             this.data = response.result
                             this.valuekey += 1
                             this.$registerEvent.$emit('refreshList')
-                            console.log(JSON.stringify(response.result))
+                            console.log('_id', response.result._id)
                         }
                     },
                     error => {
@@ -109,6 +100,7 @@ export default {
                     },
                 )
             } catch (error) {
+                this.isLoading = false
                 console.log(error)
             }
         },
@@ -157,7 +149,7 @@ export default {
         },
         removeRequiredField(field) {
             if (field === 'allAddress') {
-                this.errors = this.errors.filter(item => item !== 'address' && item !== 'number' && item !== 'neighborhood' && item !== 'city' && item !== 'state')
+                this.errors = this.errors.filter(item => item !== 'cep' && item !== 'address' && item !== 'number' && item !== 'neighborhood' && item !== 'city' && item !== 'state')
             } else {
                 this.errors = this.errors.filter(item => item !== field)
             }
@@ -166,7 +158,6 @@ export default {
             if (!this.data.name || this.data.name === '') {
                 this.errors.push('name')
             }
-
             if (!this.data.address.cep && this.data.address.cep === '') {
                 this.errors.push('cep')
             }
@@ -186,15 +177,20 @@ export default {
                 this.errors.push('state')
             }
 
-            if (!this.errors || this.errors.length === 0)
+            if (!this.errors || this.errors.length === 0) {
+                this.isLoading = true
+
                 this.loadGeolocation(
-                    data => {
-                        this.save(data)
+                    async data => {
+                        await this.save(data)
+                        this.isLoading = false
                     },
                     error => {
+                        this.isLoading = false
                         console.log(error)
                     },
                 )
+            }
         },
         loadGeolocation: function (callbackSuccess, callbackError) {
             let state = this
@@ -224,6 +220,7 @@ export default {
             )
         },
         selectItem: function (item) {
+            this.errors = []
             this.data = item
             document.body.scrollTop = 0 // For Safari
             document.documentElement.scrollTop = 0 // For Chrome, Firefox, IE and Opera

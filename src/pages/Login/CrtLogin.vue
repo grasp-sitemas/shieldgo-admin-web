@@ -5,7 +5,9 @@ import Request from '../../common/Request.vue'
 export default {
     init: payload => {
         window.location.href = '?#'
-        payload.data.email = payload.$route.query.inveted
+        // payload.data.email = payload.$route.query.inveted
+        const browserLanguage = navigator.language === 'en-US' ? 'en' : navigator.language === 'pt-BR' ? 'pt' : 'pt'
+        payload.$i18n.locale = payload.$session.get('user')?.language || payload.$session.get('language') || browserLanguage || 'pt'
     },
     methods: {
         signIn: function () {
@@ -13,12 +15,11 @@ export default {
             this.messageIdToast = null
             Request.do(
                 this,
-                'POST',
+                'post',
                 Request.getDefaultHeader(this),
                 this.data,
                 `${Endpoints.systemUsers.login}`,
                 (userResponse, fullResponse) => {
-                    //SUCCESS CALLBACK
                     if (userResponse.status === 200 && userResponse.result.status === 'ACTIVE') {
                         this.$session.destroy()
                         this.$session.start()
@@ -29,25 +30,17 @@ export default {
                         if (userResponse.result.companyUser.subtype === 'ADMIN_MASTER' || userResponse.result.companyUser.subtype === 'CLIENT') {
                             this.$router.push({ path: '/dashboard' })
                             window.location.href = '?#/dashboard'
+
+                            this.$i18n.locale = userResponse.result.language
                             location.reload()
                         } else {
                             this.$router.push({ path: '/' })
                             window.location.href = '?#/'
                             location.reload()
                         }
-                        // } else if (userResponse.result.companyUser.subtype === 'ADMIN') {
-                        //     this.$router.push({ path: '/collects-tricycle' })
-                        //     window.location.href = '?#/collects-tricycle'
-                        //     location.reload()
-                        // }
-                        // } else {
-                        // this.titleToast = this.$t('str.msg.alert')
-                        // this.messageToast = this.$t('str.msg.user.archived.logged')
-                        // this.messageIdToast = ''
                     }
                 },
                 error => {
-                    //ERROR CALLBACK
                     let res = error.response
                     if (res && res.status == 500) {
                         this.titleToast = 'Aviso'
@@ -87,12 +80,9 @@ export default {
                 this.data,
                 `${Endpoints.systemUsers.gencode}`,
                 userResponse => {
-                    //SUCCESS CALLBACK
                     this.data.systemUser = userResponse.result.systemUser
-                    // $('#modalEsqueciSenha').modal('show')
                 },
                 error => {
-                    //ERROR CALLBACK
                     let res = error.response
                     console.log(!res.status == 200)
                     if (res && res.status != 200) {
@@ -130,16 +120,12 @@ export default {
                     `${Endpoints.systemUsers.checkCode}`,
                     userResponse => {
                         if (userResponse.status === 200) {
-                            //SUCCESS CALLBACK
                             this.$session.destroy()
                             this.$session.start()
                             this.$session.set('code', this.data.code)
-                            // $('.modal').modal('hide')
-                            // $('#modalReset').modal('show')
                         }
                     },
                     error => {
-                        //ERROR CALLBACK
                         let res = error.response
                         if (res && res.status == 500) {
                             this.errors = []
@@ -171,16 +157,12 @@ export default {
                     params,
                     `${Endpoints.systemUsers.resetPassNotLog}`,
                     userResponse => {
-                        //SUCCESS CALLBACK
                         if (userResponse.status === 200) {
                             this.titleToast = 'Aviso'
                             this.messageToast = this.$t('string.login.reset.password.success')
-                            // $('.modal').modal('hide')
-                            // $('#modalReset').modal('show')
                         }
                     },
                     error => {
-                        //ERROR CALLBACK
                         let res = error.response
                         if (res && res.status == 500) {
                             this.errors = []

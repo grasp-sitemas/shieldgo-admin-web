@@ -1,5 +1,5 @@
 <template>
-    <div :key="valuekey">
+    <div id="wrapper" :key="valuekey">
         <ol class="breadcrumb float-xl-end">
             <li class="breadcrumb-item">
                 <a href="javascript:;">{{ $t('str.breadcrumb.companies') }}</a>
@@ -42,54 +42,48 @@
                         </div>
                         <div class="col-md-4 mb-3">
                             <label class="form-label" for="typePersonField">{{ $t('str.register.company.person.type.field') }}</label>
-                            <select class="form-select" @change="onChangeDocument" v-model="data.documentType">
+                            <select class="form-select" v-model="data.personType">
                                 <option value="" selected>{{ $t('str.register.select.placeholder') }}</option>
-                                <option value="CPF">{{ $t('str.person.type.individual') }}</option>
-                                <option value="CNPJ">{{ $t('str.person.type.legal') }}</option>
+                                <option value="PHYSICAL">{{ $t('str.person.type.individual') }}</option>
+                                <option value="LEGAL">{{ $t('str.person.type.legal') }}</option>
                             </select>
                         </div>
-                        <!-- {{ data.documentType + ' ' + data.document }} -->
-                        <div v-if="data.documentType === 'CPF'" class="col-md-4 mb-3">
-                            <label class="form-label" for="cpfField">{{ $t('str.document.type.cpf') }}</label>
-                            <input v-model="data.document" class="form-control" type="text" id="cpfField" :placeholder="$t('str.register.company.document.placeholder')" />
-                        </div>
-
-                        <div v-if="data.documentType === 'CNPJ'" class="col-md-4 mb-3">
-                            <label class="form-label" for="cnpjField">{{ $t('str.document.type.cnpj') }}</label>
-                            <masked-input
+                        <div class="col-md-4 mb-3">
+                            <label class="form-label" for="docField">{{ $t('str.register.company.document.field') }}</label>
+                            <input
+                                id="docField"
+                                type="tel"
+                                v-mask="['###.###.###-##', '##.###.###/####-##']"
                                 v-model="data.document"
-                                pattern="11\.111\.111\/1111\-11"
                                 class="form-control"
-                                type="text"
-                                id="cnpjField"
                                 :placeholder="$t('str.register.company.document.placeholder')"
                             />
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-md-4 mb-3">
-                            <label class="form-label" for="emailField">{{ $t('str.register.company.email.field') }}</label>
-                            <input class="form-control" v-model="data.email" type="text" id="emailField" :placeholder="$t('str.register.company.email.placeholder')" />
+                            <label class="form-label">{{ $t('str.register.company.email.field') }}</label>
+                            <input class="form-control" v-model="data.email" type="text" :placeholder="$t('str.register.company.email.placeholder')" />
                         </div>
                         <div class="col-md-4 mb-3">
                             <label class="form-label" for="primaryPhoneField">{{ $t('str.register.company.primaryPhone.field') }}</label>
-                            <masked-input
-                                v-model="data.primaryPhone"
-                                pattern="\(11\) 11111\-1111"
-                                class="form-control"
-                                type="text"
+                            <input
                                 id="primaryPhoneField"
+                                type="tel"
+                                v-mask="['(##) ####-####', '(##) #####-####']"
+                                v-model="data.primaryPhone"
+                                class="form-control"
                                 :placeholder="$t('str.register.company.primaryPhone.placeholder')"
                             />
                         </div>
                         <div class="col-md-4 mb-3">
                             <label class="form-label" for="secondaryPhoneField">{{ $t('str.register.company.secondaryPhone.field') }}</label>
-                            <masked-input
-                                v-model="data.secondaryPhone"
-                                pattern="\(11\) 11111\-1111"
-                                class="form-control"
-                                type="text"
+                            <input
                                 id="secondaryPhoneField"
+                                type="tel"
+                                v-mask="['(##) ####-####', '(##) #####-####']"
+                                v-model="data.secondaryPhone"
+                                class="form-control"
                                 :placeholder="$t('str.register.company.secondaryPhone.placeholder')"
                             />
                         </div>
@@ -97,32 +91,31 @@
                     <div class="row">
                         <div class="col-md-4 mb-3">
                             <label class="form-label" for="cepField">{{ $t('str.register.company.cep.field') }}</label>
-                            <masked-input
+                            <input
+                                type="tel"
+                                v-mask="'#####-###'"
                                 @input="inputCep()"
-                                v-model="data.address.cep"
+                                @focus="removeRequiredField('allAddress')"
                                 v-bind:class="checkRequiredField('cep') ? 'is-invalid' : ''"
-                                pattern="11111-111"
+                                v-model="data.address.cep"
                                 class="form-control"
-                                type="text"
-                                id="cepField"
                                 :placeholder="$t('str.register.company.cep.placeholder')"
                             />
                             <div class="invalid-feedback">{{ $t('str.register.company.cep.required') }}</div>
                         </div>
-                        <div v-if="data.address.cep.length === 9 && !hasUnderline()" class="col-md-4 mb-3">
-                            <label class="form-label" for="streetField">{{ $t('str.register.company.street.field') }}</label>
+                        <div v-if="data.address.cep.length === 9" class="col-md-4 mb-3">
+                            <label class="form-label" for="addressField">{{ $t('str.register.company.address.field') }}</label>
                             <input
                                 v-model="data.address.address"
                                 v-bind:class="checkRequiredField('address') ? 'is-invalid' : ''"
                                 @focus="removeRequiredField('address')"
                                 class="form-control"
                                 type="text"
-                                id="streetField"
-                                :placeholder="$t('str.register.company.street.placeholder')"
+                                id="addressField"
                             />
-                            <div class="invalid-feedback">{{ $t('str.register.company.cep.required') }}</div>
+                            <div class="invalid-feedback">{{ $t('str.register.company.address.required') }}</div>
                         </div>
-                        <div v-if="data.address.cep.length === 9 && !hasUnderline()" class="col-md-4 mb-3">
+                        <div v-if="data.address.cep.length === 9" class="col-md-4 mb-3">
                             <label class="form-label" for="numberField">{{ $t('str.register.company.number.field') }}</label>
                             <input
                                 v-model="data.address.number"
@@ -133,10 +126,10 @@
                                 id="numberField"
                                 :placeholder="$t('str.register.company.number.placeholder')"
                             />
-                            <div class="invalid-feedback">{{ $t('str.register.company.cep.required') }}</div>
+                            <div class="invalid-feedback">{{ $t('str.register.company.number.required') }}</div>
                         </div>
                     </div>
-                    <div class="row" v-if="data.address.cep.length === 9 && !hasUnderline()">
+                    <div class="row" v-if="data.address.cep.length === 9">
                         <div class="col-md-4 mb-3">
                             <label class="form-label" for="complementField">{{ $t('str.register.company.complement.field') }}</label>
                             <input v-model="data.address.complement" class="form-control" type="text" id="complementField" :placeholder="$t('str.register.company.complement.placeholder')" />
@@ -152,7 +145,7 @@
                                 id="districtField"
                                 :placeholder="$t('str.register.company.district.placeholder')"
                             />
-                            <div class="invalid-feedback">{{ $t('str.register.company.cep.required') }}</div>
+                            <div class="invalid-feedback">{{ $t('str.register.company.neighborhood.required') }}</div>
                         </div>
                         <div class="col-md-4 mb-3">
                             <label class="form-label" for="cityField">{{ $t('str.register.company.city.field') }}</label>
@@ -165,7 +158,7 @@
                                 id="cityField"
                                 :placeholder="$t('str.register.company.city.placeholder')"
                             />
-                            <div class="invalid-feedback">{{ $t('str.register.company.cep.required') }}</div>
+                            <div class="invalid-feedback">{{ $t('str.register.company.city.required') }}</div>
                         </div>
                         <div class="col-md-4 mb-3">
                             <label class="form-label" for="stateField">{{ $t('str.register.company.state.field') }}</label>
@@ -182,17 +175,18 @@
                         <div class="d-flex">
                             <div class="col-md-4 mb-3">
                                 <label class="form-label" for="numberField">{{ $t('str.register.company.logo.field') }}</label>
-                                <a v-if="data?.logoURL" class="w-lg-250px w-100px" href="javascript:;">
-                                    <img v-bind:src="`${domain}${data.logoURL}`" alt="" class="mw-100 rounded" />
-                                    <!-- <img src="../../../assets/images/logo-defender.png" alt="" class="mw-100 rounded" /> -->
+                                <a v-if="data?.logoURL && data.logoURL !== 'https://'" class="w-lg-250px w-100px" href="javascript:;">
+                                    <img crossorigin="anonymous" v-bind:src="`${domain}${data.logoURL}`" alt="" class="mw-100 rounded" />
                                 </a>
-                                <!-- <img style="object-fit: contain" v-bind:src="`${domain}${data.logoURL}`" alt="image" height="200" width="400" /> -->
                                 <input type="file" id="file" ref="file" v-on:change="handleFileUpload()" class="form-control" />
                             </div>
                         </div>
                     </div>
                     <div class="btn-center mt-4 mb-2">
-                        <button @click="checkForm" type="submit" class="btn btn-primary w-200px me-10px">{{ $t('str.btn.save') }}</button>
+                        <button @click="checkForm" type="submit" class="btn btn-primary w-200px me-10px is-loading">
+                            <i v-if="isLoading === true" class="fas fa-spinner fa-pulse"></i>
+                            {{ $t('str.btn.save') }}
+                        </button>
                         <button @click="clearForm" type="submit" class="btn btn-default w-200px">{{ $t('str.btn.clear.fields') }}</button>
                         <button v-if="data._id && data.status === 'ACTIVE'" v-on:click="confirmArchive" type="submit" class="ms-10px btn btn-warning w-200px">
                             {{ $t('str.btn.archive') }}
@@ -223,12 +217,13 @@ export default {
             states: STATES,
             domain: null,
             file: null,
+            isLoading: false,
             valuekey: 0,
             errors: [],
             data: {
                 name: '',
                 fantasyName: '',
-                DocumentType: '',
+                personType: '',
                 document: '',
                 email: '',
                 primaryPhone: '',
@@ -253,7 +248,6 @@ export default {
     mounted() {
         Controller.init(this)
     },
-    computed: {},
     methods: Controller.methods,
 }
 </script>

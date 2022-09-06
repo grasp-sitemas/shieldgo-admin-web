@@ -1,6 +1,6 @@
 <script>
-const domain = 'https://api-gateway-shield.herokuapp.com'
-// const domain = 'http://localhost:3000'
+// const domain = 'https://api-gateway-shield.herokuapp.com'
+const domain = 'http://localhost:3000'
 const viaCepDomain = 'https://viacep.com.br/ws/'
 
 export default {
@@ -10,6 +10,7 @@ export default {
         geolocation: `${domain}/api/address/geo/v1/`,
     },
     systemUsers: {
+        changeLanguage: `${domain}/api/users/system/change/language/v1/`,
         delete: `${domain}/api/users/delete/v1/`,
         systemUser: `${domain}/api/users/v1/`,
         systemUserFormdata: `${domain}/api/users/formdata/v1/`,

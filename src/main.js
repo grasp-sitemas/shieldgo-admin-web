@@ -20,7 +20,6 @@ import VuePanel from './plugins/panel/'
 import VueDateTimePicker from 'vue-bootstrap-datetimepicker'
 import VueSelect from 'vue-select'
 import VueDatepicker from "vuejs-datepicker/dist/vuejs-datepicker.esm.js"
-import VueMaskedInput from 'vue-maskedinput'
 import VueInputTag from 'vue-input-tag'
 import VueSlider from 'vue-slider-component'
 import VueGoodTable from 'vue-good-table'
@@ -29,6 +28,7 @@ import VueColorpicker from 'vue-pop-colorpicker'
 import VueCustomScrollbar from 'vue-custom-scrollbar'
 import VueApexCharts from 'vue-apexcharts'
 import DateRangePicker from 'vue2-daterange-picker'
+import VueTheMask from 'vue-the-mask'
 
 // plugins css
 import '@fortawesome/fontawesome-free/css/all.min.css'
@@ -70,6 +70,8 @@ Vue.use(VuePanel)
 Vue.use(VueDateTimePicker)
 Vue.use(VueGoodTable)
 Vue.use(VueColorpicker)
+Vue.use(VueTheMask)
+
 Vue.use(VueGoogleMaps, {
   load: {
     key: '',
@@ -83,7 +85,6 @@ Vue.use(VueInsProgressBar, {
 })
 Vue.component('v-select', VueSelect);
 Vue.component('datepicker', VueDatepicker)
-Vue.component('masked-input', VueMaskedInput)
 Vue.component('input-tag', VueInputTag)
 Vue.component('vue-slider', VueSlider)
 Vue.component('vue-custom-scrollbar', VueCustomScrollbar)

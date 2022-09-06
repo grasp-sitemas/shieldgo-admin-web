@@ -159,6 +159,7 @@ export default {
     },
     mounted() {
         this.$insProgress.finish()
+        this.$i18n.locale = this.$session.get('user')?.language || 'pt'
     },
     created() {
         AppOptions.appBodyScrollTop = window.scrollY

@@ -60,6 +60,7 @@
     "vue-slider-component": "^3.2.15",
     "vue-sparklines": "^0.2.1",
     "vue-sweetalert2": "^5.0.2",
+    "vue-the-mask": "^0.11.1",
     "vue2-daterange-picker": "^0.6.7",
     "vue2-google-maps": "^0.10.7",
     "vuejs-datepicker": "^1.6.2",

@@ -9,9 +9,9 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <router-link to="/dashboard" class="navbar-brand">
+                <div class="navbar-brand">
                     <img src="../../assets/images/logo.png" alt="ShieldGo" width="90" />
-                </router-link>
+                </div>
                 <button type="button" class="navbar-mobile-toggler" v-on:click="toggleTopMenuMobile" v-if="appOptions.appTopMenu && !appOptions.appSidebarNone">
                     <span class="fa-stack fa-lg text-inverse">
                         <i class="far fa-square fa-stack-2x"></i>
@@ -67,7 +67,8 @@
                 <b-nav-item-dropdown right menu-class="me-1" class="navbar-item navbar-user dropdown" toggle-class="navbar-link dropdown-toggle d-flex align-items-center" no-caret>
                     <template slot="button-content">
                         <div class="image image-icon bg-gray-800 text-gray-600">
-                            <i class="fa fa-user"></i>
+                            <img v-if="this.user?.photoURL && this.user.photoURL !== 'https://'" crossorigin="anonymous" v-bind:src="`${domain}${this.user?.photoURL}`" alt="" />
+                            <i v-else class="fa fa-user"></i>
                         </div>
                         <span class="d-none d-md-inline">{{ `${this.user?.firstName} ${this.user?.lastName}` }}</span>
                         <b class="caret"></b>
@@ -111,16 +112,12 @@ export default {
             appOptions: AppOptions,
             user: null,
             valuekey: 0,
+            domain: null,
         }
     },
     methods: Controller.methods,
     mounted() {
         Controller.init(this)
-    },
-    computed: {
-        getLanguage: function () {
-            return this.$session.get('user')?.language === 'en' ? 'en' : 'pt'
-        },
     },
 }
 </script>

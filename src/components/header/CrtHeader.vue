@@ -5,6 +5,7 @@ import Request from '../../common/Request.vue'
 export default {
     init: payload => {
         payload.user = payload.$session.get('user')
+        payload.domain = Endpoints.domain
     },
     methods: {
         changeLanguage: function (language) {

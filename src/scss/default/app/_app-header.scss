@@ -380,14 +380,15 @@
 			margin-top: rem(-5px);
 			margin-bottom: rem(-5px);
 			border-radius: $border-radius-lg * 5;
+			object-fit: cover !important;
 
 			@if $enable-rtl {
 				margin-left: rem(10px);
 			}
 
-			@else {
-				margin-right: rem(10px);
-			}
+			// @else {
+			// 	margin-right: rem(10px);
+			// }
 
 			@include media-breakpoint-down(md) {
 				@if $enable-rtl {

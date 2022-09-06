@@ -169,5 +169,10 @@
   "str.register.company.number.required": "O número é obrigatório",
   "str.register.company.neighborhood.required": "O bairro é obrigatório",
   "str.register.company.city.required": "A cidade é obrigatória",
-  "str.register.company.state.required": "O estado é obrigatório"
+  "str.register.company.state.required": "O estado é obrigatório",
+  "SUPER_ADMIN_MASTER": "Super Administrador Master",
+  "ADMIN_MASTER": "Administrador Master",
+  "ADMIN": "Administrador",
+  "MANAGER": "Gerente",
+  "OPERATOR": "Operador"
 }

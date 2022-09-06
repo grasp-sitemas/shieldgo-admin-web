@@ -35,7 +35,7 @@
                                 v-bind:class="checkRequiredField('name') ? 'is-invalid' : ''"
                                 @focus="removeRequiredField('name')"
                                 type="text"
-                                id="nameField"
+                                key="nameField"
                                 :placeholder="$t('str.register.company.name.placeholder')"
                             />
                             <div class="invalid-feedback">{{ $t('str.register.company.name.required') }}</div>
@@ -51,7 +51,7 @@
                         <div class="col-md-4 mb-3">
                             <label class="form-label" for="docField">{{ $t('str.register.company.document.field') }}</label>
                             <input
-                                id="docField"
+                                key="docField"
                                 type="tel"
                                 v-mask="['###.###.###-##', '##.###.###/####-##']"
                                 v-model="data.document"
@@ -68,7 +68,7 @@
                         <div class="col-md-4 mb-3">
                             <label class="form-label" for="primaryPhoneField">{{ $t('str.register.company.primaryPhone.field') }}</label>
                             <input
-                                id="primaryPhoneField"
+                                key="primaryPhoneField"
                                 type="tel"
                                 v-mask="['(##) ####-####', '(##) #####-####']"
                                 v-model="data.primaryPhone"
@@ -79,7 +79,7 @@
                         <div class="col-md-4 mb-3">
                             <label class="form-label" for="secondaryPhoneField">{{ $t('str.register.company.secondaryPhone.field') }}</label>
                             <input
-                                id="secondaryPhoneField"
+                                key="secondaryPhoneField"
                                 type="tel"
                                 v-mask="['(##) ####-####', '(##) #####-####']"
                                 v-model="data.secondaryPhone"
@@ -94,6 +94,7 @@
                             <input
                                 type="tel"
                                 v-mask="'#####-###'"
+                                key="cepField"
                                 @input="inputCep()"
                                 @focus="removeRequiredField('allAddress')"
                                 v-bind:class="checkRequiredField('cep') ? 'is-invalid' : ''"
@@ -111,7 +112,7 @@
                                 @focus="removeRequiredField('address')"
                                 class="form-control"
                                 type="text"
-                                id="addressField"
+                                key="addressField"
                             />
                             <div class="invalid-feedback">{{ $t('str.register.company.address.required') }}</div>
                         </div>
@@ -123,7 +124,7 @@
                                 @focus="removeRequiredField('number')"
                                 class="form-control"
                                 type="number"
-                                id="numberField"
+                                key="numberField"
                                 :placeholder="$t('str.register.company.number.placeholder')"
                             />
                             <div class="invalid-feedback">{{ $t('str.register.company.number.required') }}</div>
@@ -142,7 +143,7 @@
                                 @focus="removeRequiredField('neighborhood')"
                                 class="form-control"
                                 type="text"
-                                id="districtField"
+                                key="districtField"
                                 :placeholder="$t('str.register.company.district.placeholder')"
                             />
                             <div class="invalid-feedback">{{ $t('str.register.company.neighborhood.required') }}</div>
@@ -155,7 +156,7 @@
                                 @focus="removeRequiredField('city')"
                                 class="form-control"
                                 type="text"
-                                id="cityField"
+                                key="cityField"
                                 :placeholder="$t('str.register.company.city.placeholder')"
                             />
                             <div class="invalid-feedback">{{ $t('str.register.company.city.required') }}</div>

@@ -27,16 +27,22 @@ export default {
                         this.$session.set('token', userResponse.token)
                         this.$session.set('correlationId', fullResponse.headers['x-correlation-id'])
 
-                        if (userResponse.result.companyUser.subtype === 'ADMIN_MASTER' || userResponse.result.companyUser.subtype === 'CLIENT') {
-                            this.$router.push({ path: '/dashboard' })
-                            window.location.href = '?#/dashboard'
+                        const subtype = userResponse.result?.companyUser?.subtype
+                        const company = userResponse.result?.company
 
-                            this.$i18n.locale = userResponse.result.language
-                            location.reload()
-                        } else {
-                            this.$router.push({ path: '/' })
-                            window.location.href = '?#/'
-                            location.reload()
+                        if (company && company.status === 'ACTIVE') {
+                            if (subtype === 'ADMIN_MASTER' || subtype === 'ADMIN' || subtype === 'MANAGER' || subtype === 'OPERATOR') {
+                                this.$session.set('company', company)
+                                this.$i18n.locale = userResponse.result.language
+                                this.$router.push({ path: '/dashboard' })
+
+                                window.location.href = '?#/dashboard'
+                                location.reload()
+                            } else {
+                                this.$router.push({ path: '/' })
+                                window.location.href = '?#/'
+                                location.reload()
+                            }
                         }
                     }
                 },

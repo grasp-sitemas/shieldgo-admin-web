@@ -4,14 +4,14 @@
             <a href="javascript:;" class="menu-profile-link" v-on:click="expand()">
                 <div class="menu-profile-cover with-shadow"></div>
                 <div class="menu-profile-image menu-profile-image-icon bg-gray-900 text-gray-600">
-                    <i class="fa fa-user"></i>
+                    <!-- <i class="fa fa-user"></i> -->
                 </div>
                 <div class="menu-profile-info">
                     <div class="d-flex align-items-center">
-                        <div class="flex-grow-1">Grasp</div>
+                        <div class="flex-grow-1">{{ this.user?.company?.fantasyName }}</div>
                         <div class="menu-caret ms-auto"></div>
                     </div>
-                    <small>Administrador Master</small>
+                    <small>{{ $t(this.user?.companyUser?.subtype) }}</small>
                 </div>
             </a>
         </div>
@@ -41,19 +41,19 @@
 
 <script>
 import AppOptions from '../../config/AppOptions.vue'
-
+import Controller from './CrtSidebar.vue'
 export default {
     name: 'SidebarNavProfile',
     data() {
         return {
             stat: '',
             appOptions: AppOptions,
+            user: null,
         }
     },
-    methods: {
-        expand: function () {
-            this.stat = this.stat == 'expand' ? 'collapse' : 'expand'
-        },
+    methods: Controller.methods,
+    mounted() {
+        Controller.init(this)
     },
 }
 </script>

@@ -5,7 +5,6 @@ import Request from '../../common/Request.vue'
 export default {
     init: payload => {
         window.location.href = '?#'
-        // payload.data.email = payload.$route.query.inveted
         const browserLanguage = navigator.language === 'en-US' ? 'en' : navigator.language === 'pt-BR' ? 'pt' : 'pt'
         payload.$i18n.locale = payload.$session.get('user')?.language || payload.$session.get('language') || browserLanguage || 'pt'
     },
@@ -31,7 +30,7 @@ export default {
                         const company = userResponse.result?.company
 
                         if (company && company.status === 'ACTIVE') {
-                            if (subtype === 'ADMIN_MASTER' || subtype === 'ADMIN' || subtype === 'MANAGER' || subtype === 'OPERATOR') {
+                            if (subtype === 'SUPER_ADMIN_MASTER' || 'ADMIN_MASTER' || subtype === 'ADMIN' || subtype === 'MANAGER' || subtype === 'OPERATOR') {
                                 this.$session.set('company', company)
                                 this.$i18n.locale = userResponse.result.language
                                 this.$router.push({ path: '/dashboard' })

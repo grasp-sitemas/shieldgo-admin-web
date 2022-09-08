@@ -1,9 +1,12 @@
 <script>
 import Endpoints from '../../../common/Endpoints.vue'
 import Request from '../../../common/Request.vue'
+import Common from '../../../common/Common.vue'
 
 export default {
-    init: payload => {
+    init: async payload => {
+        payload.isSuperAdminMaster = Common.isSuperAdminMaster(payload)
+        payload.filters.account = Common.getAccountId(payload)
         payload.initTable()
         payload.filter()
     },
@@ -27,6 +30,8 @@ export default {
         selectItem(params) {
             const data = JSON.parse(JSON.stringify(params.row))
 
+            data.account = data?.account?._id || ''
+
             delete data.vgt_id
             delete data.originalIndex
 
@@ -35,57 +40,56 @@ export default {
         initTable() {
             this.columns = [
                 {
-                    label: this.$t('str.table.company.column.name'),
+                    label: this.$t('str.table.client.column.name'),
                     field: 'name',
-                    width: '30%',
+                    width: '15%',
                     thClass: 'text-nowrap',
                     tdClass: 'text-nowrap',
                 },
                 {
-                    label: this.$t('str.table.company.column.document'),
-                    field: 'document',
-                    width: '10%',
+                    label: this.$t('str.table.client.column.account'),
+                    field: 'account',
+                    width: '15%',
                     thClass: 'text-nowrap',
                     tdClass: 'text-nowrap',
                 },
                 {
-                    label: this.$t('str.table.company.column.email'),
+                    label: this.$t('str.table.client.column.email'),
                     field: 'email',
                     type: 'number',
-                    width: '10%',
+                    width: '15%',
                     tdClass: 'text-center text-nowrap',
                     thClass: 'text-center text-nowrap',
                 },
                 {
-                    label: this.$t('str.table.company.column.phone'),
+                    label: this.$t('str.table.client.column.phone'),
                     field: 'primaryPhone',
                     type: 'phone',
-                    width: '10%',
+                    width: '15%',
                     tdClass: 'text-center text-nowrap',
                     thClass: 'text-center text-nowrap',
                 },
                 {
-                    label: this.$t('str.table.company.column.address'),
-                    field: 'address',
-                    type: 'address',
-                    width: '20%',
-                    tdClass: 'text-center text-nowrap',
-                    thClass: 'text-center text-nowrap',
+                    label: this.$t('str.table.client.column.owner'),
+                    field: 'name',
+                    width: '15%',
+                    thClass: 'text-nowrap',
+                    tdClass: 'text-nowrap',
                 },
                 {
-                    label: this.$t('str.table.company.column.creat.at'),
+                    label: this.$t('str.table.client.column.creat.at'),
                     field: 'createDate',
                     type: 'date',
                     dateInputFormat: "yyyy-MM-dd'T'HH:mm:ss.SSSSSSSxxx",
                     dateOutputFormat: 'dd/MM/yyyy',
-                    width: '10%',
+                    width: '15%',
                     tdClass: 'text-center text-nowrap',
                     thClass: 'text-center text-nowrap',
                 },
                 {
-                    label: this.$t('str.table.company.column.status'),
+                    label: this.$t('str.table.client.column.status'),
                     field: 'status',
-                    width: '10%',
+                    width: '15%',
                     tdClass: 'text-center text-nowrap',
                     thClass: 'text-center text-nowrap',
                 },
@@ -107,6 +111,11 @@ export default {
                 ofLabel: this.$t('str.table.pagination.of.label.page'),
                 pageLabel: this.$t('str.table.pagination.page'),
                 allLabel: this.$t('str.table.pagination.all.label'),
+            }
+
+            //remove account column if not super admin
+            if (!this.isSuperAdminMaster) {
+                this.columns.splice(1, 1)
             }
         },
     },

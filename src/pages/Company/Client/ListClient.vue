@@ -1,7 +1,16 @@
 <template>
     <div>
-        <panel :title="$t('str.table.list.companies')" bodyClass="p-0">
+        <panel :title="$t('str.table.list.clients')" bodyClass="p-0">
             <div class="row ms-2 mb-1 mt-3">
+                <div v-if="isSuperAdminMaster" class="col-md-4 mb-3">
+                    <label class="form-label" for="accountField">{{ $t('str.register.client.account.field') }}</label>
+                    <select v-model="filters.account" @change="filter" class="form-select" id="accountField">
+                        <option value="">{{ $t('str.register.select.placeholder') }}</option>
+                        <option v-for="account in accounts" :value="account._id" :key="account._id">
+                            {{ account?.name }}
+                        </option>
+                    </select>
+                </div>
                 <div class="col-md-4">
                     <label class="form-label" for="statusField">{{ $t('str.register.status.field') }}</label>
                     <select v-model="filters.status" @change="filter" class="form-control" id="statusField">
@@ -10,6 +19,7 @@
                     </select>
                 </div>
             </div>
+
             <vue-good-table
                 :columns="columns"
                 :rows="items"
@@ -36,6 +46,9 @@
                     <span v-else-if="props.column.field === 'status'">
                         <span class="badge" v-bind:class="props.formattedRow[props.column.field] === 'ACTIVE' ? 'bg-success' : 'bg-danger'"> {{ $t(props.formattedRow[props.column.field]) }} </span>
                     </span>
+                    <span v-else-if="props.column.field === 'account'">
+                        {{ props.formattedRow[props.column.field].name }}
+                    </span>
                     <span v-else>
                         {{ props.formattedRow[props.column.field] }}
                     </span>
@@ -46,17 +59,20 @@
 </template>
 
 <script>
-import Controller from './CrtListCompany.vue'
+import Controller from './CrtListClient.vue'
 import Vue from 'vue'
 Vue.prototype.$registerEvent = new Vue()
 
 export default {
     components: {},
+    props: ['accounts'],
     data() {
         return {
             items: [],
+            isSuperAdminMaster: false,
             filters: {
-                type: 'ACCOUNT',
+                account: '',
+                type: 'CLIENT',
                 status: 'ACTIVE',
                 name: '',
             },

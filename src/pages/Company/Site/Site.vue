@@ -2,12 +2,12 @@
     <div :key="valuekey">
         <ol class="breadcrumb float-xl-end">
             <li class="breadcrumb-item">
-                <a href="javascript:;">{{ $t('str.breadcrumb.companies') }}</a>
+                <a href="javascript:;">{{ $t('str.breadcrumb.sites') }}</a>
             </li>
         </ol>
 
         <h1 class="page-header">
-            {{ $t('str.form.title.companies') }}
+            {{ $t('str.form.title.sites') }}
         </h1>
 
         <panel :title="$t('str.register.form.title')">
@@ -26,9 +26,40 @@
                             </select>
                         </div>
                     </div>
+
+                    <div class="row">
+                        <div v-if="isSuperAdminMaster" class="col-md-4 mb-3">
+                            <label class="form-label" for="accountField">{{ $t('str.register.site.account.field') }}</label>
+                            <select
+                                v-model="data.account"
+                                @change="changeAccount"
+                                class="form-select"
+                                v-bind:class="checkRequiredField('account') ? 'is-invalid' : ''"
+                                @focus="removeRequiredField('account')"
+                                id="accountField"
+                            >
+                                <option value="">{{ $t('str.register.select.placeholder') }}</option>
+                                <option v-for="account in accounts" :value="account._id" :key="account._id">
+                                    {{ account.name }}
+                                </option>
+                            </select>
+                            <div class="invalid-feedback">{{ $t('str.register.site.account.required') }}</div>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label class="form-label" for="clientField">{{ $t('str.register.site.client.field') }}</label>
+                            <select v-model="data.client" class="form-select" v-bind:class="checkRequiredField('client') ? 'is-invalid' : ''" @focus="removeRequiredField('client')" id="clientField">
+                                <option value="">{{ $t('str.register.select.placeholder') }}</option>
+                                <option v-for="client in clients" :value="client._id" :key="client._id">
+                                    {{ client.name }}
+                                </option>
+                            </select>
+                            <div class="invalid-feedback">{{ $t('str.register.site.client.required') }}</div>
+                        </div>
+                    </div>
+
                     <div class="row">
                         <div class="col-md-4 mb-3">
-                            <label class="form-label" for="nameField">{{ $t('str.register.company.name.field') }}</label>
+                            <label class="form-label" for="nameField">{{ $t('str.register.site.name.field') }}</label>
                             <input
                                 v-model="data.name"
                                 class="form-control"
@@ -36,61 +67,15 @@
                                 @focus="removeRequiredField('name')"
                                 type="text"
                                 key="nameField"
-                                :placeholder="$t('str.register.company.name.placeholder')"
+                                :placeholder="$t('str.register.site.name.placeholder')"
                             />
-                            <div class="invalid-feedback">{{ $t('str.register.company.name.required') }}</div>
-                        </div>
-                        <div class="col-md-4 mb-3">
-                            <label class="form-label" for="typePersonField">{{ $t('str.register.company.person.type.field') }}</label>
-                            <select class="form-select" v-model="data.personType">
-                                <option value="" selected>{{ $t('str.register.select.placeholder') }}</option>
-                                <option value="PHYSICAL">{{ $t('str.person.type.individual') }}</option>
-                                <option value="LEGAL">{{ $t('str.person.type.legal') }}</option>
-                            </select>
-                        </div>
-                        <div class="col-md-4 mb-3">
-                            <label class="form-label" for="docField">{{ $t('str.register.company.document.field') }}</label>
-                            <input
-                                key="docField"
-                                type="tel"
-                                v-mask="['###.###.###-##', '##.###.###/####-##']"
-                                v-model="data.document"
-                                class="form-control"
-                                :placeholder="$t('str.register.company.document.placeholder')"
-                            />
+                            <div class="invalid-feedback">{{ $t('str.register.site.name.required') }}</div>
                         </div>
                     </div>
+
                     <div class="row">
                         <div class="col-md-4 mb-3">
-                            <label class="form-label">{{ $t('str.register.company.email.field') }}</label>
-                            <input class="form-control" v-model="data.email" type="text" :placeholder="$t('str.register.company.email.placeholder')" />
-                        </div>
-                        <div class="col-md-4 mb-3">
-                            <label class="form-label" for="primaryPhoneField">{{ $t('str.register.company.primaryPhone.field') }}</label>
-                            <input
-                                key="primaryPhoneField"
-                                type="tel"
-                                v-mask="['(##) ####-####', '(##) #####-####']"
-                                v-model="data.primaryPhone"
-                                class="form-control"
-                                :placeholder="$t('str.register.company.primaryPhone.placeholder')"
-                            />
-                        </div>
-                        <div class="col-md-4 mb-3">
-                            <label class="form-label" for="secondaryPhoneField">{{ $t('str.register.company.secondaryPhone.field') }}</label>
-                            <input
-                                key="secondaryPhoneField"
-                                type="tel"
-                                v-mask="['(##) ####-####', '(##) #####-####']"
-                                v-model="data.secondaryPhone"
-                                class="form-control"
-                                :placeholder="$t('str.register.company.secondaryPhone.placeholder')"
-                            />
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-4 mb-3">
-                            <label class="form-label" for="cepField">{{ $t('str.register.company.cep.field') }}</label>
+                            <label class="form-label" for="cepField">{{ $t('str.register.site.cep.field') }}</label>
                             <input
                                 type="tel"
                                 v-mask="'#####-###'"
@@ -100,12 +85,12 @@
                                 v-bind:class="checkRequiredField('cep') ? 'is-invalid' : ''"
                                 v-model="data.address.cep"
                                 class="form-control"
-                                :placeholder="$t('str.register.company.cep.placeholder')"
+                                :placeholder="$t('str.register.site.cep.placeholder')"
                             />
-                            <div class="invalid-feedback">{{ $t('str.register.company.cep.required') }}</div>
+                            <div class="invalid-feedback">{{ $t('str.register.site.cep.required') }}</div>
                         </div>
                         <div v-if="data?.address?.cep?.length === 9" class="col-md-4 mb-3">
-                            <label class="form-label" for="addressField">{{ $t('str.register.company.address.field') }}</label>
+                            <label class="form-label" for="addressField">{{ $t('str.register.site.address.field') }}</label>
                             <input
                                 v-model="data.address.address"
                                 v-bind:class="checkRequiredField('address') ? 'is-invalid' : ''"
@@ -114,10 +99,10 @@
                                 type="text"
                                 key="addressField"
                             />
-                            <div class="invalid-feedback">{{ $t('str.register.company.address.required') }}</div>
+                            <div class="invalid-feedback">{{ $t('str.register.site.address.required') }}</div>
                         </div>
                         <div v-if="data?.address?.cep?.length === 9" class="col-md-4 mb-3">
-                            <label class="form-label" for="numberField">{{ $t('str.register.company.number.field') }}</label>
+                            <label class="form-label" for="numberField">{{ $t('str.register.site.number.field') }}</label>
                             <input
                                 v-model="data.address.number"
                                 v-bind:class="checkRequiredField('number') ? 'is-invalid' : ''"
@@ -125,18 +110,18 @@
                                 class="form-control"
                                 type="number"
                                 key="numberField"
-                                :placeholder="$t('str.register.company.number.placeholder')"
+                                :placeholder="$t('str.register.site.number.placeholder')"
                             />
-                            <div class="invalid-feedback">{{ $t('str.register.company.number.required') }}</div>
+                            <div class="invalid-feedback">{{ $t('str.register.site.number.required') }}</div>
                         </div>
                     </div>
                     <div class="row" v-if="data?.address?.cep?.length === 9">
                         <div class="col-md-4 mb-3">
-                            <label class="form-label" for="complementField">{{ $t('str.register.company.complement.field') }}</label>
-                            <input v-model="data.address.complement" class="form-control" type="text" id="complementField" :placeholder="$t('str.register.company.complement.placeholder')" />
+                            <label class="form-label" for="complementField">{{ $t('str.register.site.complement.field') }}</label>
+                            <input v-model="data.address.complement" class="form-control" type="text" id="complementField" :placeholder="$t('str.register.site.complement.placeholder')" />
                         </div>
                         <div class="col-md-4 mb-3">
-                            <label class="form-label" for="districtField">{{ $t('str.register.company.district.field') }}</label>
+                            <label class="form-label" for="districtField">{{ $t('str.register.site.district.field') }}</label>
                             <input
                                 v-model="data.address.neighborhood"
                                 v-bind:class="checkRequiredField('neighborhood') ? 'is-invalid' : ''"
@@ -144,12 +129,12 @@
                                 class="form-control"
                                 type="text"
                                 key="districtField"
-                                :placeholder="$t('str.register.company.district.placeholder')"
+                                :placeholder="$t('str.register.site.district.placeholder')"
                             />
-                            <div class="invalid-feedback">{{ $t('str.register.company.neighborhood.required') }}</div>
+                            <div class="invalid-feedback">{{ $t('str.register.site.neighborhood.required') }}</div>
                         </div>
                         <div class="col-md-4 mb-3">
-                            <label class="form-label" for="cityField">{{ $t('str.register.company.city.field') }}</label>
+                            <label class="form-label" for="cityField">{{ $t('str.register.site.city.field') }}</label>
                             <input
                                 v-model="data.address.city"
                                 v-bind:class="checkRequiredField('city') ? 'is-invalid' : ''"
@@ -157,25 +142,25 @@
                                 class="form-control"
                                 type="text"
                                 key="cityField"
-                                :placeholder="$t('str.register.company.city.placeholder')"
+                                :placeholder="$t('str.register.site.city.placeholder')"
                             />
-                            <div class="invalid-feedback">{{ $t('str.register.company.city.required') }}</div>
+                            <div class="invalid-feedback">{{ $t('str.register.site.city.required') }}</div>
                         </div>
                         <div class="col-md-4 mb-3">
-                            <label class="form-label" for="stateField">{{ $t('str.register.company.state.field') }}</label>
+                            <label class="form-label" for="stateField">{{ $t('str.register.site.state.field') }}</label>
                             <select v-model="data.address.state" class="form-select" v-bind:class="checkRequiredField('state') ? 'is-invalid' : ''" @focus="removeRequiredField('state')" id="stateField">
                                 <option v-for="state in states" :value="state.value" :key="state.value">
                                     {{ state.label }}
                                 </option>
                             </select>
-                            <div class="invalid-feedback">{{ $t('str.register.company.cep.required') }}</div>
+                            <div class="invalid-feedback">{{ $t('str.register.site.cep.required') }}</div>
                         </div>
                     </div>
 
                     <div class="row">
                         <div class="d-flex">
                             <div class="col-md-4 mb-3">
-                                <label class="form-label" for="numberField">{{ $t('str.register.company.logo.field') }}</label>
+                                <label class="form-label" for="numberField">{{ $t('str.register.site.logo.field') }}</label>
 
                                 <div v-if="data?.logoURL && data.logoURL !== 'https://'" class="d-flex">
                                     <a class="w-lg-250px w-250px">
@@ -201,13 +186,13 @@
             </form>
         </panel>
         <notifications group="bottom-right" position="bottom right" :speed="500" />
-        <ListCompany v-on:load-item="selectItem" />
+        <ListSite v-on:load-item="selectItem" :accounts="accounts" :clients="clients" />
     </div>
 </template>
 
 <script>
-import ListCompany from './ListCompany.vue'
-import Controller from './CrtCompany.vue'
+import ListSite from './ListSite.vue'
+import Controller from './CrtSite.vue'
 import Vue from 'vue'
 Vue.prototype.$registerEvent = new Vue()
 
@@ -215,7 +200,7 @@ import { STATES } from '../../../utils/states.js'
 
 export default {
     components: {
-        ListCompany,
+        ListSite,
     },
     data() {
         return {
@@ -224,16 +209,15 @@ export default {
             file: null,
             isLoading: false,
             errors: [],
+            accounts: [],
+            clients: [],
             valuekey: 0,
+            isSuperAdminMaster: false,
             data: {
                 name: '',
-                fantasyName: '',
-                personType: '',
-                document: '',
-                email: '',
-                primaryPhone: '',
-                secondaryPhone: '',
                 logoURL: '',
+                client: '',
+                account: '',
                 address: {
                     cep: '',
                     address: '',
@@ -245,7 +229,7 @@ export default {
                     ibge: '',
                     gia: '',
                 },
-                type: 'ACCOUNT',
+                type: 'SITE',
                 status: 'ACTIVE',
             },
         }

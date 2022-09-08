@@ -16,8 +16,10 @@ const instanceateAddress = (addressObj, geo) => {
 }
 
 export default {
-    init: payload => {
+    init: async payload => {
         payload.domain = Endpoints.domain
+
+        payload.getMe()
     },
     methods: {
         inputCep() {
@@ -75,28 +77,39 @@ export default {
             }
             this.isLoading = false
         },
+        getMe() {
+            Request.do(
+                this,
+                'get',
+                Request.getDefaultHeader(this),
+                {},
+                `${Endpoints.systemUsers.getMe}`,
+                response => {
+                    if (response) {
+                        this.data = response.result.company
+                    }
+                },
+                error => {
+                    console.log(error)
+                },
+            )
+        },
         save() {
             let formData = new FormData()
 
             formData.append('file', this.file)
             formData.append('jsonData', JSON.stringify(this.data))
-
             try {
                 Request.do(
                     this,
-                    this.data._id ? 'put' : 'post',
+                    'put',
                     Request.getDefaultHeader(this),
                     formData,
-                    `${Endpoints.companies.formData}${this.data._id ? this.data._id : ''}`,
+                    `${Endpoints.companies.formData}${this.data._id}`,
                     response => {
                         if (response.status === 200) {
-                            Common.show(this, 'bottom-right', 'success', this.data._id ? this.$t('str.form.update.success') : this.$t('str.form.create.success'))
-                            const { _id, status, logoURL } = response?.result
-                            this.data._id = _id
-                            this.data.status = status
-                            this.data.logoURL = logoURL
-                            this.$registerEvent.$emit('refreshList')
-                            // this.valuekey += 1
+                            this.data.logoURL = response?.result?.logoURL
+                            Common.show(this, 'bottom-right', 'success', this.$t('str.form.update.success'))
                         }
                     },
                     error => {
@@ -110,47 +123,6 @@ export default {
                 Common.show('bottom-right', 'warn', this.$t('str.form.update.generic.error'))
                 console.log(error)
             }
-        },
-        archive() {
-            try {
-                Request.do(
-                    this,
-                    'DELETE',
-                    Request.getDefaultHeader(this),
-                    this.data,
-                    `${Endpoints.companies.company}${this.data._id}`,
-                    response => {
-                        if (response.status === 200) {
-                            Common.show(this, 'bottom-right', 'success', this.$t('str.form.archive.success'))
-                            this.clearForm()
-                            this.$registerEvent.$emit('refreshList')
-                        }
-                    },
-                    error => {
-                        console.log(error)
-                        Common.show('bottom-right', 'warn', this.$t('str.form.archive.generic.error'))
-                    },
-                )
-            } catch (error) {
-                console.log(error)
-                Common.show('bottom-right', 'warn', this.$t('str.form.archive.generic.error'))
-            }
-        },
-        confirmArchive() {
-            this.$swal({
-                title: this.$t('str.are.you.sure'),
-                text: this.$t('str.are.you.sure.archive'),
-                showCancelButton: true,
-                buttonsStyling: false,
-                confirmButtonText: this.$t('str.title.archive'),
-                cancelButtonText: this.$t('str.btn.cancel'),
-                confirmButtonClass: 'btn me-5px btn-warning',
-                cancelButtonClass: 'btn btn-default',
-            }).then(result => {
-                if (result.isConfirmed && result.value) {
-                    this.archive()
-                }
-            })
         },
         checkRequiredField(field) {
             return this.errors.includes(field)
@@ -226,13 +198,6 @@ export default {
                     console.log(error)
                 },
             )
-        },
-        selectItem: function (item) {
-            this.errors = []
-            this.file = null
-            this.data = item
-            document.body.scrollTop = 0 // For Safari
-            document.documentElement.scrollTop = 0 // For Chrome, Firefox, IE and Opera
         },
         handleFileUpload() {
             this.file = this.$refs.file.files[0]

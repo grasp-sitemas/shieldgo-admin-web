@@ -1,6 +1,7 @@
 <script>
 import Endpoints from '../../../common/Endpoints.vue'
 import Request from '../../../common/Request.vue'
+import Services from '../../../common/Services.vue'
 import Common from '../../../common/Common.vue'
 
 const instanceateAddress = (addressObj, geo) => {
@@ -16,8 +17,16 @@ const instanceateAddress = (addressObj, geo) => {
 }
 
 export default {
-    init: payload => {
+    init: async payload => {
         payload.domain = Endpoints.domain
+
+        payload.isSuperAdminMaster = await Common.isSuperAdminMaster(payload)
+        if (payload.isSuperAdminMaster) {
+            payload.accounts = await Services.getAccounts(payload)
+        }
+
+        payload.clients = await Services.getClients(payload)
+        payload.data.account = Common.getAccountId(payload)
     },
     methods: {
         inputCep() {
@@ -52,13 +61,9 @@ export default {
             this.file = null
             this.data = {
                 name: '',
-                fantasyName: '',
-                personType: '',
-                document: '',
-                email: '',
-                primaryPhone: '',
-                secondaryPhone: '',
                 logoURL: '',
+                client: '',
+                account: '',
                 address: {
                     cep: '',
                     address: '',
@@ -70,7 +75,7 @@ export default {
                     ibge: '',
                     gia: '',
                 },
-                type: 'ACCOUNT',
+                type: 'SITE',
                 status: 'ACTIVE',
             }
             this.isLoading = false
@@ -166,6 +171,12 @@ export default {
             if (!this.data.name || this.data.name === '') {
                 this.errors.push('name')
             }
+            if (!this.data.account || this.data.account === '') {
+                this.errors.push('account')
+            }
+            if (!this.data.client || this.data.client === '') {
+                this.errors.push('client')
+            }
             if (!this.data.address.cep && this.data.address.cep === '') {
                 this.errors.push('cep')
             }
@@ -236,6 +247,15 @@ export default {
         },
         handleFileUpload() {
             this.file = this.$refs.file.files[0]
+        },
+        changeAccount: async function () {
+            const account = this.data.account
+
+            if (account === '') {
+                this.data.client = ''
+            }
+
+            this.clients = await Services.getClientsByAccount(this, account)
         },
     },
 }

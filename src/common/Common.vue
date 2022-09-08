@@ -27,34 +27,6 @@ export default {
     formatDate: text => {
         return new Date(text).toLocaleDateString()
     },
-    loadFunctionsElements: () => {
-        let $body = $('body')
-        let $window = $(window)
-        $('.button-menu-mobile').on('click', function (event) {
-            event.preventDefault()
-            $body.toggleClass('sidebar-enable')
-            if ($window.width() >= 768) {
-                $body.toggleClass('enlarged')
-            } else {
-                $body.removeClass('enlarged')
-            }
-        })
-        $(document).on('click', 'body', function (e) {
-            if ($(e.target).closest('.right-bar-toggle, .right-bar').length > 0) {
-                return
-            }
-            if ($(e.target).closest('.left-side-menu, .side-nav').length > 0 || $(e.target).hasClass('button-menu-mobile') || $(e.target).closest('.button-menu-mobile').length > 0) {
-                return
-            }
-            $('body').removeClass('right-bar-enabled')
-            $('body').removeClass('sidebar-enable')
-            return
-        })
-        $('.navbar-toggle').on('click', function (event) {
-            $(this).toggleClass('open')
-            $('#navigation').slideToggle(400)
-        })
-    },
     checkPassword: str => {
         var re = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,}$/
         return re.test(str)
@@ -66,6 +38,26 @@ export default {
         } else {
             return false
         }
+    },
+    show(vue, group, type, title) {
+        const text = `${vue.$t('str.date.subtitle')}: ${new Date().toLocaleString('pt-br')}`
+        vue.$notify({
+            group,
+            title,
+            text: text,
+            type,
+        })
+    },
+    isSuperAdminMaster: state => {
+        return state.$session.get('user')?.companyUser?.subtype === 'SUPER_ADMIN_MASTER' ? true : false
+    },
+    getAccountId: state => {
+        const type = state.$session.get('user')?.company?.type
+        return type === 'ACCOUNT' ? state.$session.get('user')?.company?._id : ''
+    },
+    getClientId: state => {
+        const type = state.$session.get('user')?.company?.type
+        return type === 'CLIENT' ? state.$session.get('user')?.company?._id : ''
     },
 }
 </script>

@@ -3,6 +3,9 @@ import Vue from 'vue'
 import VueSession from 'vue-session'
 
 import Companies from '../pages/Company/Company/Company.vue'
+import Clients from '../pages/Company/Client/Client.vue'
+import Sites from '../pages/Company/Site/Site.vue'
+import RegisterData from '../pages/Company/RegisterData/RegisterData.vue'
 import Dashboard from '../pages/Dashboard/Dashboard.vue'
 import Schedule from '../pages/Schedule/Schedule.vue'
 import Login from '../pages/Login/Login.vue'
@@ -36,9 +39,33 @@ const routes = [
         },
     },
     {
+        path: '/register-data',
+        name: 'register-data',
+        component: RegisterData,
+        beforeEnter: (_to, _from, next) => {
+            next(checkSession())
+        },
+    },
+    {
         path: '/companies',
         name: 'companies',
         component: Companies,
+        beforeEnter: (_to, _from, next) => {
+            next(checkSession())
+        },
+    },
+    {
+        path: '/clients',
+        name: 'clients',
+        component: Clients,
+        beforeEnter: (_to, _from, next) => {
+            next(checkSession())
+        },
+    },
+    {
+        path: '/sites',
+        name: 'sites',
+        component: Sites,
         beforeEnter: (_to, _from, next) => {
             next(checkSession())
         },

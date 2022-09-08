@@ -1,5 +1,5 @@
 <template>
-    <div class="menu">
+    <div class="menu" :key="valuekey">
         <div class="menu-profile">
             <a href="javascript:;" class="menu-profile-link" v-on:click="expand()">
                 <div class="menu-profile-cover with-shadow"></div>
@@ -8,10 +8,10 @@
                 </div>
                 <div class="menu-profile-info">
                     <div class="d-flex align-items-center">
-                        <div class="flex-grow-1">{{ this.user?.company?.fantasyName }}</div>
+                        <div class="flex-grow-1">{{ this?.user?.company?.fantasyName }}</div>
                         <div class="menu-caret ms-auto"></div>
                     </div>
-                    <small>{{ $t(this.user?.companyUser?.subtype) }}</small>
+                    <small>{{ $t(this?.user?.companyUser?.subtype) }}</small>
                 </div>
             </a>
         </div>
@@ -23,7 +23,7 @@
                 </a>
             </div>
             <div class="menu-item">
-                <a href="javascript:;" class="menu-link">
+                <a href="#/register-data" class="menu-link">
                     <div class="menu-icon"><i class="fa fa-pencil-alt"></i></div>
                     <div class="menu-text">{{ $t('str.sidebar.menu.register.data') }}</div>
                 </a>
@@ -46,9 +46,10 @@ export default {
     name: 'SidebarNavProfile',
     data() {
         return {
-            stat: '',
             appOptions: AppOptions,
             user: null,
+            valuekey: 0,
+            stat: '',
         }
     },
     methods: Controller.methods,

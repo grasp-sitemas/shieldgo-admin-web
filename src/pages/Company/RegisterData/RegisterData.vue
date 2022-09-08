@@ -1,16 +1,16 @@
 <template>
-    <div :key="valuekey">
+    <div>
         <ol class="breadcrumb float-xl-end">
             <li class="breadcrumb-item">
-                <a href="javascript:;">{{ $t('str.breadcrumb.companies') }}</a>
+                <a href="javascript:;">{{ $t('str.breadcrumb.register.data') }}</a>
             </li>
         </ol>
 
         <h1 class="page-header">
-            {{ $t('str.form.title.companies') }}
+            {{ $t('str.form.title.register.data') }}
         </h1>
 
-        <panel :title="$t('str.register.form.title')">
+        <panel :title="$t('str.form.title')">
             <form>
                 <fieldset>
                     <div v-if="data._id" class="row">
@@ -20,7 +20,7 @@
                         </div>
                         <div class="col-md-4 mb-3">
                             <label class="form-label" for="statusField">{{ $t('str.register.status.field') }}</label>
-                            <select v-model="data.status" class="form-control" id="statusField">
+                            <select disabled v-model="data.status" class="form-control" id="statusField">
                                 <option value="ACTIVE">{{ $t('str.register.status.active') }}</option>
                                 <option value="ARCHIVED">{{ $t('str.register.status.archived') }}</option>
                             </select>
@@ -173,50 +173,35 @@
                     </div>
 
                     <div class="row">
-                        <div class="d-flex">
-                            <div class="col-md-4 mb-3">
-                                <label class="form-label" for="numberField">{{ $t('str.register.company.logo.field') }}</label>
-
-                                <div v-if="data?.logoURL && data.logoURL !== 'https://'" class="d-flex">
-                                    <a class="w-lg-250px w-250px">
-                                        <img crossorigin="anonymous" v-bind:src="`${domain}${data.logoURL}`" class="mw-100 rounded" />
-                                    </a>
-                                </div>
-
-                                <input type="file" id="file" ref="file" v-on:change="handleFileUpload()" class="form-control" />
+                        <div class="col-md-4 mb-3">
+                            <label class="form-label" for="numberField">{{ $t('str.register.company.logo.field') }}</label>
+                            <div v-if="data?.logoURL && data.logoURL !== 'https://'" class="d-flex">
+                                <a class="w-lg-250px w-250px">
+                                    <img crossorigin="anonymous" v-bind:src="`${domain}${data.logoURL}`" class="mw-100 rounded" />
+                                </a>
                             </div>
+                            <input type="file" id="file" ref="file" v-on:change="handleFileUpload()" class="form-control" />
                         </div>
                     </div>
+
                     <div class="btn-center mt-4 mb-2">
-                        <button @click="checkForm" type="submit" class="btn btn-primary w-200px me-10px is-loading">
+                        <button v-on:click="checkForm" type="submit" class="btn btn-primary w-200px me-10px is-loading">
                             <i v-if="isLoading === true" class="fas fa-spinner fa-pulse"></i>
                             {{ $t('str.btn.save') }}
-                        </button>
-                        <button @click="clearForm" type="submit" class="btn btn-default w-200px">{{ $t('str.btn.clear.fields') }}</button>
-                        <button v-if="data._id && data.status === 'ACTIVE'" v-on:click="confirmArchive" type="submit" class="ms-10px btn btn-warning w-200px">
-                            {{ $t('str.btn.archive') }}
                         </button>
                     </div>
                 </fieldset>
             </form>
         </panel>
         <notifications group="bottom-right" position="bottom right" :speed="500" />
-        <ListCompany v-on:load-item="selectItem" />
     </div>
 </template>
 
 <script>
-import ListCompany from './ListCompany.vue'
-import Controller from './CrtCompany.vue'
-import Vue from 'vue'
-Vue.prototype.$registerEvent = new Vue()
-
+import Controller from './CrtRegisterData.vue'
 import { STATES } from '../../../utils/states.js'
 
 export default {
-    components: {
-        ListCompany,
-    },
     data() {
         return {
             states: STATES,
@@ -224,7 +209,6 @@ export default {
             file: null,
             isLoading: false,
             errors: [],
-            valuekey: 0,
             data: {
                 name: '',
                 fantasyName: '',
@@ -250,9 +234,10 @@ export default {
             },
         }
     },
+    methods: Controller.methods,
+    created() {},
     mounted() {
         Controller.init(this)
     },
-    methods: Controller.methods,
 }
 </script>

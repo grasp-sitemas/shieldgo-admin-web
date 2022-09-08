@@ -10,6 +10,7 @@ export default {
     methods: {
         changeLanguage: function (language) {
             this.$i18n.locale = language
+            this.$registerEvent.$emit('changeLanguage')
             try {
                 Request.do(
                     this,

@@ -118,7 +118,9 @@ export default {
                     `${Endpoints.companies.formData}${this.data._id}`,
                     response => {
                         if (response.status === 200) {
-                            this.data.logoURL = response?.result?.logoURL
+                            const result = response?.result
+                            this.data.logoURL = result?.logoURL
+                            this.$registerEvent.$emit('updateMenu')
                             Common.show(this, 'bottom-right', 'success', this.$t('str.form.update.success'))
                         }
                     },

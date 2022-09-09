@@ -14,10 +14,10 @@
             <form>
                 <fieldset>
                     <div v-if="data._id" class="row">
-                        <div class="col-md-4 mb-3">
+                        <!-- <div class="col-md-4 mb-3">
                             <label class="form-label" for="idField">{{ $t('str.register.id.field') }}</label>
                             <input v-model="data._id" disabled class="form-control" type="text" id="idField" />
-                        </div>
+                        </div> -->
                         <div class="col-md-4 mb-3">
                             <label class="form-label" for="statusField">{{ $t('str.register.status.field') }}</label>
                             <select v-model="data.status" class="form-control" id="statusField">
@@ -157,21 +157,6 @@
                         </div>
                     </div>
 
-                    <div class="row">
-                        <div class="d-flex">
-                            <div class="col-md-4 mb-3">
-                                <label class="form-label" for="numberField">{{ $t('str.register.site.logo.field') }}</label>
-
-                                <div v-if="data?.logoURL && data.logoURL !== 'https://'" class="d-flex">
-                                    <a class="w-lg-250px w-250px">
-                                        <img crossorigin="anonymous" v-bind:src="`${domain}${data.logoURL}`" class="mw-100 rounded" />
-                                    </a>
-                                </div>
-
-                                <input type="file" id="file" ref="file" v-on:change="handleFileUpload()" class="form-control" />
-                            </div>
-                        </div>
-                    </div>
                     <div class="btn-center mt-4 mb-2">
                         <button @click="checkForm" type="submit" class="btn btn-primary w-200px me-10px is-loading">
                             <i v-if="isLoading === true" class="fas fa-spinner fa-pulse"></i>

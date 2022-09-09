@@ -2,7 +2,9 @@
     <div class="menu" :key="valuekey">
         <div class="menu-profile">
             <a href="javascript:;" class="menu-profile-link" v-on:click="expand()">
-                <div class="menu-profile-cover with-shadow"></div>
+                <!-- <div v-bind:style="{ 'background-image': `${domain}${user?.company?.logoURL}` }" class="with-shadow"></div> -->
+
+                <div :style="{ 'background-image': `url(${`${domain}${user?.company?.logoURL || user?.account?.logoURL}`})` }" class="with-shadow menu-profile-cover"></div>
                 <div class="menu-profile-image menu-profile-image-icon bg-gray-900 text-gray-600">
                     <!-- <i class="fa fa-user"></i> -->
                 </div>
@@ -15,6 +17,7 @@
                 </div>
             </a>
         </div>
+
         <div id="appSidebarProfileMenu" class="collapse" v-bind:class="{ 'd-block': this.stat == 'expand' && !this.appOptions.pageSidebarMinified, 'd-none': this.stat == 'collapse' }">
             <div class="menu-item pt-5px">
                 <a href="javascript:;" class="menu-link">
@@ -42,17 +45,27 @@
 <script>
 import AppOptions from '../../config/AppOptions.vue'
 import Controller from './CrtSidebar.vue'
+import Vue from 'vue'
+Vue.prototype.$registerEvent = new Vue()
+
 export default {
     name: 'SidebarNavProfile',
     data() {
         return {
             appOptions: AppOptions,
+            domain: null,
             user: null,
             valuekey: 0,
             stat: '',
         }
     },
     methods: Controller.methods,
+    created() {
+        const state = this
+        state.$registerEvent.$on('updateMenu', function () {
+            state.refreshUser(state)
+        })
+    },
     mounted() {
         Controller.init(this)
     },

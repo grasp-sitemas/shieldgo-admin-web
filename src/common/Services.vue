@@ -46,5 +46,20 @@ export default {
 
         return []
     },
+    getSitesByClient: async function (state, client) {
+        const filters = {
+            name: '',
+            client: client,
+            status: 'ACTIVE',
+        }
+
+        if (client) {
+            const response = await Request.do(state, 'POST', Request.getDefaultHeader(state), filters, `${Endpoints.companies.filter}`)
+
+            return response?.data?.results || []
+        }
+
+        return []
+    },
 }
 </script>

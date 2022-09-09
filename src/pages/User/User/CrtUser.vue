@@ -2,6 +2,7 @@
 import Endpoints from '../../../common/Endpoints.vue'
 import Request from '../../../common/Request.vue'
 import Common from '../../../common/Common.vue'
+import Services from '../../../common/Services.vue'
 
 const instanceateAddress = (addressObj, geo) => {
     addressObj.name = 'MAIN'
@@ -19,7 +20,13 @@ export default {
     init: async payload => {
         payload.domain = Endpoints.domain
 
-        payload.getMe()
+        payload.isSuperAdminMaster = await Common.isSuperAdminMaster(payload)
+        if (payload.isSuperAdminMaster) {
+            payload.accounts = await Services.getAccounts(payload)
+        }
+
+        payload.clients = await Services.getClients(payload)
+        payload.data.account = Common.getAccountId(payload)
     },
     methods: {
         inputCep() {
@@ -53,14 +60,18 @@ export default {
             this.errors = []
             this.file = null
             this.data = {
-                name: '',
-                fantasyName: '',
-                personType: '',
-                document: '',
+                firstName: '',
+                lastName: '',
                 email: '',
                 primaryPhone: '',
-                secondaryPhone: '',
-                logoURL: '',
+                photoURL: '',
+                account: '',
+                client: '',
+                site: '',
+                companyUser: {
+                    status: 'ACTIVE',
+                    subtype: '',
+                },
                 address: {
                     cep: '',
                     address: '',
@@ -72,54 +83,34 @@ export default {
                     ibge: '',
                     gia: '',
                 },
-                type: 'ACCOUNT',
+                type: 'USER-COMPANY',
                 status: 'ACTIVE',
             }
+            this.data.account = Common.getAccountId(this)
             this.isLoading = false
-        },
-        getMe() {
-            Request.do(
-                this,
-                'get',
-                Request.getDefaultHeader(this),
-                {},
-                `${Endpoints.systemUsers.getMe}`,
-                response => {
-                    if (response) {
-                        const result = response?.result
-                        const role = result?.companyUser?.subtype
-                        if (role === 'SUPER_ADMIN_MASTER' || role === 'SUPER_ADMIN') {
-                            this.data = result?.company
-                        } else if (role === 'ADMIN') {
-                            this.data = result?.account
-                        } else if (role === 'MANAGER') {
-                            this.data = result?.client
-                        } else if (role === 'OPERATOR') {
-                            this.data = result?.site
-                        }
-                    }
-                },
-                error => {
-                    console.log(error)
-                },
-            )
         },
         save() {
             let formData = new FormData()
 
             formData.append('file', this.file)
             formData.append('jsonData', JSON.stringify(this.data))
+
             try {
                 Request.do(
                     this,
-                    'put',
+                    this.data._id ? 'put' : 'post',
                     Request.getDefaultHeader(this),
                     formData,
-                    `${Endpoints.companies.formData}${this.data._id}`,
+                    `${Endpoints.systemUsers.formData}${this.data._id ? this.data._id : ''}`,
                     response => {
                         if (response.status === 200) {
-                            this.data.logoURL = response?.result?.logoURL
-                            Common.show(this, 'bottom-right', 'success', this.$t('str.form.update.success'))
+                            Common.show(this, 'bottom-right', 'success', this.data._id ? this.$t('str.form.update.success') : this.$t('str.form.create.success'))
+                            const { _id, status, photoURL } = response?.result
+                            this.data._id = _id
+                            this.data.status = status
+                            this.data.photoURL = photoURL
+                            this.data.password = ''
+                            this.$registerEvent.$emit('refreshList')
                         }
                     },
                     error => {
@@ -134,6 +125,47 @@ export default {
                 console.log(error)
             }
         },
+        archive() {
+            try {
+                Request.do(
+                    this,
+                    'DELETE',
+                    Request.getDefaultHeader(this),
+                    this.data,
+                    `${Endpoints.systemUsers.systemUser}${this.data.email}`,
+                    response => {
+                        if (response.status === 200) {
+                            Common.show(this, 'bottom-right', 'success', this.$t('str.form.archive.success'))
+                            this.clearForm()
+                            this.$registerEvent.$emit('refreshList')
+                        }
+                    },
+                    error => {
+                        console.log(error)
+                        Common.show('bottom-right', 'warn', this.$t('str.form.archive.generic.error'))
+                    },
+                )
+            } catch (error) {
+                console.log(error)
+                Common.show('bottom-right', 'warn', this.$t('str.form.archive.generic.error'))
+            }
+        },
+        confirmArchive() {
+            this.$swal({
+                title: this.$t('str.are.you.sure'),
+                text: this.$t('str.are.you.sure.archive'),
+                showCancelButton: true,
+                buttonsStyling: false,
+                confirmButtonText: this.$t('str.title.archive'),
+                cancelButtonText: this.$t('str.btn.cancel'),
+                confirmButtonClass: 'btn me-5px btn-warning',
+                cancelButtonClass: 'btn btn-default',
+            }).then(result => {
+                if (result.isConfirmed && result.value) {
+                    this.archive()
+                }
+            })
+        },
         checkRequiredField(field) {
             return this.errors.includes(field)
         },
@@ -145,27 +177,21 @@ export default {
             }
         },
         checkForm() {
-            if (!this.data.name || this.data.name === '') {
-                this.errors.push('name')
+            if (!this.data.firstName || this.data.firstName === '') {
+                this.errors.push('firstName')
             }
-            if (!this.data.address.cep && this.data.address.cep === '') {
-                this.errors.push('cep')
+            if (!this.data.lastName || this.data.lastName === '') {
+                this.errors.push('lastName')
             }
-            if (!this.data.address.address && this.data.address.address === '') {
-                this.errors.push('address')
+            if (!this.data.email || this.data.email === '') {
+                this.errors.push(this.$t('email'))
             }
-            if (!this.data.address.number && this.data.address.number === '') {
-                this.errors.push('number')
+            if (!this.data._id && (!this.data.password || this.data.password === '')) {
+                this.errors.push(this.$t('password'))
             }
-            if (!this.data.address.neighborhood && this.data.address.neighborhood === '') {
-                this.errors.push('neighborhood')
-            }
-            if (!this.data.address.city && this.data.address.city === '') {
-                this.errors.push('city')
-            }
-            if (!this.data.address.state && this.data.address.state === '') {
-                this.errors.push('state')
-            }
+
+            delete this.data.client === ''
+            delete this.data.site === ''
 
             if (!this.errors || this.errors.length === 0) {
                 this.isLoading = true
@@ -208,6 +234,40 @@ export default {
                     console.log(error)
                 },
             )
+        },
+        changeAccount: async function () {
+            const account = this.data.account
+
+            if (account === '') {
+                this.data.client = ''
+            }
+
+            this.clients = await Services.getClientsByAccount(this, account)
+        },
+        changeClient: async function () {
+            const client = this.data.client
+
+            if (client === '') {
+                this.data.site = ''
+            }
+
+            this.sites = await Services.getSitesByClient(this, client)
+        },
+        changeRole: async function () {
+            this.data.client = ''
+            this.data.site = ''
+        },
+        selectItem: async function (item) {
+            this.errors = []
+            this.file = null
+            this.data = item
+
+            if (item.client) {
+                this.sites = await Services.getSitesByClient(this, item.client)
+            }
+
+            document.body.scrollTop = 0 // For Safari
+            document.documentElement.scrollTop = 0 // For Chrome, Firefox, IE and Opera
         },
         handleFileUpload() {
             this.file = this.$refs.file.files[0]

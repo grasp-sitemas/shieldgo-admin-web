@@ -1,6 +1,7 @@
 <script>
 import Endpoints from '../../common/Endpoints.vue'
 import Request from '../../common/Request.vue'
+import Common from '../../common/Common.vue'
 
 export default {
     init: payload => {
@@ -12,52 +13,69 @@ export default {
         signIn: function () {
             this.errors = []
             this.messageIdToast = null
-            Request.do(
-                this,
-                'post',
-                Request.getDefaultHeader(this),
-                this.data,
-                `${Endpoints.systemUsers.login}`,
-                (userResponse, fullResponse) => {
-                    if (userResponse.status === 200 && userResponse.result.status === 'ACTIVE') {
-                        this.$session.destroy()
-                        this.$session.start()
-                        this.$session.set('user', userResponse.result)
-                        this.$session.set('token', userResponse.token)
-                        this.$session.set('correlationId', fullResponse.headers['x-correlation-id'])
 
-                        const subtype = userResponse.result?.companyUser?.subtype
-                        const company = userResponse.result?.company
+            try {
+                Request.do(
+                    this,
+                    'post',
+                    Request.getDefaultHeader(this),
+                    this.data,
+                    `${Endpoints.systemUsers.login}`,
+                    (userResponse, fullResponse) => {
+                        if (userResponse.status === 200 && userResponse.result.status === 'ACTIVE') {
+                            this.$session.destroy()
+                            this.$session.start()
+                            this.$session.set('user', userResponse.result)
+                            this.$session.set('token', userResponse.token)
+                            this.$session.set('correlationId', fullResponse.headers['x-correlation-id'])
 
-                        if (company && company.status === 'ACTIVE') {
-                            if (subtype === 'SUPER_ADMIN_MASTER' || 'ADMIN_MASTER' || subtype === 'ADMIN' || subtype === 'MANAGER' || subtype === 'OPERATOR') {
-                                this.$session.set('company', company)
-                                this.$i18n.locale = userResponse.result.language
-                                this.$router.push({ path: '/dashboard' })
+                            const result = userResponse?.result
+                            const subtype = userResponse?.result?.companyUser?.subtype
 
-                                window.location.href = '?#/dashboard'
-                                location.reload()
+                            if (this.isCompanyActive(result)) {
+                                if (this.isUserActive(result)) {
+                                    if (this.checkRole(subtype)) {
+                                        this.$i18n.locale = userResponse.result.language
+                                        this.$router.push({ path: '/dashboard' })
+
+                                        window.location.href = '?#/dashboard'
+                                        location.reload()
+                                    } else {
+                                        this.$router.push({ path: '/' })
+                                        window.location.href = '?#/'
+                                        location.reload()
+                                        Common.show(this, 'bottom-right', 'error', this.$t('response.user.invalid.role'))
+                                    }
+                                }
                             } else {
-                                this.$router.push({ path: '/' })
-                                window.location.href = '?#/'
-                                location.reload()
+                                Common.show(this, 'bottom-right', 'error', this.$t('response.company.inactive'))
                             }
                         }
-                    }
-                },
-                error => {
-                    let res = error.response
-                    if (res && res.status == 500) {
-                        this.titleToast = 'Aviso'
-
-                        if (res.data.messageId === 'response.user.password.incorrect') {
-                            this.messageToast = this.$t(res.data.messageId)
-                        } else {
-                            this.messageIdToast = this.$t(res.data.messageId)
+                    },
+                    error => {
+                        let res = error?.response?.data || {}
+                        if (res && res.status === 500) {
+                            if (res.messageId === 'response.user.password.incorrect') {
+                                Common.show(this, 'bottom-right', 'error', this.$t('response.user.password.invalid'))
+                            } else {
+                                Common.show(this, 'bottom-right', 'warn', this.$t('str.login.error'))
+                            }
                         }
-                    }
-                },
-            )
+                    },
+                )
+            } catch (err) {
+                Common.show(this, 'bottom-right', 'warn', this.$t('str.login.error'))
+                console.log(err)
+            }
+        },
+        isCompanyActive: function (item) {
+            return item?.company?.status === 'ACTIVE' || item?.account?.status === 'ACTIVE' || item?.client?.status === 'ACTIVE' || item?.site?.status === 'ACTIVE' ? true : false
+        },
+        isUserActive: function (item) {
+            return item?.status === 'ACTIVE' && item?.companyUser?.status === 'ACTIVE' ? true : false
+        },
+        checkRole: function (role) {
+            return role === 'SUPER_ADMIN_MASTER' || role === 'ADMIN_MASTER' || role === 'ADMIN' || role === 'MANAGER' || role === 'OPERATOR' ? true : false
         },
         hasType: function (type) {
             if (this.user) {

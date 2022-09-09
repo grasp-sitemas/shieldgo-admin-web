@@ -3,13 +3,15 @@ import Vue from 'vue'
 import VueSession from 'vue-session'
 
 import Companies from '../pages/Company/Company/Company.vue'
+import ChangePassword from '../pages/User/ChangePassword/ChangePassword.vue'
 import Clients from '../pages/Company/Client/Client.vue'
-import Sites from '../pages/Company/Site/Site.vue'
-import RegisterData from '../pages/Company/RegisterData/RegisterData.vue'
 import Dashboard from '../pages/Dashboard/Dashboard.vue'
-import Schedule from '../pages/Schedule/Schedule.vue'
 import Login from '../pages/Login/Login.vue'
 import PageNotFound from '../pages/PageNotFound/PageNotFound.vue'
+import RegisterData from '../pages/Company/RegisterData/RegisterData.vue'
+import Sites from '../pages/Company/Site/Site.vue'
+import Schedule from '../pages/Schedule/Schedule.vue'
+import User from '../pages/User/User/User.vue'
 
 Vue.use(VueSession)
 
@@ -63,6 +65,14 @@ const routes = [
         },
     },
     {
+        path: '/change-password',
+        name: 'change-password',
+        component: ChangePassword,
+        beforeEnter: (_to, _from, next) => {
+            next(checkSession())
+        },
+    },
+    {
         path: '/sites',
         name: 'sites',
         component: Sites,
@@ -74,6 +84,14 @@ const routes = [
         path: '/schedules',
         name: 'schedules',
         component: Schedule,
+        beforeEnter: (_to, _from, next) => {
+            next(checkSession())
+        },
+    },
+    {
+        path: '/users',
+        name: 'users',
+        component: User,
         beforeEnter: (_to, _from, next) => {
             next(checkSession())
         },

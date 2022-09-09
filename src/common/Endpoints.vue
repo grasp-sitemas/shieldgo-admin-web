@@ -1,6 +1,6 @@
 <script>
-// const domain = 'https://api-gateway-shield.herokuapp.com'
-const domain = 'http://localhost:3000'
+const domain = 'https://api-gateway-shield.herokuapp.com'
+// const domain = 'http://localhost:3000'
 const viaCepDomain = 'https://viacep.com.br/ws/'
 
 export default {
@@ -13,7 +13,7 @@ export default {
         changeLanguage: `${domain}/api/users/system/change/language/v1/`,
         delete: `${domain}/api/users/delete/v1/`,
         systemUser: `${domain}/api/users/v1/`,
-        systemUserFormdata: `${domain}/api/users/formdata/v1/`,
+        formData: `${domain}/api/users/formdata/v1/`,
         login: `${domain}/api/users/system/login/v1/`,
         gencode: `${domain}/api/users/system/password/gencode/v1/`,
         checkCode: `${domain}/api/users/system/password/checkcode/v1/`,
@@ -21,7 +21,12 @@ export default {
         resetPassNotLog: `${domain}/api/users/system/password/change/v1/`,
         getMe: `${domain}/api/users/me/v1/`,
         ListUserByType: `${domain}/api/users/bytype/v1/`,
-        search: `${domain}/api/users/system/search/companyuser/v1/`,
+        companyUser: {
+            search: `${domain}/api/users/system/search/companyuser/v1/`,
+        },
+        customerUser: {
+            search: `${domain}/api/users/system/search/customeruser/v1/`,
+        },
         count: `${domain}/api/generic/count/byfilter/v1/`,
     },
     companies: {

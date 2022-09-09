@@ -8,7 +8,7 @@
                 </div>
                 <div class="menu-profile-info">
                     <div class="d-flex align-items-center">
-                        <div class="flex-grow-1">{{ this?.user?.company?.fantasyName }}</div>
+                        <div class="flex-grow-1">{{ getCompanyName() }}</div>
                         <div class="menu-caret ms-auto"></div>
                     </div>
                     <small>{{ $t(this?.user?.companyUser?.subtype) }}</small>

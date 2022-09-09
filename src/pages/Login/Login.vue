@@ -27,6 +27,7 @@
                 </div>
             </div>
         </div>
+        <notifications group="bottom-right" position="bottom right" :speed="500" />
     </div>
 </template>
 
@@ -36,9 +37,11 @@ import Controller from './CrtLogin.vue'
 export default {
     created() {
         AppOptions.appEmpty = true
-        Controller.init(this)
         this.data.email = 'dev@grasp.com.br'
         this.data.password = '12345678'
+    },
+    mounted() {
+        Controller.init(this)
     },
     beforeRouteLeave(to, from, next) {
         AppOptions.appEmpty = false

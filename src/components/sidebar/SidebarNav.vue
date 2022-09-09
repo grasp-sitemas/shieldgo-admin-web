@@ -31,6 +31,7 @@
 import SidebarMenu from './SidebarMenu.vue'
 import SidebarNavList from './SidebarNavList.vue'
 import AppOptions from '../../config/AppOptions.vue'
+import Controller from './CrtSidebar.vue'
 
 export default {
     name: 'SidebarNav',
@@ -42,76 +43,13 @@ export default {
         return {
             menus: SidebarMenu,
             appOptions: AppOptions,
+            user: null,
         }
     },
-    methods: {
-        handleShowFloatSubmenu: function (menu, offset) {
-            this.$emit('show-float-submenu', menu, offset)
-        },
-        handleHideFloatSubmenu: function () {
-            this.$emit('hide-float-submenu')
-        },
-        handleCollapseOther: function (menu) {
-            for (var i = 0; i < this.menus.length; i++) {
-                this.$refs.sidebarNavList[i].collapse(menu)
-            }
-        },
-        handleSidebarMinify: function () {
-            this.appOptions.appSidebarMinified = !this.appOptions.appSidebarMinified
-        },
-        handleSidebarFilter: function (e) {
-            var value = e.target.value
-            value = value.toLowerCase()
-
-            if (value) {
-                for (var x = 0; x < this.menus.length; x++) {
-                    var title = this.menus[x].title.toLowerCase()
-                    var children = this.menus[x].children
-
-                    if (title.search(value) > -1) {
-                        this.$refs.sidebarNavList[x].show()
-
-                        if (children) {
-                            this.$refs.sidebarNavList[x].searchExpand()
-                        }
-                    } else {
-                        if (children) {
-                            var hasActive = false
-                            for (var y = 0; y < children.length; y++) {
-                                var title2 = children[y].title.toLowerCase()
-
-                                if (title2.search(value) > -1) {
-                                    hasActive = true
-                                    this.$refs.sidebarNavList[x].$refs.sidebarNavList[y].show()
-                                    this.$refs.sidebarNavList[x].searchExpand()
-                                } else {
-                                    if (hasActive) {
-                                        this.$refs.sidebarNavList[x].searchExpand()
-                                    } else {
-                                        this.$refs.sidebarNavList[x].hide()
-                                    }
-                                    this.$refs.sidebarNavList[x].$refs.sidebarNavList[y].hide()
-                                }
-                            }
-                        } else {
-                            this.$refs.sidebarNavList[x].hide()
-                        }
-                    }
-                }
-            } else {
-                for (var a = 0; a < this.menus.length; a++) {
-                    this.$refs.sidebarNavList[a].show()
-
-                    var submenu = this.menus[a].children
-                    if (submenu) {
-                        for (var b = 0; b < submenu.length; b++) {
-                            this.$refs.sidebarNavList[a].$refs.sidebarNavList[b].show()
-                        }
-                    }
-                }
-            }
-            console.log('------')
-        },
+    mounted() {
+        Controller.init(this)
+        Controller.methods.applyMenuRole(this)
     },
+    methods: Controller.methods,
 }
 </script>

@@ -13,8 +13,7 @@ export default {
         return response?.data?.results || []
     },
     getClients: async function (state) {
-        const company = state.$session.get('user')?.company
-        const account = company.type === 'ACCOUNT' ? company._id : ''
+        const account = state.$session.get('user')?.account?._id
 
         const filters = {
             name: '',

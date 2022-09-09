@@ -1,5 +1,6 @@
 <script>
 import Endpoints from '../../common/Endpoints.vue'
+import Request from '../../common/Request.vue'
 
 export default {
     init: payload => {
@@ -96,6 +97,25 @@ export default {
             if (role !== 'SUPER_ADMIN_MASTER' && role !== 'ADMIN_MASTER') {
                 state.menus = state.menus.filter(menu => menu?.path !== '/companies')
             }
+        },
+        refreshUser(state) {
+            Request.do(
+                state,
+                'get',
+                Request.getDefaultHeader(state),
+                {},
+                `${Endpoints.systemUsers.getMe}`,
+                response => {
+                    if (response) {
+                        const result = response?.result
+                        state.$session.set('user', result)
+                        state.user = result
+                    }
+                },
+                error => {
+                    console.log(error)
+                },
+            )
         },
     },
 }

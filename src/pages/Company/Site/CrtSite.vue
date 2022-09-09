@@ -245,9 +245,6 @@ export default {
             document.body.scrollTop = 0 // For Safari
             document.documentElement.scrollTop = 0 // For Chrome, Firefox, IE and Opera
         },
-        handleFileUpload() {
-            this.file = this.$refs.file.files[0]
-        },
         changeAccount: async function () {
             const account = this.data.account
 

@@ -52,12 +52,12 @@ export default {
         return state.$session.get('user')?.companyUser?.subtype === 'SUPER_ADMIN_MASTER' ? true : false
     },
     getAccountId: state => {
-        const type = state.$session.get('user')?.company?.type
-        return type === 'ACCOUNT' ? state.$session.get('user')?.company?._id : ''
+        const type = state.$session.get('user')?.account?.type
+        return type === 'ACCOUNT' ? state.$session.get('user')?.account?._id : ''
     },
     getClientId: state => {
-        const type = state.$session.get('user')?.company?.type
-        return type === 'CLIENT' ? state.$session.get('user')?.company?._id : ''
+        const type = state.$session.get('user')?.client?.type
+        return type === 'CLIENT' ? state.$session.get('user')?.client?._id : ''
     },
 }
 </script>

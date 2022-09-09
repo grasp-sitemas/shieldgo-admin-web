@@ -14,10 +14,10 @@
             <form>
                 <fieldset>
                     <div v-if="data._id" class="row">
-                        <div class="col-md-4 mb-3">
+                        <!-- <div class="col-md-4 mb-3">
                             <label class="form-label" for="idField">{{ $t('str.register.id.field') }}</label>
                             <input v-model="data._id" disabled class="form-control" type="text" id="idField" />
-                        </div>
+                        </div> -->
                         <div class="col-md-4 mb-3">
                             <label class="form-label" for="statusField">{{ $t('str.register.status.field') }}</label>
                             <select v-model="data.status" class="form-control" id="statusField">

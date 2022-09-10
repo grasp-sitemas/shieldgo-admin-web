@@ -355,5 +355,9 @@
   "str.table.user.column.status": "Status",
   "response.company.inactive": "Company is inactive",
   "response.user.invalid.role": "Invalid role",
-  "str.table.list.users": "List of Users"
+  "str.table.list.users": "List of Users",
+  "str.form.title.settings": "Settings",
+  "str.dark.mode": "Dark Mode",
+  "str.dark.mode.description": "Adjust the appearance to reduce glare and give your eyes a break.",
+  "str.page.settigs": "Page settings"
 }

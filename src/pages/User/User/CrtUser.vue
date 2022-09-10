@@ -19,14 +19,14 @@ const instanceateAddress = (addressObj, geo) => {
 export default {
     init: async payload => {
         payload.domain = Endpoints.domain
+        payload.data.account = Common.getAccountId(payload)
 
         payload.isSuperAdminMaster = await Common.isSuperAdminMaster(payload)
         if (payload.isSuperAdminMaster) {
             payload.accounts = await Services.getAccounts(payload)
+        } else {
+            payload.clients = await Services.getClients(payload)
         }
-
-        payload.clients = await Services.getClients(payload)
-        payload.data.account = Common.getAccountId(payload)
     },
     methods: {
         inputCep() {
@@ -190,8 +190,13 @@ export default {
                 this.errors.push(this.$t('password'))
             }
 
-            delete this.data.client === ''
-            delete this.data.site === ''
+            if (!this.data.client || this.data.client === '') {
+                delete this.data.client
+            }
+
+            if (!this.data.site || this.data.site === '') {
+                delete this.data.site
+            }
 
             if (!this.errors || this.errors.length === 0) {
                 this.isLoading = true
@@ -240,6 +245,7 @@ export default {
 
             if (account === '') {
                 this.data.client = ''
+                this.data.site = ''
             }
 
             this.clients = await Services.getClientsByAccount(this, account)

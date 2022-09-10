@@ -343,5 +343,9 @@
   "str.table.user.column.status": "Status",
   "response.company.inactive": "Empresa inativa",
   "response.user.invalid.role": "Perfil inválido",
-  "str.table.list.users": "Lista de usuários"
+  "str.table.list.users": "Lista de usuários",
+  "str.form.title.settings": "Configurações",
+  "str.dark.mode": "Modo escuro",
+  "str.dark.mode.description": "Ajuste a aparência para reduzir o brilho e dar um descanso aos seus olhos.",
+  "str.page.settigs": "Configurações da página"
 }

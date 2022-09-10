@@ -9,6 +9,7 @@ import Dashboard from '../pages/Dashboard/Dashboard.vue'
 import Login from '../pages/Login/Login.vue'
 import PageNotFound from '../pages/PageNotFound/PageNotFound.vue'
 import RegisterData from '../pages/Company/RegisterData/RegisterData.vue'
+import Settings from '../pages/Settings/Settings.vue'
 import Sites from '../pages/Company/Site/Site.vue'
 import Schedule from '../pages/Schedule/Schedule.vue'
 import User from '../pages/User/User/User.vue'
@@ -68,6 +69,14 @@ const routes = [
         path: '/change-password',
         name: 'change-password',
         component: ChangePassword,
+        beforeEnter: (_to, _from, next) => {
+            next(checkSession())
+        },
+    },
+    {
+        path: '/settings',
+        name: 'settings',
+        component: Settings,
         beforeEnter: (_to, _from, next) => {
             next(checkSession())
         },

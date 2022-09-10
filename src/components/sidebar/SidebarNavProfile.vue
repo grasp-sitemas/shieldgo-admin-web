@@ -20,7 +20,7 @@
 
         <div id="appSidebarProfileMenu" class="collapse" v-bind:class="{ 'd-block': this.stat == 'expand' && !this.appOptions.pageSidebarMinified, 'd-none': this.stat == 'collapse' }">
             <div class="menu-item pt-5px">
-                <a href="javascript:;" class="menu-link">
+                <a href="#/settings" class="menu-link">
                     <div class="menu-icon"><i class="fa fa-cog"></i></div>
                     <div class="menu-text">{{ $t('str.sidebar.menu.settings') }}</div>
                 </a>

@@ -359,5 +359,7 @@
   "str.form.title.settings": "Settings",
   "str.dark.mode": "Dark Mode",
   "str.dark.mode.description": "Adjust the appearance to reduce glare and give your eyes a break.",
-  "str.page.settigs": "Page settings"
+  "str.page.settigs": "Page settings",
+  "response.login.user.archived": "User is inactive",
+  "response.login.company.archived": "Company is inactive"
 }

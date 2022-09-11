@@ -12,7 +12,6 @@ export default {
     methods: {
         signIn: function () {
             this.errors = []
-            this.messageIdToast = null
 
             try {
                 Request.do(
@@ -22,33 +21,22 @@ export default {
                     this.data,
                     `${Endpoints.systemUsers.login}`,
                     (userResponse, fullResponse) => {
-                        if (userResponse.status === 200 && userResponse.result.status === 'ACTIVE') {
+                        if (userResponse.status === 200) {
                             this.$session.destroy()
                             this.$session.start()
                             this.$session.set('user', userResponse.result)
                             this.$session.set('token', userResponse.token)
                             this.$session.set('correlationId', fullResponse.headers['x-correlation-id'])
 
-                            const result = userResponse?.result
                             const subtype = userResponse?.result?.companyUser?.subtype
 
-                            if (this.isCompanyActive(result)) {
-                                if (this.isUserActive(result)) {
-                                    if (this.checkRole(subtype)) {
-                                        this.$i18n.locale = userResponse.result.language
-                                        this.$router.push({ path: '/dashboard' })
-
-                                        window.location.href = '?#/dashboard'
-                                        location.reload()
-                                    } else {
-                                        this.$router.push({ path: '/' })
-                                        window.location.href = '?#/'
-                                        location.reload()
-                                        Common.show(this, 'bottom-right', 'error', this.$t('response.user.invalid.role'))
-                                    }
-                                }
+                            if (this.checkRole(subtype)) {
+                                this.$i18n.locale = userResponse.result.language
+                                this.$router.push({ path: '/dashboard' })
+                                window.location.href = '?#/dashboard'
+                                location.reload()
                             } else {
-                                Common.show(this, 'bottom-right', 'error', this.$t('response.company.inactive'))
+                                Common.show(this, 'bottom-right', 'error', this.$t('response.user.invalid.role'))
                             }
                         }
                     },
@@ -60,10 +48,18 @@ export default {
                             } else {
                                 Common.show(this, 'bottom-right', 'warn', this.$t('str.login.error'))
                             }
+                        } else if (res && res.status === 401) {
+                            if (res.messageId === 'response.user.archived') {
+                                Common.show(this, 'bottom-right', 'error', this.$t('response.login.user.archived'))
+                            } else if (res.messageId === 'response.company.archived') {
+                                Common.show(this, 'bottom-right', 'error', this.$t('response.login.company.archived'))
+                            }
                         }
                     },
                 )
             } catch (err) {
+                alert('adsads')
+
                 Common.show(this, 'bottom-right', 'warn', this.$t('str.login.error'))
                 console.log(err)
             }

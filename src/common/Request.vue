@@ -39,8 +39,7 @@ export default {
                 return res
             }
         } catch (err) {
-            console.log(err)
-            if (err.response && err.response.status == 401) {
+            if (err.response && err.response.status === 401 && err.response?.data?.messageId !== 'response.user.archived' && err.response?.data?.messageId !== 'response.company.archived') {
                 vue.$router.push('/')
             } else {
                 if (callbackError) {

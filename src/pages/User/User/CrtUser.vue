@@ -268,6 +268,10 @@ export default {
             this.file = null
             this.data = item
 
+            if (item.account) {
+                this.clients = await Services.getClientsByAccount(this, item.account)
+            }
+
             if (item.client) {
                 this.sites = await Services.getSitesByClient(this, item.client)
             }

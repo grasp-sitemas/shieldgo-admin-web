@@ -238,10 +238,15 @@ export default {
                 },
             )
         },
-        selectItem: function (item) {
+        selectItem: async function (item) {
             this.errors = []
             this.file = null
             this.data = item
+
+            if (item.account) {
+                this.clients = await Services.getClientsByAccount(this, item.account)
+            }
+
             document.body.scrollTop = 0 // For Safari
             document.documentElement.scrollTop = 0 // For Chrome, Firefox, IE and Opera
         },

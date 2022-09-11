@@ -347,5 +347,7 @@
   "str.form.title.settings": "Configurações",
   "str.dark.mode": "Modo escuro",
   "str.dark.mode.description": "Ajuste a aparência para reduzir o brilho e dar um descanso aos seus olhos.",
-  "str.page.settigs": "Configurações da página"
+  "str.page.settigs": "Configurações da página",
+  "response.login.user.archived": "Usuário Inativo",
+  "response.login.company.archived": "Empresa Inativa"
 }

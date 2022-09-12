@@ -13,6 +13,7 @@ import Settings from '../pages/Settings/Settings.vue'
 import Sites from '../pages/Company/Site/Site.vue'
 import Schedule from '../pages/Schedule/Schedule.vue'
 import User from '../pages/User/User/User.vue'
+import Vigilant from '../pages/User/Vigilant/Vigilant.vue'
 
 Vue.use(VueSession)
 
@@ -101,6 +102,14 @@ const routes = [
         path: '/users',
         name: 'users',
         component: User,
+        beforeEnter: (_to, _from, next) => {
+            next(checkSession())
+        },
+    },
+    {
+        path: '/vigilants',
+        name: 'vigilants',
+        component: Vigilant,
         beforeEnter: (_to, _from, next) => {
             next(checkSession())
         },

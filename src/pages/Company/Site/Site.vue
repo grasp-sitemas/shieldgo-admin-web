@@ -2,7 +2,7 @@
     <div :key="valuekey">
         <ol class="breadcrumb float-xl-end">
             <li class="breadcrumb-item">
-                <a href="javascript:;">{{ $t('str.breadcrumb.sites') }}</a>
+                <a href="#/sites">{{ $t('str.breadcrumb.sites') }}</a>
             </li>
         </ol>
 
@@ -98,6 +98,7 @@
                                 class="form-control"
                                 type="text"
                                 key="addressField"
+                                :placeholder="$t('str.register.site.address.placeholder')"
                             />
                             <div class="invalid-feedback">{{ $t('str.register.site.address.required') }}</div>
                         </div>
@@ -162,7 +163,7 @@
                             <i v-if="isLoading === true" class="fas fa-spinner fa-pulse"></i>
                             {{ $t('str.btn.save') }}
                         </button>
-                        <button @click="clearForm" type="submit" class="btn btn-default w-200px">{{ $t('str.btn.clear.fields') }}</button>
+                        <button @click="clearForm" type="submit" class="btn btn-default w-200px">{{ $t('str.btn.new.form') }}</button>
                         <button v-if="data._id && data.status === 'ACTIVE'" v-on:click="confirmArchive" type="submit" class="ms-10px btn btn-warning w-200px">
                             {{ $t('str.btn.archive') }}
                         </button>

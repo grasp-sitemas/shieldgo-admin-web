@@ -38,6 +38,10 @@ export default {
             data.client = data?.client?._id || ''
             data.site = data?.site?._id || ''
 
+            if (!data?.address?._id) {
+                data.address = {}
+            }
+
             this.$emit('load-item', data)
         },
         initTable() {

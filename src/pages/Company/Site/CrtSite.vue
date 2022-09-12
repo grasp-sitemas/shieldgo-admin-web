@@ -40,9 +40,8 @@ export default {
                 {},
                 `${Endpoints.cep.find}${this.data.address.cep}/json`,
                 response => {
-                    if (response) {
+                    if (response && !response.erro) {
                         this.removeRequiredField('allAddress')
-
                         this.data.address.address = response.logradouro
                         this.data.address.neighborhood = response.bairro
                         this.data.address.city = response.localidade
@@ -101,18 +100,17 @@ export default {
                             this.data.status = status
                             this.data.logoURL = logoURL
                             this.$registerEvent.$emit('refreshList')
-                            // this.valuekey += 1
                         }
                     },
                     error => {
                         this.isLoading = false
-                        Common.show('bottom-right', 'warn', this.$t('str.form.update.generic.error'))
+                        Common.show(this, 'bottom-right', 'warn', this.$t('str.form.update.generic.error'))
                         console.log(error)
                     },
                 )
             } catch (error) {
                 this.isLoading = false
-                Common.show('bottom-right', 'warn', this.$t('str.form.update.generic.error'))
+                Common.show(this, 'bottom-right', 'warn', this.$t('str.form.update.generic.error'))
                 console.log(error)
             }
         },
@@ -133,12 +131,12 @@ export default {
                     },
                     error => {
                         console.log(error)
-                        Common.show('bottom-right', 'warn', this.$t('str.form.archive.generic.error'))
+                        Common.show(this, 'bottom-right', 'warn', this.$t('str.form.archive.generic.error'))
                     },
                 )
             } catch (error) {
                 console.log(error)
-                Common.show('bottom-right', 'warn', this.$t('str.form.archive.generic.error'))
+                Common.show(this, 'bottom-right', 'warn', this.$t('str.form.archive.generic.error'))
             }
         },
         confirmArchive() {
@@ -204,9 +202,10 @@ export default {
                         await this.save(data)
                         this.isLoading = false
                     },
-                    error => {
+                    async error => {
+                        this.data.address.name = 'MAIN'
+                        await this.save(error)
                         this.isLoading = false
-                        console.log(error)
                     },
                 )
             }

@@ -16,8 +16,8 @@
   "str.click": "Click",
   "str.here": "here",
   "str.to.register": "to register",
-  "str.language.portuguese": "Portuguese",
-  "str.language.english": "English",
+  "str.language.portuguese": "Português",
+  "str.language.english": "Inglês",
   "str.language.spanish": "Spanish",
   "str.language.french": "French",
   "str.language.german": "German",
@@ -84,6 +84,7 @@
   "str.table.subtitle.no.data": "No data found",
   "str.form.register.title": "Register Data",
   "str.btn.clear.fields": "Clear Fields",
+  "str.btn.new.form": "New Form",
   "str.btn.save": "Save",
   "str.btn.cancel": "Cancel",
   "str.btn.edit": "Edit",
@@ -438,5 +439,10 @@
   "response.user.invalid.subtype": "Invalid user",
   "str.register.user.perfil.photo.field": "Photo",
   "str.register.user.address.field": "Address",
-  "str.register.user.complement.field": "Complement"
+  "str.register.user.complement.field": "Complement",
+  "str.user.profile.title": "Profile",
+  "str.profile.title": "Profile",
+  "str.register.user.complement.placeholder": "Enter the Complement",
+  "str.register.user.address.placeholder": "Enter the Address",
+  "str.register.vigilant.address.placeholder": "Enter the Address"
 }

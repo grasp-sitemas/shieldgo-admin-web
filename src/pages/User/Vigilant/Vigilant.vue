@@ -2,7 +2,7 @@
     <div :key="valuekey">
         <ol class="breadcrumb float-xl-end">
             <li class="breadcrumb-item">
-                <a href="javascript:;">{{ $t('str.breadcrumb.vigilants') }}</a>
+                <a href="#/vigilants">{{ $t('str.breadcrumb.vigilants') }}</a>
             </li>
         </ol>
 
@@ -22,7 +22,6 @@
                             </select>
                         </div>
                     </div>
-
                     <div class="row">
                         <div v-if="isSuperAdminMaster" class="col-md-4 mb-3">
                             <label class="form-label" for="accountField">{{ $t('str.register.vigilant.account.field') }}</label>
@@ -57,6 +56,16 @@
                                 </option>
                             </select>
                             <div class="invalid-feedback">{{ $t('str.register.vigilant.client.required') }}</div>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label class="form-label" for="siteField">{{ $t('str.register.vigilant.site.field') }}</label>
+                            <select v-model="data.site" class="form-select" v-bind:class="checkRequiredField('site') ? 'is-invalid' : ''" @focus="removeRequiredField('site')" id="siteField">
+                                <option value="">{{ $t('str.register.select.placeholder') }}</option>
+                                <option v-for="site in sites" :value="site._id" :key="site._id">
+                                    {{ site.name }}
+                                </option>
+                            </select>
+                            <div class="invalid-feedback">{{ $t('str.register.vigilant.site.required') }}</div>
                         </div>
                     </div>
                     <div class="row">
@@ -129,30 +138,38 @@
                     <div class="row">
                         <div class="col-md-4 mb-3">
                             <label class="form-label" for="cepField">{{ $t('str.register.vigilant.cep.field') }}</label>
-                            <input type="tel" v-mask="'#####-###'" key="cepField" @input="inputCep()" v-model="data.address.cep" class="form-control" :placeholder="$t('str.register.company.cep.placeholder')" />
+                            <input
+                                type="tel"
+                                v-mask="'#####-###'"
+                                key="cepField"
+                                @input="inputCep()"
+                                v-model="data.address.cep"
+                                class="form-control"
+                                :placeholder="$t('str.register.vigilant.cep.placeholder')"
+                            />
                             <div class="invalid-feedback">{{ $t('str.register.vigilant.cep.required') }}</div>
                         </div>
                         <div v-if="data?.address?.cep?.length === 9" class="col-md-4 mb-3">
                             <label class="form-label" for="addressField">{{ $t('str.register.vigilant.address.field') }}</label>
-                            <input v-model="data.address.address" class="form-control" type="text" key="addressField" />
+                            <input v-model="data.address.address" class="form-control" type="text" key="addressField" :placeholder="$t('str.register.vigilant.address.placeholder')" />
                         </div>
                         <div v-if="data?.address?.cep?.length === 9" class="col-md-4 mb-3">
                             <label class="form-label" for="numberField">{{ $t('str.register.vigilant.number.field') }}</label>
-                            <input v-model="data.address.number" class="form-control" type="number" key="numberField" :placeholder="$t('str.register.company.number.placeholder')" />
+                            <input v-model="data.address.number" class="form-control" type="number" key="numberField" :placeholder="$t('str.register.vigilant.number.placeholder')" />
                         </div>
                     </div>
                     <div class="row" v-if="data?.address?.cep?.length === 9">
                         <div class="col-md-4 mb-3">
                             <label class="form-label" for="complementField">{{ $t('str.register.vigilant.complement.field') }}</label>
-                            <input v-model="data.address.complement" class="form-control" type="text" id="complementField" :placeholder="$t('str.register.company.complement.placeholder')" />
+                            <input v-model="data.address.complement" class="form-control" type="text" id="complementField" :placeholder="$t('str.register.vigilant.complement.placeholder')" />
                         </div>
                         <div class="col-md-4 mb-3">
                             <label class="form-label" for="districtField">{{ $t('str.register.vigilant.district.field') }}</label>
-                            <input v-model="data.address.neighborhood" class="form-control" type="text" key="districtField" :placeholder="$t('str.register.company.district.placeholder')" />
+                            <input v-model="data.address.neighborhood" class="form-control" type="text" key="districtField" :placeholder="$t('str.register.vigilant.district.placeholder')" />
                         </div>
                         <div class="col-md-4 mb-3">
                             <label class="form-label" for="cityField">{{ $t('str.register.vigilant.city.field') }}</label>
-                            <input v-model="data.address.city" class="form-control" type="text" key="cityField" :placeholder="$t('str.register.company.city.placeholder')" />
+                            <input v-model="data.address.city" class="form-control" type="text" key="cityField" :placeholder="$t('str.register.vigilant.city.placeholder')" />
                         </div>
                         <div class="col-md-4 mb-3">
                             <label class="form-label" for="stateField">{{ $t('str.register.vigilant.state.field') }}</label>
@@ -175,7 +192,7 @@
                                     </a>
                                 </div>
 
-                                <input type="file" id="file" ref="file" v-on:change="handleFileUpload()" class="form-control" />
+                                <input type="file" accept="image/*" id="file" ref="file" v-on:change="handleFileUpload()" class="form-control" />
                             </div>
                         </div>
                     </div>
@@ -184,7 +201,7 @@
                             <i v-if="isLoading === true" class="fas fa-spinner fa-pulse"></i>
                             {{ $t('str.btn.save') }}
                         </button>
-                        <button @click="clearForm" type="submit" class="btn btn-default w-200px">{{ $t('str.btn.clear.fields') }}</button>
+                        <button @click="clearForm" type="submit" class="btn btn-default w-200px">{{ $t('str.btn.new.form') }}</button>
                         <button v-if="data._id && data.status === 'ACTIVE'" v-on:click="confirmArchive" type="submit" class="ms-10px btn btn-warning w-200px">
                             {{ $t('str.btn.archive') }}
                         </button>
@@ -219,6 +236,7 @@ export default {
             errors: [],
             accounts: [],
             clients: [],
+            sites: [],
             valuekey: 0,
             isSuperAdminMaster: false,
             data: {
@@ -229,6 +247,7 @@ export default {
                 photoURL: '',
                 account: '',
                 client: '',
+                site: '',
                 customerUser: {
                     status: 'ACTIVE',
                     subtype: 'VIGILANT',

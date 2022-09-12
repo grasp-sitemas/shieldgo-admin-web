@@ -40,7 +40,7 @@ export default {
                 {},
                 `${Endpoints.cep.find}${this.data.address.cep}/json`,
                 response => {
-                    if (response) {
+                    if (response && !response.erro) {
                         this.removeRequiredField('allAddress')
 
                         this.data.address.address = response.logradouro
@@ -59,6 +59,7 @@ export default {
         clearForm() {
             this.errors = []
             this.file = null
+            this.$refs.file.value = null
             this.data = {
                 firstName: '',
                 lastName: '',
@@ -67,7 +68,8 @@ export default {
                 photoURL: '',
                 account: '',
                 client: '',
-                companyUser: {
+                site: '',
+                customerUser: {
                     status: 'ACTIVE',
                     subtype: 'VIGILANT',
                 },
@@ -114,13 +116,13 @@ export default {
                     },
                     error => {
                         this.isLoading = false
-                        Common.show('bottom-right', 'warn', this.$t('str.form.update.generic.error'))
+                        Common.show(this, 'bottom-right', 'warn', this.$t('str.form.update.generic.error'))
                         console.log(error)
                     },
                 )
             } catch (error) {
                 this.isLoading = false
-                Common.show('bottom-right', 'warn', this.$t('str.form.update.generic.error'))
+                Common.show(this, 'bottom-right', 'warn', this.$t('str.form.update.generic.error'))
                 console.log(error)
             }
         },
@@ -141,12 +143,12 @@ export default {
                     },
                     error => {
                         console.log(error)
-                        Common.show('bottom-right', 'warn', this.$t('str.form.archive.generic.error'))
+                        Common.show(this, 'bottom-right', 'warn', this.$t('str.form.archive.generic.error'))
                     },
                 )
             } catch (error) {
                 console.log(error)
-                Common.show('bottom-right', 'warn', this.$t('str.form.archive.generic.error'))
+                Common.show(this, 'bottom-right', 'warn', this.$t('str.form.archive.generic.error'))
             }
         },
         confirmArchive() {
@@ -175,21 +177,30 @@ export default {
                 this.errors = this.errors.filter(item => item !== field)
             }
         },
-        checkForm() {
+        async checkForm() {
             if (!this.data.firstName || this.data.firstName === '') {
                 this.errors.push('firstName')
             }
             if (!this.data.lastName || this.data.lastName === '') {
                 this.errors.push('lastName')
             }
-            if (!this.data.client || this.data.client === '') {
-                this.errors.push('client')
-            }
             if (!this.data.email || this.data.email === '') {
                 this.errors.push(this.$t('email'))
             }
             if (!this.data._id && (!this.data.password || this.data.password === '')) {
                 this.errors.push(this.$t('password'))
+            }
+
+            if (!this.data.client || this.data.client === '') {
+                delete this.data.client
+            }
+
+            if (!this.data.site || this.data.site === '') {
+                delete this.data.site
+            }
+
+            if (!this.data.password || this.data.password === '') {
+                delete this.data.password
             }
 
             if (!this.errors || this.errors.length === 0) {
@@ -200,9 +211,10 @@ export default {
                         await this.save(data)
                         this.isLoading = false
                     },
-                    error => {
+                    async error => {
+                        this.data.address.name = 'MAIN'
+                        await this.save(error)
                         this.isLoading = false
-                        console.log(error)
                     },
                 )
             }
@@ -229,8 +241,10 @@ export default {
                         state.addresses = geoResponse.results
                     }
                 },
-                error => {
-                    console.log(error)
+                async error => {
+                    this.data.address.name = 'MAIN'
+                    await this.save(error)
+                    this.isLoading = false
                 },
             )
         },
@@ -239,17 +253,36 @@ export default {
 
             if (account === '') {
                 this.data.client = ''
+                this.data.site = ''
             }
 
             this.clients = await Services.getClientsByAccount(this, account)
         },
+        changeClient: async function () {
+            const client = this.data.client
+
+            if (client === '') {
+                this.data.site = ''
+            }
+
+            this.sites = await Services.getSitesByClient(this, client)
+        },
+        changeRole: async function () {
+            this.data.client = ''
+            this.data.site = ''
+        },
         selectItem: async function (item) {
             this.errors = []
             this.file = null
+            this.$refs.file.value = null
             this.data = item
 
             if (item.account) {
                 this.clients = await Services.getClientsByAccount(this, item.account)
+            }
+
+            if (item.client) {
+                this.sites = await Services.getSitesByClient(this, item.client)
             }
 
             document.body.scrollTop = 0 // For Safari

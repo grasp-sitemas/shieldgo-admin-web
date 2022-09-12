@@ -1,8 +1,6 @@
 <template>
     <div :key="valuekey">
-        <!-- BEGIN #header -->
         <div id="header" class="app-header" v-bind:class="{ 'app-header-inverse': appOptions.appHeaderInverse }">
-            <!-- BEGIN navbar-header -->
             <div class="navbar-header">
                 <button type="button" class="navbar-mobile-toggler" v-on:click="toggleSidebarEndMobile" v-if="appOptions.appSidebarTwo">
                     <span class="icon-bar"></span>
@@ -35,9 +33,6 @@
                     <span class="icon-bar"></span>
                 </button>
             </div>
-            <!-- END navbar-header -->
-
-            <!-- BEGIN header-nav -->
             <div class="navbar-nav">
                 <header-mega-menu v-if="appOptions.appHeaderMegaMenu"></header-mega-menu>
 
@@ -73,7 +68,7 @@
                         <span class="d-none d-md-inline">{{ `${this.user?.firstName} ${this.user?.lastName}` }}</span>
                         <b class="caret"></b>
                     </template>
-                    <a href="javascript:;" class="dropdown-item">{{ $t('str.header.menu.edit.profile') }}</a>
+                    <a href="#/profile" class="dropdown-item">{{ $t('str.header.menu.edit.profile') }}</a>
                     <!-- <a href="javascript:;" class="dropdown-item d-flex align-items-center">
                         Inbox
                         <span class="badge bg-danger rounded-pill ms-auto pb-4px">2</span>
@@ -91,9 +86,7 @@
                     </a>
                 </div>
             </div>
-            <!-- end header navigation right -->
         </div>
-        <!-- end #header -->
     </div>
 </template>
 
@@ -101,6 +94,8 @@
 import AppOptions from '../../config/AppOptions.vue'
 import Controller from './CrtHeader.vue'
 import HeaderMegaMenu from './HeaderMegaMenu.vue'
+import Vue from 'vue'
+Vue.prototype.$registerEvent = new Vue()
 
 export default {
     name: 'Header',
@@ -116,6 +111,12 @@ export default {
         }
     },
     methods: Controller.methods,
+    created() {
+        const state = this
+        state.$registerEvent.$on('updateHeader', function () {
+            state.refreshUser(state)
+        })
+    },
     mounted() {
         Controller.init(this)
     },

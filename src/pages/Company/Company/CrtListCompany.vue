@@ -30,6 +30,10 @@ export default {
             delete data.vgt_id
             delete data.originalIndex
 
+            if (!data?.address?._id) {
+                data.address = {}
+            }
+
             this.$emit('load-item', data)
         },
         initTable() {

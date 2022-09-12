@@ -11,7 +11,6 @@ const instanceateAddress = (addressObj, geo) => {
     if (geo.geometry.lng) {
         addressObj.lng = geo.geometry.lng
     } else return null
-
     return addressObj
 }
 
@@ -31,9 +30,8 @@ export default {
                 {},
                 `${Endpoints.cep.find}${this.data.address.cep}/json`,
                 response => {
-                    if (response) {
+                    if (response && !response.erro) {
                         this.removeRequiredField('allAddress')
-
                         this.data.address.address = response.logradouro
                         this.data.address.neighborhood = response.bairro
                         this.data.address.city = response.localidade
@@ -49,7 +47,6 @@ export default {
         },
         clearForm() {
             this.errors = []
-            this.file = null
             this.data = {
                 name: '',
                 fantasyName: '',
@@ -73,6 +70,8 @@ export default {
                 type: 'ACCOUNT',
                 status: 'ACTIVE',
             }
+            this.file = null
+            this.$refs.file.value = null
             this.isLoading = false
         },
         save() {
@@ -96,18 +95,17 @@ export default {
                             this.data.status = status
                             this.data.logoURL = logoURL
                             this.$registerEvent.$emit('refreshList')
-                            // this.valuekey += 1
                         }
                     },
                     error => {
                         this.isLoading = false
-                        Common.show('bottom-right', 'warn', this.$t('str.form.update.generic.error'))
+                        Common.show(this, 'bottom-right', 'warn', this.$t('str.form.update.generic.error'))
                         console.log(error)
                     },
                 )
             } catch (error) {
                 this.isLoading = false
-                Common.show('bottom-right', 'warn', this.$t('str.form.update.generic.error'))
+                Common.show(this, 'bottom-right', 'warn', this.$t('str.form.update.generic.error'))
                 console.log(error)
             }
         },
@@ -128,12 +126,12 @@ export default {
                     },
                     error => {
                         console.log(error)
-                        Common.show('bottom-right', 'warn', this.$t('str.form.archive.generic.error'))
+                        Common.show(this, 'bottom-right', 'warn', this.$t('str.form.archive.generic.error'))
                     },
                 )
             } catch (error) {
                 console.log(error)
-                Common.show('bottom-right', 'warn', this.$t('str.form.archive.generic.error'))
+                Common.show(this, 'bottom-right', 'warn', this.$t('str.form.archive.generic.error'))
             }
         },
         confirmArchive() {
@@ -185,6 +183,10 @@ export default {
                 this.errors.push('state')
             }
 
+            if (!this.data.personType || this.data.personType === '') {
+                delete this.data.personType
+            }
+
             if (!this.errors || this.errors.length === 0) {
                 this.isLoading = true
 
@@ -193,9 +195,10 @@ export default {
                         await this.save(data)
                         this.isLoading = false
                     },
-                    error => {
+                    async error => {
+                        this.data.address.name = 'MAIN'
+                        await this.save(error)
                         this.isLoading = false
-                        console.log(error)
                     },
                 )
             }
@@ -213,6 +216,7 @@ export default {
                         return callbackError(this.$t('string.company.register.address.invalid'))
                     } else if (geoResponse.results.length == 1) {
                         let addressObj = instanceateAddress(state.data.address, geoResponse.results[0])
+
                         if (addressObj) {
                             return callbackSuccess(state.data)
                         } else {
@@ -230,6 +234,7 @@ export default {
         selectItem: function (item) {
             this.errors = []
             this.file = null
+            this.$refs.file.value = null
             this.data = item
             document.body.scrollTop = 0 // For Safari
             document.documentElement.scrollTop = 0 // For Chrome, Firefox, IE and Opera

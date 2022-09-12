@@ -2,7 +2,7 @@
     <div :key="valuekey">
         <ol class="breadcrumb float-xl-end">
             <li class="breadcrumb-item">
-                <a href="javascript:;">{{ $t('str.breadcrumb.companies') }}</a>
+                <a href="#/companies">{{ $t('str.breadcrumb.companies') }}</a>
             </li>
         </ol>
 
@@ -14,10 +14,6 @@
             <form>
                 <fieldset>
                     <div v-if="data._id" class="row">
-                        <!-- <div class="col-md-4 mb-3">
-                            <label class="form-label" for="idField">{{ $t('str.register.id.field') }}</label>
-                            <input v-model="data._id" disabled class="form-control" type="text" id="idField" />
-                        </div> -->
                         <div class="col-md-4 mb-3">
                             <label class="form-label" for="statusField">{{ $t('str.register.status.field') }}</label>
                             <select v-model="data.status" class="form-control" id="statusField">
@@ -113,6 +109,7 @@
                                 class="form-control"
                                 type="text"
                                 key="addressField"
+                                :placeholder="$t('str.register.company.address.placeholder')"
                             />
                             <div class="invalid-feedback">{{ $t('str.register.company.address.required') }}</div>
                         </div>
@@ -164,6 +161,7 @@
                         <div class="col-md-4 mb-3">
                             <label class="form-label" for="stateField">{{ $t('str.register.company.state.field') }}</label>
                             <select v-model="data.address.state" class="form-select" v-bind:class="checkRequiredField('state') ? 'is-invalid' : ''" @focus="removeRequiredField('state')" id="stateField">
+                                <option selected>{{ $t('str.register.select.placeholder') }}</option>
                                 <option v-for="state in states" :value="state.value" :key="state.value">
                                     {{ state.label }}
                                 </option>
@@ -175,7 +173,7 @@
                     <div class="row">
                         <div class="d-flex">
                             <div class="col-md-4 mb-3">
-                                <label class="form-label" for="numberField">{{ $t('str.register.company.logo.field') }}</label>
+                                <label class="form-label" for="file">{{ $t('str.register.company.logo.field') }}</label>
 
                                 <div v-if="data?.logoURL && data.logoURL !== 'https://'" class="d-flex">
                                     <a class="w-lg-250px w-250px">
@@ -183,7 +181,7 @@
                                     </a>
                                 </div>
 
-                                <input type="file" id="file" ref="file" v-on:change="handleFileUpload()" class="form-control" />
+                                <input type="file" accept="image/*" id="file" ref="file" v-on:change="handleFileUpload()" class="form-control" />
                             </div>
                         </div>
                     </div>
@@ -192,7 +190,7 @@
                             <i v-if="isLoading === true" class="fas fa-spinner fa-pulse"></i>
                             {{ $t('str.btn.save') }}
                         </button>
-                        <button @click="clearForm" type="submit" class="btn btn-default w-200px">{{ $t('str.btn.clear.fields') }}</button>
+                        <button @click="clearForm" type="submit" class="btn btn-default w-200px">{{ $t('str.btn.new.form') }}</button>
                         <button v-if="data._id && data.status === 'ACTIVE'" v-on:click="confirmArchive" type="submit" class="ms-10px btn btn-warning w-200px">
                             {{ $t('str.btn.archive') }}
                         </button>

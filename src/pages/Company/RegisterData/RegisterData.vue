@@ -2,7 +2,7 @@
     <div>
         <ol class="breadcrumb float-xl-end">
             <li class="breadcrumb-item">
-                <a href="javascript:;">{{ $t('str.breadcrumb.register.data') }}</a>
+                <a href="#/register-data">{{ $t('str.breadcrumb.register.data') }}</a>
             </li>
         </ol>
 
@@ -180,7 +180,7 @@
                                     <img crossorigin="anonymous" v-bind:src="`${domain}${data.logoURL}`" class="mw-100 rounded" />
                                 </a>
                             </div>
-                            <input type="file" id="file" ref="file" v-on:change="handleFileUpload()" class="form-control" />
+                            <input type="file" accept="image/*" id="file" ref="file" v-on:change="handleFileUpload()" class="form-control" />
                         </div>
                     </div>
 

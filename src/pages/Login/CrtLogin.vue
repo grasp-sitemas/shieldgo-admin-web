@@ -36,7 +36,7 @@ export default {
                                 window.location.href = '?#/dashboard'
                                 location.reload()
                             } else {
-                                Common.show(this, 'bottom-right', 'error', this.$t('response.user.invalid.role'))
+                                Common.show(this, 'bottom-right', 'error', this.$t('response.user.invalid.subtype'))
                             }
                         }
                     },

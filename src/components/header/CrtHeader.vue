@@ -52,9 +52,24 @@ export default {
         toggleHeaderMegaMenuMobile() {
             this.appOptions.appHeaderMegaMenuMobileToggled = !this.appOptions.appHeaderMegaMenuMobileToggled
         },
-        checkForm: function (e) {
-            e.preventDefault()
-            this.$router.push({ path: '/extra/search' })
+        refreshUser(state) {
+            Request.do(
+                state,
+                'get',
+                Request.getDefaultHeader(state),
+                {},
+                `${Endpoints.systemUsers.getMe}`,
+                response => {
+                    if (response) {
+                        const result = response?.result
+                        state.$session.set('user', result)
+                        state.user = result
+                    }
+                },
+                error => {
+                    console.log(error)
+                },
+            )
         },
     },
 }

@@ -54,14 +54,12 @@ export default {
             this.file = null
             this.$refs.file.value = null
             this.data = {
-                name: '',
-                fantasyName: '',
-                personType: '',
-                document: '',
+                firstName: '',
+                lastName: '',
                 email: '',
                 primaryPhone: '',
                 secondaryPhone: '',
-                logoURL: '',
+                photoURL: '',
                 address: {
                     cep: '',
                     address: '',
@@ -73,7 +71,7 @@ export default {
                     ibge: '',
                     gia: '',
                 },
-                type: 'ACCOUNT',
+                type: 'USER-COMPANY',
                 status: 'ACTIVE',
             }
             this.isLoading = false
@@ -86,20 +84,10 @@ export default {
                 {},
                 `${Endpoints.systemUsers.getMe}`,
                 response => {
-                    if (response) {
-                        const result = response?.result
-                        const role = result?.companyUser?.subtype
-                        if (role === 'SUPER_ADMIN_MASTER' || role === 'SUPER_ADMIN') {
-                            this.data = result?.company
-                        } else if (role === 'ADMIN') {
-                            this.data = result?.account
-                        } else if (role === 'MANAGER') {
-                            this.data = result?.client
-                        } else if (role === 'OPERATOR') {
-                            this.data = result?.site
-                        }
+                    if (response?.status === 200) {
+                        this.data = response.result
 
-                        const address = this.data?.address
+                        const address = response.result?.address
                         if (!address?.cep) {
                             this.data.address = {
                                 cep: '',
@@ -131,12 +119,12 @@ export default {
                     'put',
                     Request.getDefaultHeader(this),
                     formData,
-                    `${Endpoints.companies.formData}${this.data._id}`,
+                    `${Endpoints.systemUsers.formData}${this.data._id}`,
                     response => {
                         if (response.status === 200) {
                             const result = response?.result
-                            this.data.logoURL = result?.logoURL
-                            this.$registerEvent.$emit('updateMenu')
+                            this.data.photoURL = result?.photoURL
+                            this.$registerEvent.$emit('updateHeader')
                             Common.show(this, 'bottom-right', 'success', this.$t('str.form.update.success'))
                         }
                     },
@@ -163,26 +151,14 @@ export default {
             }
         },
         checkForm() {
-            if (!this.data.name || this.data.name === '') {
-                this.errors.push('name')
+            if (!this.data.firstName || this.data.firstName === '') {
+                this.errors.push('firstName')
             }
-            if (!this.data.address.cep && this.data.address.cep === '') {
-                this.errors.push('cep')
+            if (!this.data.lastName || this.data.lastName === '') {
+                this.errors.push('lastName')
             }
-            if (!this.data.address.address && this.data.address.address === '') {
-                this.errors.push('address')
-            }
-            if (!this.data.address.number && this.data.address.number === '') {
-                this.errors.push('number')
-            }
-            if (!this.data.address.neighborhood && this.data.address.neighborhood === '') {
-                this.errors.push('neighborhood')
-            }
-            if (!this.data.address.city && this.data.address.city === '') {
-                this.errors.push('city')
-            }
-            if (!this.data.address.state && this.data.address.state === '') {
-                this.errors.push('state')
+            if (!this.data.email || this.data.email === '') {
+                this.errors.push('email')
             }
 
             if (!this.errors || this.errors.length === 0) {

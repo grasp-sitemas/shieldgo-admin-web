@@ -1,8 +1,8 @@
 <script>
 import Endpoints from '../../../common/Endpoints.vue'
 import Request from '../../../common/Request.vue'
-import Services from '../../../common/Services.vue'
 import Common from '../../../common/Common.vue'
+import Services from '../../../common/Services.vue'
 
 const instanceateAddress = (addressObj, geo) => {
     addressObj.name = 'MAIN'
@@ -42,6 +42,7 @@ export default {
                 response => {
                     if (response && !response.erro) {
                         this.removeRequiredField('allAddress')
+
                         this.data.address.address = response.logradouro
                         this.data.address.neighborhood = response.bairro
                         this.data.address.city = response.localidade
@@ -58,11 +59,20 @@ export default {
         clearForm() {
             this.errors = []
             this.file = null
+            this.$refs.file.value = null
             this.data = {
-                name: '',
-                logoURL: '',
-                client: '',
+                firstName: '',
+                lastName: '',
+                email: '',
+                primaryPhone: '',
+                photoURL: '',
                 account: '',
+                client: '',
+                site: '',
+                customerUser: {
+                    status: 'ACTIVE',
+                    subtype: 'VIGILANT',
+                },
                 address: {
                     cep: '',
                     address: '',
@@ -74,9 +84,10 @@ export default {
                     ibge: '',
                     gia: '',
                 },
-                type: 'SITE',
+                type: 'USER-CUSTOMER',
                 status: 'ACTIVE',
             }
+            this.data.account = Common.getAccountId(this)
             this.isLoading = false
         },
         save() {
@@ -91,14 +102,15 @@ export default {
                     this.data._id ? 'put' : 'post',
                     Request.getDefaultHeader(this),
                     formData,
-                    `${Endpoints.companies.formData}${this.data._id ? this.data._id : ''}`,
+                    `${Endpoints.systemUsers.formData}${this.data._id ? this.data._id : ''}`,
                     response => {
                         if (response.status === 200) {
                             Common.show(this, 'bottom-right', 'success', this.data._id ? this.$t('str.form.update.success') : this.$t('str.form.create.success'))
-                            const { _id, status, logoURL } = response?.result
+                            const { _id, status, photoURL } = response?.result
                             this.data._id = _id
                             this.data.status = status
-                            this.data.logoURL = logoURL
+                            this.data.photoURL = photoURL
+                            this.data.password = ''
                             this.$registerEvent.$emit('refreshList')
                         }
                     },
@@ -121,7 +133,7 @@ export default {
                     'DELETE',
                     Request.getDefaultHeader(this),
                     this.data,
-                    `${Endpoints.companies.company}${this.data._id}`,
+                    `${Endpoints.systemUsers.systemUser}${this.data.email}`,
                     response => {
                         if (response.status === 200) {
                             Common.show(this, 'bottom-right', 'success', this.$t('str.form.archive.success'))
@@ -165,33 +177,30 @@ export default {
                 this.errors = this.errors.filter(item => item !== field)
             }
         },
-        checkForm() {
-            if (!this.data.name || this.data.name === '') {
-                this.errors.push('name')
+        async checkForm() {
+            if (!this.data.firstName || this.data.firstName === '') {
+                this.errors.push('firstName')
             }
-            if (!this.data.account || this.data.account === '') {
-                this.errors.push('account')
+            if (!this.data.lastName || this.data.lastName === '') {
+                this.errors.push('lastName')
             }
+            if (!this.data.email || this.data.email === '') {
+                this.errors.push(this.$t('email'))
+            }
+            if (!this.data._id && (!this.data.password || this.data.password === '')) {
+                this.errors.push(this.$t('password'))
+            }
+
             if (!this.data.client || this.data.client === '') {
-                this.errors.push('client')
+                delete this.data.client
             }
-            if (!this.data.address.cep && this.data.address.cep === '') {
-                this.errors.push('cep')
+
+            if (!this.data.site || this.data.site === '') {
+                delete this.data.site
             }
-            if (!this.data.address.address && this.data.address.address === '') {
-                this.errors.push('address')
-            }
-            if (!this.data.address.number && this.data.address.number === '') {
-                this.errors.push('number')
-            }
-            if (!this.data.address.neighborhood && this.data.address.neighborhood === '') {
-                this.errors.push('neighborhood')
-            }
-            if (!this.data.address.city && this.data.address.city === '') {
-                this.errors.push('city')
-            }
-            if (!this.data.address.state && this.data.address.state === '') {
-                this.errors.push('state')
+
+            if (!this.data.password || this.data.password === '') {
+                delete this.data.password
             }
 
             if (!this.errors || this.errors.length === 0) {
@@ -232,31 +241,55 @@ export default {
                         state.addresses = geoResponse.results
                     }
                 },
-                error => {
-                    console.log(error)
+                async error => {
+                    this.data.address.name = 'MAIN'
+                    await this.save(error)
+                    this.isLoading = false
                 },
             )
-        },
-        selectItem: async function (item) {
-            this.errors = []
-            this.file = null
-            this.data = item
-
-            if (item.account) {
-                this.clients = await Services.getClientsByAccount(this, item.account)
-            }
-
-            document.body.scrollTop = 0 // For Safari
-            document.documentElement.scrollTop = 0 // For Chrome, Firefox, IE and Opera
         },
         changeAccount: async function () {
             const account = this.data.account
 
             if (account === '') {
                 this.data.client = ''
+                this.data.site = ''
             }
 
             this.clients = await Services.getClientsByAccount(this, account)
+        },
+        changeClient: async function () {
+            const client = this.data.client
+
+            if (client === '') {
+                this.data.site = ''
+            }
+
+            this.sites = await Services.getSitesByClient(this, client)
+        },
+        changeRole: async function () {
+            this.data.client = ''
+            this.data.site = ''
+        },
+        selectItem: async function (item) {
+            this.errors = []
+            this.file = null
+            this.$refs.file.value = null
+            this.data = item
+
+            if (item.account) {
+                this.clients = await Services.getClientsByAccount(this, item.account)
+            }
+
+            if (item.client) {
+                this.sites = await Services.getSitesByClient(this, item.client)
+            }
+
+            document.body.scrollTop = 0 // For Safari
+            document.documentElement.scrollTop = 0 // For Chrome, Firefox, IE and Opera
+        },
+        handleFileUpload() {
+            this.file = this.$refs.file.files[0]
         },
     },
 }

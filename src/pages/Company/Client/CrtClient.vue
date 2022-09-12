@@ -24,6 +24,7 @@ export default {
                 type: 'CLIENT',
                 status: 'ACTIVE',
             }
+            this.$refs.file.value = null
             this.data.account = Common.getAccountId(this)
             this.isLoading = false
         },
@@ -54,13 +55,13 @@ export default {
                     },
                     error => {
                         this.isLoading = false
-                        Common.show('bottom-right', 'warn', this.$t('str.form.update.generic.error'))
+                        Common.show(this, 'bottom-right', 'warn', this.$t('str.form.update.generic.error'))
                         console.log(error)
                     },
                 )
             } catch (error) {
                 this.isLoading = false
-                Common.show('bottom-right', 'warn', this.$t('str.form.update.generic.error'))
+                Common.show(this, 'bottom-right', 'warn', this.$t('str.form.update.generic.error'))
                 console.log(error)
             }
         },
@@ -81,12 +82,12 @@ export default {
                     },
                     error => {
                         console.log(error)
-                        Common.show('bottom-right', 'warn', this.$t('str.form.archive.generic.error'))
+                        Common.show(this, 'bottom-right', 'warn', this.$t('str.form.archive.generic.error'))
                     },
                 )
             } catch (error) {
                 console.log(error)
-                Common.show('bottom-right', 'warn', this.$t('str.form.archive.generic.error'))
+                Common.show(this, 'bottom-right', 'warn', this.$t('str.form.archive.generic.error'))
             }
         },
         confirmArchive() {

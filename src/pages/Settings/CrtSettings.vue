@@ -1,13 +1,20 @@
 <script>
 import Endpoints from '../../common/Endpoints.vue'
 import Request from '../../common/Request.vue'
-// import Common from '../../common/Common.vue'
 
 export default {
     init: async payload => {
         payload.getMe()
+
+        if (payload.browserDarkMode()) {
+            payload.darkMode = true
+            payload.handleSetDarkMode(true)
+        }
     },
     methods: {
+        browserDarkMode() {
+            return window.matchMedia('(prefers-color-scheme: dark)').matches
+        },
         getMe() {
             Request.do(
                 this,

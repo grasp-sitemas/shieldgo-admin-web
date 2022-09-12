@@ -2,19 +2,13 @@
     <div>
         <ol class="breadcrumb float-xl-end">
             <li class="breadcrumb-item">
-                <a href="javascript:;">{{ $t('str.breadcrumb.change.password') }}</a>
+                <a href="#/change-password">{{ $t('str.breadcrumb.change.password') }}</a>
             </li>
         </ol>
 
         <h1 class="page-header">
             {{ $t('str.form.title.change.password') }}
         </h1>
-
-        <!--
-  "str.change.password.confirm.error": "As senhas não conferem",
-  "str.change.password.success": "Senha alterada com sucesso",
-  "str.change.password.error": "Erro ao alterar a senha",
-  "str.change.password.error.invalid": "Senha atual inválida" -->
 
         <panel :title="$t('str.form.title')">
             <form>
@@ -82,7 +76,7 @@
                             <i v-if="isLoading === true" class="fas fa-spinner fa-pulse"></i>
                             {{ $t('str.btn.save') }}
                         </button>
-                        <button @click="clearForm" type="submit" class="btn btn-default w-200px">{{ $t('str.btn.clear.fields') }}</button>
+                        <button @click="clearForm" type="submit" class="btn btn-default w-200px">{{ $t('str.btn.new.form') }}</button>
                     </div>
                 </fieldset>
             </form>

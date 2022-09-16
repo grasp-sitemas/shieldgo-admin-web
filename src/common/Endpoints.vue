@@ -35,23 +35,16 @@ export default {
         filter: `${domain}/api/company/filter/v1/`,
         delete: `${domain}/api/company/delete/v1/`,
     },
-    projects: {
-        project: `${domain}/api/projects/v1/`,
-        archive: `${domain}/api/projects/v1/`,
-        filter: `${domain}/api/projects/search/v1/`,
+    incidents: {
+        incident: `${domain}/api/company/incidents/v1/`,
+        filter: `${domain}/api/company/incidents/filter/v1/`,
+        delete: `${domain}/api/company/incidents/delete/v1/`,
     },
-    hubs: {
-        hub: `${domain}/api/hubs/v1/`,
-        filter: `${domain}/api/hubs/search/v1/`,
-    },
-    signals: {
-        signal: `${domain}/api/hubs/signal/v1/`,
-        filter: `${domain}/api/hubs/signal/search/v1/`,
-    },
-    collects: {
-        collect: `${domain}/api/collects/v1/`,
-        filter: `${domain}/api/collects/search/v1/`,
-        delete: `${domain}/api/collects/delete/v1/`,
+    patrolPoints: {
+        patrolPoint: `${domain}/api/company/patrolpoints/v1/`,
+        saveMany: `${domain}/api/company/patrolpoints/savemany/v1/`,
+        filter: `${domain}/api/company/patrolpoints/filter/v1/`,
+        delete: `${domain}/api/company/patrolpoints/delete/v1/`,
     },
     cep: {
         find: `${viaCepDomain}`,
@@ -61,22 +54,6 @@ export default {
     },
     location: {
         geolocation: `https://maps.googleapis.com/maps/api/geocode/json?latlng=`,
-    },
-    points: {
-        point: `${domain}/api/points/v1/`,
-        filter: `${domain}/api/points/search/v1/`,
-    },
-    pointHubs: {
-        pointHub: `${domain}/api/point-hubs/v1/`,
-        filter: `${domain}/api/point-hubs/search/v1/`,
-    },
-    deposits: {
-        filter: `${domain}/api/deposits/search/v1/`,
-        deposit: `${domain}/api/deposits/v1/`,
-    },
-    pointCollects: {
-        pointCollect: `${domain}/api/points/v1/`,
-        filter: `${domain}/api/points/search/v1/`,
     },
 }
 </script>

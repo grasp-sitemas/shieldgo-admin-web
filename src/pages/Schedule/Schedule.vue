@@ -1,19 +1,12 @@
 <template>
     <div>
-        <!-- BEGIN breadcrumb -->
         <ol class="breadcrumb float-xl-end">
-            <li class="breadcrumb-item"><a href="javascript:;">Home</a></li>
-            <li class="breadcrumb-item active">Calendar</li>
+            <li class="breadcrumb-item">{{ $t('str.breadcrumb.schedules') }}</li>
         </ol>
-        <!-- END breadcrumb -->
-        <!-- BEGIN page-header -->
-        <h1 class="page-header">Calendar <small>header small text goes here...</small></h1>
-        <!-- END page-header -->
+        <h1 class="page-header">{{ $t('str.form.title.schedules') }}</h1>
         <hr />
 
-        <!-- BEGIN calendar -->
         <FullCalendar :events="events" :options="calendarOptions"></FullCalendar>
-        <!-- END calendar -->
     </div>
 </template>
 
@@ -25,10 +18,12 @@ import timeGridPlugin from '@fullcalendar/timegrid'
 import interactionPlugin from '@fullcalendar/interaction'
 import listPlugin from '@fullcalendar/list'
 import bootstrapPlugin from '@fullcalendar/bootstrap'
+import ptBrLocale from '@fullcalendar/core/locales/pt-br'
+import enGbLocale from '@fullcalendar/core/locales/en-gb'
 
 export default {
     components: {
-        FullCalendar, // make the <FullCalendar> tag available
+        FullCalendar,
     },
     data() {
         var date = new Date()
@@ -39,6 +34,8 @@ export default {
         return {
             calendarOptions: {
                 plugins: [dayGridPlugin, timeGridPlugin, interactionPlugin, listPlugin, bootstrapPlugin],
+                locales: [ptBrLocale, enGbLocale],
+                locale: 'pt-br',
                 headerToolbar: {
                     left: 'dayGridMonth,timeGridWeek,timeGridDay',
                     center: 'title',
@@ -50,6 +47,8 @@ export default {
                     week: 'Week',
                     day: 'Day',
                 },
+                dateClick: this.handleDateClick,
+                eventClick: this.handleEventClick,
                 initialView: 'dayGridMonth',
                 editable: true,
                 droppable: true,
@@ -156,6 +155,14 @@ export default {
                 ],
             },
         }
+    },
+    methods: {
+        handleDateClick: function (arg) {
+            alert('date click! ' + arg.dateStr)
+        },
+        handleEventClick: function (arg) {
+            alert('event click! ' + arg.event.title + '\n' + arg.event.startStr + '\n' + arg.event.endStr)
+        },
     },
 }
 </script>

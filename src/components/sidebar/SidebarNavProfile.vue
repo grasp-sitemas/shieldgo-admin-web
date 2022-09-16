@@ -2,12 +2,8 @@
     <div class="menu" :key="valuekey">
         <div class="menu-profile">
             <a href="javascript:;" class="menu-profile-link" v-on:click="expand()">
-                <!-- <div v-bind:style="{ 'background-image': `${domain}${user?.company?.logoURL}` }" class="with-shadow"></div> -->
-
                 <div :style="{ 'background-image': `url(${`${domain}${user?.company?.logoURL || user?.account?.logoURL}`})` }" class="with-shadow menu-profile-cover"></div>
-                <div class="menu-profile-image menu-profile-image-icon bg-gray-900 text-gray-600">
-                    <!-- <i class="fa fa-user"></i> -->
-                </div>
+                <div class="menu-profile-image"></div>
                 <div class="menu-profile-info">
                     <div class="d-flex align-items-center">
                         <div class="flex-grow-1">{{ getCompanyName() }}</div>

@@ -6,8 +6,10 @@ import Companies from '../pages/Company/Company/Company.vue'
 import ChangePassword from '../pages/User/ChangePassword/ChangePassword.vue'
 import Clients from '../pages/Company/Client/Client.vue'
 import Dashboard from '../pages/Dashboard/Dashboard.vue'
+import Incident from '../pages/Company/Incident/Incident.vue'
 import Login from '../pages/Login/Login.vue'
 import PageNotFound from '../pages/PageNotFound/PageNotFound.vue'
+import PatrolPoint from '../pages/Company/PatrolPoint/PatrolPoint.vue'
 import Profile from '../pages/User/Profile/Profile.vue'
 import RegisterData from '../pages/Company/RegisterData/RegisterData.vue'
 import Settings from '../pages/Settings/Settings.vue'
@@ -64,6 +66,22 @@ const routes = [
         path: '/dashboard',
         name: 'dashboard',
         component: Dashboard,
+        beforeEnter: (_to, _from, next) => {
+            next(checkSession())
+        },
+    },
+    {
+        path: '/incidents',
+        name: 'incidents',
+        component: Incident,
+        beforeEnter: (_to, _from, next) => {
+            next(checkSession())
+        },
+    },
+    {
+        path: '/patrol-points',
+        name: 'patrol-points',
+        component: PatrolPoint,
         beforeEnter: (_to, _from, next) => {
             next(checkSession())
         },

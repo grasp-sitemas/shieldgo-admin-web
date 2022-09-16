@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import VueX from 'vuex'
 import routes from './config/AppRoutes'
+import { MAPS } from './envs'
 
 // plugins
 import i18n from './i18n'
@@ -13,7 +14,7 @@ import VueSparkline from 'vue-sparklines'
 import * as VueGoogleMaps from 'vue2-google-maps'
 import Vueditor from '@agametov/vueditor'
 import VueHljs from 'vue-hljs'
-import hljs from "highlight.js";
+import hljs from "highlight.js"
 import VueSweetalert2 from 'vue-sweetalert2'
 import VueNotification from 'vue-notification'
 import VuePanel from './plugins/panel/'
@@ -29,6 +30,9 @@ import VueCustomScrollbar from 'vue-custom-scrollbar'
 import VueApexCharts from 'vue-apexcharts'
 import DateRangePicker from 'vue2-daterange-picker'
 import VueTheMask from 'vue-the-mask'
+import { LMap, LTileLayer, LMarker } from 'vue2-leaflet'
+import { LDrawToolbar } from 'vue2-leaflet-draw-toolbar'
+import 'leaflet/dist/leaflet.css'
 
 // plugins css
 import '@fortawesome/fontawesome-free/css/all.min.css'
@@ -72,10 +76,11 @@ Vue.use(VueGoodTable)
 Vue.use(VueColorpicker)
 Vue.use(VueTheMask)
 
+
 Vue.use(VueGoogleMaps, {
   load: {
-    key: '',
-    libraries: 'places'
+    key: MAPS.KEY,
+    libraries: 'places, drawing'
   }
 })
 Vue.use(VueInsProgressBar, {
@@ -83,14 +88,18 @@ Vue.use(VueInsProgressBar, {
   show: true,
   height: '3px'
 })
-Vue.component('v-select', VueSelect);
+Vue.component('v-select', VueSelect)
 Vue.component('datepicker', VueDatepicker)
 Vue.component('input-tag', VueInputTag)
 Vue.component('vue-slider', VueSlider)
 Vue.component('vue-custom-scrollbar', VueCustomScrollbar)
 Vue.component('apexchart', VueApexCharts)
 Vue.component('date-range-picker', DateRangePicker)
-Vue.component(VueCountdown.name, VueCountdown);
+Vue.component(VueCountdown.name, VueCountdown)
+Vue.component('l-map', LMap)
+Vue.component('l-tile-layer', LTileLayer)
+Vue.component('l-marker', LMarker)
+Vue.component('l-draw-toolbar', LDrawToolbar);
 
 const router = new VueRouter({
   routes

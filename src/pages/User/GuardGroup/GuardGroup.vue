@@ -59,7 +59,14 @@
                         </div>
                         <div class="col-md-4 mb-3">
                             <label class="form-label" for="siteField">{{ $t('str.register.guard.groups.site.field') }}</label>
-                            <select v-model="data.site" class="form-select" v-bind:class="checkRequiredField('site') ? 'is-invalid' : ''" @focus="removeRequiredField('site')" id="siteField">
+                            <select
+                                v-model="data.site"
+                                @change="changeSite"
+                                class="form-select"
+                                v-bind:class="checkRequiredField('site') ? 'is-invalid' : ''"
+                                @focus="removeRequiredField('site')"
+                                id="siteField"
+                            >
                                 <option value="">{{ $t('str.register.select.placeholder') }}</option>
                                 <option v-for="site in sites" :value="site._id" :key="site._id">
                                     {{ site.name }}
@@ -81,6 +88,19 @@
                                 :placeholder="$t('str.register.guard.groups.name.placeholder')"
                             />
                             <div class="invalid-feedback">{{ $t('str.register.guard.groups.name.required') }}</div>
+                        </div>
+                        <div class="col-md-8 mb-3">
+                            <label class="form-label" for="vigilantsField">{{ $t('str.register.guard.groups.vigilants.field') }}</label>
+                            <v-select
+                                taggable
+                                multiple
+                                label="firstName"
+                                key="vigilantsField"
+                                v-model="data.vigilants"
+                                :options="vigilants"
+                                :create-option="vigilant => ({ _id: '' })"
+                                :placeholder="$t('str.register.select.placeholder')"
+                            />
                         </div>
                     </div>
 
@@ -110,6 +130,7 @@ Vue.prototype.$registerEvent = new Vue()
 
 import { STATES } from '../../../utils/states.js'
 import { ROLES } from '../../../utils/roles.js'
+
 export default {
     components: {
         ListGuardGroup,
@@ -125,6 +146,7 @@ export default {
             accounts: [],
             clients: [],
             sites: [],
+            vigilants: [],
             valuekey: 0,
             isSuperAdminMaster: false,
             data: {
@@ -135,6 +157,29 @@ export default {
                 site: '',
                 status: 'ACTIVE',
             },
+            options: [
+                {
+                    title: 'HTML5',
+                    author: {
+                        firstName: 'Remy',
+                        lastName: 'Sharp',
+                    },
+                },
+                {
+                    title: 'HTML5',
+                    author: {
+                        firstName: 'Remy',
+                        lastName: 'Sharp',
+                    },
+                },
+                {
+                    title: 'HTML5',
+                    author: {
+                        firstName: 'Remy',
+                        lastName: 'Sharp',
+                    },
+                },
+            ],
         }
     },
     mounted() {
@@ -143,3 +188,5 @@ export default {
     methods: Controller.methods,
 }
 </script>
+<style lang="scss">
+</style>

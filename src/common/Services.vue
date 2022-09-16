@@ -60,5 +60,21 @@ export default {
 
         return []
     },
+    getVigilantsBySite: async function (state, site) {
+        const filters = {
+            name: '',
+            site: site,
+            status: 'ACTIVE',
+            subtype: 'VIGILANT',
+        }
+
+        if (site) {
+            const response = await Request.do(state, 'POST', Request.getDefaultHeader(state), filters, `${Endpoints.systemUsers.customerUser.search}`)
+
+            return response?.data?.results || []
+        }
+
+        return []
+    },
 }
 </script>

@@ -1419,6 +1419,26 @@
 	border-radius: 5px;
 }
 
+.vs__dropdown-toggle {
+	background: var(--app-component-bg) !important;
+}
+
+.vs__selected {
+	background: var(--app-theme) !important;
+	margin: 2px !important;
+	padding: 2px 5px !important;
+	border-radius: 0.25rem !important;
+	color: var(--app-component-color) !important;
+	font-size: 0.7rem !important;
+}
+
+body .v-select .vs__search {
+	font-size: 0.75rem;
+	font-weight: 600;
+	line-height: 1.5;
+	color: var(--app-component-color)
+}
+
 
 .container_card_options .option_item .checkbox {
 	position: absolute;

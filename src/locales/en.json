@@ -549,5 +549,18 @@
   "str.register.guard.groups.site.required": "Site is required",
   "str.register.guard.groups.name.field": "Name",
   "str.register.guard.groups.name.placeholder": "Enter the name",
-  "str.register.guard.groups.name.required": "Name is required"
+  "str.register.guard.groups.name.required": "Name is required",
+  "str.select.vigilants": "Select Guards",
+  "str.table.guard.groups.column.name": "Name",
+  "str.table.guard.groups.column.created.at": "Created At",
+  "str.table.guard.groups.column.updated.at": "Updated At",
+  "str.table.guard.groups.column.creat.at": "Created At",
+  "str.table.guard.groups.column.status": "Status",
+  "str.table.guard.groups.column.account": "Account",
+  "str.table.guard.groups.column.client": "Client",
+  "str.table.guard.groups.column.site": "Site",
+  "str.table.guard.groups.column.assigned.guards": "Assigned Guards",
+  "str.register.guard.groups.vigilants.field": "Assigned Guards",
+  "str.register.guard.groups.vigilants.required": "Guards are required",
+  "str.register.guard.groups.vigilants.placeholder": "Select the guards"
 }

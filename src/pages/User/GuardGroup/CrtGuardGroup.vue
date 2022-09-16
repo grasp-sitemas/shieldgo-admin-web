@@ -42,7 +42,8 @@ export default {
                     response => {
                         if (response.status === 200) {
                             Common.show(this, 'bottom-right', 'success', this.data._id ? this.$t('str.form.update.success') : this.$t('str.form.create.success'))
-                            this.data = response?.result
+                            this.data.status = response?.result?.status
+                            this.data._id = response?.result?._id
                             this.$registerEvent.$emit('refreshList')
                             this.isLoading = false
                         }
@@ -155,14 +156,21 @@ export default {
 
             this.sites = await Services.getSitesByClient(this, client)
         },
+        changeSite: async function () {
+            const site = this.data.site
+
+            if (site === '') {
+                this.data.vigilants = []
+            }
+            this.data.vigilants = []
+            this.vigilants = await Services.getVigilantsBySite(this, site)
+        },
         changeRole: async function () {
             this.data.client = ''
             this.data.site = ''
         },
         selectItem: async function (item) {
             this.errors = []
-            this.file = null
-            this.$refs.file.value = null
             this.data = item
 
             if (item.account) {
@@ -171,6 +179,10 @@ export default {
 
             if (item.client) {
                 this.sites = await Services.getSitesByClient(this, item.client)
+            }
+
+            if (item.site) {
+                this.vigilants = await Services.getVigilantsBySite(this, item.site)
             }
 
             document.body.scrollTop = 0 // For Safari

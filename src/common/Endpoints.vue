@@ -1,6 +1,6 @@
 <script>
-const domain = 'https://api-gateway-shield.herokuapp.com'
-// const domain = 'http://localhost:3000'
+// const domain = 'https://api-gateway-shield.herokuapp.com'
+const domain = 'http://localhost:3000'
 const viaCepDomain = 'https://viacep.com.br/ws/'
 
 export default {
@@ -45,6 +45,11 @@ export default {
         saveMany: `${domain}/api/company/patrolpoints/savemany/v1/`,
         filter: `${domain}/api/company/patrolpoints/filter/v1/`,
         delete: `${domain}/api/company/patrolpoints/delete/v1/`,
+    },
+    guardGroups: {
+        guardGroup: `${domain}/api/users/guardgroups/v1/`,
+        filter: `${domain}/api/users/guardgroups/filter/v1/`,
+        delete: `${domain}/api/users/guardgroups/delete/v1/`,
     },
     cep: {
         find: `${viaCepDomain}`,

@@ -1,6 +1,6 @@
 <template>
     <div>
-        <panel :title="$t('str.table.list.vigilants')" bodyClass="p-0">
+        <panel :title="$t('str.table.list.guard.groups')" bodyClass="p-0">
             <div class="row ms-2 mb-1 mt-3">
                 <div class="col-md-4">
                     <label class="form-label" for="statusField">{{ $t('str.register.status.field') }}</label>
@@ -33,9 +33,6 @@
                             props.formattedRow[props.column.field].state
                         }}
                     </span>
-                    <span v-else-if="props.column.field === 'customerUser.subtype'">
-                        {{ $t(props.formattedRow[props.column.field]) }}
-                    </span>
                     <span v-else-if="props.column.field === 'account'">
                         {{ props.formattedRow[props.column.field]?.name }}
                     </span>
@@ -58,7 +55,7 @@
 </template>
 
 <script>
-import Controller from './CrtListVigilant.vue'
+import Controller from './CrtListGuardGroup.vue'
 import Vue from 'vue'
 Vue.prototype.$registerEvent = new Vue()
 

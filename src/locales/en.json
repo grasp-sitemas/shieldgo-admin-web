@@ -536,5 +536,18 @@
   "str.register.check.point.radius.placeholder": "Enter the radius",
   "str.table.check.point.column.note": "Note",
   "str.table.check.point.column.geolocation": "Geolocation",
-  "str.table.check.point.column.radius": "Radius"
+  "str.table.check.point.column.radius": "Radius",
+  "str.sidebar.menu.guard.groups": "Guard Groups",
+  "str.breadcrumb.guard.groups": "Guard Groups",
+  "str.form.title.guard.groups": "Guard Groups",
+  "str.table.list.guard.groups": "List of Guard Groups",
+  "str.register.guard.groups.account.field": "Account",
+  "str.register.guard.groups.account.required": "Account is required",
+  "str.register.guard.groups.client.field": "Client",
+  "str.register.guard.groups.client.required": "Client is required",
+  "str.register.guard.groups.site.field": "Site",
+  "str.register.guard.groups.site.required": "Site is required",
+  "str.register.guard.groups.name.field": "Name",
+  "str.register.guard.groups.name.placeholder": "Enter the name",
+  "str.register.guard.groups.name.required": "Name is required"
 }

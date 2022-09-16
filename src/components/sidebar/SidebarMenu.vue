@@ -8,6 +8,7 @@ const sidebarMenu = [
     // { path: '/check-points', icon: 'fa fa-location', title: 'str.sidebar.menu.check.points' },
     { path: '/incidents', icon: 'fa fa-person-burst', title: 'str.sidebar.menu.incidents' },
     { path: '/vigilants', icon: 'fa fa-person-military-pointing', title: 'str.sidebar.menu.vigilants' },
+    { path: '/guard-groups', icon: 'fa fa-people-group', title: 'str.sidebar.menu.guard.groups' },
     { path: '/schedules', icon: 'fa fa-calendar', title: 'str.sidebar.menu.schedules' },
     { path: '/users', icon: 'fa fa-users', title: 'str.sidebar.menu.users' },
     // {

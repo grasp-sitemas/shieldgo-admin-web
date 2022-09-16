@@ -489,7 +489,7 @@
   "str.incident.type.rodents.in.the.area": "Roedores na área",
   "str.incident.template.generic": "Genérico",
   "str.table.list.patrol.points": "Lista de pontos de ronda",
-  "str.modal.check.points.title": "Tipo do ponto de ronda",
+  "str.modal.check.points.title": "Tipo de ponto de ronda",
   "str.register.check.point.quantity.field": "Quantidade",
   "str.register.check.point.quantity.placeholder": "Digite a quantidade",
   "str.register.check.point.quantity.required": "A quantidade é obrigatória",
@@ -523,5 +523,18 @@
   "str.register.check.point.radius.placeholder": "Digite o raio",
   "str.table.check.point.column.note": "Observação",
   "str.table.check.point.column.geolocation": "Geolocalização",
-  "str.table.check.point.column.radius": "Raio"
+  "str.table.check.point.column.radius": "Raio",
+  "str.sidebar.menu.guard.groups": "Grupos de Guarda",
+  "str.breadcrumb.guard.groups": "Grupos de Guardas",
+  "str.form.title.guard.groups": "Grupos de Guardas",
+  "str.table.list.guard.groups": "Lista de grupos de guarda",
+  "str.register.guard.groups.account.field": "Conta",
+  "str.register.guard.groups.account.required": "A conta é obrigatória",
+  "str.register.guard.groups.client.field": "Cliente",
+  "str.register.guard.groups.client.required": "O cliente é obrigatório",
+  "str.register.guard.groups.site.field": "Site",
+  "str.register.guard.groups.site.required": "O site é obrigatório",
+  "str.register.guard.groups.name.field": "Nome",
+  "str.register.guard.groups.name.placeholder": "Digite o nome",
+  "str.register.guard.groups.name.required": "O nome é obrigatório"
 }

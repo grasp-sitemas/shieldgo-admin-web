@@ -18,7 +18,7 @@ export default {
                 'POST',
                 Request.getDefaultHeader(this),
                 this.filters,
-                `${Endpoints.systemUsers.customerUser.search}`,
+                `${Endpoints.guardGroups.filter}`,
                 response => {
                     this.items = response.results
                 },
@@ -48,8 +48,8 @@ export default {
             this.columns = [
                 {
                     label: this.$t('str.table.user.column.name'),
-                    field: 'firstName',
-                    width: '30%',
+                    field: 'name',
+                    width: '20%',
                     thClass: 'text-nowrap',
                     tdClass: 'text-nowrap',
                 },
@@ -73,29 +73,6 @@ export default {
                     width: '10%',
                     thClass: 'text-nowrap',
                     tdClass: 'text-nowrap',
-                },
-                {
-                    label: this.$t('str.table.user.column.email'),
-                    field: 'email',
-                    width: '10%',
-                    tdClass: 'text-center text-nowrap',
-                    thClass: 'text-center text-nowrap',
-                },
-                {
-                    label: this.$t('str.table.user.column.phone'),
-                    field: 'primaryPhone',
-                    type: 'phone',
-                    width: '10%',
-                    tdClass: 'text-center text-nowrap',
-                    thClass: 'text-center text-nowrap',
-                },
-                {
-                    label: this.$t('str.table.user.column.address'),
-                    field: 'address',
-                    type: 'address',
-                    width: '20%',
-                    tdClass: 'text-center text-nowrap',
-                    thClass: 'text-center text-nowrap',
                 },
                 {
                     label: this.$t('str.table.user.column.creat.at'),

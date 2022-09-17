@@ -83,6 +83,7 @@
   "str.table.company.column.update.at": "Updated At",
   "str.table.subtitle.no.data": "No data found",
   "str.form.register.title": "Register Data",
+  "str.btn.template": "Template",
   "str.btn.clear.fields": "Clear Fields",
   "str.btn.new.form": "New Form",
   "str.btn.save": "Save",
@@ -608,5 +609,6 @@
   "str.log.domain.incident": "Incident",
   "str.log.domain.patrol_point": "Patrol Point",
   "str.log.domain.schedule": "Schedule",
-  "string.msg.select.all": "Select All"
+  "string.msg.select.all": "Select All",
+  "str.modal.templates.title": "Templates"
 }

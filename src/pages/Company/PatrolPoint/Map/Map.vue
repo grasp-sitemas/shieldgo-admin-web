@@ -1,5 +1,5 @@
 <template>
-    <l-map ref="map" :zoom="zoom" :center="geolocation" :options="mapOptions" style="height: 380px">
+    <l-map ref="map" @update:zoom="zoomUpdated" @update:center="centerUpdated" @update:bounds="boundsUpdated" :zoom="zoom" :center="geolocation" :options="mapOptions" style="height: 380px">
         <l-tile-layer :url="url" :attribution="attribution" />
         <l-circle :lat-lng="circle.center" :radius="circle.radius" :color="circle.color" :interactive="true" :bubblingMouseEvents="true" />
         <l-draw-toolbar position="topright" />

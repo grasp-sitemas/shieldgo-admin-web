@@ -105,39 +105,43 @@
                         <button v-if="data._id && data.status === 'ACTIVE'" v-on:click="confirmArchive" type="submit" class="ms-10px btn btn-warning w-200px">
                             {{ $t('str.btn.archive') }}
                         </button>
+                        <button v-if="!data._id" v-b-modal.templateModal type="submit" class="ms-10px btn btn-warning w-200px">
+                            {{ $t('str.btn.template') }}
+                        </button>
                     </div>
                 </fieldset>
             </form>
         </panel>
         <notifications group="bottom-right" position="bottom right" :speed="500" />
         <ListIncident v-on:load-item="selectItem" />
+        <TemplateModal :templates="templates" :isSuperAdminMaster="isSuperAdminMaster" :accounts="accounts" :clients="clients" :sites="sites" />
     </div>
 </template>
 
 <script>
 import ListIncident from './ListIncident.vue'
+import TemplateModal from './TemplateModal/TemplateModal.vue'
 import Controller from './CrtIncident.vue'
+import { INCIDENT_TEMPLATES_PT, INCIDENT_TEMPLATES_EN } from '../../../utils/incidents.js'
 import Vue from 'vue'
-Vue.prototype.$registerEvent = new Vue()
 
-import { STATES } from '../../../utils/states.js'
-import { ROLES } from '../../../utils/roles.js'
+Vue.prototype.$registerEvent = new Vue()
 
 export default {
     components: {
         ListIncident,
+        TemplateModal,
     },
     data() {
         return {
-            states: STATES,
-            roles: ROLES,
+            isSuperAdminMaster: false,
             isLoading: false,
             errors: [],
             accounts: [],
             clients: [],
             sites: [],
+            templates: [],
             valuekey: 0,
-            isSuperAdminMaster: false,
             data: {
                 name: '',
                 priority: null,
@@ -163,9 +167,16 @@ export default {
             ],
         }
     },
+    methods: Controller.methods,
     mounted() {
         Controller.init(this)
     },
-    methods: Controller.methods,
+    created() {
+        const state = this
+        state.$registerEvent.$on('changeLanguage', function () {
+            const language = state.$session.get('user')?.language
+            state.templates = language === 'pt' ? INCIDENT_TEMPLATES_PT : INCIDENT_TEMPLATES_EN
+        })
+    },
 }
 </script>

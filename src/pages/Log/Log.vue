@@ -54,7 +54,6 @@
                         :columns="columns"
                         :rows="items"
                         :lineNumbers="true"
-                        :isLoading="isLoading"
                         :totalRows="items?.length"
                         :search-options="{ enabled: true, placeholder: $t('str.table.search.in.this.table') }"
                         :pagination-options="paginationOptions"

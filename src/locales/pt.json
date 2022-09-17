@@ -90,6 +90,7 @@
   "str.table.pagination.page": "Página",
   "str.table.pagination.all.label": "Todos",
   "str.register.form.title": "Formulário de cadastro",
+  "str.btn.template": "Carregar Modelo",
   "str.btn.clear.fields": "Limpar campos",
   "str.btn.new.form": "Novo",
   "str.btn.save": "Salvar",
@@ -595,5 +596,6 @@
   "str.log.domain.incident": "Incidente",
   "str.log.domain.patrol_point": "Ponto de ronda",
   "str.log.domain.schedule": "Agendamento",
-  "string.msg.select.all": "Selecionar todos"
+  "string.msg.select.all": "Selecionar todos",
+  "str.modal.templates.title": "Modelos"
 }

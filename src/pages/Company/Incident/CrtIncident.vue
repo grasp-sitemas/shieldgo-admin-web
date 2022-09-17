@@ -3,6 +3,7 @@ import Endpoints from '../../../common/Endpoints.vue'
 import Request from '../../../common/Request.vue'
 import Common from '../../../common/Common.vue'
 import Services from '../../../common/Services.vue'
+import { INCIDENT_TEMPLATES_PT, INCIDENT_TEMPLATES_EN } from '../../../utils/incidents.js'
 
 export default {
     init: async payload => {
@@ -14,6 +15,9 @@ export default {
         } else {
             payload.clients = await Services.getClients(payload)
         }
+
+        const user = payload.$session.get('user')
+        payload.templates = user?.language === 'pt' ? INCIDENT_TEMPLATES_PT : INCIDENT_TEMPLATES_EN
     },
     methods: {
         clearForm() {
@@ -126,6 +130,17 @@ export default {
                 this.isLoading = false
             }
         },
+        checkCompanyFields() {
+            if (!this.data.account || this.data.account === '') {
+                this.errors.push('account')
+            }
+            if (!this.data.client || this.data.client === '') {
+                this.errors.push('client')
+            }
+            if (!this.data.site || this.data.site === '') {
+                this.errors.push(this.$t('site'))
+            }
+        },
         changeAccount: async function () {
             const account = this.data.account
 
@@ -136,6 +151,7 @@ export default {
 
             this.clients = await Services.getClientsByAccount(this, account)
         },
+
         changeClient: async function () {
             const client = this.data.client
 

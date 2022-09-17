@@ -593,5 +593,20 @@
   "CREATE": "Create",
   "UPDATE": "Update",
   "DELETE": "Delete",
-  "ARCHIVE": "Archive"
+  "ARCHIVE": "Archive",
+  "str.modal.logs.payload.title": "Payload",
+  "str.filter.by.companies": "Companies",
+  "str.filter.by.domains": "Domains",
+  "str.log.domain.company_user": "Company User",
+  "str.log.domain.customer_user": "Guard",
+  "str.log.domain.alert": "Alert",
+  "str.log.domain.guard_group": "Guard Group",
+  "str.log.domain.patrol_action": "Patrol Action",
+  "str.log.domain.patrol": "Patrol",
+  "str.log.domain.company": "Company",
+  "str.log.domain.appointment": "Appointment",
+  "str.log.domain.incident": "Incident",
+  "str.log.domain.patrol_point": "Patrol Point",
+  "str.log.domain.schedule": "Schedule",
+  "string.msg.select.all": "Select All"
 }

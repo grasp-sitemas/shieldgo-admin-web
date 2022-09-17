@@ -580,5 +580,20 @@
   "CREATE": "Criação",
   "UPDATE": "Atualização",
   "DELETE": "Exclusão",
-  "ARCHIVE": "Arquivamento"
+  "ARCHIVE": "Arquivamento",
+  "str.modal.logs.payload.title": "Payload",
+  "str.filter.by.companies": "Empresas",
+  "str.filter.by.domains": "Domínios",
+  "str.log.domain.company_user": "Usuário empresa",
+  "str.log.domain.customer_user": "Vigilante",
+  "str.log.domain.alert": "Alerta",
+  "str.log.domain.guard_group": "Grupo de vigilante",
+  "str.log.domain.patrol_action": "Ação de patrulha",
+  "str.log.domain.patrol": "Patrulha",
+  "str.log.domain.company": "Empresa",
+  "str.log.domain.appointment": "Evento",
+  "str.log.domain.incident": "Incidente",
+  "str.log.domain.patrol_point": "Ponto de ronda",
+  "str.log.domain.schedule": "Agendamento",
+  "string.msg.select.all": "Selecionar todos"
 }

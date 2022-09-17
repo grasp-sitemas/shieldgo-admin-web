@@ -65,14 +65,6 @@ export default {
                     thClass: 'text-nowrap',
                     tdClass: 'text-nowrap',
                 },
-                // {
-                //     label: this.$t('str.table.check.point.column.note'),
-                //     field: 'notes',
-                //     width: '10%',
-                //     sortable: true,
-                //     thClass: 'text-nowrap',
-                //     tdClass: 'text-nowrap',
-                // },
                 {
                     label: this.$t('str.table.check.point.column.geolocation'),
                     field: 'geolocation',
@@ -147,7 +139,7 @@ export default {
             }
 
             if (!this.isSuperAdminMaster) {
-                this.columns.splice(1, 1)
+                this.columns.splice(5, 1)
             }
         },
     },

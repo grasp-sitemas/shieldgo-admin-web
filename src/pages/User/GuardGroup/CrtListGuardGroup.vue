@@ -119,7 +119,7 @@ export default {
             }
 
             if (!this.isSuperAdminMaster) {
-                this.columns.splice(1, 1)
+                this.columns.splice(2, 1)
             }
         },
     },

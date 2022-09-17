@@ -2,16 +2,26 @@
 import Endpoints from '../../common/Endpoints.vue'
 import Request from '../../common/Request.vue'
 import Common from '../../common/Common.vue'
+import Services from '../../common/Services.vue'
 
 export default {
     init: async payload => {
+        payload.filters.account = Common.getAccountId(payload)
+
         payload.isSuperAdminMaster = await Common.isSuperAdminMaster(payload)
-        payload.filters.account = await Common.getAccountId(payload)
+        if (payload.isSuperAdminMaster) {
+            payload.accounts = await Services.getAccounts(payload)
+        } else {
+            payload.clients = await Services.getClients(payload)
+        }
+
         payload.initTable()
+        payload.selectAllDomains()
         payload.filter()
     },
     methods: {
         filter: function () {
+            this.isLoading = true
             this.items = []
             Request.do(
                 this,
@@ -20,10 +30,12 @@ export default {
                 this.filters,
                 `${Endpoints.logs.filter}`,
                 response => {
-                    this.items = response.results
+                    this.items = response?.results
+                    this.isLoading = false
                 },
                 error => {
                     console.log(error)
+                    this.isLoading = false
                 },
             )
         },
@@ -44,8 +56,17 @@ export default {
                 {
                     label: this.$t('str.table.actions.log.column.user'),
                     field: 'systemUser',
+                    width: '20%',
+                    sortable: true,
+                    thClass: 'text-nowrap',
+                    tdClass: 'text-nowrap',
+                },
+                {
+                    label: this.$t('str.table.actions.log.column.domain'),
+                    field: 'domain',
                     width: '15%',
                     sortable: true,
+                    firstSortType: 'desc',
                     thClass: 'text-nowrap',
                     tdClass: 'text-nowrap',
                 },
@@ -54,15 +75,6 @@ export default {
                     field: 'operation',
                     width: '15%',
                     sortable: true,
-                    thClass: 'text-nowrap',
-                    tdClass: 'text-nowrap',
-                },
-                {
-                    label: this.$t('str.table.actions.log.column.domain'),
-                    field: 'domain',
-                    width: '20%',
-                    sortable: true,
-                    firstSortType: 'desc',
                     thClass: 'text-nowrap',
                     tdClass: 'text-nowrap',
                 },
@@ -76,14 +88,14 @@ export default {
                 {
                     label: this.$t('str.table.actions.log.column.client'),
                     field: 'client',
-                    width: '15%',
+                    width: '10%',
                     thClass: 'text-nowrap',
                     tdClass: 'text-nowrap',
                 },
                 {
                     label: this.$t('str.table.actions.log.column.site'),
                     field: 'site',
-                    width: '15%',
+                    width: '10%',
                     thClass: 'text-nowrap',
                     tdClass: 'text-nowrap',
                 },
@@ -101,9 +113,9 @@ export default {
             this.paginationOptions = {
                 enabled: true,
                 mode: 'records',
-                perPage: 10,
+                perPage: 15,
                 position: 'bottom',
-                perPageDropdown: [10, 20, 50, 100],
+                perPageDropdown: [15, 50, 100],
                 dropdownAllowAll: false,
                 setCurrentPage: 1,
                 jumpFirstOrLast: true,
@@ -118,8 +130,35 @@ export default {
             }
 
             if (!this.isSuperAdminMaster) {
-                this.columns.splice(1, 1)
+                this.columns.splice(3, 1)
             }
+        },
+        changeAccount: async function () {
+            const account = this.filters.account
+
+            this.filter()
+
+            if (account === '') {
+                this.filters.client = ''
+                this.filters.site = ''
+            }
+
+            this.clients = await Services.getClientsByAccount(this, account)
+        },
+        changeClient: async function () {
+            const client = this.filters.client
+
+            this.filter()
+
+            if (client === '') {
+                this.filters.site = ''
+            }
+
+            this.sites = await Services.getSitesByClient(this, client)
+        },
+        selectAllDomains: function () {
+            const domains = this.domains.map(domain => domain.value)
+            this.filters.domains = domains
         },
     },
 }

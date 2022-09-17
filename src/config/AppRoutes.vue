@@ -8,6 +8,7 @@ import Clients from '../pages/Company/Client/Client.vue'
 import Dashboard from '../pages/Dashboard/Dashboard.vue'
 import GuardGroup from '../pages/User/GuardGroup/GuardGroup.vue'
 import Incident from '../pages/Company/Incident/Incident.vue'
+import Log from '../pages/Log/Log.vue'
 import Login from '../pages/Login/Login.vue'
 import PageNotFound from '../pages/PageNotFound/PageNotFound.vue'
 import PatrolPoint from '../pages/Company/PatrolPoint/PatrolPoint.vue'
@@ -38,7 +39,14 @@ const routes = [
     { path: '/', component: Login },
     { path: '/404', component: PageNotFound },
     { path: '*', redirect: '/404' },
-
+    {
+        path: '/actions-log',
+        name: 'actions-log',
+        component: Log,
+        beforeEnter: (_to, _from, next) => {
+            next(checkSession())
+        },
+    },
     {
         path: '/companies',
         name: 'companies',

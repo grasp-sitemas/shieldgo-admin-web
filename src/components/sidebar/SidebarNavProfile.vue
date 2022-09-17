@@ -27,6 +27,12 @@
                     <div class="menu-text">{{ $t('str.sidebar.menu.register.data') }}</div>
                 </a>
             </div>
+            <div class="menu-item">
+                <a href="#/actions-log" class="menu-link">
+                    <div class="menu-icon"><i class="fa fa-file-contract"></i></div>
+                    <div class="menu-text">{{ $t('str.sidebar.menu.actions.log') }}</div>
+                </a>
+            </div>
             <!-- <div class="menu-item pb-5px">
                 <a href="javascript:;" class="menu-link">
                     <div class="menu-icon"><i class="fa fa-question-circle"></i></div>

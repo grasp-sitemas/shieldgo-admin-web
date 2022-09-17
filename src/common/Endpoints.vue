@@ -51,6 +51,9 @@ export default {
         filter: `${domain}/api/users/guardgroups/filter/v1/`,
         delete: `${domain}/api/users/guardgroups/delete/v1/`,
     },
+    logs: {
+        filter: `${domain}/api/logs/filter/v1/`,
+    },
     cep: {
         find: `${viaCepDomain}`,
     },

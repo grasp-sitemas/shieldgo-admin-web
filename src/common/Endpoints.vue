@@ -37,6 +37,7 @@ export default {
     },
     incidents: {
         incident: `${domain}/api/company/incidents/v1/`,
+        saveMany: `${domain}/api/company/incidents/savemany/v1/`,
         filter: `${domain}/api/company/incidents/filter/v1/`,
         delete: `${domain}/api/company/incidents/delete/v1/`,
     },

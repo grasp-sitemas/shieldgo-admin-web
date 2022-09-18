@@ -4,20 +4,16 @@
             <h4 class="modal-title">{{ $t('str.modal.templates.title') }}</h4>
             <a class="btn-close" @click="$bvModal.hide('templateModal')"></a>
         </template>
-
         <div class="container_card_options">
-            <label class="option_item" v-for="template in templates" :key="template.name">
-                <input :value="template.name" @change="handleTemplate()" type="checkbox" class="checkbox" />
+            <label class="option_item" v-for="item in templates" :key="item">
+                <input @change="handleTemplate(item)" v-model="template" type="checkbox" class="checkbox" />
                 <div class="option_inner qrcode">
                     <div class="tickmark"></div>
-                    <div class="name">{{ $t(template.name) }}</div>
+                    <div class="form-label mt-2">{{ $t(item.name) }}</div>
                 </div>
-
-                <div v-if="isSelected" class="template_list">
-                    <div class="template_item" v-for="incident in template.incidents" :key="incident">
-                        <div class="template_name">{{ $t(incident.label) }}</div>
-                    </div>
-                </div>
+                <!-- <div>
+                    <label v-for="incident in template.incidents" :key="incident" class="form-label">{{ $t(incident.label) }}</label>
+                </div> -->
             </label>
         </div>
 
@@ -75,7 +71,7 @@
                             <i v-if="isLoading === true" class="fas fa-spinner fa-pulse"></i>
                             {{ $t('str.btn.save') }}
                         </button>
-                        <button @click="$bvModal.hide('checkPointModal')" type="submit" class="ms-10px btn btn-secondary w-200px">
+                        <button @click="$bvModal.hide('templateModal')" type="submit" class="ms-10px btn btn-secondary w-200px">
                             {{ $t('str.btn.close') }}
                         </button>
                     </div>
@@ -117,7 +113,7 @@ export default {
             errors: [],
             isSelected: false,
             isLoading: false,
-            quantity: null,
+            template: null,
             data: {
                 name: '',
                 priority: null,

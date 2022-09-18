@@ -31,8 +31,10 @@ export default {
 
             this.sites = await Services.getSitesByClient(this, client)
         },
-        handleTemplate: function () {
+        handleTemplate: function (item) {
             this.isSelected = !this.isSelected
+            this.template = item && this.isSelected ? item : null
+            this.errors = []
         },
         checkForm() {
             if (!this.data.account || this.data.account === '') {
@@ -44,9 +46,6 @@ export default {
             if (!this.data.site || this.data.site === '') {
                 this.errors.push(this.$t('site'))
             }
-            if (!this.quantity || this.quantity === '') {
-                this.errors.push(this.$t('quantity'))
-            }
 
             if (!this.errors || this.errors.length === 0) {
                 this.save()
@@ -56,30 +55,32 @@ export default {
             this.isLoading = true
 
             const arrayOfData = []
-            for (let i = 0; i < this.quantity; i++) {
+            const incidents = this.template?.incidents
+            incidents.forEach(incident => {
                 arrayOfData.push({
+                    name: incident?.value,
+                    priority: incident?.priority,
                     account: this.data.account,
                     client: this.data.client,
                     site: this.data.site,
-                    type: this.data.type,
                     status: this.data.status,
                 })
-            }
+            })
 
             try {
                 Request.do(
                     this,
-                    this.data._id ? 'put' : 'post',
+                    'post',
                     Request.getDefaultHeader(this),
                     arrayOfData,
-                    `${Endpoints.patrolPoints.saveMany}`,
+                    `${Endpoints.incidents.saveMany}`,
                     response => {
                         if (response.status === 200) {
                             this.isLoading = false
                             this.clearForm()
                             this.$registerEvent.$emit('refreshList')
                             Common.show(this, 'bottom-right', 'success', this.$t('str.form.create.success'))
-                            this.$bvModal.hide('checkPointModal')
+                            this.$bvModal.hide('templateModal')
                         }
                     },
                     error => {

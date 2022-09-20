@@ -32,12 +32,8 @@ export default {
         return re.test(str)
     },
     isValidEmail: email => {
-        var reg = /^\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/
-        if (reg.test(email)) {
-            return true
-        } else {
-            return false
-        }
+        var res = /^\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/
+        return res.test(email)
     },
     show(vue, group, type, title) {
         const text = `${vue.$t('str.date.subtitle')}: ${new Date().toLocaleString('pt-br')}`
@@ -50,6 +46,15 @@ export default {
     },
     isSuperAdminMaster: state => {
         return state.$session.get('user')?.companyUser?.subtype === 'SUPER_ADMIN_MASTER' ? true : false
+    },
+    isAdmin: state => {
+        return state.$session.get('user')?.companyUser?.subtype === 'ADMIN' ? true : false
+    },
+    isManager: state => {
+        return state.$session.get('user')?.companyUser?.subtype === 'MANAGER' ? true : false
+    },
+    isOperator: state => {
+        return state.$session.get('user')?.companyUser?.subtype === 'OPERATOR' ? true : false
     },
     getAccountId: state => {
         const type = state.$session.get('user')?.account?.type

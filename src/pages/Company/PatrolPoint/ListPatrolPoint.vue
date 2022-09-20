@@ -58,7 +58,6 @@
 import Controller from './CrtListPatrolPoint.vue'
 import CheckPointModal from './CheckPointModal/CheckPointModal.vue'
 import Vue from 'vue'
-
 Vue.prototype.$registerEvent = new Vue()
 
 export default {

@@ -2,7 +2,7 @@
     <b-modal id="templateModal" :hide-footer="true" class="modal-message">
         <template slot="modal-header">
             <h4 class="modal-title">{{ $t('str.modal.templates.title') }}</h4>
-            <a class="btn-close" @click="$bvModal.hide('templateModal')"></a>
+            <a class="btn-close cursor_pointer" @click="$bvModal.hide('templateModal')"></a>
         </template>
         <div class="container_card_options">
             <label class="option_item" v-for="item in templates" :key="item">

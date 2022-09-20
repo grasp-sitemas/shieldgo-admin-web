@@ -2,7 +2,7 @@
     <b-modal id="checkPointModal" :hide-footer="true" class="modal-message">
         <template slot="modal-header">
             <h4 class="modal-title">{{ $t('str.modal.check.points.title') }}</h4>
-            <a class="btn-close" @click="$bvModal.hide('checkPointModal')"></a>
+            <a class="btn-close cursor_pointer" @click="$bvModal.hide('checkPointModal')"></a>
         </template>
         <div class="container_card_options">
             <label class="option_item">

@@ -69,7 +69,9 @@
                     <div class="row">
                         <div class="col-md-6">
                             <div class="row">
-                                <Map :location="[Number(data?.geolocation?.latitude), Number(data?.geolocation?.longitude)]" :radius="data?.radius" />
+                                <div class="col-md-12">
+                                    <Map :location="[Number(data?.geolocation?.latitude), Number(data?.geolocation?.longitude)]" :radius="data?.radius" />
+                                </div>
                             </div>
                         </div>
                         <div class="col-md-6">
@@ -135,8 +137,13 @@
                                 <i v-if="isLoading === true" class="fas fa-spinner fa-pulse"></i>
                                 {{ $t('str.btn.save') }}
                             </button>
+                            <button v-b-modal.checkPointModal v-on:click="openCheckPointModal" type="submit" class="btn btn-default w-200px">{{ $t('str.btn.new.form') }}</button>
                             <button v-if="data.status === 'ACTIVE'" v-on:click="confirmArchive" type="submit" class="ms-10px btn btn-warning w-200px">
                                 {{ $t('str.btn.archive') }}
+                            </button>
+
+                            <button v-b-modal.qrCodeModal v-if="data._id && data.status === 'ACTIVE'" type="submit" class="ms-10px btn btn-success w-200px">
+                                {{ $t('str.btn.qrcode') }}
                             </button>
                         </div>
                     </div>
@@ -144,13 +151,15 @@
             </form>
         </panel>
         <notifications group="bottom-right" position="bottom right" :speed="500" />
+        <QrCodeModal :qrcodeId="data._id" />
         <ListPatrolPoint v-on:load-item="selectItem" :accounts="accounts" :clients="clients" />
     </div>
 </template>
 
 <script>
-import ListPatrolPoint from './ListPatrolPoint.vue'
 import Controller from './CrtPatrolPoint.vue'
+import ListPatrolPoint from './ListPatrolPoint.vue'
+import QrCodeModal from './QrCodeModal/QrCodeModal.vue'
 import Map from './Map/Map.vue'
 import Vue from 'vue'
 Vue.prototype.$registerEvent = new Vue()
@@ -162,6 +171,7 @@ export default {
     components: {
         ListPatrolPoint,
         Map,
+        QrCodeModal,
     },
     data() {
         return {
@@ -197,3 +207,4 @@ export default {
     methods: Controller.methods,
 }
 </script>
+

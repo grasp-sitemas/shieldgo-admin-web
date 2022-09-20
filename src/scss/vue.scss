@@ -1515,3 +1515,46 @@ body .v-select .vs__search {
 .option_item .option_inner.qrcode .tickmark {
 	border-color: var(--app-theme) transparent transparent var(--app-theme);
 }
+
+.qrcode-box {
+	display: none !important;
+}
+
+.cursor_pointer {
+	cursor: pointer !important;
+}
+
+.input-group-text {
+	background-color: var(--app-component-bg) !important;
+	border-color: var(--app-component-border-color) !important;
+	color: var(--app-component-color) !important;
+	cursor: pointer !important;
+}
+
+.nav.nav-wizards-1 .nav-item .nav-link.active .nav-no,
+.nav.nav-wizards-1 .nav-item .nav-link.completed .nav-no {
+	border-color: var(--bs-btn-bg) !important;
+	color: var(--bs-btn-bg) !important;
+}
+
+.nav.nav-wizards-1 .nav-item .nav-link.completed {
+	border-color: var(--bs-btn-bg) !important;
+	color: var(--bs-btn-bg) !important;
+}
+
+.nav.nav-wizards-1 .nav-item .nav-link.active:before,
+.nav.nav-wizards-1 .nav-item .nav-link.active:after,
+.nav.nav-wizards-1 .nav-item .nav-link.completed:before,
+.nav.nav-wizards-1 .nav-item .nav-link.completed:after {
+	background: #ced4da !important;
+}
+
+.nav.nav-wizards-1 .nav-item .nav-link.active .nav-no {
+	-webkit-box-shadow: 0 0 0 5px rgba(179, 179, 179, 0.2) !important;
+	box-shadow: 0 0 0 5px;
+}
+
+.nav.nav-wizards-1 .nav-item .nav-link.active,
+.nav.nav-wizards-1 .nav-item .nav-link.completed {
+	color: var(--bs-btn-bg) !important;
+}

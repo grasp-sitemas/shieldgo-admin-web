@@ -10,27 +10,33 @@
                             </b-card-header>
                             <b-collapse id="companies" visible accordion="companySession">
                                 <b-card-body>
-                                    <label class="form-label" for="accountField">{{ $t('str.register.user.account.field') }}</label>
-                                    <select v-model="filters.account" @change="changeAccount" class="form-select" id="accountField">
-                                        <option value="">{{ $t('str.register.select.placeholder') }}</option>
-                                        <option v-for="account in accounts" :value="account._id" :key="account._id">
-                                            {{ account.name }}
-                                        </option>
-                                    </select>
-                                    <label class="form-label" for="clientField">{{ $t('str.register.user.client.field') }}</label>
-                                    <select v-model="filters.client" @change="changeClient" class="form-select" id="clientField">
-                                        <option value="">{{ $t('str.register.select.placeholder') }}</option>
-                                        <option v-for="client in clients" :value="client._id" :key="client._id">
-                                            {{ client.name }}
-                                        </option>
-                                    </select>
-                                    <label class="form-label" for="siteField">{{ $t('str.register.user.site.field') }}</label>
-                                    <select v-model="filters.site" @change="filter" class="form-select" id="siteField">
-                                        <option value="">{{ $t('str.register.select.placeholder') }}</option>
-                                        <option v-for="site in sites" :value="site._id" :key="site._id">
-                                            {{ site.name }}
-                                        </option>
-                                    </select>
+                                    <div v-if="isSuperAdminMaster" class="row mb-3">
+                                        <label class="form-label" for="accountField">{{ $t('str.register.user.account.field') }}</label>
+                                        <select v-model="filters.account" @change="changeAccount" class="form-select" id="accountField">
+                                            <option value="">{{ $t('str.register.select.placeholder') }}</option>
+                                            <option v-for="account in accounts" :value="account._id" :key="account._id">
+                                                {{ account.name }}
+                                            </option>
+                                        </select>
+                                    </div>
+                                    <div class="row mb-3">
+                                        <label class="form-label" for="clientField">{{ $t('str.register.user.client.field') }}</label>
+                                        <select v-model="filters.client" @change="changeClient" class="form-select" id="clientField">
+                                            <option value="">{{ $t('str.register.select.placeholder') }}</option>
+                                            <option v-for="client in clients" :value="client._id" :key="client._id">
+                                                {{ client.name }}
+                                            </option>
+                                        </select>
+                                    </div>
+                                    <div class="row mb-3">
+                                        <label class="form-label" for="siteField">{{ $t('str.register.user.site.field') }}</label>
+                                        <select v-model="filters.site" @change="filter" class="form-select" id="siteField">
+                                            <option value="">{{ $t('str.register.select.placeholder') }}</option>
+                                            <option v-for="site in sites" :value="site._id" :key="site._id">
+                                                {{ site.name }}
+                                            </option>
+                                        </select>
+                                    </div>
                                 </b-card-body>
                             </b-collapse>
                         </b-card>

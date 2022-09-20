@@ -6,7 +6,7 @@
                     <img src="../../assets/images/logo.png" alt="ShieldGo" width="150" />
                 </div>
                 <div class="login-content">
-                    <form v-on:submit="signIn" method="GET">
+                    <form v-on:submit="signIn">
                         <div class="form-floating mb-20px">
                             <input type="text" v-model="data.email" class="form-control fs-13px h-45px border-0" :placeholder="$t('str.title.email.address')" id="emailAddress" />
                             <label for="emailAddress" class="d-flex align-items-center text-gray-600 fs-13px">{{ $t('str.title.email.address') }}</label>
@@ -19,14 +19,18 @@
                         <div class="mb-20px">
                             <button type="submit" class="btn btn-primary d-block w-100 h-45px btn-lg">{{ $t('str.title.signin') }}</button>
                         </div>
-                        <div class="text-gray-500">
-                            {{ $t('str.not.member.yet') + ' ' + $t('str.click') }}
-                            <a href="javascript:;" class="text-white">{{ $t('str.here') }}</a> {{ $t('str.to.register') }}
-                        </div>
                     </form>
+                    <div class="text-gray-500">
+                        {{ $t('str.not.member.yet') + ' ' + $t('str.click') }}
+                        <a href="javascript:;" class="text-white">{{ $t('str.here') }}</a> {{ $t('str.to.register') }}
+                    </div>
+                    <div class="text-gray-500 text-center mt-10px">
+                        <a v-b-modal.recoveryPassword class="text-white">{{ $t('str.recovery.password') }}</a>
+                    </div>
                 </div>
             </div>
         </div>
+        <RecoveryPassword :email="data.email" />
         <notifications group="bottom-right" position="bottom right" :speed="500" />
     </div>
 </template>
@@ -34,7 +38,11 @@
 <script>
 import AppOptions from '../../config/AppOptions.vue'
 import Controller from './CrtLogin.vue'
+import RecoveryPassword from './RecoveryPassword/RecoveryPassword.vue'
 export default {
+    components: {
+        RecoveryPassword,
+    },
     created() {
         AppOptions.appEmpty = true
         this.data.email = 'dev@grasp.com.br'

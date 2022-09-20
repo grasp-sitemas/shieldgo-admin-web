@@ -27,7 +27,15 @@ export default {
                 },
             )
         },
+        checkEnableButton: function () {
+            if (this.data.password && this.newPassword && this.confirmNewPassword) {
+                return false
+            } else {
+                return true
+            }
+        },
         save() {
+            this.isLoading = true
             try {
                 Request.do(
                     this,
@@ -46,11 +54,13 @@ export default {
                                 `${Endpoints.systemUsers.resetPass}`,
                                 userResponse => {
                                     if (userResponse.status === 200) {
+                                        this.isLoading = false
                                         Common.show(this, 'bottom-right', 'success', this.$t('str.change.password.success'))
                                         this.clearForm()
                                     }
                                 },
                                 error => {
+                                    this.isLoading = false
                                     Common.show(this, 'bottom-right', 'warn', this.$t('str.change.password.error'))
                                     console.log(error)
                                 },
@@ -58,10 +68,11 @@ export default {
                         }
                     },
                     error => {
+                        this.isLoading = false
                         let res = error.response
                         if (res && res.status == 500) {
                             if (res.data.messageId === 'response.user.password.incorrect') {
-                                this.errors.push('response.user.password.incorrect')
+                                Common.show(this, 'bottom-right', 'warn', this.$t('response.user.password.incorrect'))
                                 return
                             }
                         }
@@ -71,6 +82,7 @@ export default {
                     },
                 )
             } catch (error) {
+                this.isLoading = false
                 Common.show(this, 'bottom-right', 'warn', this.$t('str.change.password.error'))
                 console.log(error)
             }
@@ -87,7 +99,7 @@ export default {
             this.newPassword = ''
             this.confirmNewPassword = ''
         },
-        async checkForm() {
+        checkForm: function () {
             this.errors = []
 
             if (!this.data.password || this.data.password === '') {
@@ -100,14 +112,18 @@ export default {
                 this.errors.push('confirmNewPassword')
             }
 
+            if (this.newPassword.length < 6) {
+                Common.show(this, 'bottom-right', 'warn', this.$t('str.min.password.length'))
+                return
+            }
+
             if (this.newPassword !== this.confirmNewPassword) {
-                this.errors.push('str.change.password.confirm.error')
+                Common.show(this, 'bottom-right', 'warn', this.$t('string.msg.change.password.password.not.match'))
+                return
             }
 
             if (!this.errors || this.errors.length === 0) {
-                this.isLoading = true
-                await this.save()
-                this.isLoading = false
+                this.save()
             }
         },
         hasShowErrors() {

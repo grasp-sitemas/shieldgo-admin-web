@@ -76,5 +76,25 @@ export default {
 
         return []
     },
+    getAppointmentsByDate: async function (state, date) {
+        const filters = {
+            startDate: date,
+            isSortByStartDate: true,
+        }
+
+        const response = await Request.do(state, 'POST', Request.getDefaultHeader(state), filters, `${Endpoints.appointments.filter}`)
+
+        return response?.data?.results || []
+    },
+    getSchedulesByDate: async function (state, date) {
+        const filters = {
+            startDate: date,
+            isSortByStartDate: true,
+        }
+
+        const response = await Request.do(state, 'POST', Request.getDefaultHeader(state), filters, `${Endpoints.schedules.filter}`)
+
+        return response?.data?.results || []
+    },
 }
 </script>

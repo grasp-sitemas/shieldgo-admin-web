@@ -637,5 +637,11 @@
   "string.msg.error.generic": "Ocorreu um erro",
   "str.min.password.length": "A senha deve ter no mínimo 6 caracteres",
   "string.msg.change.password.is.password.required": "A senha é obrigatória",
-  "string.msg.change.password.is.confirm.password.required": "A confirmação da senha é obrigatória"
+  "string.msg.change.password.is.confirm.password.required": "A confirmação da senha é obrigatória",
+  "str.today": "Hoje",
+  "str.yesterday": "Ontem",
+  "str.tomorrow": "Amanhã",
+  "str.week": "Semana",
+  "str.month": "Mês",
+  "str.day": "Dia"
 }

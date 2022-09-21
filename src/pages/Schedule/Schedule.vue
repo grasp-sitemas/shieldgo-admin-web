@@ -5,164 +5,33 @@
         </ol>
         <h1 class="page-header">{{ $t('str.form.title.schedules') }}</h1>
         <hr />
-
-        <FullCalendar :events="events" :options="calendarOptions"></FullCalendar>
+        <!-- {{ calendarOptions.events }} -->
+        <FullCalendar :events="appointments" :options="calendarOptions"></FullCalendar>
     </div>
 </template>
 
 <script>
-import '@fullcalendar/core/vdom' // solves problem with Vite
+import Controller from './CrtSchedule.vue'
 import FullCalendar from '@fullcalendar/vue'
-import dayGridPlugin from '@fullcalendar/daygrid'
-import timeGridPlugin from '@fullcalendar/timegrid'
-import interactionPlugin from '@fullcalendar/interaction'
-import listPlugin from '@fullcalendar/list'
-import bootstrapPlugin from '@fullcalendar/bootstrap'
-import ptBrLocale from '@fullcalendar/core/locales/pt-br'
-import enGbLocale from '@fullcalendar/core/locales/en-gb'
 
 export default {
     components: {
         FullCalendar,
     },
     data() {
-        var date = new Date()
-        var currentYear = date.getFullYear()
-        var currentMonth = date.getMonth() + 1
-        currentMonth = currentMonth < 10 ? '0' + currentMonth : currentMonth
-
         return {
-            calendarOptions: {
-                plugins: [dayGridPlugin, timeGridPlugin, interactionPlugin, listPlugin, bootstrapPlugin],
-                locales: [ptBrLocale, enGbLocale],
-                locale: 'pt-br',
-                headerToolbar: {
-                    left: 'dayGridMonth,timeGridWeek,timeGridDay',
-                    center: 'title',
-                    right: 'prev,next today',
-                },
-                buttonText: {
-                    today: 'Today',
-                    month: 'Month',
-                    week: 'Week',
-                    day: 'Day',
-                },
-                dateClick: this.handleDateClick,
-                eventClick: this.handleEventClick,
-                initialView: 'dayGridMonth',
-                editable: true,
-                droppable: true,
-                themeSystem: 'bootstrap',
-                views: {
-                    timeGrid: {
-                        eventLimit: 6, // adjust to 6 only for timeGridWeek/timeGridDay
-                    },
-                },
-                events: [
-                    {
-                        title: 'Trip to London',
-                        start: currentYear + '-' + currentMonth + '-01',
-                        end: currentYear + '-' + currentMonth + '-05',
-                        color: '#00acac',
-                    },
-                    {
-                        title: 'Meet with Irene Wong',
-                        start: currentYear + '-' + currentMonth + '-02T06:00:00',
-                        color: '#348fe2',
-                    },
-                    {
-                        title: 'Mobile Apps Brainstorming',
-                        start: currentYear + '-' + currentMonth + '-10',
-                        end: currentYear + '-' + currentMonth + '-12',
-                        color: '#fb5597',
-                    },
-                    {
-                        title: 'Stonehenge, Windsor Castle, Oxford',
-                        start: currentYear + '-' + currentMonth + '-05T08:45:00',
-                        end: currentYear + '-' + currentMonth + '-06T18:00',
-                        color: '#8753de',
-                    },
-                    {
-                        title: 'Paris Trip',
-                        start: currentYear + '-' + currentMonth + '-12',
-                        end: currentYear + '-' + currentMonth + '-16',
-                    },
-                    {
-                        title: 'Domain name due',
-                        start: currentYear + '-' + currentMonth + '-15',
-                        color: '#348fe2',
-                    },
-                    {
-                        title: 'Cambridge Trip',
-                        start: currentYear + '-' + currentMonth + '-19',
-                    },
-                    {
-                        title: 'Visit Apple Company',
-                        start: currentYear + '-' + currentMonth + '-22T05:00:00',
-                        color: '#00ACAC',
-                    },
-                    {
-                        title: 'Exercise Class',
-                        start: currentYear + '-' + currentMonth + '-22T07:30:00',
-                        color: '#f59c1a',
-                    },
-                    {
-                        title: 'Live Recording',
-                        start: currentYear + '-' + currentMonth + '-22T03:00:00',
-                        color: '#348fe2',
-                    },
-                    {
-                        title: 'Announcement',
-                        start: currentYear + '-' + currentMonth + '-22T15:00:00',
-                        color: '#ff5b57',
-                    },
-                    {
-                        title: 'Dinner',
-                        start: currentYear + '-' + currentMonth + '-22T18:00:00',
-                    },
-                    {
-                        title: 'New Android App Discussion',
-                        start: currentYear + '-' + currentMonth + '-25T08:00:00',
-                        end: currentYear + '-' + currentMonth + '-25T10:00:00',
-                        color: '#ff5b57',
-                    },
-                    {
-                        title: 'Marketing Plan Presentation',
-                        start: currentYear + '-' + currentMonth + '-25T12:00:00',
-                        end: currentYear + '-' + currentMonth + '-25T14:00:00',
-                        color: '#348fe2',
-                    },
-                    {
-                        title: 'Chase due',
-                        start: currentYear + '-' + currentMonth + '-26T12:00:00',
-                        color: '#f59c1a',
-                    },
-                    {
-                        title: 'Heartguard',
-                        start: currentYear + '-' + currentMonth + '-26T08:00:00',
-                        color: '#f59c1a',
-                    },
-                    {
-                        title: 'Lunch with Richard',
-                        start: currentYear + '-' + currentMonth + '-28T14:00:00',
-                        color: '#348fe2',
-                    },
-                    {
-                        title: 'Web Hosting due',
-                        start: currentYear + '-' + currentMonth + '-30',
-                        color: '#348fe2',
-                    },
-                ],
-            },
+            calendarOptions: {},
+            appointments: [],
         }
     },
-    methods: {
-        handleDateClick: function (arg) {
-            alert('date click! ' + arg.dateStr)
-        },
-        handleEventClick: function (arg) {
-            alert('event click! ' + arg.event.title + '\n' + arg.event.startStr + '\n' + arg.event.endStr)
-        },
+    methods: Controller.methods,
+    mounted() {},
+    created() {
+        Controller.init(this)
+        const state = this
+        this.$registerEvent.$on('changeLanguage', function () {
+            state.changeLanguage()
+        })
     },
 }
 </script>

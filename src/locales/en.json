@@ -650,5 +650,11 @@
   "string.msg.error.generic": "Error",
   "str.min.password.length": "Minimum password length is 6 characters",
   "string.msg.change.password.is.password.required": "Password is required",
-  "string.msg.change.password.is.confirm.password.required": "Confirm password is required"
+  "string.msg.change.password.is.confirm.password.required": "Confirm password is required",
+  "str.today": "Today",
+  "str.yesterday": "Yesterday",
+  "str.tomorrow": "Tomorrow",
+  "str.week": "Week",
+  "str.month": "Month",
+  "str.day": "Day"
 }

@@ -100,7 +100,6 @@
                 <div class="invalid-feedback">{{ $t('str.register.schedule.vigilants.required') }}</div>
             </div>
         </div>
-
         <div class="row">
             <div class="col-md-4 mb-3">
                 <label class="form-label" for="beginDateField">{{ $t('str.register.schedule.starts.in.field') }}</label>
@@ -131,7 +130,14 @@
             </div>
             <div class="col-md-4 mb-3">
                 <label class="form-label" for="frequencyField">{{ $t('str.register.schedule.frequency.field') }}</label>
-                <select v-model="data.frequency" class="form-select" v-bind:class="checkRequiredField('frequency') ? 'is-invalid' : ''" @focus="removeRequiredField('frequency')" id="frequencyField">
+                <select
+                    v-model="data.frequency"
+                    @change="changeFrequency()"
+                    class="form-select"
+                    v-bind:class="checkRequiredField('frequency') ? 'is-invalid' : ''"
+                    @focus="removeRequiredField('frequency')"
+                    id="frequencyField"
+                >
                     <option value="">{{ $t('str.register.select.placeholder') }}</option>
                     <option v-for="frequency in frequencies" :value="frequency.value" :key="frequency.value">
                         {{ $t(frequency.label) }}
@@ -148,6 +154,60 @@
                     <input v-model="data.weeklyDays" :id="item.value" :value="item.value" :true-value="item.value" class="form-check-input cursor_pointer" type="checkbox" />
                     <label class="form-check-label cursor_pointer" :for="item.value">{{ $t(item.label) }}</label>
                 </div>
+            </div>
+        </div>
+
+        <div class="row mb-3" v-if="data.frequency === 'MONTHLY'">
+            <div class="col-md-4">
+                <label class="form-label" for="monthlyDayFrequencyField">{{ $t('str.register.schedule.frequency.monthly.day.field') }}</label>
+                <input
+                    v-model="data.frequencyMonth.day"
+                    type="number"
+                    class="form-control"
+                    min="1"
+                    max="31"
+                    @blur="verifyMonthDay()"
+                    v-bind:class="checkRequiredField('frequencyMonthDay') ? 'is-invalid' : ''"
+                    @focus="removeRequiredField('frequencyMonthDay')"
+                    id="monthlyDayFrequencyField"
+                    :placeholder="$t('str.register.schedule.frequency.monthly.day.placeholder')"
+                />
+                <div class="invalid-feedback">{{ $t('str.register.schedule.frequency.monthly.day.required') }}</div>
+            </div>
+        </div>
+
+        <div class="row mb-3" v-if="data.frequency === 'YEARLY'">
+            <div class="col-md-4">
+                <label class="form-label" for="yearlyMonthFrequencyField">{{ $t('str.register.schedule.frequency.yearly.month.field') }}</label>
+                <select
+                    v-model="data.frequencyYear.month"
+                    class="form-select"
+                    v-bind:class="checkRequiredField('frequencyYearMonth') ? 'is-invalid' : ''"
+                    @focus="removeRequiredField('frequencyYearMonth')"
+                    id="yearlyMonthFrequencyField"
+                >
+                    <option value="">{{ $t('str.register.select.placeholder') }}</option>
+                    <option v-for="month in months" :value="month.value" :key="month.value">
+                        {{ $t(month.label) }}
+                    </option>
+                </select>
+                <div class="invalid-feedback">{{ $t('str.register.schedule.frequency.year.month.required') }}</div>
+            </div>
+            <div class="col-md-4">
+                <label class="form-label" for="yearlyDayFrequencyField">{{ $t('str.register.schedule.frequency.yearly.day.field') }}</label>
+                <input
+                    v-model="data.frequencyYear.day"
+                    type="number"
+                    class="form-control"
+                    min="1"
+                    max="31"
+                    @blur="verifyDay()"
+                    v-bind:class="checkRequiredField('frequencyYearDay') ? 'is-invalid' : ''"
+                    @focus="removeRequiredField('frequencyYearDay')"
+                    id="yearlyDayFrequencyField"
+                    :placeholder="$t('str.register.schedule.frequency.year.day.placeholder')"
+                />
+                <div class="invalid-feedback">{{ $t('str.register.schedule.frequency.year.month.required') }}</div>
             </div>
         </div>
 
@@ -199,7 +259,7 @@
 
 <script>
 import Controller from './CrtCreateScheduleModal.vue'
-import { FREQUENCIES, WEEKLY_DAYS } from '../../../utils/schedules.js'
+import { FREQUENCIES, WEEKLY_DAYS, MONTHS } from '../../../utils/schedules.js'
 import moment from 'moment'
 
 export default {
@@ -251,12 +311,20 @@ export default {
             vigilants: [],
             frequencies: FREQUENCIES,
             weeklyDays: WEEKLY_DAYS,
+            months: MONTHS,
             data: {
                 guardGroup: '',
                 account: '',
                 client: '',
                 site: '',
                 frequency: '',
+                frequencyMonth: {
+                    day: '',
+                },
+                frequencyYear: {
+                    month: '',
+                    day: '',
+                },
                 points: [],
                 vigilants: [],
                 weeklyDays: [],

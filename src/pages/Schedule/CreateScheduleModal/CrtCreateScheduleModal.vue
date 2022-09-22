@@ -117,6 +117,18 @@ export default {
                 this.errors.push('points')
             }
 
+            if (this.data?.frequency === 'YEARLY' && (!this.data?.frequencyYear?.month || this.data?.frequencyYear?.month === '')) {
+                this.errors.push('frequencyYearMonth')
+            }
+
+            if (this.data?.frequency === 'YEARLY' && (!this.data?.frequencyYear?.day || this.data?.frequencyYear?.day === '')) {
+                this.errors.push('frequencyYearDay')
+            }
+
+            if (this.data?.frequency === 'MONTHLY' && (!this.data?.frequencyMonth?.day || this.data?.frequencyMonth?.day === '')) {
+                this.errors.push('frequencyMonthDay')
+            }
+
             if (!this.data.guardGroup || this.data.guardGroup === '') {
                 delete this.data.guardGroup
             }
@@ -124,6 +136,18 @@ export default {
             if (!this.errors || this.errors.length === 0) {
                 this.save()
             }
+        },
+        changeFrequency: function () {
+            this.data.frequencyYear = {
+                month: '',
+                day: '',
+            }
+            this.data.frequencyMonth = {
+                day: '',
+            }
+            this.removeRequiredField('frequencyMonthDay')
+            this.removeRequiredField('frequencyYearMonth')
+            this.removeRequiredField('frequencyYearDay')
         },
         async selectAllVigilants() {
             if (!this.data.guardGroup) this.data.vigilants = this.vigilants ? this.vigilants : await Services.getVigilantsBySite(this, this.data.site)
@@ -139,6 +163,25 @@ export default {
             this.patrolPoints = []
             this.vigilants = []
         },
+        verifyDay: function () {
+            // check if day of month is valid for selected month
+            const month = this.data?.frequencyYear?.month
+            const day = this.data?.frequencyYear?.day
+
+            if (month && day) {
+                const daysInMonth = new Date(new Date().getFullYear(), month, 0).getDate()
+                if (day > daysInMonth) {
+                    this.data.frequencyYear.day = daysInMonth
+                }
+            }
+        },
+        verifyMonthDay: function () {
+            // check if day of month is valid for selected month
+            const day = this.data?.frequencyMonth?.day
+            if (day > 31) {
+                this.data.frequencyMonth.day = 31
+            }
+        },
         clearForm() {
             this.errors = []
             this.data = {
@@ -147,11 +190,19 @@ export default {
                 client: '',
                 site: '',
                 frequency: '',
+                frenquencyMonth: {
+                    day: '',
+                },
+                frenquencyYear: {
+                    month: '',
+                    day: '',
+                },
                 points: [],
                 vigilants: [],
                 weeklyDays: [],
-                beginDate: '',
-                endDate: '',
+                beginDate: null,
+                endDate: null,
+                sendAlert: false,
                 type: 'FREE-PROGRAM',
                 status: 'ACTIVE',
             }

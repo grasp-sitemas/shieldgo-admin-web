@@ -38,7 +38,7 @@
     "jspdf": "^2.5.1",
     "leaflet": "^1.8.0",
     "leaflet-draw": "^1.0.4",
-    "moment": "^2.29.1",
+    "moment": "^2.29.4",
     "node-sass": "^6.0.1",
     "qrcode.vue": "^1.7.0",
     "sass-loader": "^10.1.1",

@@ -1,5 +1,5 @@
 <script>
-// import Common from '../../common/Common.vue'
+import Common from '../../common/Common.vue'
 import Services from '../../common/Services.vue'
 import '@fullcalendar/core/vdom' // solves problem with Vite
 import dayGridPlugin from '@fullcalendar/daygrid'
@@ -9,13 +9,21 @@ import listPlugin from '@fullcalendar/list'
 import bootstrapPlugin from '@fullcalendar/bootstrap'
 import ptBrLocale from '@fullcalendar/core/locales/pt-br'
 import enGbLocale from '@fullcalendar/core/locales/en-gb'
-
+import moment from 'moment'
 export default {
     init: async payload => {
         payload.initCalendar()
 
+        payload.isSuperAdminMaster = await Common.isSuperAdminMaster(payload)
+        if (payload.isSuperAdminMaster) {
+            payload.accounts = await Services.getAccounts(payload)
+        } else {
+            payload.clients = await Services.getClients(payload)
+        }
+
         payload.getAppointments()
     },
+
     methods: {
         async getAppointments() {
             const appointments = await Services.getAppointmentsByDate(this, new Date())
@@ -34,7 +42,6 @@ export default {
             })
             return formattedAppointments
         },
-
         initCalendar: function () {
             const language = this.$session.get('user')?.language
             const locale = language === 'pt' ? 'pt-br' : 'en-gb'
@@ -54,7 +61,7 @@ export default {
                     week: this.$t('str.week'),
                     day: this.$t('str.day'),
                 },
-                dateClick: this.handleDateSelect,
+                dateClick: this.handleDateClick,
                 eventClick: this.handleEventClick,
                 initialView: 'dayGridMonth',
                 droppable: false,
@@ -78,7 +85,10 @@ export default {
             this.calendarOptions.locale = locale
         },
         handleDateClick: function (arg) {
-            alert('date click! ' + arg.dateStr)
+            // if (Common.compareDates(new Date(arg.dateStr), new Date())) {
+            this.selectedDate = moment(arg.dateStr).format('DD-MM-YYYY')
+            this.$bvModal.show('createScheduleModal')
+            // }
         },
         handleEventClick: function (arg) {
             alert('event click! ' + arg.event.title + '\n' + arg.event.startStr + '\n' + arg.event.endStr)

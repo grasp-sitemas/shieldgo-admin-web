@@ -96,5 +96,31 @@ export default {
 
         return response?.data?.results || []
     },
+    getGuardGroupsBySite: async function (state, site) {
+        if (site) {
+            const filters = {
+                site: site,
+                status: 'ACTIVE',
+            }
+
+            const response = await Request.do(state, 'POST', Request.getDefaultHeader(state), filters, `${Endpoints.guardGroups.filter}`)
+            return response?.data?.results || []
+        }
+
+        return []
+    },
+    getPatrolPointsBySite: async function (state, site) {
+        if (site) {
+            const filters = {
+                site: site,
+                status: 'ACTIVE',
+            }
+
+            const response = await Request.do(state, 'POST', Request.getDefaultHeader(state), filters, `${Endpoints.patrolPoints.filter}`)
+            return response?.data?.results || []
+        }
+
+        return []
+    },
 }
 </script>

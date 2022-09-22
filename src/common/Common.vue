@@ -1,4 +1,6 @@
 <script>
+const moment = require('moment')
+
 export default {
     camelize: text => {
         if (text) {
@@ -26,6 +28,22 @@ export default {
     },
     formatDate: text => {
         return new Date(text).toLocaleDateString()
+    },
+    checkValidDate: function (date) {
+        const currentDate = moment().format('DD-MM-YYYY')
+        return moment(date).isSameOrAfter(currentDate)
+    },
+    compareDates: function (d1, d2) {
+        let date1 = new Date(d1).getTime()
+        let date2 = new Date(d2).getTime()
+
+        if (date1 < date2) {
+            return false
+        } else if (date1 > date2) {
+            return true
+        } else {
+            return true
+        }
     },
     checkPassword: str => {
         var re = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,}$/

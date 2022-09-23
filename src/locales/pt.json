@@ -733,7 +733,17 @@
   "str.register.schedule.frequency.month.day.placeholder": "Digite o dia",
   "str.register.schedule.frequency.yearly.month.field": "Mês",
   "str.register.schedule.frequency.yearly.day.field": "Dia",
-  "str.register.schedule.frequency.monthly.day.field": "Dia",
+  "str.register.schedule.frequency.monthly.day.field": "Todo dia",
   "str.register.schedule.frequency.monthly.day.required": "O dia é obrigatório",
-  "str.register.schedule.frequency.monthly.day.placeholder": "Digite o dia"
+  "str.register.schedule.frequency.monthly.day.placeholder": "Digite o dia",
+  "str.register.schedule.notify.vigilants.field": "Notificar vigilantes",
+  "str.register.schedule.begin.hour.field": "Hora de início",
+  "str.register.schedule.begin.hour.placeholder": "Selecione a hora de início",
+  "str.register.schedule.begin.hour.required": "A hora de início é obrigatória",
+  "str.register.schedule.end.hour.field": "Hora de término",
+  "str.register.schedule.end.hour.placeholder": "Selecione a hora de término",
+  "str.register.schedule.end.hour.required": "A hora de término é obrigatória",
+  "str.title.cancel.series": "Cancelar série",
+  "str.title.cancel.occurrence": "Cancelar ocorrência",
+  "str.btn.exit": "Fechar"
 }

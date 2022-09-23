@@ -10,6 +10,7 @@ import bootstrapPlugin from '@fullcalendar/bootstrap'
 import ptBrLocale from '@fullcalendar/core/locales/pt-br'
 import enGbLocale from '@fullcalendar/core/locales/en-gb'
 import moment from 'moment'
+
 export default {
     init: async payload => {
         payload.initCalendar()
@@ -27,6 +28,7 @@ export default {
     methods: {
         async getAppointments() {
             const appointments = await Services.getAppointmentsByDate(this, new Date())
+            this.originalAppointments = appointments
             const formattedAppointments = await this.formatAppointments(appointments)
             this.appointments = formattedAppointments ? formattedAppointments : []
             this.calendarOptions.events = this.appointments
@@ -78,6 +80,7 @@ export default {
                 },
             }
         },
+
         changeLanguage: function () {
             const language = this.$session.get('user')?.language
             const locale = language === 'pt' ? 'pt-br' : 'en-gb'
@@ -85,13 +88,30 @@ export default {
             this.calendarOptions.locale = locale
         },
         handleDateClick: function (arg) {
-            // if (Common.compareDates(new Date(arg.dateStr), new Date())) {
-            this.selectedDate = moment(arg.dateStr).format('DD-MM-YYYY')
+            this.selectedDate = new Date(arg.dateStr).toLocaleDateString()
             this.$bvModal.show('createScheduleModal')
-            // }
         },
-        handleEventClick: function (arg) {
-            alert('event click! ' + arg.event.title + '\n' + arg.event.startStr + '\n' + arg.event.endStr)
+        getAppintmentById: function (id) {
+            return this.originalAppointments.find(appointment => appointment._id === id)
+        },
+        handleEventClick: async function (arg) {
+            const appointment = this.getAppintmentById(arg.event.id)
+
+            const filters = {
+                account: appointment?.account?._id,
+                client: appointment?.client?._id,
+                site: appointment?.site?._id,
+                schedule: appointment?.schedule,
+                status: 'ACTIVE',
+            }
+
+            const selectedAppointment = await Services.getScheduleById(this, filters)
+            selectedAppointment.beginDate = moment(selectedAppointment.beginDate).format('YYYY-MM-DD')
+            selectedAppointment.endDate = moment(selectedAppointment.endDate).format('YYYY-MM-DD')
+
+            this.selectedAppointment = selectedAppointment
+
+            this.$bvModal.show('createScheduleModal')
         },
     },
 }

@@ -122,5 +122,13 @@ export default {
 
         return []
     },
+    getScheduleById: async function (state, filters) {
+        const response = await Request.do(state, 'POST', Request.getDefaultHeader(state), filters, `${Endpoints.schedules.filter}`)
+        return response?.data?.results[0] || []
+    },
+    cancelAppointmentSeries: async function (state, filters) {
+        const response = await Request.do(state, 'POST', Request.getDefaultHeader(state), filters, `${Endpoints.appointments.cancelSeries}`)
+        return response?.data?.deleteSchedule || null
+    },
 }
 </script>

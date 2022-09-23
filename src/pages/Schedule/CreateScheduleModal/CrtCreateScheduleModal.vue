@@ -3,13 +3,15 @@ import Common from '../../../common/Common.vue'
 import Services from '../../../common/Services.vue'
 import Endpoints from '../../../common/Endpoints.vue'
 import Request from '../../../common/Request.vue'
+import Vue from 'vue'
+Vue.prototype.$registerEvent = new Vue()
+
 export default {
     init: async payload => {
         payload.initTable()
         if (!payload.isSuperAdminMaster) {
             payload.data.account = Common.getAccountId(payload)
         }
-        payload.data.beginDate = payload.selectedDate ?? ''
     },
     methods: {
         checkRequiredField(field) {
@@ -71,20 +73,18 @@ export default {
                         if (response.status === 200) {
                             this.isLoading = false
                             this.$registerEvent.$emit('refreshSchedule')
-                            Common.show(this, 'bottom-right', 'success', this.$t('str.form.create.success'))
-                            // this.clearForm()
                             this.$bvModal.hide('createScheduleModal')
                         }
                     },
                     error => {
                         this.isLoading = false
-                        Common.show(this, 'bottom-right', 'warn', this.$t(this.data._id ? 'str.form.update.generic.error' : 'str.form.save.generic.error'))
+                        Common.show(this, 'bottom-right', 'warn', this.data._id ? this.$t('str.form.update.generic.error') : this.$t('str.form.save.generic.error'))
                         console.log(error)
                     },
                 )
             } catch (error) {
                 this.isLoading = false
-                Common.show(this, 'bottom-right', 'warn', this.$t(this.data._id ? 'str.form.update.generic.error' : 'str.form.save.generic.error'))
+                Common.show(this, 'bottom-right', 'warn', this.data._id ? this.$t('str.form.update.generic.error') : this.$t('str.form.save.generic.error'))
                 console.log(error)
             }
         },
@@ -107,11 +107,17 @@ export default {
             if (!this.data.beginDate || this.data.beginDate === '') {
                 this.errors.push('beginDate')
             }
+            if (!this.data.endDate || this.data.endDate === '') {
+                this.errors.push('endDate')
+            }
             if (!this.data.frequency || this.data.frequency === '') {
                 this.errors.push('frequency')
             }
-            if (!this.data.endDate || this.data.endDate === '') {
-                this.errors.push('endDate')
+            if (!this.data.beginHour || this.data.beginHour === '') {
+                this.errors.push('beginHour')
+            }
+            if (!this.data.endHour || this.data.endHour === '') {
+                this.errors.push('endHour')
             }
             if (!this.data.points || this.data.points.length === 0) {
                 this.errors.push('points')
@@ -129,14 +135,52 @@ export default {
                 this.errors.push('frequencyMonthDay')
             }
 
-            if (!this.data.guardGroup || this.data.guardGroup === '') {
-                delete this.data.guardGroup
-            }
-
             if (!this.errors || this.errors.length === 0) {
+                if (!this.data.guardGroup || this.data.guardGroup === '') {
+                    delete this.data.guardGroup
+                }
+
+                if (this.data.frequency === 'DAILY' || this.data.frequency === 'WEEKLY' || this.data.frequency === 'NOT_REPEAT') {
+                    delete this.data.frequencyYear
+                    delete this.data.frequencyMonth
+                }
+
+                this.data.beginDate = this.data.beginDate + 'T' + this.data?.beginHour + ':00.000Z'
+                this.data.endDate = this.data.endDate + 'T' + this.data?.endHour + ':00.000Z'
+
                 this.save()
             }
         },
+        confirmArchive() {
+            this.$swal({
+                title: this.$t('str.are.you.sure'),
+                text: this.$t('str.are.you.sure.archive'),
+                showCancelButton: true,
+                showDenyButton: true,
+                buttonsStyling: false,
+                confirmButtonText: this.$t('str.title.cancel.series'),
+                cancelButtonClass: 'btn btn-default',
+                denyButtonText: this.$t('str.title.cancel.occurrence'),
+                confirmButtonClass: 'btn me-5px btn-danger',
+                cancelButtonText: this.$t('str.btn.exit'),
+                denyButtonClass: 'btn me-5px btn-warning',
+            }).then(result => {
+                if (result.isConfirmed) {
+                    this.cancelAppointmentSeries()
+                } else if (result.isDenied) {
+                    this.cancelAppointmentOccurrence()
+                }
+            })
+        },
+        cancelAppointmentSeries: async function () {
+            const filters = {
+                schedule: this.data._id,
+            }
+            await Services.cancelAppointmentSeries(this, filters)
+            this.$registerEvent.$emit('refreshSchedule')
+            this.$bvModal.hide('createScheduleModal')
+        },
+        cancelAppointmentOccurrence: function () {},
         changeFrequency: function () {
             this.data.frequencyYear = {
                 month: '',
@@ -145,16 +189,20 @@ export default {
             this.data.frequencyMonth = {
                 day: '',
             }
+            this.data.weeklyDays = []
             this.removeRequiredField('frequencyMonthDay')
             this.removeRequiredField('frequencyYearMonth')
             this.removeRequiredField('frequencyYearDay')
         },
         async selectAllVigilants() {
-            if (!this.data.guardGroup) this.data.vigilants = this.vigilants ? this.vigilants : await Services.getVigilantsBySite(this, this.data.site)
+            if (!this.data?.guardGroup) this.data.vigilants = this.vigilants ? this.vigilants : await Services.getVigilantsBySite(this, this.data.site)
             else this.data.vigilants = this.data.guardGroup.vigilants
+
+            this.removeRequiredField('vigilants')
         },
         removeAllVigilants() {
             this.data.vigilants = []
+            this.removeRequiredField('vigilants')
         },
         clearFields() {
             this.data.vigilants = []
@@ -184,7 +232,13 @@ export default {
         },
         clearForm() {
             this.errors = []
+
+            this.patrolPoints = []
+            this.vigilants = []
+            this.guardGroups = []
+
             this.data = {
+                name: '',
                 guardGroup: '',
                 account: '',
                 client: '',
@@ -202,13 +256,16 @@ export default {
                 weeklyDays: [],
                 beginDate: null,
                 endDate: null,
+                beginHour: '',
+                endHour: '',
                 sendAlert: false,
+                notifyVigilants: false,
                 type: 'FREE-PROGRAM',
                 status: 'ACTIVE',
             }
             if (this.isSuperAdminMaster) {
-                this.clients = []
-                this.sites = []
+                this.clientList = []
+                this.siteList = []
             } else this.data.account = Common.getAccountId(this)
 
             this.isLoading = false
@@ -289,12 +346,28 @@ export default {
         },
         selectionChanged(params) {
             this.data.points = params.selectedRows
-            // this.rowSelection = params.selectedRows
+            if (params.selectedRows.length > 0) this.removeRequiredField('points')
         },
         isEnabledBtnSave: function () {
             return this.data.name && this.data.frequency && this.data.vigilants.length > 0 && this.data.points.length > 0 && this.data.beginDate && this.data.endDate && this.data.client && this.data.site
         },
-        selectItem() {},
+        async initSelectedAppointment() {
+            this.data.account = this.data?.account?._id
+            this.data.client = this.data?.client?._id
+            this.data.site = this.data?.site?._id
+
+            if (Common.isSuperAdminMaster(this)) {
+                this.accountList = await Services.getAccounts(this)
+            }
+
+            this.clientList = await Services.getClientsByAccount(this, this.data.account)
+            this.siteList = await Services.getSitesByClient(this, this.data.client)
+            this.guardGroups = await Services.getGuardGroupsBySite(this, this.data.site)
+            this.patrolPoints = await Services.getPatrolPointsBySite(this, this.data.site)
+            this.vigilants = await Services.getVigilantsBySite(this, this.data.site)
+
+            // this.$refs['my-table'].selectedRows = this.data.points
+        },
     },
 }
 </script>

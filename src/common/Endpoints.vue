@@ -9,8 +9,9 @@ export default {
         filter: `${domain}/api/company/appointments/filter/v1/`,
         appointment: `${domain}/api/company/appointments/v1/`,
         delete: `${domain}/api/company/appointments/delete/v1/`,
+        cancelSeries: `${domain}/api/company/appointments/cancel/series/v1/`,
+        cancelOccurrence: `${domain}/api/company/appointments/cancel/occurrence/v1/`,
     },
-
     addresses: {
         address: `${domain}/api/address/v1/`,
         geolocation: `${domain}/api/address/geo/v1/`,

@@ -742,5 +742,18 @@
   "str.register.schedule.frequency.month.day.required": "Day is required",
   "str.register.schedule.frequency.month.day.placeholder": "Enter the day",
   "str.register.schedule.frequency.monthly.day.required": "Day is required",
-  "str.register.schedule.frequency.monthly.day.placeholder": "Enter the day"
+  "str.register.schedule.frequency.monthly.day.placeholder": "Enter the day",
+  "str.register.schedule.notify.vigilants.field": "Notify Vigilants",
+  "str.register.schedule.frequency.monthly.day.field": "On day",
+  "str.register.schedule.frequency.yearly.month.field": "Month",
+  "str.register.schedule.frequency.yearly.day.field": "Day",
+  "str.register.schedule.begin.hour.field": "Begin hour",
+  "str.register.schedule.begin.hour.placeholder": "Select the begin hour",
+  "str.register.schedule.begin.hour.required": "Begin hour is required",
+  "str.register.schedule.end.hour.field": "End hour",
+  "str.register.schedule.end.hour.placeholder": "Select the end hour",
+  "str.register.schedule.end.hour.required": "End hour is required",
+  "str.title.cancel.series": "Cancel series",
+  "str.title.cancel.occurrence": "Cancel occurrence",
+  "str.btn.exit": "Close"
 }

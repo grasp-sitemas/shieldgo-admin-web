@@ -4,7 +4,7 @@
             <h4 class="modal-title">{{ $t('str.modal.create.schedule.title') }}</h4>
             <a class="btn-close cursor_pointer" @click="$bvModal.hide('createScheduleModal')"></a>
         </template>
-
+        {{ data.beginDate + ' ' + data.endDate }}
         <div class="row">
             <div v-if="isSuperAdminMaster" class="col-md-4 mb-3">
                 <label class="form-label" for="accountField">{{ $t('str.register.incident.account.field') }}</label>
@@ -91,8 +91,8 @@
                     label="firstName"
                     key="vigilantsField"
                     v-model="data.vigilants"
+                    @search:blur="removeRequiredField('vigilants')"
                     v-bind:class="checkRequiredField('vigilants') ? 'is-invalid' : ''"
-                    @focus="removeRequiredField('vigilants')"
                     :options="vigilants"
                     :create-option="vigilant => ({ _id: '' })"
                     :placeholder="$t('str.register.select.placeholder')"
@@ -105,7 +105,7 @@
                 <label class="form-label" for="beginDateField">{{ $t('str.register.schedule.starts.in.field') }}</label>
                 <input
                     v-model="data.beginDate"
-                    type="datetime-local"
+                    type="date"
                     class="form-control"
                     v-bind:class="checkRequiredField('beginDate') ? 'is-invalid' : ''"
                     @focus="removeRequiredField('beginDate')"
@@ -119,7 +119,7 @@
                 <label class="form-label" for="endDateField">{{ $t('str.register.schedule.ends.in.field') }}</label>
                 <input
                     v-model="data.endDate"
-                    type="datetime-local"
+                    type="date"
                     class="form-control"
                     v-bind:class="checkRequiredField('endDate') ? 'is-invalid' : ''"
                     @focus="removeRequiredField('endDate')"
@@ -176,8 +176,8 @@
             </div>
         </div>
 
-        <div class="row mb-3" v-if="data.frequency === 'YEARLY'">
-            <div class="col-md-4">
+        <div class="row" v-if="data.frequency === 'YEARLY'">
+            <div class="col-md-4 mb-3">
                 <label class="form-label" for="yearlyMonthFrequencyField">{{ $t('str.register.schedule.frequency.yearly.month.field') }}</label>
                 <select
                     v-model="data.frequencyYear.month"
@@ -193,7 +193,7 @@
                 </select>
                 <div class="invalid-feedback">{{ $t('str.register.schedule.frequency.year.month.required') }}</div>
             </div>
-            <div class="col-md-4">
+            <div class="col-md-4 mb-3">
                 <label class="form-label" for="yearlyDayFrequencyField">{{ $t('str.register.schedule.frequency.yearly.day.field') }}</label>
                 <input
                     v-model="data.frequencyYear.day"
@@ -212,13 +212,42 @@
         </div>
 
         <div class="row">
+            <div class="col-md-4 mb-3">
+                <label class="form-label" for="beginHourField">{{ $t('str.register.schedule.begin.hour.field') }}</label>
+                <input
+                    v-model="data.beginHour"
+                    type="time"
+                    class="form-control"
+                    v-bind:class="checkRequiredField('beginHour') ? 'is-invalid' : ''"
+                    @focus="removeRequiredField('beginHour')"
+                    id="beginHourField"
+                    :placeholder="$t('str.register.schedule.begin.hour.placeholder')"
+                />
+                <div class="invalid-feedback">{{ $t('str.register.schedule.begin.hour.required') }}</div>
+            </div>
+            <div class="col-md-4 mb-3">
+                <label class="form-label" for="endHourField">{{ $t('str.register.schedule.end.hour.field') }}</label>
+                <input
+                    v-model="data.endHour"
+                    type="time"
+                    class="form-control"
+                    v-bind:class="checkRequiredField('endHour') ? 'is-invalid' : ''"
+                    @focus="removeRequiredField('endHour')"
+                    id="endHourField"
+                    :placeholder="$t('str.register.schedule.end.hour.placeholder')"
+                />
+                <div class="invalid-feedback">{{ $t('str.register.schedule.end.hour.required') }}</div>
+            </div>
+        </div>
+
+        <div class="row">
             <label class="form-label" for="startDateField">{{ $t('str.register.schedule.patrol.points.table') }}</label>
             <vue-good-table
+                ref="my-table"
                 :columns="columns"
                 :rows="patrolPoints"
                 :search-options="{ enabled: true, placeholder: $t('str.table.search.in.this.table') }"
                 :lineNumbers="true"
-                @on-row-click="selectItem"
                 :select-options="selectOptions"
                 :pagination-options="paginationOptions"
                 @on-selected-rows-change="selectionChanged"
@@ -239,15 +268,27 @@
             <div class="invalid-feedback">{{ $t('str.register.schedule.patrol.points.required') }}</div>
         </div>
 
+        <div class="row mb-3 mt-10px">
+            <div class="col-md-4 mb-2">
+                <div class="form-check">
+                    <input v-model="data.notifyVigilants" class="form-check-input cursor-pointer" type="checkbox" :value="data.notifyVigilants" id="notifyVigilantsCheck" />
+                    <label class="form-check-label cursor-pointer" for="notifyVigilantsCheck">{{ $t('str.register.schedule.notify.vigilants.field') }} </label>
+                </div>
+            </div>
+        </div>
+
         <div class="row">
             <div class="col-md-12 mb-3">
                 <div class="btn-center mt-4 mb-2">
-                    <button @click="checkForm" type="submit" class="btn btn-primary w-200px me-10px is-loading">
+                    <button v-if="!data._id" @click="checkForm" type="submit" class="btn btn-primary w-200px me-10px is-loading">
                         <i v-if="isLoading === true" class="fas fa-spinner fa-pulse"></i>
                         {{ $t('str.btn.save') }}
                     </button>
                     <button @click="$bvModal.hide('createScheduleModal')" type="submit" class="ms-10px btn btn-secondary w-200px">
                         {{ $t('str.btn.close') }}
+                    </button>
+                    <button v-if="data._id && data.status === 'ACTIVE'" v-on:click="confirmArchive" type="submit" class="ms-10px btn btn-warning w-200px">
+                        {{ $t('str.btn.archive') }}
                     </button>
                 </div>
             </div>
@@ -261,12 +302,14 @@
 import Controller from './CrtCreateScheduleModal.vue'
 import { FREQUENCIES, WEEKLY_DAYS, MONTHS } from '../../../utils/schedules.js'
 import moment from 'moment'
-
 export default {
     props: {
         selectedDate: {
             type: String,
-            default: moment().format('YYYY-MM-DD 00:00:00'),
+        },
+        selectedAppointment: {
+            type: Object,
+            default: () => {},
         },
         accounts: {
             type: Array,
@@ -286,8 +329,12 @@ export default {
         },
     },
     watch: {
+        selectedAppointment: function () {
+            this.data = this.selectedAppointment
+            this.initSelectedAppointment()
+        },
         selectedDate: function () {
-            this.data.beginDate = this.selectedDate
+            this.data.beginDate = moment(this.selectedDate).format('YYYY-MM-DD')
         },
         accounts: function () {
             this.accountList = this.accounts
@@ -312,7 +359,9 @@ export default {
             frequencies: FREQUENCIES,
             weeklyDays: WEEKLY_DAYS,
             months: MONTHS,
+            table: null,
             data: {
+                name: '',
                 guardGroup: '',
                 account: '',
                 client: '',
@@ -330,7 +379,10 @@ export default {
                 weeklyDays: [],
                 beginDate: null,
                 endDate: null,
+                beginHour: '',
+                endHour: '',
                 sendAlert: false,
+                notifyVigilants: false,
                 type: 'FREE-PROGRAM',
                 status: 'ACTIVE',
             },

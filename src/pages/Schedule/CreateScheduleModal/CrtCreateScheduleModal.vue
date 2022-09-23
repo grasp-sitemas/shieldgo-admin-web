@@ -60,32 +60,34 @@ export default {
             }
         },
         save() {
-            this.isLoading = true
+            if (!this.isLoading) {
+                this.isLoading = true
 
-            try {
-                Request.do(
-                    this,
-                    this.data._id ? 'put' : 'post',
-                    Request.getDefaultHeader(this),
-                    this.data,
-                    `${Endpoints.schedules.schedule}`,
-                    response => {
-                        if (response.status === 200) {
+                try {
+                    Request.do(
+                        this,
+                        this.data._id ? 'put' : 'post',
+                        Request.getDefaultHeader(this),
+                        this.data,
+                        `${Endpoints.schedules.schedule}`,
+                        response => {
+                            if (response.status === 200) {
+                                this.isLoading = false
+                                this.$registerEvent.$emit('refreshSchedule')
+                                this.$bvModal.hide('createScheduleModal')
+                            }
+                        },
+                        error => {
                             this.isLoading = false
-                            this.$registerEvent.$emit('refreshSchedule')
-                            this.$bvModal.hide('createScheduleModal')
-                        }
-                    },
-                    error => {
-                        this.isLoading = false
-                        Common.show(this, 'bottom-right', 'warn', this.data._id ? this.$t('str.form.update.generic.error') : this.$t('str.form.save.generic.error'))
-                        console.log(error)
-                    },
-                )
-            } catch (error) {
-                this.isLoading = false
-                Common.show(this, 'bottom-right', 'warn', this.data._id ? this.$t('str.form.update.generic.error') : this.$t('str.form.save.generic.error'))
-                console.log(error)
+                            Common.show(this, 'bottom-right', 'warn', this.data._id ? this.$t('str.form.update.generic.error') : this.$t('str.form.save.generic.error'))
+                            console.log(error)
+                        },
+                    )
+                } catch (error) {
+                    this.isLoading = false
+                    Common.show(this, 'bottom-right', 'warn', this.data._id ? this.$t('str.form.update.generic.error') : this.$t('str.form.save.generic.error'))
+                    console.log(error)
+                }
             }
         },
         checkForm() {
@@ -123,6 +125,11 @@ export default {
                 this.errors.push('points')
             }
 
+            // verify if end date is greater than begin date and if range is smaller than one year
+            if (this.checkRangeDate()) {
+                this.errors.push('rangeDate')
+            }
+
             if (this.data?.frequency === 'YEARLY' && (!this.data?.frequencyYear?.month || this.data?.frequencyYear?.month === '')) {
                 this.errors.push('frequencyYearMonth')
             }
@@ -151,6 +158,25 @@ export default {
                 this.save()
             }
         },
+        checkRangeDate: async function () {
+            if (this.data.beginDate && this.data.endDate) {
+                const beginDate = new Date(this.data.beginDate)
+                const endDate = new Date(this.data.endDate)
+                const diff = endDate.getTime() - beginDate.getTime()
+                const diffDays = Math.ceil(diff / (1000 * 3600 * 24))
+                if (diffDays < 0) {
+                    // begin date is greater than end date
+                    Common.show(this, 'bottom-right', 'warn', this.$t('str.form.schedule.error.begin.date.greater.than.end.date'))
+                    return false
+                } else if (diffDays > 365) {
+                    // range is greater than one year
+                    Common.show(this, 'bottom-right', 'warn', this.$t('str.form.schedule.error.range.greater.than.one.year'))
+                    return false
+                }
+                return true
+            }
+            return false
+        },
         confirmArchive() {
             this.$swal({
                 title: this.$t('str.are.you.sure'),
@@ -159,11 +185,11 @@ export default {
                 showDenyButton: true,
                 buttonsStyling: false,
                 confirmButtonText: this.$t('str.title.cancel.series'),
-                cancelButtonClass: 'btn btn-default',
+                cancelButtonClass: 'btn btn-default w-100',
                 denyButtonText: this.$t('str.title.cancel.occurrence'),
-                confirmButtonClass: 'btn me-5px btn-danger',
+                confirmButtonClass: 'btn me-5px btn-danger w-100',
                 cancelButtonText: this.$t('str.btn.exit'),
-                denyButtonClass: 'btn me-5px btn-warning',
+                denyButtonClass: 'btn me-5px btn-warning w-100',
             }).then(result => {
                 if (result.isConfirmed) {
                     this.cancelAppointmentSeries()

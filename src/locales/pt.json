@@ -745,5 +745,7 @@
   "str.register.schedule.end.hour.required": "A hora de término é obrigatória",
   "str.title.cancel.series": "Cancelar série",
   "str.title.cancel.occurrence": "Cancelar ocorrência",
+  "str.form.schedule.error.begin.date.greater.than.end.date": "A data de início deve ser menor que a data de término",
+  "str.form.schedule.error.range.greater.than.one.year": "O período não pode ser maior que um ano",
   "str.btn.exit": "Fechar"
 }

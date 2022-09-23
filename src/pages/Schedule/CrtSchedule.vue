@@ -27,7 +27,7 @@ export default {
 
     methods: {
         async getAppointments() {
-            const appointments = await Services.getAppointmentsByDate(this, new Date())
+            const appointments = await Services.getAppointmentsByDate(this, this.filters)
             this.originalAppointments = appointments
             const formattedAppointments = await this.formatAppointments(appointments)
             this.appointments = formattedAppointments ? formattedAppointments : []
@@ -108,10 +108,33 @@ export default {
             const selectedAppointment = await Services.getScheduleById(this, filters)
             selectedAppointment.beginDate = moment(selectedAppointment.beginDate).format('YYYY-MM-DD')
             selectedAppointment.endDate = moment(selectedAppointment.endDate).format('YYYY-MM-DD')
-
+            selectedAppointment.appointment = appointment
             this.selectedAppointment = selectedAppointment
 
             this.$bvModal.show('createScheduleModal')
+        },
+        changeAccount: async function () {
+            const account = this.filters.account
+
+            if (account === '') {
+                this.filters.client = ''
+                this.filters.site = ''
+            }
+            this.getAppointments()
+            this.clients = await Services.getClientsByAccount(this, account)
+        },
+        changeClient: async function () {
+            const client = this.filters.client
+
+            if (client === '') {
+                this.filters.site = ''
+            }
+
+            this.getAppointments()
+            this.sites = await Services.getSitesByClient(this, client)
+        },
+        changeSite: async function () {
+            this.getAppointments()
         },
     },
 }

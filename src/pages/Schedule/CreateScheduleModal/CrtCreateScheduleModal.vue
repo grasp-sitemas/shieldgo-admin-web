@@ -177,10 +177,15 @@ export default {
                 schedule: this.data._id,
             }
             await Services.cancelAppointmentSeries(this, filters)
-            this.$registerEvent.$emit('refreshSchedule')
-            this.$bvModal.hide('createScheduleModal')
+            this.$registerEvent.$emit('cancelAppointment')
         },
-        cancelAppointmentOccurrence: function () {},
+        cancelAppointmentOccurrence: async function () {
+            const filters = {
+                appointment: this.data.appointment,
+            }
+            await Services.cancelAppointmentOccurrence(this, filters)
+            this.$registerEvent.$emit('cancelAppointment')
+        },
         changeFrequency: function () {
             this.data.frequencyYear = {
                 month: '',

@@ -4,7 +4,6 @@
             <h4 class="modal-title">{{ $t('str.modal.create.schedule.title') }}</h4>
             <a class="btn-close cursor_pointer" @click="$bvModal.hide('createScheduleModal')"></a>
         </template>
-        {{ data.beginDate + ' ' + data.endDate }}
         <div class="row">
             <div v-if="isSuperAdminMaster" class="col-md-4 mb-3">
                 <label class="form-label" for="accountField">{{ $t('str.register.incident.account.field') }}</label>
@@ -284,11 +283,11 @@
                         <i v-if="isLoading === true" class="fas fa-spinner fa-pulse"></i>
                         {{ $t('str.btn.save') }}
                     </button>
-                    <button @click="$bvModal.hide('createScheduleModal')" type="submit" class="ms-10px btn btn-secondary w-200px">
-                        {{ $t('str.btn.close') }}
-                    </button>
                     <button v-if="data._id && data.status === 'ACTIVE'" v-on:click="confirmArchive" type="submit" class="ms-10px btn btn-warning w-200px">
                         {{ $t('str.btn.archive') }}
+                    </button>
+                    <button @click="$bvModal.hide('createScheduleModal')" type="submit" class="ms-10px btn btn-secondary w-200px">
+                        {{ $t('str.btn.close') }}
                     </button>
                 </div>
             </div>

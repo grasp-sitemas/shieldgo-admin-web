@@ -76,12 +76,7 @@ export default {
 
         return []
     },
-    getAppointmentsByDate: async function (state, date) {
-        const filters = {
-            startDate: date,
-            isSortByStartDate: true,
-        }
-
+    getAppointmentsByDate: async function (state, filters) {
         const response = await Request.do(state, 'POST', Request.getDefaultHeader(state), filters, `${Endpoints.appointments.filter}`)
 
         return response?.data?.results || []
@@ -129,6 +124,10 @@ export default {
     cancelAppointmentSeries: async function (state, filters) {
         const response = await Request.do(state, 'POST', Request.getDefaultHeader(state), filters, `${Endpoints.appointments.cancelSeries}`)
         return response?.data?.deleteSchedule || null
+    },
+    cancelAppointmentOccurrence: async function (state, filters) {
+        const response = await Request.do(state, 'POST', Request.getDefaultHeader(state), filters, `${Endpoints.appointments.cancelOccurrence}`)
+        return response?.data?.deleteAppointment || null
     },
 }
 </script>

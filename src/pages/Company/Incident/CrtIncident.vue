@@ -3,7 +3,7 @@ import Endpoints from '../../../common/Endpoints.vue'
 import Request from '../../../common/Request.vue'
 import Common from '../../../common/Common.vue'
 import Services from '../../../common/Services.vue'
-import { INCIDENT_TEMPLATES_PT, INCIDENT_TEMPLATES_EN } from '../../../utils/incidents.js'
+// import { INCIDENT_TEMPLATES_PT, INCIDENT_TEMPLATES_EN } from '../../../utils/incidents.js'
 
 export default {
     init: async payload => {
@@ -16,8 +16,8 @@ export default {
             payload.clients = await Services.getClients(payload)
         }
 
-        const user = payload.$session.get('user')
-        payload.templates = user?.language === 'pt' ? INCIDENT_TEMPLATES_PT : INCIDENT_TEMPLATES_EN
+        // const user = payload.$session.get('user')
+        // payload.templates = user?.language === 'pt' ? INCIDENT_TEMPLATES_PT : INCIDENT_TEMPLATES_EN
     },
     methods: {
         clearForm() {

@@ -36,6 +36,7 @@ export default {
 
             data.account = data?.account?._id || ''
             data.client = data?.client?._id || ''
+            data.site = data?.site?._id || ''
 
             if (!data?.address?._id) {
                 data.address = {}
@@ -62,6 +63,13 @@ export default {
                 {
                     label: this.$t('str.table.user.column.client'),
                     field: 'client',
+                    width: '10%',
+                    thClass: 'text-nowrap',
+                    tdClass: 'text-nowrap',
+                },
+                {
+                    label: this.$t('str.table.user.column.site'),
+                    field: 'site',
                     width: '10%',
                     thClass: 'text-nowrap',
                     tdClass: 'text-nowrap',

@@ -178,6 +178,15 @@ export default {
             }
         },
         async checkForm() {
+            if (!this.data.account || this.data.account === '') {
+                this.errors.push('account')
+            }
+            if (!this.data.client || this.data.client === '') {
+                this.errors.push('client')
+            }
+            if (!this.data.site || this.data.site === '') {
+                this.errors.push('site')
+            }
             if (!this.data.firstName || this.data.firstName === '') {
                 this.errors.push('firstName')
             }
@@ -192,15 +201,11 @@ export default {
             }
 
             if (!this.data.client || this.data.client === '') {
-                delete this.data.client
+                this.data.client === ''
             }
 
             if (!this.data.site || this.data.site === '') {
-                delete this.data.site
-            }
-
-            if (!this.data.password || this.data.password === '') {
-                delete this.data.password
+                this.data.site === ''
             }
 
             if (!this.errors || this.errors.length === 0) {

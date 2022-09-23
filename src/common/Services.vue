@@ -60,5 +60,74 @@ export default {
 
         return []
     },
+    getVigilantsBySite: async function (state, site) {
+        const filters = {
+            name: '',
+            site: site,
+            status: 'ACTIVE',
+            subtype: 'VIGILANT',
+        }
+
+        if (site) {
+            const response = await Request.do(state, 'POST', Request.getDefaultHeader(state), filters, `${Endpoints.systemUsers.customerUser.search}`)
+
+            return response?.data?.results || []
+        }
+
+        return []
+    },
+    getAppointmentsByDate: async function (state, filters) {
+        const response = await Request.do(state, 'POST', Request.getDefaultHeader(state), filters, `${Endpoints.appointments.filter}`)
+
+        return response?.data?.results || []
+    },
+    getSchedulesByDate: async function (state, date) {
+        const filters = {
+            startDate: date,
+            isSortByStartDate: true,
+        }
+
+        const response = await Request.do(state, 'POST', Request.getDefaultHeader(state), filters, `${Endpoints.schedules.filter}`)
+
+        return response?.data?.results || []
+    },
+    getGuardGroupsBySite: async function (state, site) {
+        if (site) {
+            const filters = {
+                site: site,
+                status: 'ACTIVE',
+            }
+
+            const response = await Request.do(state, 'POST', Request.getDefaultHeader(state), filters, `${Endpoints.guardGroups.filter}`)
+            return response?.data?.results || []
+        }
+
+        return []
+    },
+    getPatrolPointsBySite: async function (state, site) {
+        if (site) {
+            const filters = {
+                site: site,
+                status: 'ACTIVE',
+            }
+
+            const response = await Request.do(state, 'POST', Request.getDefaultHeader(state), filters, `${Endpoints.patrolPoints.filter}`)
+            return response?.data?.results || []
+        }
+
+        return []
+    },
+    getScheduleById: async function (state, filters) {
+        const response = await Request.do(state, 'POST', Request.getDefaultHeader(state), filters, `${Endpoints.schedules.filter}`)
+        return response?.data?.results[0] || []
+    },
+    cancelAppointmentSeries: async function (state, filters) {
+        const response = await Request.do(state, 'POST', Request.getDefaultHeader(state), filters, `${Endpoints.appointments.cancelSeries}`)
+        return response?.data?.deleteSchedule || null
+    },
+    cancelAppointmentOccurrence: async function (state, filters) {
+        const response = await Request.do(state, 'POST', Request.getDefaultHeader(state), filters, `${Endpoints.appointments.cancelOccurrence}`)
+        return response?.data?.deleteAppointment || null
+    },
 }
 </script>

@@ -1,161 +1,99 @@
 <template>
     <div>
-        <!-- BEGIN breadcrumb -->
         <ol class="breadcrumb float-xl-end">
-            <li class="breadcrumb-item"><a href="javascript:;">Home</a></li>
-            <li class="breadcrumb-item active">Calendar</li>
+            <li class="breadcrumb-item">{{ $t('str.breadcrumb.schedules') }}</li>
         </ol>
-        <!-- END breadcrumb -->
-        <!-- BEGIN page-header -->
-        <h1 class="page-header">Calendar <small>header small text goes here...</small></h1>
-        <!-- END page-header -->
+        <h1 class="page-header">{{ $t('str.form.title.schedules') }}</h1>
         <hr />
 
-        <!-- BEGIN calendar -->
-        <FullCalendar :events="events" :options="calendarOptions"></FullCalendar>
-        <!-- END calendar -->
+        <div class="row">
+            <div v-if="isSuperAdminMaster" class="col-md-4 mb-3">
+                <label class="form-label" for="accountField">{{ $t('str.register.guard.groups.account.field') }}</label>
+                <select v-model="filters.account" @change="changeAccount" class="form-select" id="accountField">
+                    <option value="">{{ $t('str.register.select.placeholder') }}</option>
+                    <option v-for="account in accounts" :value="account._id" :key="account._id">
+                        {{ account.name }}
+                    </option>
+                </select>
+                <div class="invalid-feedback">{{ $t('str.register.guard.groups.account.required') }}</div>
+            </div>
+            <div class="col-md-4 mb-3">
+                <label class="form-label" for="clientField">{{ $t('str.register.guard.groups.client.field') }}</label>
+                <select v-model="filters.client" @change="changeClient" class="form-select" id="clientField">
+                    <option value="">{{ $t('str.register.select.placeholder') }}</option>
+                    <option v-for="client in clients" :value="client._id" :key="client._id">
+                        {{ client.name }}
+                    </option>
+                </select>
+                <div class="invalid-feedback">{{ $t('str.register.guard.groups.client.required') }}</div>
+            </div>
+            <div class="col-md-4 mb-3">
+                <label class="form-label" for="siteField">{{ $t('str.register.guard.groups.site.field') }}</label>
+                <select v-model="filters.site" @change="changeSite" class="form-select" id="siteField">
+                    <option value="">{{ $t('str.register.select.placeholder') }}</option>
+                    <option v-for="site in sites" :value="site._id" :key="site._id">
+                        {{ site.name }}
+                    </option>
+                </select>
+                <div class="invalid-feedback">{{ $t('str.register.guard.groups.site.required') }}</div>
+            </div>
+        </div>
+
+        <CreateScheduleModal :selectedAppointment="selectedAppointment" :selectedDate="selectedDate" :accounts="accounts" :clients="clients" :isSuperAdminMaster="isSuperAdminMaster" />
+        <FullCalendar :events="appointments" :options="calendarOptions"></FullCalendar>
     </div>
 </template>
 
 <script>
-import '@fullcalendar/core/vdom' // solves problem with Vite
+import Common from '../../common/Common.vue'
+import Controller from './CrtSchedule.vue'
 import FullCalendar from '@fullcalendar/vue'
-import dayGridPlugin from '@fullcalendar/daygrid'
-import timeGridPlugin from '@fullcalendar/timegrid'
-import interactionPlugin from '@fullcalendar/interaction'
-import listPlugin from '@fullcalendar/list'
-import bootstrapPlugin from '@fullcalendar/bootstrap'
+import CreateScheduleModal from './CreateScheduleModal/CreateScheduleModal.vue'
+import Vue from 'vue'
+Vue.prototype.$registerEvent = new Vue()
 
 export default {
     components: {
-        FullCalendar, // make the <FullCalendar> tag available
+        FullCalendar,
+        CreateScheduleModal,
     },
     data() {
-        var date = new Date()
-        var currentYear = date.getFullYear()
-        var currentMonth = date.getMonth() + 1
-        currentMonth = currentMonth < 10 ? '0' + currentMonth : currentMonth
-
         return {
-            calendarOptions: {
-                plugins: [dayGridPlugin, timeGridPlugin, interactionPlugin, listPlugin, bootstrapPlugin],
-                headerToolbar: {
-                    left: 'dayGridMonth,timeGridWeek,timeGridDay',
-                    center: 'title',
-                    right: 'prev,next today',
-                },
-                buttonText: {
-                    today: 'Today',
-                    month: 'Month',
-                    week: 'Week',
-                    day: 'Day',
-                },
-                initialView: 'dayGridMonth',
-                editable: true,
-                droppable: true,
-                themeSystem: 'bootstrap',
-                views: {
-                    timeGrid: {
-                        eventLimit: 6, // adjust to 6 only for timeGridWeek/timeGridDay
-                    },
-                },
-                events: [
-                    {
-                        title: 'Trip to London',
-                        start: currentYear + '-' + currentMonth + '-01',
-                        end: currentYear + '-' + currentMonth + '-05',
-                        color: '#00acac',
-                    },
-                    {
-                        title: 'Meet with Irene Wong',
-                        start: currentYear + '-' + currentMonth + '-02T06:00:00',
-                        color: '#348fe2',
-                    },
-                    {
-                        title: 'Mobile Apps Brainstorming',
-                        start: currentYear + '-' + currentMonth + '-10',
-                        end: currentYear + '-' + currentMonth + '-12',
-                        color: '#fb5597',
-                    },
-                    {
-                        title: 'Stonehenge, Windsor Castle, Oxford',
-                        start: currentYear + '-' + currentMonth + '-05T08:45:00',
-                        end: currentYear + '-' + currentMonth + '-06T18:00',
-                        color: '#8753de',
-                    },
-                    {
-                        title: 'Paris Trip',
-                        start: currentYear + '-' + currentMonth + '-12',
-                        end: currentYear + '-' + currentMonth + '-16',
-                    },
-                    {
-                        title: 'Domain name due',
-                        start: currentYear + '-' + currentMonth + '-15',
-                        color: '#348fe2',
-                    },
-                    {
-                        title: 'Cambridge Trip',
-                        start: currentYear + '-' + currentMonth + '-19',
-                    },
-                    {
-                        title: 'Visit Apple Company',
-                        start: currentYear + '-' + currentMonth + '-22T05:00:00',
-                        color: '#00ACAC',
-                    },
-                    {
-                        title: 'Exercise Class',
-                        start: currentYear + '-' + currentMonth + '-22T07:30:00',
-                        color: '#f59c1a',
-                    },
-                    {
-                        title: 'Live Recording',
-                        start: currentYear + '-' + currentMonth + '-22T03:00:00',
-                        color: '#348fe2',
-                    },
-                    {
-                        title: 'Announcement',
-                        start: currentYear + '-' + currentMonth + '-22T15:00:00',
-                        color: '#ff5b57',
-                    },
-                    {
-                        title: 'Dinner',
-                        start: currentYear + '-' + currentMonth + '-22T18:00:00',
-                    },
-                    {
-                        title: 'New Android App Discussion',
-                        start: currentYear + '-' + currentMonth + '-25T08:00:00',
-                        end: currentYear + '-' + currentMonth + '-25T10:00:00',
-                        color: '#ff5b57',
-                    },
-                    {
-                        title: 'Marketing Plan Presentation',
-                        start: currentYear + '-' + currentMonth + '-25T12:00:00',
-                        end: currentYear + '-' + currentMonth + '-25T14:00:00',
-                        color: '#348fe2',
-                    },
-                    {
-                        title: 'Chase due',
-                        start: currentYear + '-' + currentMonth + '-26T12:00:00',
-                        color: '#f59c1a',
-                    },
-                    {
-                        title: 'Heartguard',
-                        start: currentYear + '-' + currentMonth + '-26T08:00:00',
-                        color: '#f59c1a',
-                    },
-                    {
-                        title: 'Lunch with Richard',
-                        start: currentYear + '-' + currentMonth + '-28T14:00:00',
-                        color: '#348fe2',
-                    },
-                    {
-                        title: 'Web Hosting due',
-                        start: currentYear + '-' + currentMonth + '-30',
-                        color: '#348fe2',
-                    },
-                ],
+            calendarOptions: {},
+            appointments: [],
+            accounts: [],
+            clients: [],
+            sites: [],
+            originalAppointments: [],
+            selectedAppointment: {},
+            filters: {
+                account: '',
+                client: '',
+                site: '',
+                status: 'ACTIVE',
+                startDate: new Date(),
+                isSortByStartDate: true,
             },
+            isSuperAdminMaster: false,
+            selectedDate: '',
         }
+    },
+    methods: Controller.methods,
+    mounted() {},
+    created() {
+        Controller.init(this)
+        const state = this
+        state.$registerEvent.$on('changeLanguage', function () {
+            state.changeLanguage()
+        })
+        state.$registerEvent.$on('refreshSchedule', function () {
+            state.getAppointments()
+        })
+        state.$registerEvent.$on('cancelAppointment', function () {
+            state.getAppointments()
+            state.$bvModal.hide('createScheduleModal')
+            Common.show(state, 'bottom-right', 'success', state.$t('str.form.archive.success'))
+        })
     },
 }
 </script>

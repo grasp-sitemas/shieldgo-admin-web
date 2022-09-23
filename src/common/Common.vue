@@ -1,4 +1,6 @@
 <script>
+const moment = require('moment')
+
 export default {
     camelize: text => {
         if (text) {
@@ -27,17 +29,29 @@ export default {
     formatDate: text => {
         return new Date(text).toLocaleDateString()
     },
+    checkValidDate: function (date) {
+        const currentDate = moment().format('DD-MM-YYYY')
+        return moment(date).isSameOrAfter(currentDate)
+    },
+    compareDates: function (d1, d2) {
+        let date1 = new Date(d1).getTime()
+        let date2 = new Date(d2).getTime()
+
+        if (date1 < date2) {
+            return false
+        } else if (date1 > date2) {
+            return true
+        } else {
+            return true
+        }
+    },
     checkPassword: str => {
         var re = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,}$/
         return re.test(str)
     },
     isValidEmail: email => {
-        var reg = /^\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/
-        if (reg.test(email)) {
-            return true
-        } else {
-            return false
-        }
+        var res = /^\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/
+        return res.test(email)
     },
     show(vue, group, type, title) {
         const text = `${vue.$t('str.date.subtitle')}: ${new Date().toLocaleString('pt-br')}`
@@ -50,6 +64,15 @@ export default {
     },
     isSuperAdminMaster: state => {
         return state.$session.get('user')?.companyUser?.subtype === 'SUPER_ADMIN_MASTER' ? true : false
+    },
+    isAdmin: state => {
+        return state.$session.get('user')?.companyUser?.subtype === 'ADMIN' ? true : false
+    },
+    isManager: state => {
+        return state.$session.get('user')?.companyUser?.subtype === 'MANAGER' ? true : false
+    },
+    isOperator: state => {
+        return state.$session.get('user')?.companyUser?.subtype === 'OPERATOR' ? true : false
     },
     getAccountId: state => {
         const type = state.$session.get('user')?.account?.type

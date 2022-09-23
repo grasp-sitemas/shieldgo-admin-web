@@ -9,7 +9,6 @@
         <h1 class="page-header">
             {{ $t('str.form.title.users') }}
         </h1>
-
         <panel :title="$t('str.register.form.title')">
             <form>
                 <fieldset>
@@ -148,6 +147,7 @@
                                 @focus="removeRequiredField('password')"
                                 v-model="data.password"
                                 type="password"
+                                autocomplete="off"
                                 :placeholder="$t('str.register.user.password.placeholder')"
                             />
                             <div class="invalid-feedback">{{ $t('str.register.user.password.required') }}</div>

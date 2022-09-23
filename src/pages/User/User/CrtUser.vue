@@ -91,6 +91,8 @@ export default {
             this.isLoading = false
         },
         save() {
+            this.isLoading = true
+
             let formData = new FormData()
 
             formData.append('file', this.file)
@@ -105,6 +107,7 @@ export default {
                     `${Endpoints.systemUsers.formData}${this.data._id ? this.data._id : ''}`,
                     response => {
                         if (response.status === 200) {
+                            this.isLoading = false
                             Common.show(this, 'bottom-right', 'success', this.data._id ? this.$t('str.form.update.success') : this.$t('str.form.create.success'))
                             const { _id, status, photoURL } = response?.result
                             this.data._id = _id
@@ -178,6 +181,20 @@ export default {
             }
         },
         async checkForm() {
+            const role = this.data.companyUser.subtype
+
+            if (!this.data.account || this.data.account === '') {
+                this.errors.push('account')
+            }
+
+            if (role !== 'ADMIN' && (!this.data.client || this.data.client === '')) {
+                this.errors.push('client')
+            }
+
+            if (role === 'OPERATOR' && (!this.data.site || this.data.site === '')) {
+                this.errors.push('site')
+            }
+
             if (!this.data.firstName || this.data.firstName === '') {
                 this.errors.push('firstName')
             }
@@ -191,30 +208,25 @@ export default {
                 this.errors.push(this.$t('password'))
             }
 
-            if (!this.data.client || this.data.client === '') {
-                delete this.data.client
-            }
-
-            if (!this.data.site || this.data.site === '') {
-                delete this.data.site
-            }
-
             if (!this.data.password || this.data.password === '') {
                 delete this.data.password
             }
 
-            if (!this.errors || this.errors.length === 0) {
-                this.isLoading = true
+            if (!this.data.client || this.data.client === '') {
+                delete this.data.client
+            }
+            if (!this.data.site || this.data.site === '') {
+                delete this.data.site
+            }
 
+            if (!this.errors || this.errors.length === 0) {
                 this.loadGeolocation(
                     async data => {
                         await this.save(data)
-                        this.isLoading = false
                     },
                     async error => {
                         this.data.address.name = 'MAIN'
                         await this.save(error)
-                        this.isLoading = false
                     },
                 )
             }
@@ -268,14 +280,28 @@ export default {
             this.sites = await Services.getSitesByClient(this, client)
         },
         changeRole: async function () {
-            this.data.client = ''
-            this.data.site = ''
+            const role = this.data.companyUser.subtype
+            if (role === 'ADMIN') {
+                this.data.client = ''
+                this.data.site = ''
+                this.removeRequiredField('client')
+                this.removeRequiredField('site')
+            } else if (role === 'MANAGER' || role === 'OPERATOR') {
+                this.data.site = ''
+                this.removeRequiredField('site')
+            }
         },
         selectItem: async function (item) {
             this.errors = []
             this.file = null
             this.$refs.file.value = null
-            this.data = item
+
+            if (!item?.companyUser?.subtype) {
+                item.companyUser = {
+                    status: 'ACTIVE',
+                    subtype: '',
+                }
+            }
 
             if (item.account) {
                 this.clients = await Services.getClientsByAccount(this, item.account)
@@ -284,6 +310,8 @@ export default {
             if (item.client) {
                 this.sites = await Services.getSitesByClient(this, item.client)
             }
+
+            this.data = item
 
             document.body.scrollTop = 0 // For Safari
             document.documentElement.scrollTop = 0 // For Chrome, Firefox, IE and Opera

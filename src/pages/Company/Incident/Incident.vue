@@ -122,7 +122,7 @@
 import ListIncident from './ListIncident.vue'
 import TemplateModal from './TemplateModal/TemplateModal.vue'
 import Controller from './CrtIncident.vue'
-import { INCIDENT_TEMPLATES_PT, INCIDENT_TEMPLATES_EN } from '../../../utils/incidents.js'
+// import { INCIDENT_TEMPLATES_PT, INCIDENT_TEMPLATES_EN } from '../../../utils/incidents.js'
 import Vue from 'vue'
 
 Vue.prototype.$registerEvent = new Vue()
@@ -174,8 +174,8 @@ export default {
     created() {
         const state = this
         state.$registerEvent.$on('changeLanguage', function () {
-            const language = state.$session.get('user')?.language
-            state.templates = language === 'pt' ? INCIDENT_TEMPLATES_PT : INCIDENT_TEMPLATES_EN
+            // const language = state.$session.get('user')?.language
+            // state.templates = language === 'pt' ? INCIDENT_TEMPLATES_PT : INCIDENT_TEMPLATES_EN
         })
     },
 }

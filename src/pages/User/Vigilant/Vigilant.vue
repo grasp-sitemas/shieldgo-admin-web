@@ -121,17 +121,23 @@
                             />
                             <div class="invalid-feedback">{{ $t('str.register.vigilant.email.required') }}</div>
                         </div>
+
                         <div class="col-md-4 mb-3">
                             <label class="form-label">{{ $t('str.register.vigilant.password.field') }}</label>
-                            <input
-                                class="form-control"
-                                v-bind:class="checkRequiredField('password') ? 'is-invalid' : ''"
-                                @focus="removeRequiredField('password')"
-                                v-model="data.password"
-                                type="password"
-                                :placeholder="$t('str.register.vigilant.password.placeholder')"
-                            />
-                            <div class="invalid-feedback">{{ $t('str.register.vigilant.password.required') }}</div>
+                            <div class="input-group">
+                                <input
+                                    class="form-control"
+                                    v-bind:class="checkRequiredField('password') ? 'is-invalid' : ''"
+                                    @focus="removeRequiredField('password')"
+                                    v-model="data.password"
+                                    v-bind:type="showPassword ? 'text' : 'password'"
+                                    :placeholder="$t('str.register.vigilant.password.placeholder')"
+                                />
+                                <span class="input-group-text" v-on:click="showPassword = !showPassword">
+                                    <i v-bind:class="showPassword ? 'fas fa-eye' : 'fas fa-eye-slash'"></i>
+                                </span>
+                                <div class="invalid-feedback">{{ $t('str.register.vigilant.password.required') }}</div>
+                            </div>
                         </div>
                     </div>
 
@@ -238,6 +244,7 @@ export default {
             clients: [],
             sites: [],
             valuekey: 0,
+            showPassword: false,
             isSuperAdminMaster: false,
             data: {
                 firstName: '',

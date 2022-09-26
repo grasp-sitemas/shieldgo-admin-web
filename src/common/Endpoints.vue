@@ -16,6 +16,11 @@ export default {
         address: `${domain}/api/address/v1/`,
         geolocation: `${domain}/api/address/geo/v1/`,
     },
+    events: {
+        filter: `${domain}/api/company/events/filter/v1/`,
+        event: `${domain}/api/company/events/v1/`,
+        delete: `${domain}/api/company/events/delete/v1/`,
+    },
     systemUsers: {
         changeLanguage: `${domain}/api/users/system/change/language/v1/`,
         delete: `${domain}/api/users/delete/v1/`,

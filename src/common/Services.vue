@@ -119,6 +119,7 @@ export default {
     },
     getScheduleById: async function (state, filters) {
         const response = await Request.do(state, 'POST', Request.getDefaultHeader(state), filters, `${Endpoints.schedules.filter}`)
+        console.log(response?.data?.results[0]._id)
         return response?.data?.results[0] || []
     },
     cancelAppointmentSeries: async function (state, filters) {
@@ -128,6 +129,10 @@ export default {
     cancelAppointmentOccurrence: async function (state, filters) {
         const response = await Request.do(state, 'POST', Request.getDefaultHeader(state), filters, `${Endpoints.appointments.cancelOccurrence}`)
         return response?.data?.deleteAppointment || null
+    },
+    getEventsByDate: async function (state, filters) {
+        const response = await Request.do(state, 'POST', Request.getDefaultHeader(state), filters, `${Endpoints.events.filter}`)
+        return response?.data?.results || []
     },
 }
 </script>

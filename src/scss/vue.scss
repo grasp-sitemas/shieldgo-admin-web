@@ -1566,3 +1566,23 @@ body .v-select .vs__search {
 .badge-ml-5 {
 	margin-left: 5px !important;
 }
+
+.min-btn-width {
+	min-width: 130px !important;
+}
+
+.form-select:disabled {
+	background-color: var(--app-component-bg) !important;
+}
+
+.form-control:disabled {
+	background-color: var(--app-component-bg) !important;
+}
+
+.vs--disabled .vs__dropdown-toggle .vs__search {
+	background-color: var(--app-component-bg) !important;
+}
+
+.vs__dropdown-toggle {
+	background: var(--app-component-bg) !important;
+}

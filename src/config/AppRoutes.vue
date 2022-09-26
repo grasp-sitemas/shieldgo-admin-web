@@ -17,6 +17,7 @@ import RegisterData from '../pages/Company/RegisterData/RegisterData.vue'
 import Settings from '../pages/Settings/Settings.vue'
 import Sites from '../pages/Company/Site/Site.vue'
 import Schedule from '../pages/Schedule/Schedule.vue'
+import Timeline from '../pages/Timeline/Timeline.vue'
 import User from '../pages/User/User/User.vue'
 import Vigilant from '../pages/User/Vigilant/Vigilant.vue'
 
@@ -139,6 +140,14 @@ const routes = [
         path: '/schedules',
         name: 'schedules',
         component: Schedule,
+        beforeEnter: (_to, _from, next) => {
+            next(checkSession())
+        },
+    },
+    {
+        path: '/timeline',
+        name: 'timeline',
+        component: Timeline,
         beforeEnter: (_to, _from, next) => {
             next(checkSession())
         },

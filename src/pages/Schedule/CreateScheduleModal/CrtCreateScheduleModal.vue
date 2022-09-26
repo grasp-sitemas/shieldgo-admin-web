@@ -125,11 +125,6 @@ export default {
                 this.errors.push('points')
             }
 
-            // verify if end date is greater than begin date and if range is smaller than one year
-            if (this.checkRangeDate()) {
-                this.errors.push('rangeDate')
-            }
-
             if (this.data?.frequency === 'YEARLY' && (!this.data?.frequencyYear?.month || this.data?.frequencyYear?.month === '')) {
                 this.errors.push('frequencyYearMonth')
             }
@@ -142,7 +137,8 @@ export default {
                 this.errors.push('frequencyMonthDay')
             }
 
-            if (!this.errors || this.errors.length === 0) {
+            // verify errors and if end date is greater than begin date and if range is smaller than one year
+            if (!this.errors || (this.errors.length === 0 && this.checkRangeDate())) {
                 if (!this.data.guardGroup || this.data.guardGroup === '') {
                     delete this.data.guardGroup
                 }
@@ -180,16 +176,16 @@ export default {
         confirmArchive() {
             this.$swal({
                 title: this.$t('str.are.you.sure'),
-                text: this.$t('str.are.you.sure.archive'),
+                text: this.$t('str.are.you.sure.cancel.schedule'),
                 showCancelButton: true,
                 showDenyButton: true,
                 buttonsStyling: false,
                 confirmButtonText: this.$t('str.title.cancel.series'),
-                cancelButtonClass: 'btn btn-default w-100',
+                cancelButtonClass: 'btn btn-default min-btn-width',
                 denyButtonText: this.$t('str.title.cancel.occurrence'),
-                confirmButtonClass: 'btn me-5px btn-danger w-100',
+                confirmButtonClass: 'btn me-5px btn-danger min-btn-width',
                 cancelButtonText: this.$t('str.btn.exit'),
-                denyButtonClass: 'btn me-5px btn-warning w-100',
+                denyButtonClass: 'btn me-5px btn-warning min-btn-width',
             }).then(result => {
                 if (result.isConfirmed) {
                     this.cancelAppointmentSeries()
@@ -298,7 +294,7 @@ export default {
                 this.clientList = []
                 this.siteList = []
             } else this.data.account = Common.getAccountId(this)
-
+            this.selectOptions.enabled = true
             this.isLoading = false
         },
         initTable() {
@@ -394,11 +390,18 @@ export default {
             this.clientList = await Services.getClientsByAccount(this, this.data.account)
             this.siteList = await Services.getSitesByClient(this, this.data.client)
             this.guardGroups = await Services.getGuardGroupsBySite(this, this.data.site)
-            this.patrolPoints = await Services.getPatrolPointsBySite(this, this.data.site)
-            this.vigilants = await Services.getVigilantsBySite(this, this.data.site)
 
-            // this.$refs['my-table'].selectedRows = this.data.points
+            if (!this.data._id) {
+                this.patrolPoints = await Services.getPatrolPointsBySite(this, this.data.site)
+            } else {
+                this.patrolPoints = this.data?.points || []
+            }
+
+            this.vigilants = await Services.getVigilantsBySite(this, this.data.site)
         },
+    },
+    checkEnableInput: function () {
+        return this.data._id ? true : false
     },
 }
 </script>

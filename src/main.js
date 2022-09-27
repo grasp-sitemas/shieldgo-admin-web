@@ -32,6 +32,7 @@ import DateRangePicker from 'vue2-daterange-picker'
 import VueTheMask from 'vue-the-mask'
 import { LMap, LTileLayer, LMarker } from 'vue2-leaflet'
 import { LDrawToolbar } from 'vue2-leaflet-draw-toolbar'
+import { FlowerSpinner, OrbitSpinner } from 'epic-spinners'
 import 'leaflet/dist/leaflet.css'
 
 // plugins css
@@ -99,7 +100,9 @@ Vue.component(VueCountdown.name, VueCountdown)
 Vue.component('l-map', LMap)
 Vue.component('l-tile-layer', LTileLayer)
 Vue.component('l-marker', LMarker)
-Vue.component('l-draw-toolbar', LDrawToolbar);
+Vue.component('l-draw-toolbar', LDrawToolbar)
+Vue.component('flower-spinner', FlowerSpinner)
+Vue.component('orbit-spinner', OrbitSpinner)
 
 const router = new VueRouter({
   routes

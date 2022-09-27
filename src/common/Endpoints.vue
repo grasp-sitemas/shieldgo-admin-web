@@ -1,6 +1,6 @@
 <script>
-const domain = 'https://api-gateway-shield.herokuapp.com'
-// const domain = 'http://localhost:3000'
+// const domain = 'https://api-gateway-shield.herokuapp.com'
+const domain = 'http://localhost:3000'
 const viaCepDomain = 'https://viacep.com.br/ws/'
 
 export default {
@@ -38,6 +38,7 @@ export default {
         },
         customerUser: {
             search: `${domain}/api/users/system/search/customeruser/v1/`,
+            byGuardGroup: `${domain}/api/users/system/search/customeruser/byguardgroup/v1/`,
         },
         count: `${domain}/api/generic/count/byfilter/v1/`,
     },

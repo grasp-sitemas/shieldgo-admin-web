@@ -76,6 +76,23 @@ export default {
 
         return []
     },
+    getVigilantsByGuardGroup: async function (state, guardGroup) {
+        const filters = {
+            guardGroup: guardGroup,
+            status: 'ACTIVE',
+        }
+
+        if (guardGroup) {
+            const response = await Request.do(state, 'POST', Request.getDefaultHeader(state), filters, `${Endpoints.guardGroups.filter}`)
+
+            const result = response?.data?.result || null
+            if (result?.vigilants) return result.vigilants
+
+            return null
+        }
+
+        return null
+    },
     getAppointmentsByDate: async function (state, filters) {
         const response = await Request.do(state, 'POST', Request.getDefaultHeader(state), filters, `${Endpoints.appointments.filter}`)
 
@@ -119,7 +136,6 @@ export default {
     },
     getScheduleById: async function (state, filters) {
         const response = await Request.do(state, 'POST', Request.getDefaultHeader(state), filters, `${Endpoints.schedules.filter}`)
-        console.log(response?.data?.results[0]._id)
         return response?.data?.results[0] || []
     },
     cancelAppointmentSeries: async function (state, filters) {

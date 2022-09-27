@@ -4,6 +4,7 @@
             <h4 class="modal-title">{{ $t('str.modal.create.schedule.title') }}</h4>
             <a class="btn-close cursor_pointer" @click="$bvModal.hide('createScheduleModal')"></a>
         </template>
+
         <div class="row">
             <div v-if="isSuperAdminMaster" class="col-md-4 mb-3">
                 <label class="form-label" for="accountField">{{ $t('str.register.incident.account.field') }}</label>
@@ -83,7 +84,7 @@
                 <label class="form-label" for="guardGroupField">{{ $t('str.register.schedule.guardgroup.field') }}</label>
                 <select v-model="data.guardGroup" :disabled="data._id ? true : false" v-on:change="changeGuardGroup" class="form-select" id="guardGroupField">
                     <option value="">{{ $t('str.register.select.placeholder') }}</option>
-                    <option v-for="guardGroup in guardGroups" :value="guardGroup" :key="guardGroup._id">
+                    <option v-for="guardGroup in guardGroups" :value="guardGroup._id" :key="guardGroup._id">
                         {{ guardGroup.name }}
                     </option>
                 </select>
@@ -353,6 +354,7 @@ export default {
         selectedAppointment: function () {
             this.data = this.selectedAppointment
             this.selectOptions.enabled = false
+            this.data.guardGroup = this.selectedAppointment.guardGroup._id
             this.initSelectedAppointment()
         },
         selectedDate: function () {

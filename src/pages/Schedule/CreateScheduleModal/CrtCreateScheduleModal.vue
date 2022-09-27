@@ -51,9 +51,9 @@ export default {
         },
         changeGuardGroup: async function () {
             if (this.data.guardGroup) {
-                const vigilants = this.data?.guardGroup?.vigilants || []
-                this.vigilants = vigilants
-                this.data.vigilants = vigilants
+                const vigilants = await Services.getVigilantsByGuardGroup(this, this.data.guardGroup)
+                this.vigilants = vigilants || []
+                this.data.vigilants = vigilants || []
             } else {
                 this.vigilants = await Services.getVigilantsBySite(this, this.data.site)
                 this.data.vigilants = []
@@ -222,8 +222,10 @@ export default {
             this.removeRequiredField('frequencyYearDay')
         },
         async selectAllVigilants() {
-            if (!this.data?.guardGroup) this.data.vigilants = this.vigilants ? this.vigilants : await Services.getVigilantsBySite(this, this.data.site)
-            else this.data.vigilants = this.data.guardGroup.vigilants
+            if (!this.data?.guardGroup || this.data.guardGroup === '') this.data.vigilants = this.vigilants ? this.vigilants : await Services.getVigilantsBySite(this, this.data.site)
+            else {
+                this.data.vigilants = this.vigilants
+            }
 
             this.removeRequiredField('vigilants')
         },

@@ -1586,3 +1586,14 @@ body .v-select .vs__search {
 .vs__dropdown-toggle {
 	background: var(--app-component-bg) !important;
 }
+
+.primary-color {
+	color: var(--app-theme) !important;
+	display: flex !important;
+	right: 220 !important;
+}
+
+.vue-daterange-picker.btn {
+	padding: 2px !important;
+	display: table-row !important;
+}

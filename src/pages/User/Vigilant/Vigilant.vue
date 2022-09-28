@@ -9,7 +9,7 @@
         <h1 class="page-header">
             {{ $t('str.form.title.vigilants') }}
         </h1>
-
+        {{ errors }}
         <panel :title="$t('str.register.form.title')">
             <form>
                 <fieldset>
@@ -113,13 +113,14 @@
                             <label class="form-label">{{ $t('str.register.vigilant.email.field') }}</label>
                             <input
                                 class="form-control"
-                                v-bind:class="checkRequiredField('email') ? 'is-invalid' : ''"
-                                @focus="removeRequiredField('email')"
+                                v-bind:class="checkRequiredField('email') || checkRequiredField('emailAlreadyExists') ? 'is-invalid' : ''"
+                                v-on:input="removeRequiredField('email')"
                                 v-model="data.email"
                                 type="text"
                                 :placeholder="$t('str.register.vigilant.email.placeholder')"
                             />
-                            <div class="invalid-feedback">{{ $t('str.register.vigilant.email.required') }}</div>
+                            <div class="invalid-feedback">{{ $t('str.register.vigilanasdsat.email.required') }}</div>
+                            <!-- <div class="invalid-feedback">{{ $t('str.register.vigilant.email.required') }}</div> -->
                         </div>
 
                         <div class="col-md-4 mb-3">
@@ -250,6 +251,7 @@ export default {
                 firstName: '',
                 lastName: '',
                 email: '',
+                oldEmail: '',
                 primaryPhone: '',
                 photoURL: '',
                 account: '',

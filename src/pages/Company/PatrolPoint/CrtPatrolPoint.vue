@@ -141,10 +141,9 @@ export default {
         changeAccount: async function () {
             const account = this.data.account
 
-            if (account === '') {
-                this.data.client = ''
-                this.data.site = ''
-            }
+            this.sites = []
+            this.data.client = ''
+            this.data.site = ''
 
             this.clients = await Services.getClientsByAccount(this, account)
         },

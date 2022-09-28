@@ -150,5 +150,9 @@ export default {
         const response = await Request.do(state, 'POST', Request.getDefaultHeader(state), filters, `${Endpoints.events.filter}`)
         return response?.data?.results || []
     },
+    emailAlreadyExists: async function (state, email) {
+        const response = await Request.do(state, 'GET', Request.getDefaultHeader(state), {}, `${Endpoints.systemUsers.checkEmailExist}${email}`)
+        return response?.data?.result || null
+    },
 }
 </script>

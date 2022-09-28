@@ -91,6 +91,12 @@
                         </div>
                         <div class="col-md-8 mb-3">
                             <label class="form-label" for="vigilantsField">{{ $t('str.register.guard.groups.vigilants.field') }}</label>
+                            <span v-show="!data._id" @click="removeAllVigilants()" disabled class="badge bg-dark rounded-5 cursor_pointer f-right badge-ml-5">{{
+                                $t('str.register.guard.group.remove.all.vigilants.label')
+                            }}</span>
+                            <span v-show="!data._id" @click="selectAllVigilants()" disabled class="badge bg-dark rounded-5 cursor_pointer f-right">{{
+                                $t('str.register.guard.group.select.all.vigilants.label')
+                            }}</span>
                             <v-select
                                 taggable
                                 multiple

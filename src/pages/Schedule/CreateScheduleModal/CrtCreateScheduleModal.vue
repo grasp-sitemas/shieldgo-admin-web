@@ -21,14 +21,13 @@ export default {
             this.errors = this.errors.filter(item => item !== field)
         },
         changeAccount: async function () {
-            const account = this.data.account
-            if (account === '') {
-                this.data.client = ''
-                this.data.site = ''
-            }
+            this.sites = []
+            this.data.client = ''
+            this.data.site = ''
 
             this.clearFields()
 
+            const account = this.data.account
             this.clientList = await Services.getClientsByAccount(this, account)
         },
 

@@ -64,6 +64,7 @@ export default {
                 firstName: '',
                 lastName: '',
                 email: '',
+                oldEmail: '',
                 primaryPhone: '',
                 photoURL: '',
                 account: '',
@@ -109,10 +110,12 @@ export default {
                         if (response.status === 200) {
                             this.isLoading = false
                             Common.show(this, 'bottom-right', 'success', this.data._id ? this.$t('str.form.update.success') : this.$t('str.form.create.success'))
-                            const { _id, status, photoURL } = response?.result
+                            const { _id, status, photoURL, email } = response?.result
                             this.data._id = _id
                             this.data.status = status
                             this.data.photoURL = photoURL
+                            this.data.email = email
+                            this.data.oldEmail = email
                             this.data.password = ''
                             this.$registerEvent.$emit('refreshList')
                         }
@@ -220,15 +223,33 @@ export default {
             }
 
             if (!this.errors || this.errors.length === 0) {
-                this.loadGeolocation(
-                    async data => {
-                        await this.save(data)
-                    },
-                    async error => {
-                        this.data.address.name = 'MAIN'
-                        await this.save(error)
-                    },
-                )
+                if (this.data.email !== this.data.oldEmail) {
+                    const res = await Services.emailAlreadyExists(this, this.data.email)
+
+                    if (res.alreadyExist === false) {
+                        this.loadGeolocation(
+                            async data => {
+                                await this.save(data)
+                            },
+                            async error => {
+                                this.data.address.name = 'MAIN'
+                                await this.save(error)
+                            },
+                        )
+                    } else {
+                        Common.show(this, 'bottom-right', 'warn', this.$t('str.email.already.in.use'))
+                    }
+                } else {
+                    this.loadGeolocation(
+                        async data => {
+                            await this.save(data)
+                        },
+                        async error => {
+                            this.data.address.name = 'MAIN'
+                            await this.save(error)
+                        },
+                    )
+                }
             }
         },
         loadGeolocation: function (callbackSuccess, callbackError) {
@@ -263,10 +284,9 @@ export default {
         changeAccount: async function () {
             const account = this.data.account
 
-            if (account === '') {
-                this.data.client = ''
-                this.data.site = ''
-            }
+            this.sites = []
+            this.data.client = ''
+            this.data.site = ''
 
             this.clients = await Services.getClientsByAccount(this, account)
         },
@@ -312,6 +332,7 @@ export default {
             }
 
             this.data = item
+            this.data.oldEmail = item.email
 
             document.body.scrollTop = 0 // For Safari
             document.documentElement.scrollTop = 0 // For Chrome, Firefox, IE and Opera

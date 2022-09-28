@@ -64,6 +64,7 @@ export default {
                 firstName: '',
                 lastName: '',
                 email: '',
+                oldEmail: '',
                 primaryPhone: '',
                 photoURL: '',
                 account: '',
@@ -91,6 +92,7 @@ export default {
             this.isLoading = false
         },
         save() {
+            this.isLoading = true
             let formData = new FormData()
 
             formData.append('file', this.file)
@@ -106,11 +108,14 @@ export default {
                     response => {
                         if (response.status === 200) {
                             Common.show(this, 'bottom-right', 'success', this.data._id ? this.$t('str.form.update.success') : this.$t('str.form.create.success'))
-                            const { _id, status, photoURL } = response?.result
+                            const { _id, status, photoURL, email } = response?.result
                             this.data._id = _id
                             this.data.status = status
                             this.data.photoURL = photoURL
+                            this.data.email = email
+                            this.data.oldEmail = email
                             this.data.password = ''
+                            this.isLoading = false
                             this.$registerEvent.$emit('refreshList')
                         }
                     },
@@ -209,19 +214,33 @@ export default {
             }
 
             if (!this.errors || this.errors.length === 0) {
-                this.isLoading = true
+                if (this.data.email !== this.data.oldEmail) {
+                    const res = await Services.emailAlreadyExists(this, this.data.email)
 
-                this.loadGeolocation(
-                    async data => {
-                        await this.save(data)
-                        this.isLoading = false
-                    },
-                    async error => {
-                        this.data.address.name = 'MAIN'
-                        await this.save(error)
-                        this.isLoading = false
-                    },
-                )
+                    if (res.alreadyExist === false) {
+                        this.loadGeolocation(
+                            async data => {
+                                await this.save(data)
+                            },
+                            async error => {
+                                this.data.address.name = 'MAIN'
+                                await this.save(error)
+                            },
+                        )
+                    } else {
+                        Common.show(this, 'bottom-right', 'warn', this.$t('str.email.already.in.use'))
+                    }
+                } else {
+                    this.loadGeolocation(
+                        async data => {
+                            await this.save(data)
+                        },
+                        async error => {
+                            this.data.address.name = 'MAIN'
+                            await this.save(error)
+                        },
+                    )
+                }
             }
         },
         loadGeolocation: function (callbackSuccess, callbackError) {
@@ -256,10 +275,9 @@ export default {
         changeAccount: async function () {
             const account = this.data.account
 
-            if (account === '') {
-                this.data.client = ''
-                this.data.site = ''
-            }
+            this.sites = []
+            this.data.client = ''
+            this.data.site = ''
 
             this.clients = await Services.getClientsByAccount(this, account)
         },
@@ -282,6 +300,8 @@ export default {
             this.$refs.file.value = null
             this.data = item
 
+            this.data.oldEmail = item.email
+
             if (item.account) {
                 this.clients = await Services.getClientsByAccount(this, item.account)
             }
@@ -296,6 +316,7 @@ export default {
         handleFileUpload() {
             this.file = this.$refs.file.files[0]
         },
+        isValidEmail: Common.isValidEmail,
     },
 }
 </script>

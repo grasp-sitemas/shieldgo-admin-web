@@ -261,6 +261,7 @@ export default {
                 firstName: '',
                 lastName: '',
                 email: '',
+                oldEmail: '',
                 primaryPhone: '',
                 photoURL: '',
                 account: '',

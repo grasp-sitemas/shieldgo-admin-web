@@ -10,7 +10,7 @@ const sidebarMenu = [
     { path: '/vigilants', icon: 'fa fa-person-military-pointing', title: 'str.sidebar.menu.vigilants' },
     { path: '/guard-groups', icon: 'fa fa-people-group', title: 'str.sidebar.menu.guard.groups' },
     { path: '/schedules', icon: 'fa fa-calendar', title: 'str.sidebar.menu.schedules' },
-    // { path: '/timeline', icon: 'fa fa-bars-staggered', title: 'str.sidebar.menu.timeline' },
+    { path: '/timeline', icon: 'fa fa-bars-staggered', title: 'str.sidebar.menu.timeline' },
     { path: '/users', icon: 'fa fa-users', title: 'str.sidebar.menu.users' },
     // {
     //     path: '/menu',

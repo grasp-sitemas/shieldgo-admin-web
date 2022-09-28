@@ -15,10 +15,9 @@ export default {
         changeAccount: async function () {
             const account = this.data.account
 
-            if (account === '') {
-                this.data.client = ''
-                this.data.site = ''
-            }
+            this.data.client = ''
+            this.data.site = ''
+            this.sites = []
 
             this.clients = await Services.getClientsByAccount(this, account)
         },
@@ -58,6 +57,7 @@ export default {
             const arrayOfData = []
             for (let i = 0; i < this.quantity; i++) {
                 arrayOfData.push({
+                    name: this.$t('str.generic.check.point.name') + ' ' + (i + 1),
                     account: this.data.account,
                     client: this.data.client,
                     site: this.data.site,

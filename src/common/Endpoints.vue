@@ -38,7 +38,9 @@ export default {
         },
         customerUser: {
             search: `${domain}/api/users/system/search/customeruser/v1/`,
+            byGuardGroup: `${domain}/api/users/system/search/customeruser/byguardgroup/v1/`,
         },
+        checkEmailExist: `${domain}/api/users/check/email/v1/`,
         count: `${domain}/api/generic/count/byfilter/v1/`,
     },
     companies: {

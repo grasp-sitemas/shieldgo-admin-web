@@ -138,12 +138,11 @@ export default {
             }
         },
         changeAccount: async function () {
-            const account = this.data.account
+            this.sites = []
+            this.data.client = ''
+            this.data.site = ''
 
-            if (account === '') {
-                this.data.client = ''
-                this.data.site = ''
-            }
+            const account = this.data.account
 
             this.clients = await Services.getClientsByAccount(this, account)
         },
@@ -187,6 +186,12 @@ export default {
 
             document.body.scrollTop = 0 // For Safari
             document.documentElement.scrollTop = 0 // For Chrome, Firefox, IE and Opera
+        },
+        async selectAllVigilants() {
+            this.data.vigilants = this.vigilants
+        },
+        removeAllVigilants() {
+            this.data.vigilants = []
         },
     },
 }

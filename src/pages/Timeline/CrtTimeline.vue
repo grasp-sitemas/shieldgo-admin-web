@@ -1,9 +1,11 @@
 <script>
 import Common from '../../common/Common.vue'
 import Services from '../../common/Services.vue'
+import moment from 'moment'
 
 export default {
     init: async payload => {
+        payload.isLoading = true
         payload.isSuperAdminMaster = await Common.isSuperAdminMaster(payload)
         if (payload.isSuperAdminMaster) {
             payload.accounts = await Services.getAccounts(payload)
@@ -13,11 +15,14 @@ export default {
         await payload.initTable()
 
         payload.filter()
-    },
 
+        payload.isLoading = false
+    },
     methods: {
         async filter() {
+            this.isLoading = true
             this.items = await Services.getEventsByDate(this, this.filters)
+            this.isLoading = false
         },
         initTable() {
             this.columns = [
@@ -88,6 +93,7 @@ export default {
                     tdClass: 'text-nowrap',
                 },
             ]
+
             this.paginationOptions = {
                 enabled: true,
                 mode: 'records',
@@ -111,6 +117,49 @@ export default {
                 this.columns.splice(5, 1)
             }
         },
+        initRangeDate() {
+            this.dateRange = {
+                opens: 'right',
+                singleDatePicker: false,
+                timePicker: false,
+                timePicker24Hour: false,
+                showWeekNumbers: false,
+                showDropdowns: false,
+                autoApply: false,
+                linkedCalendars: false,
+                range: {
+                    startDate: moment().subtract(7, 'days'),
+                    endDate: moment(),
+                    prevStartDate: moment().subtract('days', 15).format('D MMMM'),
+                    prevEndDate: moment().subtract('days', 8).format('D MMMM YYYY'),
+                },
+                sampleLocaleData: {
+                    direction: 'ltr',
+                    format: 'mm/dd/yyyy',
+                    separator: ' - ',
+                    applyLabel: this.$t('str.apply'),
+                    cancelLabel: this.$t('str.cancel'),
+                    weekLabel: 'W',
+                    customRangeLabel: this.$t('str.custom.range'),
+                    // daysOfWeek: [this.$t('str.sunday'), this.$t('str.monday'), this.$t('str.tuesday'), this.$t('str.wednesday'), this.$t('str.thursday'), this.$t('str.friday'), this.$t('str.saturday')],
+                    // monthNames: [
+                    //     this.$t('str.january'),
+                    //     this.$t('str.february'),
+                    //     this.$t('str.march'),
+                    //     this.$t('str.april'),
+                    //     this.$t('str.may'),
+                    //     this.$t('str.june'),
+                    //     this.$t('str.july'),
+                    //     this.$t('str.august'),
+                    //     this.$t('str.september'),
+                    //     this.$t('str.october'),
+                    //     this.$t('str.november'),
+                    //     this.$t('str.december'),
+                    // ],
+                    firstDay: 0,
+                },
+            }
+        },
         changeAccount: async function () {
             const account = this.filters.account
 
@@ -132,6 +181,11 @@ export default {
             this.sites = await Services.getSitesByClient(this, client)
         },
         changeSite: async function () {
+            this.filter()
+        },
+        updateValues(d) {
+            this.filters.startDate = new Date(d.startDate)
+            this.filters.endDate = new Date(d.endDate)
             this.filter()
         },
     },

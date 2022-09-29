@@ -113,8 +113,8 @@
             </form>
         </panel>
         <notifications group="bottom-right" position="bottom right" :speed="500" />
-        <ListIncident v-on:load-item="selectItem" />
-        <TemplateModal :templates="templates" :isSuperAdminMaster="isSuperAdminMaster" :accounts="accounts" :clients="clients" :sites="sites" />
+        <ListIncident v-on:load-item="selectItem" :isSuperAdminMaster="isSuperAdminMaster" :accounts="accounts" />
+        <TemplateModal :templates="templates" />
     </div>
 </template>
 

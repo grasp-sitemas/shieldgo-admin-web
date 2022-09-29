@@ -9,7 +9,6 @@
         <h1 class="page-header">
             {{ $t('str.form.title.vigilants') }}
         </h1>
-        {{ errors }}
         <panel :title="$t('str.register.form.title')">
             <form>
                 <fieldset>
@@ -217,7 +216,7 @@
             </form>
         </panel>
         <notifications group="bottom-right" position="bottom right" :speed="500" />
-        <ListVigilant v-on:load-item="selectItem" />
+        <ListVigilant v-on:load-item="selectItem" :isSuperAdminMaster="isSuperAdminMaster" :accounts="accounts" />
     </div>
 </template>
 

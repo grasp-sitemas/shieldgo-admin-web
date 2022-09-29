@@ -17,6 +17,7 @@
   "str.here": "here",
   "str.to.register": "to register",
   "str.language.portuguese": "Português",
+  "str.language.portuguese.br": "Portuguese",
   "str.language.english": "Inglês",
   "str.language.spanish": "Spanish",
   "str.language.french": "French",
@@ -810,5 +811,8 @@
   "str.apply": "Apply",
   "str.range.date.field": "Range date",
   "str.email.already.in.use": "Email is already in use",
-  "str.generic.check.point.name": "Check Point"
+  "str.generic.check.point.name": "Check Point",
+  "str.language.english.en": "English",
+  "str.register.guard.group.remove.all.vigilants.label": "Remove all",
+  "str.register.guard.group.select.all.vigilants.label": "Select all"
 }

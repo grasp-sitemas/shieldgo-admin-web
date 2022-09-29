@@ -56,8 +56,12 @@
                         </span>
                         <b class="caret"></b>
                     </template>
-                    <b-dropdown-item @click="changeLanguage('pt')"><span class="flag-icon flag-icon-br"></span> {{ $t('str.language.portuguese') }}</b-dropdown-item>
-                    <b-dropdown-item @click="changeLanguage('en')"><span class="flag-icon flag-icon-us"></span> {{ $t('str.language.english') }}</b-dropdown-item>
+                    <b-dropdown-item @click="changeLanguage('pt')"
+                        ><span class="flag-icon flag-icon-br"></span> {{ isCurrentLanguage ? $t('str.language.portuguese.br') : $t('str.language.portuguese') }}</b-dropdown-item
+                    >
+                    <b-dropdown-item @click="changeLanguage('en')"
+                        ><span class="flag-icon flag-icon-us"></span> {{ isCurrentLanguage ? $t('str.language.english.en') : $t('str.language.english') }}</b-dropdown-item
+                    >
                 </b-nav-item-dropdown>
                 <b-nav-item-dropdown right menu-class="me-1" class="navbar-item navbar-user dropdown" toggle-class="navbar-link dropdown-toggle d-flex align-items-center" no-caret>
                     <template slot="button-content">

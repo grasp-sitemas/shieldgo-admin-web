@@ -151,8 +151,8 @@
             </form>
         </panel>
         <notifications group="bottom-right" position="bottom right" :speed="500" />
-        <QrCodeModal :qrcodeId="data._id" />
-        <ListPatrolPoint v-on:load-item="selectItem" :accounts="accounts" :clients="clients" />
+        <QrCodeModal :qrcodeId="data._id" :data="data" />
+        <ListPatrolPoint v-on:load-item="selectItem" :isSuperAdminMaster="isSuperAdminMaster" :accounts="accounts" />
     </div>
 </template>
 

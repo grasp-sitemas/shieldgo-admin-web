@@ -15,8 +15,9 @@
   "str.click": "Clique",
   "str.here": "aqui",
   "str.to.register": "para se cadastrar",
+  "str.language.portuguese.br": "Português",
   "str.language.portuguese": "Portuguese",
-  "str.language.english": "English",
+  "str.language.english": "Inglês",
   "str.language.spanish": "Espanhol",
   "str.language.french": "Francês",
   "str.language.german": "Alemão",
@@ -802,5 +803,6 @@
   "str.email.already.in.use": "O e-mail informado já está em uso",
   "str.register.guard.group.remove.all.vigilants.label": "Remover todos",
   "str.register.guard.group.select.all.vigilants.label": "Selecionar todos",
-  "str.generic.point.name": "Ponto"
+  "str.generic.point.name": "Ponto",
+  "str.language.english.en": "Inglês"
 }

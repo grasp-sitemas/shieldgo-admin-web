@@ -5,7 +5,7 @@
             <a class="btn-close cursor_pointer" @click="$bvModal.hide('templateModal')"></a>
         </template>
         <div class="container_card_options">
-            <label class="option_item" v-for="item in templates" :key="item">
+            <label class="option_item" v-for="(item, index) in templates" :key="index">
                 <input @change="handleTemplate(item)" v-model="template" type="checkbox" class="checkbox" />
                 <div class="option_inner qrcode">
                     <div class="tickmark"></div>

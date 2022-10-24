@@ -71,6 +71,17 @@
                             />
                             <div class="invalid-feedback">{{ $t('str.register.site.name.required') }}</div>
                         </div>
+                        <div class="col-md-4 mb-3">
+                            <label class="form-label" for="primaryPhoneField">{{ $t('str.register.company.primaryPhone.field') }}</label>
+                            <input
+                                key="primaryPhoneField"
+                                type="tel"
+                                v-mask="['(##) ####-####', '(##) #####-####']"
+                                v-model="data.primaryPhone"
+                                class="form-control"
+                                :placeholder="$t('str.register.company.primaryPhone.placeholder')"
+                            />
+                        </div>
                     </div>
 
                     <div class="row">
@@ -204,6 +215,7 @@ export default {
                 logoURL: '',
                 client: '',
                 account: '',
+                primaryPhone: '',
                 address: {
                     cep: '',
                     address: '',

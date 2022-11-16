@@ -17,7 +17,10 @@
                         </div>
 
                         <div class="mb-20px">
-                            <button type="submit" class="btn btn-primary d-block w-100 h-45px btn-lg">{{ $t('str.title.signin') }}</button>
+                            <button type="submit" class="btn btn-primary d-block w-100 h-45px btn-lg">
+                                <i v-if="loading" class="fas fa-spinner fa-spin" />
+                                {{ $t('str.title.signin') }}
+                            </button>
                         </div>
                     </form>
                     <div class="text-gray-500">
@@ -57,6 +60,7 @@ export default {
     },
     data() {
         return {
+            loading: false,
             data: {
                 email: null,
                 password: null,

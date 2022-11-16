@@ -12,6 +12,7 @@ export default {
     methods: {
         signIn: function () {
             this.errors = []
+            this.loading = true
 
             try {
                 Request.do(
@@ -27,7 +28,7 @@ export default {
                             this.$session.set('user', userResponse.result)
                             this.$session.set('token', userResponse.token)
                             this.$session.set('correlationId', fullResponse.headers['x-correlation-id'])
-
+                            this.loading = false
                             const subtype = userResponse?.result?.companyUser?.subtype
 
                             if (this.checkRole(subtype)) {
@@ -55,11 +56,11 @@ export default {
                                 Common.show(this, 'bottom-right', 'error', this.$t('response.login.company.archived'))
                             }
                         }
+                        this.loading = false
                     },
                 )
             } catch (err) {
-                alert('adsads')
-
+                this.loading = false
                 Common.show(this, 'bottom-right', 'warn', this.$t('str.login.error'))
                 console.log(err)
             }

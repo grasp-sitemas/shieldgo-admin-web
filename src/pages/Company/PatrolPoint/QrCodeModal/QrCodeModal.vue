@@ -11,6 +11,7 @@
             </div>
 
             <button v-on:click="downloadQrCode" v-if="qrcodeId" type="submit" class="mt-10px ms-10px btn btn-success w-200px">
+                <i v-if="isLoading === true" class="fas fa-spinner fa-pulse"></i>
                 {{ $t('str.btn.download') }}
             </button>
         </div>
@@ -27,29 +28,24 @@ export default {
             type: String,
             default: null,
         },
+        data: {
+            type: Object,
+            default: null,
+        },
     },
     components: {
         QrcodeVue,
     },
     data() {
         return {
-            errors: [],
-            isSelected: false,
             isLoading: false,
-            quantity: null,
-            data: {
-                account: '',
-                client: '',
-                site: '',
-                type: 'QRCODE',
-                status: 'ACTIVE',
-            },
         }
     },
     methods: {
         downloadQrCode() {
-            const name = this.data?.name ? this.data.name : 'patrol_point'
-            const accountName = this.data?.account?.name ? this.data.account?.name : 'account'
+            let name = this.data?.name ? this.data.name : 'patrol_point'
+            name = name.replace(/\s/g, '_')
+            let accountName = this.data?.account?.name ? this.data.account?.name : 'account'
             domtoimage
                 .toPng(this.$refs.qrCodeContent)
                 .then(function (dataUrl) {
@@ -62,7 +58,7 @@ export default {
                     doc.save(filename)
                 })
                 .catch(function (error) {
-                    alert('oops, alguma coisa deu errada!\n', error)
+                    console.log(error)
                 })
         },
     },

@@ -2,10 +2,10 @@
 import Endpoints from '../../../common/Endpoints.vue'
 import Request from '../../../common/Request.vue'
 import Common from '../../../common/Common.vue'
+import Services from '../../../common/Services.vue'
 
 export default {
     init: async payload => {
-        payload.isSuperAdminMaster = await Common.isSuperAdminMaster(payload)
         payload.filters.account = await Common.getAccountId(payload)
         payload.initTable()
         payload.filter()
@@ -144,6 +144,31 @@ export default {
             if (!this.isSuperAdminMaster) {
                 this.columns.splice(1, 1)
             }
+        },
+        changeAccount: async function () {
+            const account = this.filters.account
+
+            this.sites = []
+            this.filters.client = ''
+            this.filters.site = ''
+
+            this.filter()
+
+            this.listClients = await Services.getClientsByAccount(this, account)
+        },
+        changeClient: async function () {
+            const client = this.filters.client
+
+            if (client === '') {
+                this.filters.site = ''
+            }
+
+            this.filter()
+
+            this.listSites = await Services.getSitesByClient(this, client)
+        },
+        changeSite: function () {
+            this.filter()
         },
     },
 }

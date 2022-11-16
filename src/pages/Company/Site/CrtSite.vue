@@ -63,6 +63,7 @@ export default {
                 logoURL: '',
                 client: '',
                 account: '',
+                primaryPhone: '',
                 address: {
                     cep: '',
                     address: '',

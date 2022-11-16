@@ -2,7 +2,7 @@
 import Endpoints from '../../../common/Endpoints.vue'
 import Request from '../../../common/Request.vue'
 import Common from '../../../common/Common.vue'
-
+import Services from '../../../common/Services.vue'
 export default {
     init: async payload => {
         payload.isSuperAdminMaster = await Common.isSuperAdminMaster(payload)
@@ -104,6 +104,7 @@ export default {
                 {
                     label: this.$t('str.table.check.point.column.creat.at'),
                     field: 'createDate',
+
                     type: 'date',
                     dateInputFormat: "yyyy-MM-dd'T'HH:mm:ss.SSSSSSSxxx",
                     dateOutputFormat: 'dd/MM/yyyy',
@@ -141,6 +142,31 @@ export default {
             if (!this.isSuperAdminMaster) {
                 this.columns.splice(5, 1)
             }
+        },
+        changeAccount: async function () {
+            const account = this.filters.account
+
+            this.sites = []
+            this.filters.client = ''
+            this.filters.site = ''
+
+            this.filter()
+
+            this.listClients = await Services.getClientsByAccount(this, account)
+        },
+        changeClient: async function () {
+            const client = this.filters.client
+
+            if (client === '') {
+                this.filters.site = ''
+            }
+
+            this.filter()
+
+            this.listSites = await Services.getSitesByClient(this, client)
+        },
+        changeSite: function () {
+            this.filter()
         },
     },
 }

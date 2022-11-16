@@ -13,10 +13,10 @@ export default {
         payload: {
             type: Object,
             default: () => {},
+        },
     },
     data() {
-        return {
-        }
+        return {}
     },
     methods: Controller.methods,
 }

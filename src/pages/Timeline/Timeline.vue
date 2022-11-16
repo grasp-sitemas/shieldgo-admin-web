@@ -44,7 +44,7 @@
                 <label class="form-label" for="statusField">{{ $t('str.range.date.field') }}</label>
                 <date-range-picker
                     ref="picker"
-                    class="btn btn-dark me-2"
+                    class="form-select btn btn-dark me-2"
                     :opens="dateRange.opens"
                     :locale-data="dateRange.sampleLocaleData"
                     :singleDatePicker="dateRange.singleDatePicker"
@@ -56,6 +56,7 @@
                     v-model="dateRange.range"
                     @update="updateValues"
                     :linkedCalendars="dateRange.linkedCalendars"
+                    :date-range="dateRange"
                 >
                     <template v-slot:input="filters">
                         <i class="fa fa-calendar fa-fw text-white text-opacity-50 ms-n1"></i>
@@ -76,7 +77,7 @@
             </div> -->
             <div class="col-md-4 mb-3">
                 <label class="form-label" for="statusField">{{ $t('str.register.status.field') }}</label>
-                <select v-model="filters.status" @change="filter" class="form-control" id="statusField">
+                <select v-model="filters.status" @change="filter" class="form-select" id="statusField">
                     <option value="ACTIVE">{{ $t('str.select') }}</option>
                     <option value="DONE">{{ $t('str.status.done') }}</option>
                     <option value="PENDING">{{ $t('str.status.pending') }}</option>
@@ -94,7 +95,8 @@
                 :pagination-options="paginationOptions"
             >
                 <div slot="emptystate" class="vgt-center-align vgt-text-disabled">
-                    <div v-if="isLoading" class="text-center"><orbit-spinner :animation-duration="1000" :size="30" class="primary-color text-center" /></div>
+                    <i v-if="isLoading" class="fas fa-spinner fa-spin" />
+                    <!-- <div v-if="isLoading" class="text-center"><orbit-spinner :animation-duration="1000" :size="30" class="primary-color text-center" /></div> -->
                     <span v-if="!isLoading">{{ $t('str.table.subtitle.no.data') }}</span>
                 </div>
 
@@ -141,6 +143,7 @@ export default {
             paginationOptions: {},
             columns: [],
             isLoading: false,
+            dateRange: {},
             filters: {
                 account: '',
                 client: '',
@@ -151,7 +154,6 @@ export default {
                 isSortByStartDate: true,
             },
             isSuperAdminMaster: false,
-            dateRange: {},
         }
     },
     methods: Controller.methods,
@@ -168,3 +170,15 @@ export default {
     },
 }
 </script>
+<style lang="scss" scoped>
+.vue-daterange-picker.btn {
+    padding: 2px !important;
+    display: flex !important;
+    background-color: var(--app-component-bg) !important;
+    text-align-last: start !important;
+}
+
+.caret {
+    display: none !important;
+}
+</style>

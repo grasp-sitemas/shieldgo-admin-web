@@ -71,6 +71,9 @@ export default {
                 },
             )
         },
+        isCurrentLanguage(language) {
+            return this.$i18n.locale === language
+        },
     },
 }
 </script>

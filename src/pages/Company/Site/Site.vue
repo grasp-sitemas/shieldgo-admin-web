@@ -20,7 +20,7 @@
                         </div> -->
                         <div class="col-md-4 mb-3">
                             <label class="form-label" for="statusField">{{ $t('str.register.status.field') }}</label>
-                            <select v-model="data.status" class="form-control" id="statusField">
+                            <select v-model="data.status" class="form-select" id="statusField">
                                 <option value="ACTIVE">{{ $t('str.register.status.active') }}</option>
                                 <option value="ARCHIVED">{{ $t('str.register.status.archived') }}</option>
                             </select>
@@ -70,6 +70,17 @@
                                 :placeholder="$t('str.register.site.name.placeholder')"
                             />
                             <div class="invalid-feedback">{{ $t('str.register.site.name.required') }}</div>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label class="form-label" for="primaryPhoneField">{{ $t('str.register.company.primaryPhone.field') }}</label>
+                            <input
+                                key="primaryPhoneField"
+                                type="tel"
+                                v-mask="['(##) ####-####', '(##) #####-####']"
+                                v-model="data.primaryPhone"
+                                class="form-control"
+                                :placeholder="$t('str.register.company.primaryPhone.placeholder')"
+                            />
                         </div>
                     </div>
 
@@ -204,6 +215,7 @@ export default {
                 logoURL: '',
                 client: '',
                 account: '',
+                primaryPhone: '',
                 address: {
                     cep: '',
                     address: '',

@@ -9,14 +9,13 @@
         <h1 class="page-header">
             {{ $t('str.form.title.vigilants') }}
         </h1>
-        {{ errors }}
         <panel :title="$t('str.register.form.title')">
             <form>
                 <fieldset>
                     <div v-if="data._id" class="row">
                         <div class="col-md-4 mb-3">
                             <label class="form-label" for="statusField">{{ $t('str.register.status.field') }}</label>
-                            <select v-model="data.status" class="form-control" id="statusField">
+                            <select v-model="data.status" class="form-select" id="statusField">
                                 <option value="ACTIVE">{{ $t('str.register.status.active') }}</option>
                                 <option value="ARCHIVED">{{ $t('str.register.status.archived') }}</option>
                             </select>
@@ -217,7 +216,7 @@
             </form>
         </panel>
         <notifications group="bottom-right" position="bottom right" :speed="500" />
-        <ListVigilant v-on:load-item="selectItem" />
+        <ListVigilant v-on:load-item="selectItem" :isSuperAdminMaster="isSuperAdminMaster" :accounts="accounts" />
     </div>
 </template>
 

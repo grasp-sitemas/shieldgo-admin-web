@@ -16,7 +16,7 @@
                     <div v-if="data._id" class="row">
                         <div class="col-md-4 mb-3">
                             <label class="form-label" for="statusField">{{ $t('str.register.status.field') }}</label>
-                            <select v-model="data.status" class="form-control" id="statusField">
+                            <select v-model="data.status" class="form-select" id="statusField">
                                 <option value="ACTIVE">{{ $t('str.register.status.active') }}</option>
                                 <option value="ARCHIVED">{{ $t('str.register.status.archived') }}</option>
                             </select>
@@ -113,8 +113,8 @@
             </form>
         </panel>
         <notifications group="bottom-right" position="bottom right" :speed="500" />
-        <ListIncident v-on:load-item="selectItem" />
-        <TemplateModal :templates="templates" :isSuperAdminMaster="isSuperAdminMaster" :accounts="accounts" :clients="clients" :sites="sites" />
+        <ListIncident v-on:load-item="selectItem" :isSuperAdminMaster="isSuperAdminMaster" :accounts="accounts" />
+        <TemplateModal :templates="templates" />
     </div>
 </template>
 

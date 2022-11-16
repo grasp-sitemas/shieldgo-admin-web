@@ -5,7 +5,6 @@ import moment from 'moment'
 
 export default {
     init: async payload => {
-        payload.isLoading = true
         payload.isSuperAdminMaster = await Common.isSuperAdminMaster(payload)
         if (payload.isSuperAdminMaster) {
             payload.accounts = await Services.getAccounts(payload)
@@ -15,8 +14,6 @@ export default {
         await payload.initTable()
 
         payload.filter()
-
-        payload.isLoading = false
     },
     methods: {
         async filter() {

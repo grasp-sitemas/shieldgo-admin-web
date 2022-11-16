@@ -95,7 +95,8 @@
                 :pagination-options="paginationOptions"
             >
                 <div slot="emptystate" class="vgt-center-align vgt-text-disabled">
-                    <div v-if="isLoading" class="text-center"><orbit-spinner :animation-duration="1000" :size="30" class="primary-color text-center" /></div>
+                    <i v-if="isLoading" class="fas fa-spinner fa-spin" />
+                    <!-- <div v-if="isLoading" class="text-center"><orbit-spinner :animation-duration="1000" :size="30" class="primary-color text-center" /></div> -->
                     <span v-if="!isLoading">{{ $t('str.table.subtitle.no.data') }}</span>
                 </div>
 
@@ -174,10 +175,7 @@ export default {
     padding: 2px !important;
     display: flex !important;
     background-color: var(--app-component-bg) !important;
-}
-
-.vue-daterange-picker.btn .form-control {
-    text-align: start !important;
+    text-align-last: start !important;
 }
 
 .caret {

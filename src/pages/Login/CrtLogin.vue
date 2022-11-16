@@ -10,59 +10,77 @@ export default {
         payload.$i18n.locale = payload.$session.get('user')?.language || payload.$session.get('language') || browserLanguage || 'pt'
     },
     methods: {
+        checkForm: function () {
+            if (this.loading) {
+                return false
+            }
+
+            if (!this.data?.email) {
+                Common.show(this, 'bottom-right', 'warn', this.$t('str.login.email.required'))
+                return false
+            }
+
+            if (!this.data?.password) {
+                Common.show(this, 'bottom-right', 'warn', this.$t('str.login.password.required'))
+                return false
+            }
+
+            return true
+        },
         signIn: function () {
-            this.errors = []
-            this.loading = true
+            if (this.checkForm()) {
+                this.loading = true
 
-            try {
-                Request.do(
-                    this,
-                    'post',
-                    Request.getDefaultHeader(this),
-                    this.data,
-                    `${Endpoints.systemUsers.login}`,
-                    (userResponse, fullResponse) => {
-                        if (userResponse.status === 200) {
-                            this.$session.destroy()
-                            this.$session.start()
-                            this.$session.set('user', userResponse.result)
-                            this.$session.set('token', userResponse.token)
-                            this.$session.set('correlationId', fullResponse.headers['x-correlation-id'])
+                try {
+                    Request.do(
+                        this,
+                        'post',
+                        Request.getDefaultHeader(this),
+                        this.data,
+                        `${Endpoints.systemUsers.login}`,
+                        (userResponse, fullResponse) => {
                             this.loading = false
-                            const subtype = userResponse?.result?.companyUser?.subtype
+                            if (userResponse.status === 200) {
+                                this.$session.destroy()
+                                this.$session.start()
+                                this.$session.set('user', userResponse.result)
+                                this.$session.set('token', userResponse.token)
+                                this.$session.set('correlationId', fullResponse.headers['x-correlation-id'])
+                                const subtype = userResponse?.result?.companyUser?.subtype
 
-                            if (this.checkRole(subtype)) {
-                                this.$i18n.locale = userResponse.result.language
-                                this.$router.push({ path: '/dashboard' })
-                                window.location.href = '?#/dashboard'
-                                location.reload()
-                            } else {
-                                Common.show(this, 'bottom-right', 'error', this.$t('response.user.invalid.subtype'))
+                                if (this.checkRole(subtype)) {
+                                    this.$i18n.locale = userResponse.result.language
+                                    this.$router.push({ path: '/dashboard' })
+                                    window.location.href = '?#/dashboard'
+                                    location.reload()
+                                } else {
+                                    Common.show(this, 'bottom-right', 'error', this.$t('response.user.invalid.subtype'))
+                                }
                             }
-                        }
-                    },
-                    error => {
-                        let res = error?.response?.data || {}
-                        if (res && res.status === 500) {
-                            if (res.messageId === 'response.user.password.incorrect') {
-                                Common.show(this, 'bottom-right', 'error', this.$t('response.user.password.invalid'))
-                            } else {
-                                Common.show(this, 'bottom-right', 'warn', this.$t('str.login.error'))
+                        },
+                        error => {
+                            let res = error?.response?.data || {}
+                            if (res && res.status === 500) {
+                                if (res.messageId === 'response.user.password.incorrect') {
+                                    Common.show(this, 'bottom-right', 'error', this.$t('response.user.password.invalid'))
+                                } else {
+                                    Common.show(this, 'bottom-right', 'warn', this.$t('str.login.error'))
+                                }
+                            } else if (res && res.status === 401) {
+                                if (res.messageId === 'response.user.archived') {
+                                    Common.show(this, 'bottom-right', 'error', this.$t('response.login.user.archived'))
+                                } else if (res.messageId === 'response.company.archived') {
+                                    Common.show(this, 'bottom-right', 'error', this.$t('response.login.company.archived'))
+                                }
                             }
-                        } else if (res && res.status === 401) {
-                            if (res.messageId === 'response.user.archived') {
-                                Common.show(this, 'bottom-right', 'error', this.$t('response.login.user.archived'))
-                            } else if (res.messageId === 'response.company.archived') {
-                                Common.show(this, 'bottom-right', 'error', this.$t('response.login.company.archived'))
-                            }
-                        }
-                        this.loading = false
-                    },
-                )
-            } catch (err) {
-                this.loading = false
-                Common.show(this, 'bottom-right', 'warn', this.$t('str.login.error'))
-                console.log(err)
+                            this.loading = false
+                        },
+                    )
+                } catch (err) {
+                    this.loading = false
+                    Common.show(this, 'bottom-right', 'warn', this.$t('str.login.error'))
+                    console.log(err)
+                }
             }
         },
         isCompanyActive: function (item) {
@@ -195,10 +213,6 @@ export default {
                     },
                 )
             }
-        },
-        checkForm: function (e) {
-            e.preventDefault()
-            this.$router.push({ path: '/login' })
         },
     },
 }

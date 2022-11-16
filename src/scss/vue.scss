@@ -1554,11 +1554,6 @@ body .v-select .vs__search {
     padding: 0.9375rem 0.5rem 0rem 0.5rem !important;
 }
 
-// align absolute spinner left centered with text
-.spinner-align {
-    // align absolute spinner left centered with text
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
+.form-select {
+    cursor: pointer !important;
 }

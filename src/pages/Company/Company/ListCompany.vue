@@ -4,7 +4,7 @@
             <div class="row ms-2 mb-1 mt-3">
                 <div class="col-md-4">
                     <label class="form-label" for="statusField">{{ $t('str.register.status.field') }}</label>
-                    <select v-model="filters.status" @change="filter" class="form-control" id="statusField">
+                    <select v-model="filters.status" @change="filter" class="form-select" id="statusField">
                         <option value="ACTIVE">{{ $t('str.register.status.active') }}</option>
                         <option value="ARCHIVED">{{ $t('str.register.status.archived') }}</option>
                     </select>

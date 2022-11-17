@@ -12,7 +12,9 @@ export default {
     },
     methods: {
         filter: function () {
+            this.isLoading = true
             this.items = []
+
             Request.do(
                 this,
                 'POST',
@@ -21,8 +23,10 @@ export default {
                 `${Endpoints.guardGroups.filter}`,
                 response => {
                     this.items = response.results
+                    this.isLoading = false
                 },
                 error => {
+                    this.isLoading = false
                     console.log(error)
                 },
             )

@@ -11,6 +11,7 @@ export default {
     },
     methods: {
         filter: function () {
+            this.isLoading = true
             this.items = []
             Request.do(
                 this,
@@ -20,8 +21,10 @@ export default {
                 `${Endpoints.incidents.filter}`,
                 response => {
                     this.items = response.results
+                    this.isLoading = false
                 },
                 error => {
+                    this.isLoading = false
                     console.log(error)
                 },
             )

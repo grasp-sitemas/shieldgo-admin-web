@@ -6,8 +6,6 @@ import Services from '../../common/Services.vue'
 
 export default {
     init: async payload => {
-        payload.isLoading = true
-
         payload.filters.account = Common.getAccountId(payload)
 
         payload.isSuperAdminMaster = await Common.isSuperAdminMaster(payload)
@@ -20,12 +18,12 @@ export default {
         await payload.initTable()
         await payload.selectAllDomains()
         await payload.filter()
-
-        payload.isLoading = false
     },
     methods: {
         filter: function () {
+            this.isLoading = true
             this.items = []
+
             Request.do(
                 this,
                 'POST',
@@ -34,8 +32,10 @@ export default {
                 `${Endpoints.logs.filter}`,
                 response => {
                     this.items = response?.results
+                    this.isLoading = false
                 },
                 error => {
+                    this.isLoading = false
                     console.log(error)
                 },
             )

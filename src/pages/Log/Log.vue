@@ -64,7 +64,11 @@
                         :search-options="{ enabled: true, placeholder: $t('str.table.search.in.this.table') }"
                         :pagination-options="paginationOptions"
                     >
-                        <div slot="emptystate" class="vgt-center-align vgt-text-disabled">{{ $t('str.table.subtitle.no.data') }}</div>
+                        <div slot="emptystate" class="vgt-center-align vgt-text-disabled">
+                            <i v-if="isLoading" class="fas fa-spinner fa-spin" />
+                            <span v-if="!isLoading && items?.length === 0">{{ $t('str.table.subtitle.no.data') }}</span>
+                        </div>
+
                         <template slot="table-row" slot-scope="props">
                             <span v-if="props.column.field === 'systemUser'"> {{ props.formattedRow[props.column.field]?.firstName }} {{ props.formattedRow[props.column.field]?.lastName }} </span>
                             <span v-else-if="props.column.field === 'domain' || props.column.field === 'operation'">

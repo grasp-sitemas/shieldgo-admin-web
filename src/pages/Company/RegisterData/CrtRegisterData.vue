@@ -18,8 +18,7 @@ const instanceateAddress = (addressObj, geo) => {
 export default {
     init: async payload => {
         payload.domain = Endpoints.domain
-
-        payload.getMe()
+        await payload.getMe()
     },
     methods: {
         inputCep() {
@@ -76,7 +75,7 @@ export default {
                 type: 'ACCOUNT',
                 status: 'ACTIVE',
             }
-            this.isLoading = false
+            this.isProcessing = false
         },
         getMe() {
             Request.do(
@@ -113,9 +112,12 @@ export default {
                                 gia: '',
                             }
                         }
+
+                        this.isLoading = false
                     }
                 },
                 error => {
+                    this.isLoading = false
                     console.log(error)
                 },
             )
@@ -141,13 +143,13 @@ export default {
                         }
                     },
                     error => {
-                        this.isLoading = false
+                        this.isProcessing = false
                         Common.show(this, 'bottom-right', 'warn', this.$t('str.form.update.generic.error'))
                         console.log(error)
                     },
                 )
             } catch (error) {
-                this.isLoading = false
+                this.isProcessing = false
                 Common.show(this, 'bottom-right', 'warn', this.$t('str.form.update.generic.error'))
                 console.log(error)
             }
@@ -186,15 +188,15 @@ export default {
             }
 
             if (!this.errors || this.errors.length === 0) {
-                this.isLoading = true
+                this.isProcessing = true
 
                 this.loadGeolocation(
                     async data => {
                         await this.save(data)
-                        this.isLoading = false
+                        this.isProcessing = false
                     },
                     error => {
-                        this.isLoading = false
+                        this.isProcessing = false
                         console.log(error)
                     },
                 )

@@ -1,7 +1,7 @@
 <template>
     <b-modal no-close-on-backdrop id="infoItemModal" :hide-footer="true" size="lg" class="modal-message">
         <template slot="modal-header">
-            <h4 class="modal-title">{{ $t('str.modal.create.timeline.item.info.title') }} {{ data.vigilant?.firstName }}</h4>
+            <h4 class="modal-title">{{ $t('str.modal.create.timeline.item.info.title') }} {{ data?.name }}</h4>
             <a class="btn-close cursor_pointer" @click="$bvModal.hide('infoItemModal')"></a>
         </template>
 

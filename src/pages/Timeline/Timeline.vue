@@ -93,11 +93,12 @@
                 :totalRows="items?.length"
                 :search-options="{ enabled: true, placeholder: $t('str.table.search.in.this.table') }"
                 :pagination-options="paginationOptions"
+                @on-row-click="selectItem"
             >
                 <div slot="emptystate" class="vgt-center-align vgt-text-disabled">
                     <i v-if="isLoading" class="fas fa-spinner fa-spin" />
                     <!-- <div v-if="isLoading" class="text-center"><orbit-spinner :animation-duration="1000" :size="30" class="primary-color text-center" /></div> -->
-                    <span v-if="!isLoading">{{ $t('str.table.subtitle.no.data') }}</span>
+                    <span v-if="!isLoading && items?.length === 0">{{ $t('str.table.subtitle.no.data') }}</span>
                 </div>
 
                 <template slot="table-row" slot-scope="props">
@@ -119,19 +120,19 @@
             </vue-good-table>
         </div>
 
-        <!-- <CreateScheduleModal :selectedAppointment="selectedAppointment" :selectedDate="selectedDate" :accounts="accounts" :clients="clients" :isSuperAdminMaster="isSuperAdminMaster" /> -->
+        <InfoItemModal :selectedItem="selectedItem" :isSuperAdminMaster="isSuperAdminMaster" />
     </div>
 </template>
 
 <script>
 import Controller from './CrtTimeline.vue'
-// import CreateScheduleModal from './CreateScheduleModal/CreateScheduleModal.vue'
+import InfoItemModal from './InfoItemModal/InfoItemModal.vue'
 import Vue from 'vue'
 Vue.prototype.$registerEvent = new Vue()
 
 export default {
     components: {
-        // CreateScheduleModal,
+        InfoItemModal,
     },
     data() {
         return {
@@ -153,6 +154,7 @@ export default {
                 endDate: null,
                 isSortByStartDate: true,
             },
+            selectedItem: null,
             isSuperAdminMaster: false,
         }
     },

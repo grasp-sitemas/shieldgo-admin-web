@@ -25,6 +25,7 @@ export default {
             state.clients = await Services.getClientsByAccount(state, account)
         },
         filter: function () {
+            this.isLoading = true
             this.items = []
             Request.do(
                 this,
@@ -34,8 +35,10 @@ export default {
                 `${Endpoints.companies.filter}`,
                 response => {
                     this.items = response.results
+                    this.isLoading = false
                 },
                 error => {
+                    this.isLoading = false
                     console.log(error)
                 },
             )

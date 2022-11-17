@@ -13,6 +13,7 @@ export default {
     methods: {
         filter: function () {
             this.items = []
+            this.isLoading = true
             Request.do(
                 this,
                 'POST',
@@ -21,8 +22,10 @@ export default {
                 `${Endpoints.systemUsers.companyUser.search}`,
                 response => {
                     this.items = response.results
+                    this.isLoading = false
                 },
                 error => {
+                    this.isLoading = false
                     console.log(error)
                 },
             )

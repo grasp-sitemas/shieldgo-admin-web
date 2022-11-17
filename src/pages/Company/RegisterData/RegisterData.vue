@@ -186,10 +186,12 @@
 
                     <div class="btn-center mt-4 mb-2">
                         <button v-on:click="checkForm" type="submit" class="btn btn-primary w-200px me-10px is-loading">
-                            <i v-if="isLoading === true" class="fas fa-spinner fa-pulse"></i>
+                            <i v-if="isProcessing === true" class="fas fa-spinner fa-pulse"></i>
                             {{ $t('str.btn.save') }}
                         </button>
                     </div>
+
+                    <Spinner v-show="isLoading" />
                 </fieldset>
             </form>
         </panel>
@@ -201,15 +203,18 @@
 import Controller from './CrtRegisterData.vue'
 import { STATES } from '../../../utils/states.js'
 import Vue from 'vue'
+import Spinner from '../../../components/spinner/Spinner.vue'
 Vue.prototype.$registerEvent = new Vue()
 
 export default {
+    components: { Spinner },
     data() {
         return {
             states: STATES,
             domain: null,
             file: null,
-            isLoading: false,
+            isLoading: true,
+            isProcessing: false,
             errors: [],
             data: {
                 name: '',

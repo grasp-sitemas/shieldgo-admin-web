@@ -806,5 +806,18 @@
     "str.generic.point.name": "Ponto",
     "str.language.english.en": "Inglês",
     "str.login.email.required": "O E-mail é obrigatório",
-    "str.login.password.required": "A Senha é obrigatória"
+    "str.login.password.required": "A Senha é obrigatória",
+    "str.modal.create.timeline.item.info.title": "Evento:",
+    "str.modal.create.timeline.item.info.name": "Nome",
+    "str.timeline.item.vigilant": "Vigilante",
+    "str.timeline.item.starts.in": "Inicio",
+    "str.timeline.item.ends.in": "Fim",
+    "str.timeline.item.patrol.points": "Pontos de ronda",
+    "str.timeline.item.patrol.actions": "Ações da ronda",
+    "str.timeline.item.patrol.actions.date": "Data",
+    "str.timeline.item.patrol.actions.type": "Tipo",
+    "str.timeline.item.patrol.actions.notes": "Observações",
+    "str.timeline.item.patrol.actions.geolocation": "Geolocalização",
+    "str.timeline.item.patrol.actions.deviceInfo": "Informações do dispositivo",
+    "str.timeline.item.patrol.actions.medias": "Mídias"
 }

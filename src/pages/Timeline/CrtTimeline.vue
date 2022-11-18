@@ -194,6 +194,7 @@ export default {
             this.filters.endDate = new Date(d.endDate)
             this.filter()
         },
+        getStatusName: Common.getEventStatusName,
     },
 }
 </script>

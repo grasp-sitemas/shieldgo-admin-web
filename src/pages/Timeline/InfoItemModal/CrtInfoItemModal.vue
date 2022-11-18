@@ -47,44 +47,43 @@ export default {
         initTable() {
             this.columns = [
                 {
-                    label: this.$t('str.table.check.point.column.name'),
-                    field: 'name',
-                    width: '30%',
-                    sortable: true,
-                    firstSortType: 'desc',
-                    thClass: 'text-nowrap',
-                    tdClass: 'text-nowrap',
+                    label: this.$t('str.timeline.item.patrol.actions.date'),
+                    field: 'date',
+                    type: 'date',
+                    dateInputFormat: "yyyy-MM-dd'T'HH:mm:ss.SSSSSSSxxx",
+                    dateOutputFormat: 'dd/MM/yyyy HH:mm:ss',
+                    tdClass: 'text-center text-nowrap',
+                    thClass: 'text-center text-nowrap',
                 },
                 {
-                    label: this.$t('str.table.check.point.column.type'),
+                    label: this.$t('str.timeline.item.patrol.actions.type'),
                     field: 'type',
-                    width: '20%',
-                    sortable: true,
-                    thClass: 'text-nowrap',
-                    tdClass: 'text-nowrap',
+                    tdClass: 'text-center text-nowrap',
+                    thClass: 'text-center text-nowrap',
                 },
                 {
-                    label: this.$t('str.table.check.point.column.geolocation'),
-                    field: 'geolocation',
-                    width: '10%',
-                    thClass: 'text-nowrap',
-                    tdClass: 'text-nowrap',
-                },
-                {
-                    label: this.$t('str.table.check.point.column.radius'),
-                    field: 'radius',
-                    width: '10%',
-                    thClass: 'text-nowrap',
-                    tdClass: 'text-nowrap',
-                },
-
-                {
-                    label: this.$t('str.table.check.point.column.note'),
+                    label: this.$t('str.timeline.item.patrol.actions.notes'),
                     field: 'notes',
-                    width: '30%',
-                    sortable: true,
-                    thClass: 'text-nowrap',
-                    tdClass: 'text-nowrap',
+                    tdClass: 'text-center text-nowrap',
+                    thClass: 'text-center text-nowrap',
+                },
+                {
+                    label: this.$t('str.timeline.item.patrol.actions.geolocation'),
+                    field: 'geolocation',
+                    tdClass: 'text-center text-nowrap',
+                    thClass: 'text-center text-nowrap',
+                },
+                {
+                    label: this.$t('str.timeline.item.patrol.actions.deviceInfo'),
+                    field: 'deviceInfo',
+                    tdClass: 'text-center text-nowrap',
+                    thClass: 'text-center text-nowrap',
+                },
+                {
+                    label: this.$t('str.timeline.item.patrol.actions.medias'),
+                    field: 'medias',
+                    tdClass: 'text-center text-nowrap',
+                    thClass: 'text-center text-nowrap',
                 },
             ]
             this.paginationOptions = {
@@ -118,6 +117,20 @@ export default {
                 this.columns.splice(5, 1)
             }
         },
+        getDeviceInfo(obj) {
+            if (obj) {
+                return `${obj?.brand} ${obj?.manufacturer} ${obj?.model} ${obj?.version} ${obj?.bateryLevel} ${obj?.isCharging} ${obj?.ipAddress} ${obj?.deviceId}`
+            }
+            return ''
+        },
+        selectItem(item) {
+            this.patrolActionItem = item
+        },
+        showMap() {
+            alert('show map')
+            this.$bvModal.show('mapModal')
+        },
+        getStatusName: Common.getEventStatusName,
     },
 }
 </script>

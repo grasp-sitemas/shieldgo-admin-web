@@ -82,5 +82,24 @@ export default {
         const type = state.$session.get('user')?.client?.type
         return type === 'CLIENT' ? state.$session.get('user')?.client?._id : ''
     },
+    getEventStatusName(status) {
+        switch (status) {
+            case 'ACTIVE':
+                return 'str.event.status.pendent'
+            case 'CANCELED':
+                return 'str.event.status.canceled'
+            case 'DONE':
+                return 'str.event.status.done'
+            case 'EXPIRED':
+                return 'str.event.status.expired'
+            case 'FINISHED':
+                return 'str.event.status.finished'
+            case 'PENDENT':
+                return 'str.event.status.pendent'
+
+            default:
+                return ''
+        }
+    },
 }
 </script>

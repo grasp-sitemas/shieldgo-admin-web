@@ -55,6 +55,9 @@ export default {
         filter: `${domain}/api/company/incidents/filter/v1/`,
         delete: `${domain}/api/company/incidents/delete/v1/`,
     },
+    patrolActions: {
+        filter: `${domain}/api/users/patrol/actions/filter/v1/`,
+    },
     patrolPoints: {
         patrolPoint: `${domain}/api/company/patrolpoints/v1/`,
         saveMany: `${domain}/api/company/patrolpoints/savemany/v1/`,

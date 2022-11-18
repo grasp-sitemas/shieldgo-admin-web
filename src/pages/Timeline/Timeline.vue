@@ -66,15 +66,6 @@
                 </date-range-picker>
             </div>
 
-            <!-- <div class="col-md-4 mb-3">
-                <label class="form-label" for="startDateField">{{ $t('str.register.timeline.starts.in.field') }}</label>
-                <input v-model="filters.startDate" type="date" class="form-control" id="startDateField" :placeholder="$t('str.register.timeline.starts.in.placeholder')" />
-            </div>
-
-            <div class="col-md-4 mb-3">
-                <label class="form-label" for="endDateField">{{ $t('str.register.timeline.ends.in.field') }}</label>
-                <input v-model="filters.endDate" type="date" class="form-control" id="endDateField" :placeholder="$t('str.register.timeline.ends.in.placeholder')" />
-            </div> -->
             <div class="col-md-4 mb-3">
                 <label class="form-label" for="statusField">{{ $t('str.register.status.field') }}</label>
                 <select v-model="filters.status" @change="filter" class="form-select" id="statusField">
@@ -97,7 +88,6 @@
             >
                 <div slot="emptystate" class="vgt-center-align vgt-text-disabled">
                     <i v-if="isLoading" class="fas fa-spinner fa-spin" />
-                    <!-- <div v-if="isLoading" class="text-center"><orbit-spinner :animation-duration="1000" :size="30" class="primary-color text-center" /></div> -->
                     <span v-if="!isLoading && items?.length === 0">{{ $t('str.table.subtitle.no.data') }}</span>
                 </div>
 
@@ -110,7 +100,9 @@
                         {{ props.formattedRow[props.column.field]?.name }}
                     </span>
                     <span v-else-if="props.column.field === 'status'">
-                        <span class="badge" v-bind:class="props.formattedRow[props.column.field] === 'ACTIVE' ? 'bg-success' : 'bg-danger'"> {{ $t(props.formattedRow[props.column.field]) }} </span>
+                        <span class="badge" v-bind:class="props.formattedRow[props.column.field] === 'ACTIVE' ? 'bg-success' : 'bg-danger'">
+                            {{ $t(getStatusName(props.formattedRow[props.column.field])) }}
+                        </span>
                     </span>
 
                     <span v-else>

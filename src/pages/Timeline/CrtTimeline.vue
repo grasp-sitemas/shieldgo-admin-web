@@ -18,6 +18,7 @@ export default {
     methods: {
         async filter() {
             this.isLoading = true
+            this.items = []
             this.items = await Services.getEventsByDate(this, this.filters)
             this.isLoading = false
         },

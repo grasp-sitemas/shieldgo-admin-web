@@ -69,9 +69,8 @@
             <div class="col-md-4 mb-3">
                 <label class="form-label" for="statusField">{{ $t('str.register.status.field') }}</label>
                 <select v-model="filters.status" @change="filter" class="form-select" id="statusField">
-                    <option value="ACTIVE">{{ $t('str.select') }}</option>
+                    <option value="ACTIVE">{{ $t('str.status.pending') }}</option>
                     <option value="DONE">{{ $t('str.status.done') }}</option>
-                    <option value="PENDING">{{ $t('str.status.pending') }}</option>
                     <option value="EXPIRED">{{ $t('str.status.expired') }}</option>
                 </select>
             </div>

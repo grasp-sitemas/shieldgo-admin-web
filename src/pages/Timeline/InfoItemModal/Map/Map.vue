@@ -1,16 +1,12 @@
 <template>
-    <b-modal no-close-on-backdrop id="mapModal" :hide-footer="true" size="m" class="modal-message">
-        <template slot="modal-header">
-            <a class="btn-close cursor_pointer" @click="$bvModal.hide('mapModal')"></a>
-        </template>
-
+    <b-modal id="mapModal" :hide-header="true" :hide-footer="true" size="m" class="modal-message">
         <GmapMap
             :center="{
-                lat: data?.geolocation?.latitude ? Number(data.geolocation.latitude) : 0,
-                lng: data?.geolocation?.longitude ? Number(data.geolocation.longitude) : 0,
+                lat: geolocation?.latitude ? Number(geolocation.latitude) : 0,
+                lng: geolocation?.longitude ? Number(geolocation.longitude) : 0,
             }"
             :zoom="15"
-            style="width: 200px; height: 200px"
+            style="height: 220px"
             :options="{
                 zoomControl: true,
                 mapTypeControl: false,
@@ -23,8 +19,8 @@
         >
             <GmapMarker
                 :position="{
-                    lat: data?.geolocation?.latitude ? Number(data.geolocation.latitude) : 0,
-                    lng: data?.geolocation?.longitude ? Number(data.geolocation.longitude) : 0,
+                    lat: geolocation?.latitude ? Number(geolocation.latitude) : 0,
+                    lng: geolocation?.longitude ? Number(geolocation.longitude) : 0,
                 }"
             />
         </GmapMap>
@@ -33,11 +29,17 @@
 
 <script>
 export default {
-    props: {
-        data: {
-            type: Object,
-            default: () => {},
+    props: ['data'],
+    watch: {
+        data: function () {
+            console.log(JSON.stringify(this.data?.row?.geolocation))
+            this.geolocation = this.data?.row?.geolocation
         },
+    },
+    data() {
+        return {
+            geolocation: {},
+        }
     },
 }
 </script>

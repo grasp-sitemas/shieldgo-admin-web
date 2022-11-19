@@ -836,5 +836,21 @@
     "str.event.status.done": "Done",
     "str.event.status.expired": "Expired",
     "str.event.status.finished": "Finished",
-    "str.event.status.pendent": "Pendent"
+    "str.event.status.pendent": "Pendent",
+    "str.timeline.item.patrol.geolocation": "Geolocation",
+    "str.timeline.item.patrol.deviceInfo": "Device Info",
+    "str.timeline.item.patrol.medias": "Medias",
+    "str.browser.not.support.audio": "Your browser does not support the audio element.",
+    "str.device.info.manufacturer": "Manufacturer",
+    "str.device.info.model": "Model",
+    "str.device.info.brand": "Brand",
+    "str.device.info.version": "Version",
+    "str.device.info.bateryLevel": "Battery Level",
+    "str.device.info.isCharging": "Is Charging",
+    "str.device.info.ipAddress": "IP Address",
+    "str.device.info.deviceId": "Device ID",
+    "str.msg.yes": "Yes",
+    "str.msg.no": "No",
+    "str.msg.noData": "No data",
+    "str.no.load.image": "Unable to load image"
 }

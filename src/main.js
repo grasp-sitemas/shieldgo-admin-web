@@ -14,13 +14,13 @@ import VueSparkline from 'vue-sparklines'
 import * as VueGoogleMaps from 'vue2-google-maps'
 import Vueditor from '@agametov/vueditor'
 import VueHljs from 'vue-hljs'
-import hljs from "highlight.js"
+import hljs from 'highlight.js'
 import VueSweetalert2 from 'vue-sweetalert2'
 import VueNotification from 'vue-notification'
 import VuePanel from './plugins/panel/'
 import VueDateTimePicker from 'vue-bootstrap-datetimepicker'
 import VueSelect from 'vue-select'
-import VueDatepicker from "vuejs-datepicker/dist/vuejs-datepicker.esm.js"
+import VueDatepicker from 'vuejs-datepicker/dist/vuejs-datepicker.esm.js'
 import VueInputTag from 'vue-input-tag'
 import VueSlider from 'vue-slider-component'
 import VueGoodTable from 'vue-good-table'
@@ -32,7 +32,6 @@ import DateRangePicker from 'vue2-daterange-picker'
 import VueTheMask from 'vue-the-mask'
 import { LMap, LTileLayer, LMarker } from 'vue2-leaflet'
 import { LDrawToolbar } from 'vue2-leaflet-draw-toolbar'
-import { FlowerSpinner, OrbitSpinner } from 'epic-spinners'
 import 'leaflet/dist/leaflet.css'
 
 // plugins css
@@ -77,17 +76,16 @@ Vue.use(VueGoodTable)
 Vue.use(VueColorpicker)
 Vue.use(VueTheMask)
 
-
 Vue.use(VueGoogleMaps, {
-  load: {
-    key: MAPS.KEY,
-    libraries: 'places, drawing'
-  }
+    load: {
+        key: MAPS.KEY,
+        libraries: 'places, drawing',
+    },
 })
 Vue.use(VueInsProgressBar, {
-  position: 'fixed',
-  show: true,
-  height: '3px'
+    position: 'fixed',
+    show: true,
+    height: '3px',
 })
 Vue.component('v-select', VueSelect)
 Vue.component('datepicker', VueDatepicker)
@@ -101,16 +99,13 @@ Vue.component('l-map', LMap)
 Vue.component('l-tile-layer', LTileLayer)
 Vue.component('l-marker', LMarker)
 Vue.component('l-draw-toolbar', LDrawToolbar)
-Vue.component('flower-spinner', FlowerSpinner)
-Vue.component('orbit-spinner', OrbitSpinner)
 
 const router = new VueRouter({
-  routes
+    routes,
 })
 
 new Vue({
-  i18n,
-  router,
-  render: h => h(App)
-
+    i18n,
+    router,
+    render: h => h(App),
 }).$mount('#app')

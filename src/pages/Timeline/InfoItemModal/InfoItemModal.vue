@@ -8,6 +8,7 @@
                 </h5>
             </h4>
             <span class="badge align-badge" v-bind:class="data.status === 'ACTIVE' ? 'bg-success' : 'bg-danger'"> {{ $t(getStatusName(data.status)) }} </span>
+
             <a class="btn-close cursor_pointer" @click="$bvModal.hide('infoItemModal')"></a>
         </template>
 
@@ -63,7 +64,7 @@
                             <i v-on:click="showSound()" v-show="props.formattedRow[props.column.field].sound" class="fas fa-volume-up" />
                             <i v-on:click="showSignature()" v-show="props.formattedRow[props.column.field].signature" class="fas fa-pen" />
                             <i
-                                v-show="!props.formattedRow[props.column.field].signature && !props.formattedRow[props.column.field].video && !props.formattedRow[props.column.field].photo"
+                                v-show="!props.formattedRow[props.column.field].signature && !props.formattedRow[props.column.field].sound && !props.formattedRow[props.column.field].photo"
                                 class="fas fa-minus"
                             />
                         </span>
@@ -126,6 +127,11 @@ export default {
                 vigilant: this.data?.vigilant?._id,
                 event: this.data?._id,
             }
+
+            // const filters = {
+            //     status: 'ACTIVE',
+            //     vigilant: '634ed3ce8f86d500100aef96',
+            // }
 
             const resultPatrolAction = await Services.getPatrolActionsByEvent(this, filters)
             const formattedPatrolActions = resultPatrolAction?.map(patrolAction => {

@@ -17,6 +17,7 @@
                 @on-row-click="selectItem"
                 :search-options="{ enabled: true, placeholder: $t('str.table.search.in.this.table') }"
                 :pagination-options="paginationOptions"
+                style="height: 500px"
             >
                 <div slot="emptystate" class="vgt-center-align vgt-text-disabled">
                     <i v-if="isLoading" class="fas fa-spinner fa-spin" />
@@ -83,3 +84,8 @@ export default {
     methods: Controller.methods,
 }
 </script>
+<style lang="scss" scoped>
+.body-style {
+    height: 400px !important;
+}
+</style>

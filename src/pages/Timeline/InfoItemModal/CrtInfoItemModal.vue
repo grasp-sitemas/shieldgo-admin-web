@@ -61,12 +61,7 @@ export default {
                     tdClass: 'text-center text-nowrap',
                     thClass: 'text-center text-nowrap',
                 },
-                {
-                    label: this.$t('str.timeline.item.patrol.actions.notes'),
-                    field: 'notes',
-                    tdClass: 'text-center text-nowrap',
-                    thClass: 'text-center text-nowrap',
-                },
+
                 {
                     label: this.$t('str.timeline.item.patrol.actions.geolocation'),
                     field: 'geolocation',
@@ -82,6 +77,12 @@ export default {
                 {
                     label: this.$t('str.timeline.item.patrol.actions.medias'),
                     field: 'medias',
+                    tdClass: 'text-center text-nowrap',
+                    thClass: 'text-center text-nowrap',
+                },
+                {
+                    label: this.$t('str.timeline.item.patrol.actions.notes'),
+                    field: 'notes',
                     tdClass: 'text-center text-nowrap',
                     thClass: 'text-center text-nowrap',
                 },
@@ -127,8 +128,19 @@ export default {
             this.patrolActionItem = item
         },
         showMap() {
-            alert('show map')
             this.$bvModal.show('mapModal')
+        },
+        showPhoto() {
+            this.$bvModal.show('photoModal')
+        },
+        showSignature() {
+            this.$bvModal.show('signatureModal')
+        },
+        showSound() {
+            this.$bvModal.show('soundModal')
+        },
+        showDeviceInfo() {
+            this.$bvModal.show('deviceInfoModal')
         },
         getStatusName: Common.getEventStatusName,
     },

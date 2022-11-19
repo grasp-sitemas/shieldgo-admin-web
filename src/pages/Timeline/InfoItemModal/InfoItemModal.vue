@@ -1,7 +1,13 @@
 <template>
     <b-modal no-close-on-backdrop id="infoItemModal" :hide-footer="true" size="lg" class="modal-message">
         <template slot="modal-header">
-            <h4 class="modal-title">{{ $t('str.modal.create.timeline.item.info.title') }} {{ data?.name }}</h4>
+            <h4 class="modal-title">
+                {{ $t('str.modal.create.timeline.item.info.title') }}
+                <h5 class="same-line">
+                    {{ data?.name }}
+                </h5>
+            </h4>
+            <span class="badge align-badge" v-bind:class="data.status === 'ACTIVE' ? 'bg-success' : 'bg-danger'"> {{ $t(getStatusName(data.status)) }} </span>
             <a class="btn-close cursor_pointer" @click="$bvModal.hide('infoItemModal')"></a>
         </template>
 
@@ -10,11 +16,11 @@
                 <dt class="text-dark">{{ $t('str.timeline.item.vigilant') }}</dt>
                 <dd>{{ data.vigilant?.firstName }} {{ data.vigilant?.lastName }}</dd>
             </div>
-            <div class="col-md-2">
+            <div class="col-md-3">
                 <dt class="text-dark">{{ $t('str.timeline.item.starts.in') }}</dt>
                 <dd>{{ data.startDate }}</dd>
             </div>
-            <div class="col-md-2">
+            <div class="col-md-3">
                 <dt class="text-dark">{{ $t('str.timeline.item.ends.in') }}</dt>
                 <dd>{{ data.endDate }}</dd>
             </div>
@@ -28,44 +34,51 @@
                     </ul>
                 </dd>
             </div>
-            <div class="col-md-2">
-                <dt class="text-dark">{{ $t('str.timeline.item.status') }}</dt>
-                <span class="badge" v-bind:class="data.status === 'ACTIVE' ? 'bg-success' : 'bg-danger'"> {{ $t(getStatusName(data.status)) }} </span>
-            </div>
         </div>
 
         <div class="row">
-            <dt class="text-dark">{{ $t('str.timeline.item.patrol.actions') }}</dt>
+            <div class="col-md-12">
+                <dt class="text-dark">{{ $t('str.timeline.item.patrol.actions') }}</dt>
+                <vue-good-table ref="table" :columns="columns" :rows="patrolActions" :totalRows="patrolActions?.length" @on-row-click="selectItem">
+                    <div slot="emptystate" class="vgt-center-align vgt-text-disabled">
+                        <i v-if="isLoading" class="fas fa-spinner fa-spin" />
+                        <span v-if="!isLoading && patrolActions?.length === 0">{{ $t('str.table.subtitle.no.data') }}</span>
+                    </div>
 
-            <vue-good-table :columns="columns" :rows="patrolActions" :lineNumbers="false" :totalRows="patrolActions?.length" @on-row-click="selectItem">
-                <div slot="emptystate" class="vgt-center-align vgt-text-disabled">
-                    <i v-if="isLoading" class="fas fa-spinner fa-spin" />
-                    <span v-if="!isLoading && patrolActions?.length === 0">{{ $t('str.table.subtitle.no.data') }}</span>
-                </div>
-                <template slot="table-row" slot-scope="props">
-                    <span v-if="props.column.field === 'type'">
-                        {{ $t(props.formattedRow[props.column.field]) }}
-                    </span>
-                    <span v-else-if="props.column.field === 'geolocation'">
-                        <i v-on:click="showMap()" class="fas fa-map"></i>
-                        <!-- {{ getDeviceInfo(props.formattedRow[props.column.field]) }} -->
-                    </span>
-                    <span v-else-if="props.column.field === 'notes'">
-                        {{ props.formattedRow[props.column.field]?.length > 0 ? props.formattedRow[props.column.field] : '-' }}
-                    </span>
-                    <span v-else-if="props.column.field === 'deviceInfo'">
-                        <i class="fas fa-mobile-alt"></i>
-                        <!-- {{ getDeviceInfo(props.formattedRow[props.column.field]) }} -->
-                    </span>
-                    <span v-else>
-                        {{ props.formattedRow[props.column.field] }}
-                    </span>
-                </template>
-            </vue-good-table>
+                    <template slot="table-row" slot-scope="props">
+                        <span v-if="props.column.field === 'type'">
+                            {{ $t(props.formattedRow[props.column.field]) }}
+                        </span>
+                        <span v-else-if="props.column.field === 'geolocation'">
+                            <i v-on:click="showMap()" class="fas fa-map-marker-alt cursor_pointer" />
+                        </span>
+                        <span v-else-if="props.column.field === 'notes'">
+                            {{ props.formattedRow[props.column.field]?.length > 0 ? props.formattedRow[props.column.field] : '-' }}
+                        </span>
+                        <span v-else-if="props.column.field === 'deviceInfo'">
+                            <i v-on:click="showDeviceInfo()" class="fas fa-info-circle cursor_pointer" />
+                        </span>
+                        <span class="align-medias" v-else-if="props.column.field === 'medias'">
+                            <i v-on:click="showPhoto()" v-show="props.formattedRow[props.column.field].photo" class="fas fa-image" />
+                            <i v-on:click="showSound()" v-show="props.formattedRow[props.column.field].sound" class="fas fa-volume-up" />
+                            <i v-on:click="showSignature()" v-show="props.formattedRow[props.column.field].signature" class="fas fa-pen" />
+                            <i
+                                v-show="!props.formattedRow[props.column.field].signature && !props.formattedRow[props.column.field].video && !props.formattedRow[props.column.field].photo"
+                                class="fas fa-minus"
+                            />
+                        </span>
+                        <span v-else>
+                            {{ props.formattedRow[props.column.field] }}
+                        </span>
+                    </template>
+                </vue-good-table>
+            </div>
         </div>
-
         <Map :data="patrolActionItem" />
-
+        <Photo :data="patrolActionItem" />
+        <Signature :data="patrolActionItem" />
+        <Sound :data="patrolActionItem" />
+        <DeviceInfo :data="patrolActionItem" />
         <notifications group="bottom-right" position="bottom right" :speed="500" />
     </b-modal>
 </template>
@@ -75,9 +88,17 @@ import Controller from './CrtInfoItemModal.vue'
 import moment from 'moment'
 import Services from '../../../common/Services.vue'
 import Map from './Map/Map.vue'
+import Photo from './Photo/Photo.vue'
+import Signature from './Signature/Signature.vue'
+import Sound from './Sound/Sound.vue'
+import DeviceInfo from './DeviceInfo/DeviceInfo.vue'
 export default {
     components: {
         Map,
+        Photo,
+        Signature,
+        Sound,
+        DeviceInfo,
     },
     props: {
         selectedItem: {
@@ -100,18 +121,25 @@ export default {
 
             this.isLoading = true
 
-            // const filters = {
-            //     status: this.data?.status,
-            //     vigilant: this.data?.vigilant?._id,
-            //     event: this.data?._id,
-            // }
-
             const filters = {
-                status: 'ACTIVE',
-                vigilant: '634ed3ce8f86d500100aef96',
-                event: '6374e85864b161001044e30f',
+                status: this.data?.status,
+                vigilant: this.data?.vigilant?._id,
+                event: this.data?._id,
             }
-            this.patrolActions = await Services.getPatrolActionsByEvent(this, filters)
+
+            const resultPatrolAction = await Services.getPatrolActionsByEvent(this, filters)
+            const formattedPatrolActions = resultPatrolAction?.map(patrolAction => {
+                patrolAction.medias = {
+                    photo: patrolAction?.photoURL ? patrolAction?.photoURL : null,
+                    signature: patrolAction?.signatureURL ? patrolAction?.signatureURL : null,
+                    sound: patrolAction?.soundURL ? patrolAction?.soundURL : null,
+                }
+
+                return patrolAction
+            })
+
+            this.patrolActions = formattedPatrolActions
+
             this.isLoading = false
         },
     },
@@ -140,3 +168,20 @@ export default {
     },
 }
 </script>
+<style lang="scss" scoped>
+.same-line {
+    display: inline-block;
+}
+.align-badge {
+    position: absolute;
+    top: 25px;
+    right: 50px;
+}
+.align-medias {
+    display: flex;
+    justify-content: space-around;
+}
+.vgt-responsive {
+    height: 420px !important;
+}
+</style>

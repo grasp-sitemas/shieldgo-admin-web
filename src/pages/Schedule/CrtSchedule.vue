@@ -49,6 +49,7 @@ export default {
             const locale = language === 'pt' ? 'pt-br' : 'en-gb'
 
             this.calendarOptions = {
+                timeZone: 'UTC',
                 plugins: [dayGridPlugin, timeGridPlugin, interactionPlugin, listPlugin, bootstrapPlugin],
                 locales: [ptBrLocale, enGbLocale],
                 locale: locale,
@@ -79,6 +80,8 @@ export default {
                     },
                 },
             }
+
+            console.log('calendarOptions', this.calendarOptions.locale)
         },
 
         changeLanguage: function () {
@@ -106,8 +109,8 @@ export default {
             }
 
             const selectedAppointment = await Services.getScheduleById(this, filters)
-            selectedAppointment.beginDate = moment(selectedAppointment.beginDate).format('YYYY-MM-DD')
-            selectedAppointment.endDate = moment(selectedAppointment.endDate).format('YYYY-MM-DD')
+            selectedAppointment.beginDate = moment(selectedAppointment?.beginDate).format('YYYY-MM-DD')
+            selectedAppointment.endDate = moment(selectedAppointment?.endDate).format('YYYY-MM-DD')
             selectedAppointment.appointment = appointment
             this.selectedAppointment = selectedAppointment
 

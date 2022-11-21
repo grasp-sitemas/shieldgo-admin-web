@@ -116,6 +116,24 @@
         </div>
         <div class="row">
             <div class="col-md-4 mb-3">
+                <label class="form-label" for="frequencyField">{{ $t('str.register.schedule.frequency.field') }}</label>
+                <select
+                    v-model="data.frequency"
+                    :disabled="data._id ? true : false"
+                    @change="changeFrequency()"
+                    class="form-select"
+                    v-bind:class="checkRequiredField('frequency') ? 'is-invalid' : ''"
+                    @focus="removeRequiredField('frequency')"
+                    id="frequencyField"
+                >
+                    <option value="">{{ $t('str.register.select.placeholder') }}</option>
+                    <option v-for="frequency in frequencies" :value="frequency.value" :key="frequency.value">
+                        {{ $t(frequency.label) }}
+                    </option>
+                </select>
+                <div class="invalid-feedback">{{ $t('str.register.schedule.frequency.required') }}</div>
+            </div>
+            <div class="col-md-4 mb-3">
                 <label class="form-label" for="beginDateField">{{ $t('str.register.schedule.starts.in.field') }}</label>
                 <input
                     v-model="data.beginDate"
@@ -143,24 +161,6 @@
                     :placeholder="$t('str.register.schedule.ends.in.placeholder')"
                 />
                 <div class="invalid-feedback">{{ $t('str.register.schedule.ends.in.required') }}</div>
-            </div>
-            <div class="col-md-4 mb-3">
-                <label class="form-label" for="frequencyField">{{ $t('str.register.schedule.frequency.field') }}</label>
-                <select
-                    v-model="data.frequency"
-                    :disabled="data._id ? true : false"
-                    @change="changeFrequency()"
-                    class="form-select"
-                    v-bind:class="checkRequiredField('frequency') ? 'is-invalid' : ''"
-                    @focus="removeRequiredField('frequency')"
-                    id="frequencyField"
-                >
-                    <option value="">{{ $t('str.register.select.placeholder') }}</option>
-                    <option v-for="frequency in frequencies" :value="frequency.value" :key="frequency.value">
-                        {{ $t(frequency.label) }}
-                    </option>
-                </select>
-                <div class="invalid-feedback">{{ $t('str.register.schedule.frequency.required') }}</div>
             </div>
         </div>
 
@@ -352,9 +352,9 @@ export default {
     },
     watch: {
         selectedAppointment: function () {
-            this.data = this.selectedAppointment
+            this.data = this?.selectedAppointment
             this.selectOptions.enabled = false
-            this.data.guardGroup = this.selectedAppointment.guardGroup._id
+            this.data.guardGroup = this.selectedAppointment?.guardGroup?._id
             this.initSelectedAppointment()
         },
         selectedDate: function () {

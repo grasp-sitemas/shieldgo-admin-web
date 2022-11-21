@@ -272,10 +272,10 @@ export default {
                 client: '',
                 site: '',
                 frequency: '',
-                frenquencyMonth: {
+                frequencyMonth: {
                     day: '',
                 },
-                frenquencyYear: {
+                frequencyYear: {
                     month: '',
                     day: '',
                 },

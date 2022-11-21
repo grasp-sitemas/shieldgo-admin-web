@@ -123,7 +123,7 @@ export default {
             this.isLoading = true
 
             const filters = {
-                status: this.data?.status,
+                status: 'ACTIVE',
                 vigilant: this.data?.vigilant?._id,
                 event: this.data?._id,
             }

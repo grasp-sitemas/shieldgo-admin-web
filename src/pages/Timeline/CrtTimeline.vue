@@ -25,9 +25,18 @@ export default {
         initTable() {
             this.columns = [
                 {
+                    label: this.$t('str.table.timeline.column.name'),
+                    field: 'name',
+                    width: '10%',
+                    sortable: true,
+                    firstSortType: 'desc',
+                    thClass: 'text-nowrap',
+                    tdClass: 'text-nowrap',
+                },
+                {
                     label: this.$t('str.table.timeline.column.vigilant'),
                     field: 'vigilant',
-                    width: '15%',
+                    width: '10%',
                     sortable: true,
                     firstSortType: 'desc',
                     thClass: 'text-nowrap',
@@ -64,7 +73,7 @@ export default {
                 {
                     label: this.$t('str.table.timeline.column.status'),
                     field: 'status',
-                    width: '15%',
+                    width: '10%',
                     sortable: true,
                     thClass: 'text-nowrap',
                     tdClass: 'text-nowrap',
@@ -72,7 +81,7 @@ export default {
                 {
                     label: this.$t('str.table.timeline.column.account'),
                     field: 'account',
-                    width: '15%',
+                    width: '10%',
                     thClass: 'text-nowrap',
                     tdClass: 'text-nowrap',
                 },

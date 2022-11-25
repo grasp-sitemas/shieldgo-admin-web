@@ -288,6 +288,7 @@ export default {
                 endHour: '',
                 sendAlert: false,
                 notifyVigilants: false,
+                timeSlot: 15,
                 type: 'FREE-PROGRAM',
                 status: 'ACTIVE',
             }

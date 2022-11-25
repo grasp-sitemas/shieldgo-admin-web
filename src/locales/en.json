@@ -853,5 +853,7 @@
     "str.msg.no": "No",
     "str.msg.noData": "No data",
     "str.no.load.image": "Unable to load image",
-    "str.table.timeline.column.name": "Event"
+    "str.table.timeline.column.name": "Event",
+    "str.register.schedule.timeSlot.field" : "Time Slot",
+    "str.register.schedule.timeSlot.placeholder": "Input the time slot"
 }

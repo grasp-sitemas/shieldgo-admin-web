@@ -848,5 +848,7 @@
     "str.msg.no": "Não",
     "str.msg.noData": "Sem dados",
     "str.no.load.image": "Não foi possível carregar a imagem",
-    "str.table.timeline.column.name": "Evento"
+    "str.table.timeline.column.name": "Evento",
+    "str.register.schedule.timeSlot.field" : "Limite de tempo",
+    "str.register.schedule.timeSlot.placeholder": "Insira o limite de tempo"
 }

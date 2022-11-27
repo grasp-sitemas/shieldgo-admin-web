@@ -260,6 +260,19 @@
                 />
                 <div class="invalid-feedback">{{ $t('str.register.schedule.end.hour.required') }}</div>
             </div>
+            <div class="col-md-4 mb-3">
+                <label class="form-label" for="timeSlotField">{{ $t('str.register.schedule.timeSlot.field') }}</label>
+                <input
+                    v-model="data.timeSlot"
+                    :disabled="data._id ? true : false"
+                    type="number"
+                    min="1"
+                    max="120"
+                    class="form-control"
+                    id="timeSlotField"
+                    :placeholder="$t('str.register.schedule.timeSlot.placeholder')"
+                />
+            </div>
         </div>
 
         <div class="row">
@@ -406,7 +419,8 @@ export default {
                 beginHour: '',
                 endHour: '',
                 sendAlert: false,
-                notifyVigilants: false,
+                notifyVigilants: false, 
+                timeSlot: 15,
                 type: 'FREE-PROGRAM',
                 status: 'ACTIVE',
             },

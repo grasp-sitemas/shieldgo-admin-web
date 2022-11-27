@@ -91,6 +91,7 @@
                                 type="tel"
                                 v-mask="'#####-###'"
                                 key="cepField"
+                                @keyup.delete="handleCEPDelete"
                                 @input="inputCep()"
                                 @focus="removeRequiredField('allAddress')"
                                 v-bind:class="checkRequiredField('cep') ? 'is-invalid' : ''"

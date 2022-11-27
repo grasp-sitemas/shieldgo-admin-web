@@ -143,6 +143,7 @@ export default {
                 status: 'ACTIVE',
                 startDate: new Date(),
                 endDate: null,
+                isDescSortByStartDate: false,
                 isSortByStartDate: true,
             },
             selectedItem: null,

@@ -86,8 +86,8 @@ export default {
                     field: 'address',
                     type: 'address',
                     width: '25%',
-                    tdClass: 'text-center text-nowrap',
-                    thClass: 'text-center text-nowrap',
+                    tdClass: 'text-nowrap',
+                    thClass: 'text-nowrap',
                 },
                 {
                     label: this.$t('str.table.site.column.creat.at'),
@@ -96,15 +96,15 @@ export default {
                     dateInputFormat: "yyyy-MM-dd'T'HH:mm:ss.SSSSSSSxxx",
                     dateOutputFormat: 'dd/MM/yyyy',
                     width: '25%',
-                    tdClass: 'text-center text-nowrap',
-                    thClass: 'text-center text-nowrap',
+                    tdClass: 'text-nowrap',
+                    thClass: 'text-nowrap',
                 },
                 {
                     label: this.$t('str.table.site.column.status'),
                     field: 'status',
                     width: '25%',
-                    tdClass: 'text-center text-nowrap',
-                    thClass: 'text-center text-nowrap',
+                    tdClass: 'text-nowrap',
+                    thClass: 'text-nowrap',
                 },
             ]
             this.paginationOptions = {

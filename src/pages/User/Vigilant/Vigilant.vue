@@ -149,6 +149,7 @@
                                 v-mask="'#####-###'"
                                 key="cepField"
                                 @input="inputCep()"
+                                @keyup.delete="handleCEPDelete"
                                 v-model="data.address.cep"
                                 class="form-control"
                                 :placeholder="$t('str.register.vigilant.cep.placeholder')"
@@ -161,7 +162,7 @@
                         </div>
                         <div v-if="data?.address?.cep?.length === 9" class="col-md-4 mb-3">
                             <label class="form-label" for="numberField">{{ $t('str.register.vigilant.number.field') }}</label>
-                            <input v-model="data.address.number" class="form-control" type="number" key="numberField" :placeholder="$t('str.register.vigilant.number.placeholder')" />
+                            <input v-model="data.address.number" class="form-control" type="number" ref="numberField" key="numberField" :placeholder="$t('str.register.vigilant.number.placeholder')" />
                         </div>
                     </div>
                     <div class="row" v-if="data?.address?.cep?.length === 9">

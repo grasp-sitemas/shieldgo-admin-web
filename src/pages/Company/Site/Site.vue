@@ -91,6 +91,7 @@
                                 type="tel"
                                 v-mask="'#####-###'"
                                 key="cepField"
+                                @keyup.delete="handleCEPDelete"
                                 @input="inputCep()"
                                 @focus="removeRequiredField('allAddress')"
                                 v-bind:class="checkRequiredField('cep') ? 'is-invalid' : ''"
@@ -121,7 +122,8 @@
                                 @focus="removeRequiredField('number')"
                                 class="form-control"
                                 type="number"
-                                key="numberField"
+								key="numberField"
+								ref="numberField"
                                 :placeholder="$t('str.register.site.number.placeholder')"
                             />
                             <div class="invalid-feedback">{{ $t('str.register.site.number.required') }}</div>

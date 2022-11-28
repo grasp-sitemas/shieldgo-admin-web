@@ -20,8 +20,9 @@ export default {
                     `${Endpoints.systemUsers.changeLanguage}${this.user._id}`,
                     response => {
                         if (response.status === 200) {
-                            this.$session.set('user', response.result)
-                            this.user = response.result
+                            const user = this.user
+                            user.language = language
+                            this.$session.set('user', user)
                             this.valuekey += 1
                         }
                     },

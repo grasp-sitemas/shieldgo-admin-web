@@ -52,7 +52,7 @@ export default {
                 {
                     label: this.$t('str.table.user.column.name'),
                     field: 'firstName',
-                    width: '30%',
+                    width: '10%',
                     thClass: 'text-nowrap',
                     tdClass: 'text-nowrap',
                 },

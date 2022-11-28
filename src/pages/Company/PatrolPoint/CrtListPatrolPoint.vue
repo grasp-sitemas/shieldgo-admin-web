@@ -5,7 +5,6 @@ import Common from '../../../common/Common.vue'
 import Services from '../../../common/Services.vue'
 export default {
     init: async payload => {
-        payload.isSuperAdminMaster = await Common.isSuperAdminMaster(payload)
         payload.filters.account = await Common.getAccountId(payload)
         payload.initTable()
         payload.filter()

@@ -1561,3 +1561,13 @@ body .v-select .vs__search {
 .vgt-right-align {
     text-align: left !important;
 }
+
+.daterangepicker .drp-selected {
+    color: var(--app-theme-color) !important;
+}
+.daterangepicker .drp-buttons .btn {
+    font-weight: 600;
+    min-width: 80px;
+    margin: 0;
+    text-align-last: center !important;
+}

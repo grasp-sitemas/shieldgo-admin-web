@@ -52,7 +52,7 @@ export default {
                     var img = new Image()
                     img.src = dataUrl
                     const doc = new jsPDF('p', 'pt', 'A4')
-                    doc.text('Nº ' + name, 230, 180)
+                    doc.text(name, 230, 180)
                     doc.addImage(img, 'PNG', 100, 200, 400, 200)
                     const filename = accountName + '_' + name + '.pdf'
                     doc.save(filename)

@@ -6,7 +6,6 @@ import Services from '../../../common/Services.vue'
 
 export default {
     init: async payload => {
-        payload.isSuperAdminMaster = await Common.isSuperAdminMaster(payload)
         payload.filters.account = await Common.getAccountId(payload)
         payload.initTable()
         payload.filter()
@@ -53,9 +52,10 @@ export default {
                 {
                     label: this.$t('str.table.user.column.name'),
                     field: 'firstName',
-                    width: '30%',
+                    width: '20%',
                     thClass: 'text-nowrap',
                     tdClass: 'text-nowrap',
+                    sortable: true,
                 },
                 {
                     label: this.$t('str.table.user.column.account'),
@@ -63,6 +63,7 @@ export default {
                     width: '10%',
                     thClass: 'text-nowrap',
                     tdClass: 'text-nowrap',
+                    sortable: true,
                 },
                 {
                     label: this.$t('str.table.user.column.client'),
@@ -70,6 +71,7 @@ export default {
                     width: '10%',
                     thClass: 'text-nowrap',
                     tdClass: 'text-nowrap',
+                    sortable: true,
                 },
                 {
                     label: this.$t('str.table.user.column.site'),
@@ -77,6 +79,7 @@ export default {
                     width: '10%',
                     thClass: 'text-nowrap',
                     tdClass: 'text-nowrap',
+                    sortable: true,
                 },
                 {
                     label: this.$t('str.table.user.column.email'),
@@ -84,6 +87,7 @@ export default {
                     width: '10%',
                     tdClass: 'text-nowrap',
                     thClass: 'text-nowrap',
+                    sortable: true,
                 },
                 {
                     label: this.$t('str.table.user.column.phone'),
@@ -97,9 +101,11 @@ export default {
                     label: this.$t('str.table.user.column.address'),
                     field: 'address',
                     type: 'address',
-                    width: '20%',
+                    width: '10%',
                     tdClass: 'text-nowrap',
                     thClass: 'text-nowrap',
+                    sortable: true,
+
                 },
                 {
                     label: this.$t('str.table.user.column.creat.at'),
@@ -107,9 +113,11 @@ export default {
                     type: 'date',
                     dateInputFormat: "yyyy-MM-dd'T'HH:mm:ss.SSSSSSSxxx",
                     dateOutputFormat: 'dd/MM/yyyy',
-                    width: '10%',
+                    width: '300px',
                     tdClass: 'text-nowrap',
                     thClass: 'text-nowrap',
+                    sortable: true,
+
                 },
                 {
                     label: this.$t('str.table.user.column.status'),
@@ -117,6 +125,8 @@ export default {
                     width: '10%',
                     tdClass: 'text-nowrap',
                     thClass: 'text-nowrap',
+                    sortable: true,
+
                 },
             ]
             this.paginationOptions = {

@@ -5,7 +5,6 @@ import Common from '../../../common/Common.vue'
 import Services from '../../../common/Services.vue'
 export default {
     init: async payload => {
-        payload.isSuperAdminMaster = await Common.isSuperAdminMaster(payload)
         payload.filters.account = await Common.getAccountId(payload)
         payload.initTable()
         payload.filter()
@@ -112,15 +111,15 @@ export default {
                     dateInputFormat: "yyyy-MM-dd'T'HH:mm:ss.SSSSSSSxxx",
                     dateOutputFormat: 'dd/MM/yyyy',
                     width: '10%',
-                    tdClass: 'text-center text-nowrap',
-                    thClass: 'text-center text-nowrap',
+                    tdClass: 'text-nowrap',
+                    thClass: 'text-nowrap',
                 },
                 {
                     label: this.$t('str.table.check.point.column.status'),
                     field: 'status',
                     width: '10%',
-                    tdClass: 'text-center text-nowrap',
-                    thClass: 'text-center text-nowrap',
+                    tdClass: 'text-nowrap',
+                    thClass: 'text-nowrap',
                 },
             ]
             this.paginationOptions = {

@@ -57,6 +57,7 @@
                     @update="updateValues"
                     :linkedCalendars="dateRange.linkedCalendars"
                     :date-range="dateRange"
+                    :locale="dateRange.locale"
                 >
                     <template v-slot:input="filters">
                         <i class="fa fa-calendar fa-fw text-white text-opacity-50 ms-n1"></i>
@@ -143,6 +144,7 @@ export default {
                 status: 'ACTIVE',
                 startDate: new Date(),
                 endDate: null,
+                isDescSortByStartDate: false,
                 isSortByStartDate: true,
             },
             selectedItem: null,
@@ -150,11 +152,11 @@ export default {
         }
     },
     methods: Controller.methods,
-    mounted() {},
+    mounted() {
+        
+    },
     created() {
         const state = this
-        this.initRangeDate()
-
         Controller.init(state)
         state.$registerEvent.$on('changeLanguage', function () {
             state.initTable()
@@ -170,8 +172,8 @@ export default {
     background-color: var(--app-component-bg) !important;
     text-align-last: start !important;
 }
-
 .caret {
     display: none !important;
 }
+
 </style>

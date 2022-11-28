@@ -123,6 +123,7 @@ export default {
                 site: '',
                 status: 'ACTIVE',
                 name: '',
+                isSortByName: true,
             },
             listAccounts: [],
             listClients: [],

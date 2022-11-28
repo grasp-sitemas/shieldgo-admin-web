@@ -37,6 +37,7 @@ export default {
             this.isLoading = false
         },
         save() {
+            this.isLoading = true
             this.data.geolocation.latitude = this.data?.geolocation?.latitude.toString()
             this.data.geolocation.longitude = this.data?.geolocation?.longitude.toString()
 
@@ -53,6 +54,7 @@ export default {
                         if (response.status === 200) {
                             Common.show(this, 'bottom-right', 'success', this.data._id ? this.$t('str.form.update.success') : this.$t('str.form.create.success'))
                             this.data = response?.result
+                            this.isLoading = false
                             this.$registerEvent.$emit('refreshList')
                         }
                     },
@@ -133,9 +135,7 @@ export default {
             }
 
             if (!this.errors || this.errors.length === 0) {
-                this.isLoading = true
                 await this.save()
-                this.isLoading = false
             }
         },
         changeAccount: async function () {

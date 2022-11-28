@@ -107,8 +107,8 @@ export default {
                     dateInputFormat: "yyyy-MM-dd'T'HH:mm:ss.SSSSSSSxxx",
                     dateOutputFormat: 'dd/MM/yyyy HH:mm:ss',
                     width: '10%',
-                    tdClass: 'text-center text-nowrap',
-                    thClass: 'text-center text-nowrap',
+                    tdClass: 'text-nowrap',
+                    thClass: 'text-nowrap',
                 },
             ]
             this.paginationOptions = {

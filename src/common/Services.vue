@@ -154,6 +154,10 @@ export default {
         const response = await Request.do(state, 'GET', Request.getDefaultHeader(state), {}, `${Endpoints.systemUsers.checkEmailExist}${email}`)
         return response?.data?.result || null
     },
+    usernameAlreadyExists: async function (state, username) {
+        const response = await Request.do(state, 'GET', Request.getDefaultHeader(state), {}, `${Endpoints.systemUsers.checkUsernameExist}${username}`)
+        return response?.data?.result || null
+    },
     getPatrolActionsByEvent: async function (state, filters) {
         const response = await Request.do(state, 'POST', Request.getDefaultHeader(state), filters, `${Endpoints.patrolActions.filter}`)
         return response?.data?.results || []

@@ -5,13 +5,18 @@ import moment from 'moment'
 
 export default {
     init: async payload => {
+
+        payload.initRangeDate()
         payload.isSuperAdminMaster = await Common.isSuperAdminMaster(payload)
+
+        await payload.initTable()
+
         if (payload.isSuperAdminMaster) {
             payload.accounts = await Services.getAccounts(payload)
         } else {
             payload.clients = await Services.getClients(payload)
         }
-        await payload.initTable()
+
 
         payload.filter()
     },
@@ -49,8 +54,9 @@ export default {
                     dateInputFormat: "yyyy-MM-dd'T'HH:mm:ss.SSSSSSSxxx",
                     dateOutputFormat: 'dd/MM/yyyy HH:mm:ss',
                     width: '10%',
-                    tdClass: 'text-center text-nowrap',
-                    thClass: 'text-center text-nowrap',
+                    sortable: true,
+                    tdClass: 'text-nowrap',
+                    thClass: 'text-nowrap',
                 },
                 {
                     label: this.$t('str.table.timeline.column.ends.in'),
@@ -59,8 +65,9 @@ export default {
                     dateInputFormat: "yyyy-MM-dd'T'HH:mm:ss.SSSSSSSxxx",
                     dateOutputFormat: 'dd/MM/yyyy HH:mm:ss',
                     width: '10%',
-                    tdClass: 'text-center text-nowrap',
-                    thClass: 'text-center text-nowrap',
+                    sortable: true,
+                    tdClass: 'text-nowrap',
+                    thClass: 'text-nowrap',
                 },
                 {
                     label: this.$t('str.table.timeline.column.patrol.points'),
@@ -82,6 +89,7 @@ export default {
                     label: this.$t('str.table.timeline.column.account'),
                     field: 'account',
                     width: '10%',
+                    sortable: true,
                     thClass: 'text-nowrap',
                     tdClass: 'text-nowrap',
                 },
@@ -89,6 +97,7 @@ export default {
                     label: this.$t('str.table.timeline.column.client'),
                     field: 'client',
                     width: '10%',
+                    sortable: true,
                     thClass: 'text-nowrap',
                     tdClass: 'text-nowrap',
                 },
@@ -96,6 +105,7 @@ export default {
                     label: this.$t('str.table.timeline.column.site'),
                     field: 'site',
                     width: '10%',
+                    sortable: true,
                     thClass: 'text-nowrap',
                     tdClass: 'text-nowrap',
                 },
@@ -135,34 +145,33 @@ export default {
                 autoApply: false,
                 linkedCalendars: false,
                 range: {
-                    startDate: moment().subtract(7, 'days'),
+                    startDate: moment().subtract(2, 'days'),
                     endDate: moment(),
-                    prevStartDate: moment().subtract('days', 15).format('D MMMM'),
+                    prevStartDate: moment().subtract('days', 15).format('D MMMM YYYY'),
                     prevEndDate: moment().subtract('days', 8).format('D MMMM YYYY'),
                 },
                 sampleLocaleData: {
                     direction: 'ltr',
-                    format: 'mm/dd/yyyy',
+                    format: 'dd/mm/yyyy',
                     separator: ' - ',
                     applyLabel: this.$t('str.apply'),
                     cancelLabel: this.$t('str.cancel'),
                     weekLabel: 'W',
-                    customRangeLabel: this.$t('str.custom.range'),
-                    // daysOfWeek: [this.$t('str.sunday'), this.$t('str.monday'), this.$t('str.tuesday'), this.$t('str.wednesday'), this.$t('str.thursday'), this.$t('str.friday'), this.$t('str.saturday')],
-                    // monthNames: [
-                    //     this.$t('str.january'),
-                    //     this.$t('str.february'),
-                    //     this.$t('str.march'),
-                    //     this.$t('str.april'),
-                    //     this.$t('str.may'),
-                    //     this.$t('str.june'),
-                    //     this.$t('str.july'),
-                    //     this.$t('str.august'),
-                    //     this.$t('str.september'),
-                    //     this.$t('str.october'),
-                    //     this.$t('str.november'),
-                    //     this.$t('str.december'),
-                    // ],
+                    daysOfWeek: [this.$t('str.abbreviation.sunday'), this.$t('str.abbreviation.monday'), this.$t('str.abbreviation.tuesday'), this.$t('str.abbreviation.wednesday'), this.$t('str.abbreviation.thursday'), this.$t('str.abbreviation.friday'), this.$t('str.abbreviation.saturday')],
+                    monthNames: [
+                        this.$t('str.abbreviation.january'),
+                        this.$t('str.abbreviation.february'),
+                        this.$t('str.abbreviation.march'),
+                        this.$t('str.abbreviation.april'),
+                        this.$t('str.abbreviation.may'),
+                        this.$t('str.abbreviation.june'),
+                        this.$t('str.abbreviation.july'),
+                        this.$t('str.abbreviation.august'),
+                        this.$t('str.abbreviation.september'),
+                        this.$t('str.abbreviation.october'),
+                        this.$t('str.abbreviation.november'),
+                        this.$t('str.abbreviation.december'),
+                    ],
                     firstDay: 0,
                 },
             }

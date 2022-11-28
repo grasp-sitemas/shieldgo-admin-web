@@ -41,6 +41,7 @@ export default {
             byGuardGroup: `${domain}/api/users/system/search/customeruser/byguardgroup/v1/`,
         },
         checkEmailExist: `${domain}/api/users/check/email/v1/`,
+        checkUsernameExist: `${domain}/api/users/check/username/v1/`,
         count: `${domain}/api/generic/count/byfilter/v1/`,
     },
     companies: {

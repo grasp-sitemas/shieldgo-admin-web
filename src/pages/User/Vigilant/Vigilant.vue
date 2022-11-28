@@ -109,17 +109,29 @@
 
                     <div class="row">
                         <div class="col-md-4 mb-3">
+                            <label class="form-label">{{ $t('str.register.vigilant.username.field') }}</label>
+                            <input
+                                class="form-control"
+                                v-bind:class="checkRequiredField('username') || checkRequiredField('usernameAlreadyExists') ? 'is-invalid' : ''"
+                                v-on:input="removeRequiredField('username')"
+                                v-model="data.username"
+                                @focus="removeRequiredField('username')"
+                                type="text"
+                                :placeholder="$t('str.register.vigilant.username.placeholder')"
+                            />
+                            <div class="invalid-feedback">{{ $t('str.register.vigilant.username.required') }}</div>
+                        </div>
+                        <div class="col-md-4 mb-3">
                             <label class="form-label">{{ $t('str.register.vigilant.email.field') }}</label>
                             <input
                                 class="form-control"
                                 v-bind:class="checkRequiredField('email') || checkRequiredField('emailAlreadyExists') ? 'is-invalid' : ''"
-                                v-on:input="removeRequiredField('email')"
+                                @focus="removeRequiredField('email')"
                                 v-model="data.email"
                                 type="text"
                                 :placeholder="$t('str.register.vigilant.email.placeholder')"
                             />
-                            <div class="invalid-feedback">{{ $t('str.register.vigilanasdsat.email.required') }}</div>
-                            <!-- <div class="invalid-feedback">{{ $t('str.register.vigilant.email.required') }}</div> -->
+                            <div class="invalid-feedback">{{ $t('str.register.vigilant.email.required') }}</div>
                         </div>
 
                         <div class="col-md-4 mb-3">
@@ -149,6 +161,7 @@
                                 v-mask="'#####-###'"
                                 key="cepField"
                                 @input="inputCep()"
+                                @keyup.delete="handleCEPDelete"
                                 v-model="data.address.cep"
                                 class="form-control"
                                 :placeholder="$t('str.register.vigilant.cep.placeholder')"
@@ -161,7 +174,7 @@
                         </div>
                         <div v-if="data?.address?.cep?.length === 9" class="col-md-4 mb-3">
                             <label class="form-label" for="numberField">{{ $t('str.register.vigilant.number.field') }}</label>
-                            <input v-model="data.address.number" class="form-control" type="number" key="numberField" :placeholder="$t('str.register.vigilant.number.placeholder')" />
+                            <input v-model="data.address.number" class="form-control" type="number" ref="numberField" key="numberField" :placeholder="$t('str.register.vigilant.number.placeholder')" />
                         </div>
                     </div>
                     <div class="row" v-if="data?.address?.cep?.length === 9">
@@ -251,6 +264,8 @@ export default {
                 lastName: '',
                 email: '',
                 oldEmail: '',
+                username: '',
+                oldUsername: '',
                 primaryPhone: '',
                 photoURL: '',
                 account: '',

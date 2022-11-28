@@ -32,6 +32,26 @@ export default {
         inputCep() {
             if (this.data.address.cep.length === 9) this.loadInfosByCEP()
         },
+        clearCep(){
+            const cep = this.data?.address?.cep
+            const address = {
+                cep: cep,
+                    address: '',
+                    number: '',
+                    complement: '',
+                    neighborhood: '',
+                    city: '',
+                    state: '',
+                    ibge: '',
+                    gia: '',
+            }
+            this.data.address = address
+        },
+        handleCEPDelete(e){
+            if (e.key === "Backspace" || e.key === "Delete") {
+                this.clearCep()
+            }
+        },
         loadInfosByCEP() {
             Request.do(
                 this,
@@ -48,6 +68,8 @@ export default {
                         this.data.address.state = response.uf
                         this.data.address.ibge = response.ibge
                         this.data.address.gia = response.gia
+                        this.$refs.numberField.focus()
+
                     }
                 },
                 error => {
@@ -176,7 +198,7 @@ export default {
             if (!this.data.client || this.data.client === '') {
                 this.errors.push('client')
             }
-            if (!this.data.address.cep && this.data.address.cep === '') {
+            if (!this.data.address.cep || this.data.address?.cep?.length !== 9) {
                 this.errors.push('cep')
             }
             if (!this.data.address.address && this.data.address.address === '') {

@@ -113,12 +113,12 @@
             </form>
         </panel>
         <notifications group="bottom-right" position="bottom right" :speed="500" />
+        <TemplateModal :templates="templates" :isSuperAdminMaster="isSuperAdminMaster" :accounts="accounts"/>
         <ListIncident v-on:load-item="selectItem" :isSuperAdminMaster="isSuperAdminMaster" :accounts="accounts" />
-        <TemplateModal :templates="templates" />
     </div>
 </template>
-
 <script>
+
 import ListIncident from './ListIncident.vue'
 import TemplateModal from './TemplateModal/TemplateModal.vue'
 import Controller from './CrtIncident.vue'

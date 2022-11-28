@@ -47,6 +47,10 @@
                 @on-row-click="selectItem"
                 :search-options="{ enabled: true, placeholder: $t('str.table.search.in.this.table') }"
                 :pagination-options="paginationOptions"
+                :sort-options="{
+                    enabled: true,
+                    multipleColumns: true
+                }"
             >
                 <div slot="emptystate" class="vgt-center-align vgt-text-disabled">
                     <i v-if="isLoading" class="fas fa-spinner fa-spin" />
@@ -115,13 +119,14 @@ export default {
     data() {
         return {
             items: [],
-            isLoaded: false,
+            isLoading: false,
             filters: {
                 account: '',
                 client: '',
                 site: '',
                 status: 'ACTIVE',
                 name: '',
+                isSortByName: true,
             },
             columns: [],
             listAccounts: [],

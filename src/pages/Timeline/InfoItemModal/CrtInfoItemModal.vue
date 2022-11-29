@@ -140,7 +140,7 @@ export default {
             this.$bvModal.show('deviceInfoModal')
         },
         getStatusName: Common.getEventStatusName,
+        formatDate: Common.formatDateAndTime,
     },
-    formatDate: Common.formatDateAndTime,
 }
 </script>

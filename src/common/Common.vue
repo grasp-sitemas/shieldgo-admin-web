@@ -101,5 +101,8 @@ export default {
                 return ''
         }
     },
+    formatDateAndTime(date) {
+        return moment(date).utc().format('DD/MM/YYYY HH:mm:ss')
+    },
 }
 </script>

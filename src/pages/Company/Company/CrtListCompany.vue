@@ -1,6 +1,7 @@
 <script>
 import Endpoints from '../../../common/Endpoints.vue'
 import Request from '../../../common/Request.vue'
+import Common from '../../../common/Common.vue'
 
 export default {
     init: payload => {
@@ -82,9 +83,6 @@ export default {
                 {
                     label: this.$t('str.table.company.column.creat.at'),
                     field: 'createDate',
-                    type: 'date',
-                    dateInputFormat: "yyyy-MM-dd'T'HH:mm:ss.SSSSSSSxxx",
-                    dateOutputFormat: 'dd/MM/yyyy',
                     width: '10%',
                     thClass: 'text-nowrap',
                     tdClass: 'text-nowrap',
@@ -116,6 +114,7 @@ export default {
                 allLabel: this.$t('str.table.pagination.all.label'),
             }
         },
+        formatDate: Common.formatDateAndTime,
     },
 }
 </script>

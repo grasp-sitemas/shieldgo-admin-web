@@ -50,9 +50,6 @@ export default {
                 {
                     label: this.$t('str.table.timeline.column.starts.in'),
                     field: 'startDate',
-                    type: 'date',
-                    dateInputFormat: "yyyy-MM-dd'T'HH:mm:ss.SSSSSSSxxx",
-                    dateOutputFormat: 'dd/MM/yyyy HH:mm:ss',
                     width: '10%',
                     sortable: true,
                     tdClass: 'text-nowrap',
@@ -61,9 +58,6 @@ export default {
                 {
                     label: this.$t('str.table.timeline.column.ends.in'),
                     field: 'endDate',
-                    type: 'date',
-                    dateInputFormat: "yyyy-MM-dd'T'HH:mm:ss.SSSSSSSxxx",
-                    dateOutputFormat: 'dd/MM/yyyy HH:mm:ss',
                     width: '10%',
                     sortable: true,
                     tdClass: 'text-nowrap',
@@ -214,6 +208,7 @@ export default {
             this.filter()
         },
         getStatusName: Common.getEventStatusName,
+        formatDate: Common.formatDateAndTime,
     },
 }
 </script>

@@ -103,9 +103,6 @@ export default {
                 {
                     label: this.$t('str.table.actions.log.column.creat.at'),
                     field: 'createDate',
-                    type: 'date',
-                    dateInputFormat: "yyyy-MM-dd'T'HH:mm:ss.SSSSSSSxxx",
-                    dateOutputFormat: 'dd/MM/yyyy HH:mm:ss',
                     width: '10%',
                     tdClass: 'text-nowrap',
                     thClass: 'text-nowrap',
@@ -161,6 +158,7 @@ export default {
             const domains = this.domains.map(domain => domain.value)
             this.filters.domains = domains
         },
+        formatDate: Common.formatDateAndTime,
     },
 }
 </script>

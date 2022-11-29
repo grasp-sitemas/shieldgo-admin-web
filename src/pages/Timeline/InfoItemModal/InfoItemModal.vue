@@ -53,6 +53,9 @@
                         <span v-else-if="props.column.field === 'geolocation'">
                             <i v-on:click="showMap()" class="fas fa-map-marker-alt cursor_pointer" />
                         </span>
+                        <span v-else-if="props.column.field === 'date'">
+                            {{ formatDate(props.formattedRow[props.column.field]) }}
+                        </span>
                         <span v-else-if="props.column.field === 'notes'">
                             {{ props.formattedRow[props.column.field]?.length > 0 ? props.formattedRow[props.column.field] : '-' }}
                         </span>

@@ -118,10 +118,10 @@ export default {
         selectedItem: async function () {
             this.data = this.selectedItem
 
-            const startDate = moment(this.data.startDate)
-            const endDate = moment(this.data.endDate)
-            this.data.startDate = startDate.format('DD/MM/YYYY - HH:mm')
-            this.data.endDate = endDate.format('DD/MM/YYYY - HH:mm')
+            const startDate = moment(this.data.startDate).utc()
+            const endDate = moment(this.data.endDate).utc()
+            this.data.startDate =  startDate.format('DD/MM/YYYY - HH:mm')
+            this.data.endDate =  endDate.format('DD/MM/YYYY - HH:mm')
 
             this.isLoading = true
 
@@ -130,11 +130,6 @@ export default {
                 vigilant: this.data?.vigilant?._id,
                 event: this.data?._id,
             }
-
-            // const filters = {
-            //     status: 'ACTIVE',
-            //     vigilant: '634ed3ce8f86d500100aef96',
-            // }
 
             const resultPatrolAction = await Services.getPatrolActionsByEvent(this, filters)
             const formattedPatrolActions = resultPatrolAction?.map(patrolAction => {

@@ -27,6 +27,13 @@ export default {
                 site: '',
                 status: 'ACTIVE',
             }
+            this.vigilants = []
+            this.clients = []
+
+            if(!this.isSuperAdminMaster){
+                this.sites = []
+            }
+
             this.data.account = Common.getAccountId(this)
             this.isLoading = false
         },

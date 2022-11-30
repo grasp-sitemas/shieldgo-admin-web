@@ -1571,3 +1571,7 @@ body .v-select .vs__search {
     margin: 0;
     text-align-last: center !important;
 }
+
+body .daterangepicker.show-ranges.ltr .ranges, body .daterangepicker.show-ranges.rtl .ranges {
+    display: none !important;
+}

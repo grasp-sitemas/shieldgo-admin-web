@@ -92,9 +92,6 @@ export default {
                 {
                     label: this.$t('str.table.site.column.creat.at'),
                     field: 'createDate',
-                    type: 'date',
-                    dateInputFormat: "yyyy-MM-dd'T'HH:mm:ss.SSSSSSSxxx",
-                    dateOutputFormat: 'dd/MM/yyyy',
                     width: '25%',
                     tdClass: 'text-nowrap',
                     thClass: 'text-nowrap',
@@ -131,6 +128,7 @@ export default {
                 this.columns.splice(1, 1)
             }
         },
+        formatDate: Common.formatDateAndTime,
     },
 }
 </script>

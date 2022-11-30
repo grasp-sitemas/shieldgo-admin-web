@@ -110,9 +110,6 @@ export default {
                 {
                     label: this.$t('str.table.user.column.creat.at'),
                     field: 'createDate',
-                    type: 'date',
-                    dateInputFormat: "yyyy-MM-dd'T'HH:mm:ss.SSSSSSSxxx",
-                    dateOutputFormat: 'dd/MM/yyyy',
                     width: '10%',
                     tdClass: 'text-nowrap',
                     thClass: 'text-nowrap',
@@ -173,6 +170,7 @@ export default {
         changeSite: function () {
             this.filter()
         },
+        formatDate: Common.formatDateAndTime,
     },
 }
 </script>

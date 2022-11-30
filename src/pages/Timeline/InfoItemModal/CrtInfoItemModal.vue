@@ -49,9 +49,6 @@ export default {
                 {
                     label: this.$t('str.timeline.item.patrol.actions.date'),
                     field: 'date',
-                    type: 'date',
-                    dateInputFormat: "yyyy-MM-dd'T'HH:mm:ss.SSSSSSSxxx",
-                    dateOutputFormat: 'dd/MM/yyyy HH:mm:ss',
                     tdClass: 'text-nowrap',
                     thClass: 'text-nowrap',
                 },
@@ -143,6 +140,7 @@ export default {
             this.$bvModal.show('deviceInfoModal')
         },
         getStatusName: Common.getEventStatusName,
+        formatDate: Common.formatDateAndTime,
     },
 }
 </script>

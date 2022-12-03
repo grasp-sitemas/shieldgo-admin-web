@@ -400,6 +400,16 @@ export default {
             }
 
             this.vigilants = await Services.getVigilantsBySite(this, this.data.site)
+
+            const mappedVigilants = this.data.vigilants.map(vigilant => {
+                return {
+                    _id: vigilant._id,
+                    firstName: vigilant.firstName,
+                    lastName: vigilant.lastName,
+                    fullName: `${vigilant.firstName} ${vigilant.lastName}`,
+                }
+            })
+            this.data.vigilants = mappedVigilants ? mappedVigilants : []
         },
     },
     checkEnableInput: function () {

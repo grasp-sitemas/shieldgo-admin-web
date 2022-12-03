@@ -102,7 +102,7 @@
                     taggable
                     multiple
                     :disabled="data._id ? true : false"
-                    label="firstName"
+                    label="fullName"
                     key="vigilantsField"
                     v-model="data.vigilants"
                     @search:blur="removeRequiredField('vigilants')"

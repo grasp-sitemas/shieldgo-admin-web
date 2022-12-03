@@ -100,7 +100,7 @@
                             <v-select
                                 taggable
                                 multiple
-                                label="firstName"
+                                label="fullName" 
                                 key="vigilantsField"
                                 v-model="data.vigilants"
                                 :options="vigilants"
@@ -163,29 +163,6 @@ export default {
                 site: '',
                 status: 'ACTIVE',
             },
-            options: [
-                {
-                    title: 'HTML5',
-                    author: {
-                        firstName: 'Remy',
-                        lastName: 'Sharp',
-                    },
-                },
-                {
-                    title: 'HTML5',
-                    author: {
-                        firstName: 'Remy',
-                        lastName: 'Sharp',
-                    },
-                },
-                {
-                    title: 'HTML5',
-                    author: {
-                        firstName: 'Remy',
-                        lastName: 'Sharp',
-                    },
-                },
-            ],
         }
     },
     mounted() {

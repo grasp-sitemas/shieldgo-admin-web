@@ -120,11 +120,11 @@
 </template>
 
 <script>
+import moment from 'moment'
 import Controller from './CrtTimeline.vue'
 import InfoItemModal from './InfoItemModal/InfoItemModal.vue'
 import Vue from 'vue'
 Vue.prototype.$registerEvent = new Vue()
-
 export default {
     components: {
         InfoItemModal,
@@ -145,8 +145,8 @@ export default {
                 client: '',
                 site: '',
                 status: 'ACTIVE',
-                startDate: new Date(),
-                endDate: null,
+                startDate: moment().utcOffset(-3),
+                endDate: moment().utcOffset(-3),
                 isDescSortByStartDate: false,
                 isSortByStartDate: true,
             },

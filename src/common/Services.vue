@@ -71,9 +71,21 @@ export default {
         if (site) {
             const response = await Request.do(state, 'POST', Request.getDefaultHeader(state), filters, `${Endpoints.systemUsers.customerUser.search}`)
 
-            return response?.data?.results || []
+            const result = response?.data?.results
+            if (result && result.length > 0) {
+                const mappedResult = result.map((item) => {
+                    return {
+                        _id: item._id,
+                        firstName: item.firstName,
+                        lastName: item.lastName,
+                        fullName: `${item.firstName} ${item.lastName}`,
+                        status: item.status,
+                    }
+                })
+                return mappedResult
+            }
+            return []
         }
-
         return []
     },
     getVigilantsByGuardGroup: async function (state, guardGroup) {
@@ -85,13 +97,23 @@ export default {
         if (guardGroup) {
             const response = await Request.do(state, 'POST', Request.getDefaultHeader(state), filters, `${Endpoints.guardGroups.filter}`)
 
-            const result = response?.data?.result || null
-            if (result?.vigilants) return result.vigilants
+            const result = response?.data?.result?.vigilants
+            if (result && result?.length > 0) {
 
-            return null
+                    const mappedResult = result.map((item) => {
+                        return {
+                            _id: item._id,
+                            firstName: item.firstName,
+                            lastName: item.lastName,
+                            fullName: `${item.firstName} ${item.lastName}`,
+                            status: item.status,
+                        }
+                    })
+                    return mappedResult
+            }
         }
 
-        return null
+        return []
     },
     getAppointmentsByDate: async function (state, filters) {
         const response = await Request.do(state, 'POST', Request.getDefaultHeader(state), filters, `${Endpoints.appointments.filter}`)

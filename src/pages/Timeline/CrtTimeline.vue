@@ -17,13 +17,22 @@ export default {
             payload.clients = await Services.getClients(payload)
         }
 
-
         payload.filter()
     },
     methods: {
         async filter() {
             this.isLoading = true
             this.items = []
+
+            // if status is expired the set isDescSortByStartDate to true
+            if (this.filters.status === 'EXPIRED' || this.filters.status === 'DONE') {
+                this.filters.isDescSortByStartDate = true
+                this.filters.isSortByStartDate = false
+            } else {
+                this.filters.isSortByStartDate = true
+                this.filters.isDescSortByStartDate = false
+            }
+
             this.items = await Services.getEventsByDate(this, this.filters)
             this.isLoading = false
         },
@@ -139,7 +148,7 @@ export default {
                 autoApply: false,
                 linkedCalendars: false,
                 range: {
-                    startDate: moment().subtract(2, 'days'),
+                    startDate: moment().subtract(0, 'days'),
                     endDate: moment(),
                     prevStartDate: moment().subtract('days', 15).format('D MMMM YYYY'),
                     prevEndDate: moment().subtract('days', 8).format('D MMMM YYYY'),

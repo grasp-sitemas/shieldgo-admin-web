@@ -25,25 +25,39 @@ export default {
         inputCep() {
             if (this.data.address.cep.length === 9) this.loadInfosByCEP()
         },
-        clearCep(){
+        clearCep() {
             const cep = this.data?.address?.cep
             const address = {
                 cep: cep,
-                    address: '',
-                    number: '',
-                    complement: '',
-                    neighborhood: '',
-                    city: '',
-                    state: '',
-                    ibge: '',
-                    gia: '',
+                address: '',
+                number: '',
+                complement: '',
+                neighborhood: '',
+                city: '',
+                state: '',
+                ibge: '',
+                gia: '',
             }
             this.data.address = address
         },
-        handleCEPDelete(e){
-            if (e.key === "Backspace" || e.key === "Delete") {
+        handleCEPDelete(e) {
+            if (e.key === 'Backspace' || e.key === 'Delete') {
                 this.clearCep()
             }
+        },
+        clearAddress() {
+            const address = {
+                cep: this.data?.address?.cep,
+                address: '',
+                number: '',
+                complement: '',
+                neighborhood: '',
+                city: '',
+                state: '',
+                ibge: '',
+                gia: '',
+            }
+            this.data.address = address
         },
         loadInfosByCEP() {
             Request.do(
@@ -63,10 +77,13 @@ export default {
                         this.data.address.ibge = response.ibge
                         this.data.address.gia = response.gia
                         this.$refs.numberField.focus()
+                    } else {
+                        this.clearAddress()
                     }
                 },
                 error => {
                     console.log(error)
+                    this.clearAddress()
                 },
             )
         },

@@ -15,6 +15,7 @@
                         {{ account.name }}
                     </option>
                 </select>
+
                 <div class="invalid-feedback">{{ $t('str.register.guard.groups.account.required') }}</div>
             </div>
             <div class="col-md-4 mb-3">
@@ -80,7 +81,6 @@
             <vue-good-table
                 :columns="columns"
                 :rows="items"
-                :lineNumbers="true"
                 :totalRows="items?.length"
                 :search-options="{ enabled: true, placeholder: $t('str.table.search.in.this.table') }"
                 :pagination-options="paginationOptions"
@@ -93,9 +93,6 @@
 
                 <template slot="table-row" slot-scope="props">
                     <span v-if="props.column.field === 'vigilant'"> {{ props.formattedRow[props.column.field]?.firstName }} {{ props.formattedRow[props.column.field]?.lastName }} </span>
-                    <span v-else-if="props.column.field === 'patrolPoints'">
-                        <p class="m-0" v-for="patrolPoint in props.formattedRow[props.column.field]" :key="patrolPoint._id">- {{ patrolPoint?.name }}</p>
-                    </span>
                     <span v-else-if="props.column.field === 'account' || props.column.field === 'client' || props.column.field === 'site'">
                         {{ props.formattedRow[props.column.field]?.name }}
                     </span>
@@ -104,7 +101,7 @@
                     </span>
                     <span v-else-if="props.column.field === 'status'">
                         <span class="badge" v-bind:class="props.formattedRow[props.column.field] === 'ACTIVE' ? 'bg-success' : 'bg-danger'">
-                            {{ $t(getStatusName(props.formattedRow[props.column.field])) }} 
+                            {{ $t(getStatusName(props.formattedRow[props.column.field])) }}
                         </span>
                     </span>
 
@@ -155,9 +152,7 @@ export default {
         }
     },
     methods: Controller.methods,
-    mounted() {
-        
-    },
+    mounted() {},
     created() {
         const state = this
         Controller.init(state)
@@ -178,5 +173,4 @@ export default {
 .caret {
     display: none !important;
 }
-
 </style>

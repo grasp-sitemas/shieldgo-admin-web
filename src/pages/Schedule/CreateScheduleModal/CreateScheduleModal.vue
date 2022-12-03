@@ -4,7 +4,7 @@
             <h4 class="modal-title">{{ $t('str.modal.create.schedule.title') }}</h4>
             <a class="btn-close cursor_pointer" @click="$bvModal.hide('createScheduleModal')"></a>
         </template>
-
+        {{}}
         <div class="row">
             <div v-if="isSuperAdminMaster" class="col-md-4 mb-3">
                 <label class="form-label" for="accountField">{{ $t('str.register.incident.account.field') }}</label>
@@ -419,7 +419,7 @@ export default {
                 beginHour: '',
                 endHour: '',
                 sendAlert: false,
-                notifyVigilants: false, 
+                notifyVigilants: false,
                 timeSlot: 15,
                 type: 'FREE-PROGRAM',
                 status: 'ACTIVE',

@@ -1575,3 +1575,11 @@ body .v-select .vs__search {
 body .daterangepicker.show-ranges.ltr .ranges, body .daterangepicker.show-ranges.rtl .ranges {
     display: none !important;
 }
+
+.fa-success {
+    color: var(--bs-success) !important;
+}
+
+.fa-error {
+    color: var(--app-theme) !important;
+}

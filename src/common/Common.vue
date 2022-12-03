@@ -104,5 +104,15 @@ export default {
     formatDateAndTime(date) {
         return moment(date).utc().format('DD/MM/YYYY HH:mm:ss')
     },
+    checkCPF: str => {
+        /* eslint-disable */
+        var re = /^\d{3}\.\d{3}\.\d{3}\-\d{2}$/
+        return re.test(str)
+    },
+    checkCNPJ: str => {
+        /* eslint-disable */
+        var re = /^\d{2}\.\d{3}\.\d{3}\/\d{4}\-\d{2}$/
+        return re.test(str)
+    },
 }
 </script>

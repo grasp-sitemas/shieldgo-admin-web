@@ -7,7 +7,7 @@ Vue.prototype.$registerEvent = new Vue()
 
 export default {
     init: async payload => {
-        payload.initTable()
+        await payload.initTable()
         if (!payload.isSuperAdminMaster) {
             payload.data.account = Common.getAccountId(payload)
         }
@@ -45,46 +45,58 @@ export default {
             }
         },
         initTable() {
-            this.columns = [
+            const columns = [
                 {
                     label: this.$t('str.timeline.item.patrol.actions.date'),
                     field: 'date',
                     tdClass: 'text-nowrap',
                     thClass: 'text-nowrap',
+                    sortable: true,
+                    width: '20%',
                 },
                 {
                     label: this.$t('str.timeline.item.patrol.actions.type'),
                     field: 'type',
                     tdClass: 'text-nowrap',
                     thClass: 'text-nowrap',
+                    sortable: true,
+                    width: '20%',
                 },
-
                 {
                     label: this.$t('str.timeline.item.patrol.actions.geolocation'),
                     field: 'geolocation',
                     tdClass: 'text-nowrap',
                     thClass: 'text-nowrap',
+                    width: '10%',
                 },
                 {
                     label: this.$t('str.timeline.item.patrol.actions.deviceInfo'),
                     field: 'deviceInfo',
                     tdClass: 'text-nowrap',
                     thClass: 'text-nowrap',
+                    width: '10%',
                 },
                 {
                     label: this.$t('str.timeline.item.patrol.actions.medias'),
                     field: 'medias',
                     tdClass: 'text-nowrap',
                     thClass: 'text-nowrap',
+                    width: '10%',
+                },
+                {
+                    label: this.$t('str.timeline.item.patrol.actions.notes'),
+                    field: 'notes',
                 },
                 {
                     label: this.$t('str.timeline.item.patrol.actions.notes'),
                     field: 'notes',
                     tdClass: 'text-nowrap',
                     thClass: 'text-nowrap',
+                    width: '30%',
                 },
             ]
-            this.paginationOptions = {
+
+            const paginationOptions = {
                 enabled: true,
                 mode: 'records',
                 perPage: 5,
@@ -102,7 +114,8 @@ export default {
                 pageLabel: this.$t('str.table.pagination.page'),
                 allLabel: this.$t('str.table.pagination.all.label'),
             }
-            this.selectOptions = {
+
+            const selectOptions = {
                 enabled: true,
                 selectOnCheckboxOnly: false,
                 selectionText: this.$t('str.schedule.selected.rows'),
@@ -110,6 +123,10 @@ export default {
                 disableSelectInfo: false,
                 selectAllByGroup: true,
             }
+
+            this.columns = columns
+            this.paginationOptions = paginationOptions
+            this.selectOptions = selectOptions
 
             if (!this.isSuperAdminMaster) {
                 this.columns.splice(5, 1)
@@ -138,6 +155,9 @@ export default {
         },
         showDeviceInfo() {
             this.$bvModal.show('deviceInfoModal')
+        },
+        showPatrolPoints() {
+            this.$bvModal.show('patrolPointsModal')
         },
         getStatusName: Common.getEventStatusName,
         formatDate: Common.formatDateAndTime,

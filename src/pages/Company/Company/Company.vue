@@ -38,21 +38,34 @@
                         </div>
                         <div class="col-md-4 mb-3">
                             <label class="form-label" for="typePersonField">{{ $t('str.register.company.person.type.field') }}</label>
-                            <select class="form-select" v-model="data.personType">
-                                <option value="" selected>{{ $t('str.register.select.placeholder') }}</option>
+                            <select class="form-select" @change="selectDocument()" v-model="data.personType">
                                 <option value="PHYSICAL">{{ $t('str.person.type.individual') }}</option>
                                 <option value="LEGAL">{{ $t('str.person.type.legal') }}</option>
                             </select>
                         </div>
-                        <div class="col-md-4 mb-3">
-                            <label class="form-label" for="docField">{{ $t('str.register.company.document.field') }}</label>
+
+                        <div v-if="data.personType === 'PHYSICAL'" class="col-md-4 mb-3">
+                            <label class="form-label" for="docPhysicalField">{{ $t('str.register.company.physical.document.field') }}</label>
                             <input
-                                key="docField"
+                                key="docPhysicalField"
+                                ref="docPhysicalField"
                                 type="tel"
-                                v-mask="['###.###.###-##', '##.###.###/####-##']"
+                                v-mask="['###.###.###-##']"
                                 v-model="data.document"
                                 class="form-control"
-                                :placeholder="$t('str.register.company.document.placeholder')"
+                                :placeholder="$t('str.register.company.physical.document.placeholder')"
+                            />
+                        </div>
+                        <div v-else-if="data.personType === 'LEGAL'" class="col-md-4 mb-3">
+                            <label class="form-label" for="docLegalField">{{ $t('str.register.company.legal.document.field') }}</label>
+                            <input
+                                key="docLegalField"
+                                ref="docLegalField"
+                                type="tel"
+                                v-mask="['##.###.###/####-##']"
+                                v-model="data.document"
+                                class="form-control"
+                                :placeholder="$t('str.register.company.legal.document.placeholder')"
                             />
                         </div>
                     </div>
@@ -90,6 +103,7 @@
                             <input
                                 type="tel"
                                 v-mask="'#####-###'"
+                                ref="cepField"
                                 key="cepField"
                                 @keyup.delete="handleCEPDelete"
                                 @input="inputCep()"
@@ -123,6 +137,7 @@
                                 class="form-control"
                                 type="number"
                                 key="numberField"
+                                ref="numberField"
                                 :placeholder="$t('str.register.company.number.placeholder')"
                             />
                             <div class="invalid-feedback">{{ $t('str.register.company.number.required') }}</div>
@@ -227,7 +242,7 @@ export default {
             data: {
                 name: '',
                 fantasyName: '',
-                personType: '',
+                personType: 'LEGAL',
                 document: '',
                 email: '',
                 primaryPhone: '',

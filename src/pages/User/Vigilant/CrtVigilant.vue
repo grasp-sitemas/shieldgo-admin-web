@@ -32,25 +32,39 @@ export default {
         inputCep() {
             if (this.data.address.cep.length === 9) this.loadInfosByCEP()
         },
-        clearCep(){
+        clearCep() {
             const cep = this.data?.address?.cep
             const address = {
                 cep: cep,
-                    address: '',
-                    number: '',
-                    complement: '',
-                    neighborhood: '',
-                    city: '',
-                    state: '',
-                    ibge: '',
-                    gia: '',
+                address: '',
+                number: '',
+                complement: '',
+                neighborhood: '',
+                city: '',
+                state: '',
+                ibge: '',
+                gia: '',
             }
             this.data.address = address
         },
-        handleCEPDelete(e){
-            if (e.key === "Backspace" || e.key === "Delete") {
+        handleCEPDelete(e) {
+            if (e.key === 'Backspace' || e.key === 'Delete') {
                 this.clearCep()
             }
+        },
+        clearAddress() {
+            const address = {
+                cep: this.data?.address?.cep,
+                address: '',
+                number: '',
+                complement: '',
+                neighborhood: '',
+                city: '',
+                state: '',
+                ibge: '',
+                gia: '',
+            }
+            this.data.address = address
         },
         loadInfosByCEP() {
             Request.do(
@@ -70,10 +84,13 @@ export default {
                         this.data.address.ibge = response.ibge
                         this.data.address.gia = response.gia
                         this.$refs.numberField.focus()
+                    } else {
+                        this.clearAddress()
                     }
                 },
                 error => {
                     console.log(error)
+                    this.clearAddress()
                 },
             )
         },
@@ -115,9 +132,7 @@ export default {
             this.isLoading = false
         },
         save() {
-            
-            if(!this.isLoading){
-
+            if (!this.isLoading) {
                 this.isLoading = true
                 let formData = new FormData()
 
@@ -158,9 +173,7 @@ export default {
                     Common.show(this, 'bottom-right', 'warn', this.$t('str.form.update.generic.error'))
                     console.log(error)
                 }
-                                
             }
-           
         },
         archive() {
             try {
@@ -248,7 +261,6 @@ export default {
             }
 
             if (!this.errors || this.errors.length === 0) {
-
                 const resEmail = await Services.emailAlreadyExists(this, this.data.email)
                 if (resEmail.alreadyExist && this.data.email !== this.data.oldEmail) {
                     Common.show(this, 'bottom-right', 'warn', this.$t('str.email.already.in.use'))
@@ -270,37 +282,32 @@ export default {
                         await this.save(error)
                     },
                 )
-
             }
 
-
-
-
-                //     if (res.alreadyExist === false) {
-                //         this.loadGeolocation(
-                //             async data => {
-                //                 await this.save(data)
-                //             },
-                //             async error => {
-                //                 this.data.address.name = 'MAIN'
-                //                 await this.save(error)
-                //             },
-                //         )
-                //     } else {
-                //         Common.show(this, 'bottom-right', 'warn', this.$t('str.email.already.in.use'))
-                //     }
-                // } else {
-                //     this.loadGeolocation(
-                //         async data => {
-                //             await this.save(data)
-                //         },
-                //         async error => {
-                //             this.data.address.name = 'MAIN'
-                //             await this.save(error)
-                //         },
-                //     )
-                // }
-
+            //     if (res.alreadyExist === false) {
+            //         this.loadGeolocation(
+            //             async data => {
+            //                 await this.save(data)
+            //             },
+            //             async error => {
+            //                 this.data.address.name = 'MAIN'
+            //                 await this.save(error)
+            //             },
+            //         )
+            //     } else {
+            //         Common.show(this, 'bottom-right', 'warn', this.$t('str.email.already.in.use'))
+            //     }
+            // } else {
+            //     this.loadGeolocation(
+            //         async data => {
+            //             await this.save(data)
+            //         },
+            //         async error => {
+            //             this.data.address.name = 'MAIN'
+            //             await this.save(error)
+            //         },
+            //     )
+            // }
 
             // if (!this.errors || this.errors.length === 0) {
             //     if (this.data.email !== this.data.oldEmail) {

@@ -5,7 +5,6 @@ import moment from 'moment'
 
 export default {
     init: async payload => {
-
         payload.initRangeDate()
         payload.isSuperAdminMaster = await Common.isSuperAdminMaster(payload)
 
@@ -72,14 +71,14 @@ export default {
                     tdClass: 'text-nowrap',
                     thClass: 'text-nowrap',
                 },
-                {
-                    label: this.$t('str.table.timeline.column.patrol.points'),
-                    field: 'patrolPoints',
-                    width: '20%',
-                    sortable: true,
-                    thClass: 'text-nowrap',
-                    tdClass: 'text-nowrap',
-                },
+                // {
+                //     label: this.$t('str.table.timeline.column.patrol.points'),
+                //     field: 'patrolPoints',
+                //     width: '20%',
+                //     sortable: true,
+                //     thClass: 'text-nowrap',
+                //     tdClass: 'text-nowrap',
+                // },
                 {
                     label: this.$t('str.table.timeline.column.status'),
                     field: 'status',
@@ -160,7 +159,15 @@ export default {
                     applyLabel: this.$t('str.apply'),
                     cancelLabel: this.$t('str.cancel'),
                     weekLabel: 'W',
-                    daysOfWeek: [this.$t('str.abbreviation.sunday'), this.$t('str.abbreviation.monday'), this.$t('str.abbreviation.tuesday'), this.$t('str.abbreviation.wednesday'), this.$t('str.abbreviation.thursday'), this.$t('str.abbreviation.friday'), this.$t('str.abbreviation.saturday')],
+                    daysOfWeek: [
+                        this.$t('str.abbreviation.sunday'),
+                        this.$t('str.abbreviation.monday'),
+                        this.$t('str.abbreviation.tuesday'),
+                        this.$t('str.abbreviation.wednesday'),
+                        this.$t('str.abbreviation.thursday'),
+                        this.$t('str.abbreviation.friday'),
+                        this.$t('str.abbreviation.saturday'),
+                    ],
                     monthNames: [
                         this.$t('str.abbreviation.january'),
                         this.$t('str.abbreviation.february'),

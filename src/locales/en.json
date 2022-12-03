@@ -882,5 +882,12 @@
     "str.register.vigilant.username.field": "Username",
     "str.register.vigilant.username.placeholder": "Input the username",
     "str.username.already.in.use": "Username is already in use",
-    "str.register.vigilant.username.required": "Username is required"
+    "str.register.vigilant.username.required": "Username is required",
+    "str.timeline.item.patrol.point.checked": "Checked",
+    "str.timeline.item.patrol.point.name": "Patrol point name",
+    "str.timeline.item.points.name": "check point",
+    "str.register.company.legal.document.field": "Legal Document",
+    "str.register.company.legal.document.placeholder": "Input the legal document",
+    "str.register.company.physical.document.field": "Federal Tax Id",
+    "str.register.company.physical.document.placeholder": "Input the federal tax id"
 }

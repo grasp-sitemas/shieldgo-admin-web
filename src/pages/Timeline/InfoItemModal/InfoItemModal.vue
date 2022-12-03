@@ -1,5 +1,5 @@
 <template>
-    <b-modal no-close-on-backdrop id="infoItemModal" :hide-footer="true" size="lg" class="modal-message">
+    <b-modal no-close-on-backdrop id="infoItemModal" :hide-footer="true" size="xl" class="modal-message">
         <template slot="modal-header">
             <h4 class="modal-title">
                 {{ $t('str.modal.create.timeline.item.info.title') }}
@@ -25,15 +25,10 @@
                 <dt class="text-dark">{{ $t('str.timeline.item.ends.in') }}</dt>
                 <dd>{{ data.endDate }}</dd>
             </div>
-            <div class="col-md-3">
+            <div class="col-md-3 cursor_pointer" v-on:click="showPatrolPoints()">
                 <dt class="text-dark">{{ $t('str.timeline.item.patrol.points') }}</dt>
-                <dd>
-                    <ul>
-                        <li v-for="patrolPoint in data.patrolPoints" :key="patrolPoint._id">
-                            {{ patrolPoint.name }}
-                        </li>
-                    </ul>
-                </dd>
+                <i v-show="data?.patrolPoints?.length > 0" class="fas fa-qrcode cursor_pointer" />
+                {{ data?.patrolPoints?.length }} {{ $t('str.timeline.item.points.name') }}
             </div>
         </div>
 
@@ -55,9 +50,6 @@
                         </span>
                         <span v-else-if="props.column.field === 'date'">
                             {{ formatDate(props.formattedRow[props.column.field]) }}
-                        </span>
-                        <span v-else-if="props.column.field === 'notes'">
-                            {{ props.formattedRow[props.column.field]?.length > 0 ? props.formattedRow[props.column.field] : '-' }}
                         </span>
                         <span v-else-if="props.column.field === 'deviceInfo'">
                             <i v-on:click="showDeviceInfo()" class="fas fa-info-circle cursor_pointer" />
@@ -83,6 +75,7 @@
         <Signature :data="patrolActionItem" />
         <Sound :data="patrolActionItem" />
         <DeviceInfo :data="patrolActionItem" />
+        <PatrolPoints :patrolPoints="patrolPoints" />
         <notifications group="bottom-right" position="bottom right" :speed="500" />
     </b-modal>
 </template>
@@ -96,6 +89,7 @@ import Photo from './Photo/Photo.vue'
 import Signature from './Signature/Signature.vue'
 import Sound from './Sound/Sound.vue'
 import DeviceInfo from './DeviceInfo/DeviceInfo.vue'
+import PatrolPoints from './PatrolPoints/PatrolPoints.vue'
 export default {
     components: {
         Map,
@@ -103,6 +97,7 @@ export default {
         Signature,
         Sound,
         DeviceInfo,
+        PatrolPoints,
     },
     props: {
         selectedItem: {
@@ -120,8 +115,8 @@ export default {
 
             const startDate = moment(this.data.startDate).utc()
             const endDate = moment(this.data.endDate).utc()
-            this.data.startDate =  startDate.format('DD/MM/YYYY - HH:mm')
-            this.data.endDate =  endDate.format('DD/MM/YYYY - HH:mm')
+            this.data.startDate = startDate.format('DD/MM/YYYY - HH:mm')
+            this.data.endDate = endDate.format('DD/MM/YYYY - HH:mm')
 
             this.isLoading = true
 
@@ -144,6 +139,18 @@ export default {
 
             this.patrolActions = formattedPatrolActions
 
+            //get scanned patrol points
+            const patrolPoints = this.data.patrolPoints
+            const scannedPatrolPoints = this.patrolActions.filter(patrolAction => patrolAction?.type === 'SCAN')
+            const formattedPatrolPoints = patrolPoints?.map(patrolPoint => {
+                const scannedPatrolPoint = scannedPatrolPoints.find(scannedPatrolPoint => scannedPatrolPoint?.patrolPoint?._id === patrolPoint?._id)
+                patrolPoint._id = patrolPoint?._id
+                patrolPoint.name = patrolPoint?.name
+                patrolPoint.scanned = scannedPatrolPoint ? true : false
+                return patrolPoint
+            })
+            this.patrolPoints = formattedPatrolPoints
+
             this.isLoading = false
         },
     },
@@ -158,6 +165,7 @@ export default {
             columns: [],
             patrolActions: [],
             paginationOptions: {},
+            patrolPoints: [],
         }
     },
     methods: Controller.methods,
@@ -176,15 +184,18 @@ export default {
 .same-line {
     display: inline-block;
 }
+
 .align-badge {
     position: absolute;
     top: 25px;
     right: 50px;
 }
+
 .align-medias {
     display: flex;
     justify-content: space-around;
 }
+
 .vgt-responsive {
     height: 420px !important;
 }

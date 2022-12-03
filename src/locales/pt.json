@@ -851,9 +851,7 @@
     "str.table.timeline.column.name": "Evento",
     "str.register.schedule.timeSlot.field" : "Tolerância (minutos)",
     "str.register.schedule.timeSlot.placeholder": "Insira o limite de tempo para iniciar a ronda",
-    "str.table.site.column.created.at": "Criado em",
     "str.table.site.column.creat.at": "Criado em",
-    "str.table.site.column.updated.at": "Atualizado em",
     "str.abbreviation.sunday": "Dom",
     "str.abbreviation.monday": "Seg",
     "str.abbreviation.tuesday": "Ter",
@@ -876,5 +874,12 @@
     "str.register.vigilant.username.field": "Nome de Usuário",
     "str.register.vigilant.username.placeholder": "Insira o nome de usuário",
     "str.username.already.in.use": "O nome de usuário informado já está em uso",
-    "str.register.vigilant.username.required": "O nome de usuário é obrigatório"
+    "str.register.vigilant.username.required": "O nome de usuário é obrigatório",
+    "str.timeline.item.patrol.point.checked": "Verificado",
+    "str.timeline.item.patrol.point.name": "Nome do ponto",
+    "str.timeline.item.points.name": "pontos",
+    "str.register.company.legal.document.field": "CNPJ",
+    "str.register.company.legal.document.placeholder": "Insira o CNPJ",
+    "str.register.company.physical.document.field": "CPF",
+    "str.register.company.physical.document.placeholder": "Insira o CPF"
 }

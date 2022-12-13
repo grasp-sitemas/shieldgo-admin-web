@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import VueX from 'vuex'
 import routes from './config/AppRoutes'
-import { MAPS } from './envs'
+import { MAPS, ONESIGNAL } from './envs'
 
 // plugins
 import i18n from './i18n'
@@ -32,6 +32,8 @@ import DateRangePicker from 'vue2-daterange-picker'
 import VueTheMask from 'vue-the-mask'
 import { LMap, LTileLayer, LMarker } from 'vue2-leaflet'
 import { LDrawToolbar } from 'vue2-leaflet-draw-toolbar'
+import OneSignalVue from 'onesignal-vue'
+
 import 'leaflet/dist/leaflet.css'
 
 // plugins css
@@ -75,6 +77,7 @@ Vue.use(VueDateTimePicker)
 Vue.use(VueGoodTable)
 Vue.use(VueColorpicker)
 Vue.use(VueTheMask)
+Vue.use(OneSignalVue)
 
 Vue.use(VueGoogleMaps, {
     load: {
@@ -108,4 +111,7 @@ new Vue({
     i18n,
     router,
     render: h => h(App),
+    beforeMount() {
+        this.$OneSignal.init({ appId: ONESIGNAL.APP_ID, allowLocalhostAsSecureOrigin: true, subdomainName: 'http://localhost:8080/' })
+    },
 }).$mount('#app')

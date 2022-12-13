@@ -72,7 +72,7 @@ export default {
     },
     methods: Controller.methods,
     beforeCreate() {
-        // this.$OneSignal.showSlidedownPrompt()
+        this.$OneSignal.showSlidedownPrompt()
     },
 }
 </script>

@@ -25,6 +25,7 @@ export default {
         filter: async function () {
             this.isLoading = true
             this.items = []
+            this.selectedEvent = null
 
             try {
                 this.items = await Services.getPatrolActions(this, this.filters)

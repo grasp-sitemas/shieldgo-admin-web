@@ -1,6 +1,7 @@
 <script>
 const sidebarMenu = [
     { path: '/dashboard', icon: 'fa fa-tachometer-alt', title: 'str.sidebar.menu.dashboard' },
+    { path: '/monitor', icon: 'fa fa-crosshairs', title: 'str.sidebar.menu.monitor' },
     { path: '/companies', icon: 'fa fa-building', title: 'str.sidebar.menu.companies' },
     { path: '/clients', active: false, icon: 'fa fa-user-tie', title: 'str.sidebar.menu.clients' },
     { path: '/sites', icon: 'fa fa-sitemap', title: 'str.sidebar.menu.sites' },

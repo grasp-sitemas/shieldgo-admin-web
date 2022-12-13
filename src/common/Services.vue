@@ -73,7 +73,7 @@ export default {
 
             const result = response?.data?.results
             if (result && result.length > 0) {
-                const mappedResult = result.map((item) => {
+                const mappedResult = result.map(item => {
                     return {
                         _id: item._id,
                         firstName: item.firstName,
@@ -99,17 +99,16 @@ export default {
 
             const result = response?.data?.result?.vigilants
             if (result && result?.length > 0) {
-
-                    const mappedResult = result.map((item) => {
-                        return {
-                            _id: item._id,
-                            firstName: item.firstName,
-                            lastName: item.lastName,
-                            fullName: `${item.firstName} ${item.lastName}`,
-                            status: item.status,
-                        }
-                    })
-                    return mappedResult
+                const mappedResult = result.map(item => {
+                    return {
+                        _id: item._id,
+                        firstName: item.firstName,
+                        lastName: item.lastName,
+                        fullName: `${item.firstName} ${item.lastName}`,
+                        status: item.status,
+                    }
+                })
+                return mappedResult
             }
         }
 
@@ -155,6 +154,10 @@ export default {
         }
 
         return []
+    },
+    getPatrolActions: async function (state, filters) {
+        const response = await Request.do(state, 'POST', Request.getDefaultHeader(state), filters, `${Endpoints.patrolActions.filter}`)
+        return response?.data?.results || []
     },
     getScheduleById: async function (state, filters) {
         const response = await Request.do(state, 'POST', Request.getDefaultHeader(state), filters, `${Endpoints.schedules.filter}`)

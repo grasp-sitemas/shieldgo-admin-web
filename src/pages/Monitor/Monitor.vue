@@ -209,6 +209,9 @@ export default {
             state.initTable()
         })
     },
+    beforeCreate() {
+        this.$OneSignal.showSlidedownPrompt()
+    },
     methods: Controller.methods,
 }
 </script>

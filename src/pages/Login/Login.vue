@@ -71,9 +71,6 @@ export default {
         }
     },
     methods: Controller.methods,
-    beforeCreate() {
-        this.$OneSignal.showSlidedownPrompt()
-    },
 }
 </script>
 <style lang="scss" scoped>

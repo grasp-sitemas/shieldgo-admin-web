@@ -10,6 +10,7 @@ import GuardGroup from '../pages/User/GuardGroup/GuardGroup.vue'
 import Incident from '../pages/Company/Incident/Incident.vue'
 import Log from '../pages/Log/Log.vue'
 import Login from '../pages/Login/Login.vue'
+import Monitor from '../pages/Monitor/Monitor.vue'
 import PageNotFound from '../pages/PageNotFound/PageNotFound.vue'
 import PatrolPoint from '../pages/Company/PatrolPoint/PatrolPoint.vue'
 import Profile from '../pages/User/Profile/Profile.vue'
@@ -92,6 +93,14 @@ const routes = [
         path: '/incidents',
         name: 'incidents',
         component: Incident,
+        beforeEnter: (_to, _from, next) => {
+            next(checkSession())
+        },
+    },
+    {
+        path: '/monitor',
+        name: 'monitor',
+        component: Monitor,
         beforeEnter: (_to, _from, next) => {
             next(checkSession())
         },

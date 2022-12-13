@@ -10,7 +10,7 @@ export default {
     init: async payload => {
         payload.initTable()
         if (!payload.isSuperAdminMaster) {
-            payload.data.account = Common.getAccountId(payload)
+            payload.data.account = await Common.getAccountId(payload)
         }
     },
     methods: {

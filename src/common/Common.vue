@@ -29,6 +29,9 @@ export default {
     formatDate: text => {
         return new Date(text).toLocaleDateString()
     },
+    formatDateTime: text => {
+        return new Date(text).toLocaleString()
+    },
     checkValidDate: function (date) {
         const currentDate = moment().format('DD-MM-YYYY')
         return moment(date).isSameOrAfter(currentDate)
@@ -76,7 +79,7 @@ export default {
     },
     getAccountId: state => {
         const type = state.$session.get('user')?.account?.type
-        return type === 'ACCOUNT' ? state.$session.get('user')?.account?._id : ''
+        return type === 'ACCOUNT' && state.$session.get('user')?.account ? state.$session.get('user')?.account : ''
     },
     getClientId: state => {
         const type = state.$session.get('user')?.client?.type

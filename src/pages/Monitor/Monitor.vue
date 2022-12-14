@@ -78,7 +78,7 @@
                 </div>
 
                 <div v-if="selectedEvent" class="col-xl-4 col-lg-6">
-                    <panel :title="$t(selectedEvent?.type)">
+                    <panel :title="$t(selectedEvent?.type) + ' ' + $t('str.on') + ' ' + selectedEvent?.formattedDate + ' ' + $t('str.at') + ' ' + selectedEvent?.formattedTime">
                         <div class="result-info">
                             <div class="flex-1 mb-3">
                                 <div class="text-opacity-50 small fw-bold">
@@ -162,6 +162,18 @@
                                 <a v-if="selectedEvent?.deviceInfo" v-on:click="showDeviceInfo()" data-toggle="tooltip" data-container="body" data-title="Device Info" class="cursor-mouse">
                                     <i class="fa fa-fw fa-info-circle"></i>
                                 </a>
+                            </div>
+
+                            <!-- render incident list in selectedEvent?.incidents -->
+                            <div v-if="selectedEvent?.incidents?.length > 0" class="mb-3">
+                                <div class="text-opacity-50 small fw-bold">{{ $t('str.monitor.details.incidents') }}:</div>
+                                <div class="text-opacity-50 small fw-bold">
+                                    <ul>
+                                        <li v-for="incident in selectedEvent?.incidents" :key="incident._id">
+                                            {{ incident.name }}
+                                        </li>
+                                    </ul>
+                                </div>
                             </div>
 
                             <div class="result-price">
@@ -299,7 +311,7 @@ export default {
 }
 
 img {
-    max-width: 100%;
+    max-width: 100% !important;
     display: block;
 }
 </style>

@@ -920,5 +920,7 @@
     "str.monitor.details.vigilant.email": "Email",
     "str.monitor.alone.patrol" : "Alone Patrol",
     "str.monitor.without.status" : "No status",
-    "str.monitor.answer.event" : "Answer Event"
+    "str.monitor.answer.event" : "Answer Event",
+    "str.on" : "on",
+    "str.at" : "at"
 }

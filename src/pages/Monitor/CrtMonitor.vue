@@ -132,8 +132,13 @@ export default {
                     dataItem.event = event
                 }
 
-                let dateTimezone = moment(dataItem?.date).utc(false)
-                dataItem.description += ' ' + this.$t('str.event.on') + ' ' + dateTimezone.format('DD/MM/YYYY') + ' - ' + dateTimezone.format('HH:mm')
+                const dateTimezone = moment(dataItem?.date).utc(false)
+                const formattedDate = dateTimezone.format('DD/MM/YYYY')
+                const formattedTime = dateTimezone.format('HH:mm')
+
+                dataItem.formattedDate = formattedDate
+                dataItem.formattedTime = formattedTime
+                dataItem.description += ' ' + this.$t('str.event.on') + ' ' + formattedDate
 
                 formatData.push(dataItem)
             })

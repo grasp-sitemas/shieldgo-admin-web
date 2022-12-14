@@ -912,5 +912,7 @@
     "str.monitor.details.vigilant.email": "E-mail",
     "str.monitor.alone.patrol" : "Evento sem ronda",
     "str.monitor.without.status" : "Sem status",
-    "str.monitor.answer.event" : "Responder evento"
+    "str.monitor.answer.event" : "Responder evento",
+    "str.on" : "em",
+    "str.at" : "às"
 }

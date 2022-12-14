@@ -2,11 +2,10 @@
 import moment from 'moment'
 import Common from '../../common/Common.vue'
 import Services from '../../common/Services.vue'
-
+import Endpoints from '../../common/Endpoints.vue'
 export default {
     init: async payload => {
-        // payload.filters.account = await Common.getAccountId(payload)
-
+        payload.domain = Endpoints.domain
         payload.isSuperAdminMaster = await Common.isSuperAdminMaster(payload)
         if (payload.isSuperAdminMaster) {
             payload.accounts = await Services.getAccounts(payload)
@@ -36,6 +35,7 @@ export default {
 
             this.isLoading = false
         },
+        handleAnswerEvent: async function () {},
         formatPatrolActions: function (list) {
             const data = list.map(item => {
                 const { _id, status, account, client, site, event, type, date, vigilant, patrol, soundURL, photoURL, signatureURL, incidents, deviceInfo, geolocation, notes } = item

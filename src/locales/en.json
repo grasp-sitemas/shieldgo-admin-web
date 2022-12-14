@@ -908,5 +908,17 @@
     "str.event.ended_a_patrol" : "ended a patrol",
     "str.event.scanned_a_qr_code": "scanned a QR Code",
     "str.event.on": "on",
-    "str.monitor.event.details": "Event Details"
+    "str.monitor.event.details": "Event Details",
+    "str.monitor.data.about": "Data About",
+    "str.monitor.details.site": "Site",
+    "str.monitor.details.patrol": "Patrol",
+    "str.monitor.details.status": "Status",
+    "str.monitor.details.date": "Date",
+    "str.monitor.details.time": "Time",
+    "str.monitor.details.event": "Event",
+    "str.monitor.details.vigilant.phone": "Phone",
+    "str.monitor.details.vigilant.email": "Email",
+    "str.monitor.alone.patrol" : "Alone Patrol",
+    "str.monitor.without.status" : "No status",
+    "str.monitor.answer.event" : "Answer Event"
 }

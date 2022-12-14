@@ -1588,3 +1588,7 @@ body .daterangepicker.show-ranges.ltr .ranges, body .daterangepicker.show-ranges
     cursor: pointer !important;
 }
 
+::-webkit-scrollbar {
+    width: 0px;
+}
+

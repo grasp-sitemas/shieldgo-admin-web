@@ -3,12 +3,8 @@
         <div style="min-height: 100vh; background-size: 360px; background-position: right bottom">
             <div class="d-flex align-items-center mb-3">
                 <h1 class="page-header mb-0">{{ $t('str.form.title.monitor') }}</h1>
-                <!-- <div class="ms-auto">
-                    <a href="#modalAddTask" data-bs-toggle="modal" class="btn btn-success btn-rounded px-4 rounded-pill"><i class="fa fa-plus fa-lg me-2 ms-n2 text-success-900"></i> Add Task</a>
-                </div> -->
             </div>
-
-            <div class="row">
+            <!-- <div class="row">
                 <div class="col-md-12 mb-3 p-3">
                     <div id="accordion" class="accordion rounded overflow-hidden">
                         <b-card class="bg-gray-800 text-white border-0 rounded-0" no-body>
@@ -58,8 +54,7 @@
                         </b-card>
                     </div>
                 </div>
-            </div>
-
+            </div> -->
             <div class="row">
                 <div class="col-xl-4 col-lg-6">
                     <panel title="Eventos">
@@ -85,21 +80,52 @@
                 <div v-if="selectedEvent" class="col-xl-4 col-lg-6">
                     <panel :title="$t(selectedEvent?.type)">
                         <div class="result-info">
-                            <div class="fs-14px lh-12 mb-2px fw-bold">{{ $t(selectedEvent?.event?.name) }}</div>
-                            <!-- event status badge -->
-                            <div class="mb-1">
-                                <span v-bind:class="selectedEvent?.event?.tag">{{ $t(selectedEvent?.event?.status) }}</span>
+                            <div class="flex-1 mb-3">
+                                <div class="text-opacity-50 small fw-bold">
+                                    {{ $t('str.monitor.details.patrol') }}:
+                                    <label v-if="selectedEvent?.event?.name" class="info-result">{{ selectedEvent?.event?.name }}</label>
+                                    <label v-else class="info-result"> {{ $t('str.monitor.alone.patrol') }} </label>
+                                </div>
+                                <div class="text-opacity-50 small fw-bold">
+                                    {{ $t('str.monitor.details.status') }}:
+                                    <label v-if="selectedEvent?.event" class="info-result">{{ $t(selectedEvent?.event?.status) }}</label>
+                                    <label v-else class="info-result">
+                                        {{ $t('str.monitor.without.status') }}
+                                    </label>
+                                </div>
+                                <div class="text-opacity-50 small fw-bold">
+                                    {{ $t('str.monitor.details.site') }}: <label class="info-result">{{ selectedEvent?.site?.name }}</label>
+                                </div>
                             </div>
-                            <!-- <div class="mb-1">
-                                <span v-bind:class="selectedEvent?.event?.status">{{ $t(selectedEvent?.event?.status) }}</span>
-                            </div> -->
+                            <hr class="bg-gray-500" />
 
-                            <!-- <p class="location">United State, BY 10089</p> -->
-                            <!-- <p class="desc">
-                                Nunc et ornare ligula. Aenean commodo lectus turpis, eu laoreet risus lobortis quis. Suspendisse vehicula mollis magna vel aliquet. Donec ac tempor neque, convallis euismod
-                                mauris. Integer dictum dictum ipsum quis viverra.
-                            </p> -->
-                            <div class="btn-row">
+                            <div class="flex-1 mb-3">
+                                <div class="timeline-header">
+                                    <div class="userimage">
+                                        <img
+                                            v-if="selectedEvent?.vigilant?.photoURL && selectedEvent?.vigilant?.photoURL !== 'https://'"
+                                            crossorigin="anonymous"
+                                            v-bind:src="`${domain}${selectedEvent?.vigilant?.photoURL}`"
+                                        />
+                                        <img v-else src="@/assets/images/profile.png" />
+                                    </div>
+                                    <div class="username">
+                                        <a>{{ selectedEvent?.vigilant?.firstName }} {{ selectedEvent?.vigilant?.lastName }}</a>
+                                    </div>
+                                </div>
+
+                                <div class="text-opacity-50 small fw-bold">
+                                    {{ $t('str.monitor.details.vigilant.phone') }}:
+                                    <label class="info-result">{{ selectedEvent?.vigilant?.primaryPhone }}</label>
+                                </div>
+                                <div v-if="selectedEvent?.vigilant?.email" class="text-opacity-50 small fw-bold">
+                                    {{ $t('str.monitor.details.vigilant.email') }}:
+                                    <label class="info-result">{{ selectedEvent?.vigilant?.email }}</label>
+                                </div>
+                            </div>
+                            <hr class="bg-gray-500" />
+
+                            <div class="btn-row mb-4">
                                 <a v-if="selectedEvent?.geolocation" v-on:click="showMap()" data-toggle="tooltip" data-container="body" data-title="Map" class="cursor-mouse">
                                     <i class="fa fa-fw fa-map-marker-alt"></i>
                                 </a>
@@ -137,6 +163,10 @@
                                     <i class="fa fa-fw fa-info-circle"></i>
                                 </a>
                             </div>
+
+                            <div class="result-price">
+                                <a @click="handleAnswerEvent()" class="btn btn-yellow d-block w-100"> {{ $t('str.monitor.answer.event') }} </a>
+                            </div>
                         </div>
                     </panel>
                 </div>
@@ -173,7 +203,7 @@ export default {
     data() {
         return {
             isLoading: true,
-            // isLoadingEventDetails: false,
+            domain: '',
             valuekey: 0,
             eventTypes: EVENT_TYPES,
             errors: [],
@@ -183,6 +213,7 @@ export default {
             items: [],
             events: [],
             selectedEvent: null,
+            answerEvent: null,
             filters: {
                 types: [],
                 status: 'ACTIVE',
@@ -240,5 +271,35 @@ export default {
 
 .result-info .btn-row a + a {
     margin-left: 0.3121875rem;
+}
+
+.panel .panel-body {
+    max-height: 75vh !important;
+    overflow-y: auto !important;
+}
+
+.info-result {
+    color: var(--app-component-color);
+    font-weight: 500;
+}
+
+.userimage {
+    width: 40px;
+    height: 40px;
+    overflow: hidden;
+    border-radius: 36px;
+    margin-right: 0.75rem;
+    object-fit: contain;
+}
+
+.timeline-header {
+    padding: 0.2rem;
+    display: flex;
+    align-items: center;
+}
+
+img {
+    max-width: 100%;
+    display: block;
 }
 </style>

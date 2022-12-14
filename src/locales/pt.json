@@ -900,5 +900,17 @@
     "str.event.ended_a_patrol" : "finalizou uma ronda",
     "str.event.scanned_a_qr_code": "escaneou um QR Code",
     "str.event.on": "em",
-    "str.monitor.event.details": "Detalhes"
+    "str.monitor.event.details": "Detalhes",
+    "str.monitor.data.about":"Dados do",
+    "str.monitor.details.site": "Site",
+    "str.monitor.details.patrol": "Ronda",
+    "str.monitor.details.status": "Status",
+    "str.monitor.details.date": "Data",
+    "str.monitor.details.time": "Hora",
+    "str.monitor.details.event": "Evento",
+    "str.monitor.details.vigilant.phone": "Telefone",
+    "str.monitor.details.vigilant.email": "E-mail",
+    "str.monitor.alone.patrol" : "Evento sem ronda",
+    "str.monitor.without.status" : "Sem status",
+    "str.monitor.answer.event" : "Responder evento"
 }

@@ -57,7 +57,7 @@ export default {
                     deviceInfo: deviceInfo || {},
                     geolocation: geolocation || {},
                     notes: notes ? notes : '',
-                    date: Common.formatDate(date),
+                    date,
                     status: status,
                 }
             })
@@ -133,7 +133,7 @@ export default {
                 }
 
                 let dateTimezone = moment(dataItem?.date).utc(false)
-                dataItem.description += ' ' + this.$t('str.event.on') + ' ' + dateTimezone.format('ll') + ' - ' + dateTimezone.format('LT')
+                dataItem.description += ' ' + this.$t('str.event.on') + ' ' + dateTimezone.format('DD/MM/YYYY') + ' - ' + dateTimezone.format('HH:mm')
 
                 formatData.push(dataItem)
             })

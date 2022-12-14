@@ -138,7 +138,7 @@ export default {
 
                 dataItem.formattedDate = formattedDate
                 dataItem.formattedTime = formattedTime
-                dataItem.description += ' ' + this.$t('str.event.on') + ' ' + formattedDate
+                dataItem.description += ' ' + this.$t('str.event.on') + ' ' + formattedDate + ' - ' + formattedTime
 
                 formatData.push(dataItem)
             })

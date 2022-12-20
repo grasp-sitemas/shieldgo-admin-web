@@ -112,6 +112,6 @@ new Vue({
     router,
     render: h => h(App),
     beforeMount() {
-        this.$OneSignal.init({ appId: ONESIGNAL.APP_ID, allowLocalhostAsSecureOrigin: true, subdomainName: 'http://localhost:8080/' })
+        this.$OneSignal.init({ appId: ONESIGNAL.APP_ID, allowLocalhostAsSecureOrigin: false })
     },
 }).$mount('#app')

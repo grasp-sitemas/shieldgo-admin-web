@@ -1,10 +1,12 @@
 <script>
-const domain = 'https://api-gateway-shield.herokuapp.com'
-// const domain = 'http://localhost:3000'
+// const domain = 'https://api-gateway-shield.herokuapp.com'
+const domain = 'http://localhost:3000'
+const socketDomain = 'http://localhost:5004'
 const viaCepDomain = 'https://viacep.com.br/ws/'
 
 export default {
     domain: domain,
+    socketDomain: socketDomain,
     appointments: {
         filter: `${domain}/api/company/appointments/filter/v1/`,
         appointment: `${domain}/api/company/appointments/v1/`,

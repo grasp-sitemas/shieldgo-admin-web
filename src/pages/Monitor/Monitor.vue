@@ -200,6 +200,7 @@ import Photo from './Components/Photo/Photo.vue'
 import Signature from './Components/Signature/Signature.vue'
 import Sound from './Components/Sound/Sound.vue'
 import DeviceInfo from './Components/DeviceInfo/DeviceInfo.vue'
+import SocketioService from '../../service/socketio.service.js'
 
 import Vue from 'vue'
 Vue.prototype.$registerEvent = new Vue()
@@ -251,6 +252,10 @@ export default {
         state.$registerEvent.$on('changeLanguage', function () {
             state.initTable()
         })
+        SocketioService.setupSocketConnection()
+    },
+    beforeUnmount() {
+        SocketioService.disconnect()
     },
     beforeCreate() {
         this.$OneSignal.showSlidedownPrompt()

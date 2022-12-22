@@ -6,6 +6,12 @@ export default {
     init: payload => {
         payload.user = payload.$session.get('user')
         payload.domain = Endpoints.domain
+
+        if (payload.getSoundStore() === false) {
+            payload.soundEnabled = false
+        } else {
+            payload.soundEnabled = true
+        }
     },
     methods: {
         changeLanguage: function (language) {
@@ -33,6 +39,16 @@ export default {
             } catch (error) {
                 console.log(error)
             }
+        },
+        handleEnableSound: function () {
+            this.soundEnabled = !this.soundEnabled
+            this.setSoundStore(this.soundEnabled)
+        },
+        setSoundStore: function (sound) {
+            this.$session.set('sound', sound)
+        },
+        getSoundStore: function () {
+            return this.$session.get('sound')
         },
         logout() {
             this.$session.destroy()
@@ -74,6 +90,11 @@ export default {
         },
         isCurrentLanguage(language) {
             return this.$i18n.locale === language
+        },
+        playSound() {
+            if (this.soundEnabled) {
+                this.audio.play()
+            }
         },
     },
 }

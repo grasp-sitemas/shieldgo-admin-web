@@ -28,6 +28,7 @@ const appOptions = {
     appTopMenuMobileToggled: false,
     appEmpty: false,
     appBodyScrollTop: 0,
+    appSound: true,
     font: {
         family: window.getComputedStyle(document.body).getPropertyValue('--bs-body-font-family').trim(),
         size: window.getComputedStyle(document.body).getPropertyValue('--bs-body-font-size').trim(),

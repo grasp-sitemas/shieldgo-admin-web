@@ -11,7 +11,7 @@ export default {
             payload.accounts = await Services.getAccounts(payload)
         } else {
             payload.clients = await Services.getClients(payload)
-            payload.filters.account = payload.$session.get('user')?.account
+            payload.filters.account = payload.$session.get('user')?.account?._id
         }
 
         await payload.initTable()
@@ -283,6 +283,15 @@ export default {
             this.$bvModal.show('deviceInfoModal')
         },
         formatDate: Common.formatDateAndTime,
+        show(vue, group, type, title) {
+            const text = `${vue.$t('str.date.subtitle')}: ${new Date().toLocaleString('pt-br')}`
+            vue.$notify({
+                group,
+                title,
+                text: text,
+                type,
+            })
+        },
     },
 }
 </script>

@@ -79,11 +79,11 @@ export default {
     },
     getAccountId: state => {
         const type = state.$session.get('user')?.account?.type
-        return type === 'ACCOUNT' && state.$session.get('user')?.account ? state.$session.get('user')?.account : ''
+        return type === 'ACCOUNT' && state.$session.get('user')?.account ? state.$session.get('user')?.account?._id : ''
     },
     getClientId: state => {
         const type = state.$session.get('user')?.client?.type
-        return type === 'CLIENT' ? state.$session.get('user')?.client?._id : ''
+        return type === 'CLIENT' && state.$session.get('user')?.client ? state.$session.get('user')?.client?._id : ''
     },
     getEventStatusName(status) {
         switch (status) {

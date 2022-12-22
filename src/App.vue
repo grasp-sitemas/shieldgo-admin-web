@@ -135,6 +135,13 @@ export default {
                 weight: window.getComputedStyle(document.body).getPropertyValue('--bs-body-font-family').trim(),
             }
         },
+        handleSound: function (value) {
+            if (value === true) {
+                document.body.classList.add('sound')
+            } else {
+                document.body.classList.remove('sound')
+            }
+        },
         handleSetDarkMode: function (value) {
             if (value === true) {
                 document.body.classList.add('dark-mode')

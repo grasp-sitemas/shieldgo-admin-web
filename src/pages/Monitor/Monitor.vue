@@ -189,18 +189,21 @@
         <Signature :data="selectedEvent" />
         <Sound :data="selectedEvent" />
         <DeviceInfo :data="selectedEvent" />
+        <notifications position="top left" />
     </div>
 </template>
 
 <script>
 import Controller from './CrtMonitor.vue'
+// import Common from '../../common/Common.vue'
 import { EVENT_TYPES } from '../../utils/events'
 import Map from './Components/Map/Map.vue'
 import Photo from './Components/Photo/Photo.vue'
 import Signature from './Components/Signature/Signature.vue'
 import Sound from './Components/Sound/Sound.vue'
 import DeviceInfo from './Components/DeviceInfo/DeviceInfo.vue'
-
+import db from '../../firebaseInit.js'
+import { doc, onSnapshot, deleteDoc } from 'firebase/firestore'
 import Vue from 'vue'
 Vue.prototype.$registerEvent = new Vue()
 
@@ -224,6 +227,7 @@ export default {
             sites: [],
             items: [],
             events: [],
+            notifications: [],
             selectedEvent: null,
             answerEvent: null,
             filters: {
@@ -248,12 +252,24 @@ export default {
         state.$registerEvent.$on('refreshList', function () {
             state.filter()
         })
+
         state.$registerEvent.$on('changeLanguage', function () {
             state.initTable()
         })
-    },
-    beforeCreate() {
-        this.$OneSignal.showSlidedownPrompt()
+
+        const siteId = state.$session.get('user')?.site
+        onSnapshot(doc(db, 'notifications', siteId), async document => {
+            const type = document.data()?.type
+
+            if (type === 'INCIDENT') {
+                await deleteDoc(doc(db, 'notifications', siteId))
+                state.filter()
+            } else if (type === 'SOS_ALERT') {
+                state.$registerEvent.$emit('soundAlert')
+                state.filter()
+                await deleteDoc(doc(db, 'notifications', siteId))
+            }
+        })
     },
     methods: Controller.methods,
 }

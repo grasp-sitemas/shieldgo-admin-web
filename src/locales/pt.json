@@ -914,5 +914,7 @@
     "str.monitor.without.status" : "Sem status",
     "str.monitor.answer.event" : "Responder evento",
     "str.on" : "em",
-    "str.at" : "às"
+    "str.at" : "às",
+    "msg.new.incident.notification": "Incidente reportado",
+    "msg.new.sos.notification": "Alerta de SOS reportado"
 }

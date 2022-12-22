@@ -36,14 +36,19 @@
             <div class="navbar-nav">
                 <header-mega-menu v-if="appOptions.appHeaderMegaMenu"></header-mega-menu>
 
-                <!-- <b-nav-item-dropdown class="navbar-item" menu-class="dropdown-menu media-list" right toggle-class="navbar-link dropdown-toggle icon" no-caret>
-                    <template slot="button-content">
+                <b-nav-item-dropdown class="navbar-item" menu-class="dropdown-menu media-list" right toggle-class="navbar-link dropdown-toggle icon" no-caret>
+                    <!-- <template slot="button-content">
                         <i class="fa fa-bell"></i>
                         <span class="badge">0</span>
                     </template>
                     <div class="dropdown-header">NOTIFICATIONS (0)</div>
-                    <div class="text-center w-300px py-3">No notification found</div>
-                </b-nav-item-dropdown> -->
+                    <div class="text-center w-300px py-3">No notification found</div> -->
+                    <template slot="button-content">
+                        <!-- speaker (sound) icon control sound on and off -->
+                        <i @click="handleEnableSound" class="fa fa-volume-up p-3" v-if="soundEnabled"></i>
+                        <i @click="handleEnableSound" class="fa fa-volume-mute p-3" v-else></i>
+                    </template>
+                </b-nav-item-dropdown>
                 <b-nav-item-dropdown class="navbar-item" toggle-class="navbar-link dropdown-toggle" no-caret v-if="appOptions.appHeaderLanguageBar">
                     <template slot="button-content">
                         <span v-if="this.$i18n.locale === 'pt'">
@@ -112,13 +117,22 @@ export default {
             user: null,
             valuekey: 0,
             domain: null,
+            soundEnabled: true,
         }
     },
     methods: Controller.methods,
     created() {
         const state = this
+
         state.$registerEvent.$on('updateHeader', function () {
             state.refreshUser(state)
+        })
+
+        state.$registerEvent.$on('soundAlert', function () {
+            if (!state.soundEnabled) return
+
+            var audio = new Audio(require('../../assets/sound/alarm.mp3'))
+            audio.play()
         })
     },
     mounted() {

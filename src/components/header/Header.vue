@@ -96,6 +96,7 @@
                 </div>
             </div>
         </div>
+        <!-- <notifications group="top-right" position="top right" :speed="1000" /> -->
     </div>
 </template>
 
@@ -103,6 +104,7 @@
 import AppOptions from '../../config/AppOptions.vue'
 import Controller from './CrtHeader.vue'
 import HeaderMegaMenu from './HeaderMegaMenu.vue'
+import Common from '../../common/Common.vue'
 import Vue from 'vue'
 Vue.prototype.$registerEvent = new Vue()
 
@@ -129,10 +131,14 @@ export default {
         })
 
         state.$registerEvent.$on('soundAlert', function () {
+            Common.show(state, 'top-right', 'error', state.$t('msg.new.sos.notification'))
+
             if (!state.soundEnabled) return
 
-            var audio = new Audio(require('../../assets/sound/alarm.mp3'))
-            audio.play()
+            setTimeout(() => {
+                var audio = new Audio(require('../../assets/sound/alarm.mp3'))
+                audio.play()
+            }, 1000)
         })
     },
     mounted() {

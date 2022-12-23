@@ -159,6 +159,10 @@ export default {
         const response = await Request.do(state, 'POST', Request.getDefaultHeader(state), filters, `${Endpoints.patrolActions.filter}`)
         return response?.data?.results || []
     },
+    getPatrolActionById: async function (state, id) {
+        const response = await Request.do(state, 'GET', Request.getDefaultHeader(state), {}, `${Endpoints.patrolActions.patrolAction}/${id}`)
+        return response?.data?.result || {}
+    },
     getScheduleById: async function (state, filters) {
         const response = await Request.do(state, 'POST', Request.getDefaultHeader(state), filters, `${Endpoints.schedules.filter}`)
         return response?.data?.results[0] || []

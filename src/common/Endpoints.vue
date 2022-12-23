@@ -60,6 +60,7 @@ export default {
         delete: `${domain}/api/company/incidents/delete/v1/`,
     },
     patrolActions: {
+        patrolAction: `${domain}/api/users/patrol/actions/v1/`,
         filter: `${domain}/api/users/patrol/actions/filter/v1/`,
     },
     patrolPoints: {

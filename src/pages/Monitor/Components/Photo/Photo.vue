@@ -1,6 +1,6 @@
 <template>
     <b-modal id="photoModal" :hide-header="true" :hide-footer="true" size="m" class="modal-message">
-        <img v-if="photoURL && photoURL !== 'https://'" v-bind:src="`${domain}${photoURL}`" alt="image" class="mw-100 d-block" />
+        <img v-if="photo && photo !== 'https://'" v-bind:src="`${domain}${photo}`" alt="image" class="mw-100 d-block" />
         <div v-else class="text-center">
             <label>{{ $t('str.no.load.image') }}</label>
         </div>
@@ -10,15 +10,15 @@
 <script>
 import Endpoints from '../../../../common/Endpoints.vue'
 export default {
-    props: ['data'],
+    props: ['photoURL'],
     watch: {
-        data: function () {
-            this.photoURL = this.data?.photoURL
+        photoURL: function () {
+            this.photo = this?.photoURL
         },
     },
     data() {
         return {
-            photoURL: {},
+            photo: null,
             domain: Endpoints.domain,
         }
     },

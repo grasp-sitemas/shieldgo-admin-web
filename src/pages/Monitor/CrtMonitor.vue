@@ -3,8 +3,11 @@ import moment from 'moment'
 import Common from '../../common/Common.vue'
 import Services from '../../common/Services.vue'
 import Endpoints from '../../common/Endpoints.vue'
+
 export default {
     init: async payload => {
+        payload.selectedEvent = null
+
         payload.domain = Endpoints.domain
         payload.isSuperAdminMaster = await Common.isSuperAdminMaster(payload)
         if (payload.isSuperAdminMaster) {
@@ -24,11 +27,15 @@ export default {
         filter: async function () {
             this.isLoading = true
             this.items = []
-            this.selectedEvent = null
 
             try {
                 this.items = await Services.getPatrolActions(this, this.filters)
-                this.events = this.formatPatrolActions(this.items)
+                const events = this.formatPatrolActions(this.items)
+
+                this.events = events
+                if (!this.selectedEvent && events?.length > 0) {
+                    this.selectedEvent = this.events[0]
+                }
             } catch (error) {
                 console.log(error)
             }
@@ -147,19 +154,6 @@ export default {
         },
         handleSelectEvent: function (event) {
             this.selectedEvent = event
-            console.log(event)
-        },
-        selectItem(params) {
-            const data = JSON.parse(JSON.stringify(params.row))
-
-            delete data.vgt_id
-            delete data.originalIndex
-
-            data.account = data?.account?._id || ''
-            data.client = data?.client?._id || ''
-            data.site = data?.site?._id || ''
-
-            this.$emit('load-item', data)
         },
         initTable() {
             this.columns = [
@@ -263,6 +257,9 @@ export default {
 
             this.sites = await Services.getSitesByClient(this, client)
         },
+        updateSelectedEvent: async function (patrolAction) {
+            this.selectedEvent = await Services.getPatrolActionById(this, patrolAction)
+        },
         selectAllTypes: function () {
             const types = this.eventTypes.map(type => type.value)
             this.filters.types = types
@@ -283,14 +280,8 @@ export default {
             this.$bvModal.show('deviceInfoModal')
         },
         formatDate: Common.formatDateAndTime,
-        show(vue, group, type, title) {
-            const text = `${vue.$t('str.date.subtitle')}: ${new Date().toLocaleString('pt-br')}`
-            vue.$notify({
-                group,
-                title,
-                text: text,
-                type,
-            })
+        show() {
+            Common.show(this, 'bottom-right', 'error', this.$t('response.user.invalid.subtype'))
         },
     },
 }

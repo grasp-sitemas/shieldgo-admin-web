@@ -759,10 +759,11 @@
     "str.form.title.timeline": "Linha do tempo",
     "str.sidebar.menu.timeline": "Linha do tempo",
     "CANCELED": "Cancelado",
-    "EXPIRED": "Vencido",
+    "EXPIRED": "Expirado",
     "DONE": "Concluído",
     "FINISHED": "Finalizado",
     "PENDENT": "Pendente",
+    "ÏN_PROGRESS": "Em andamento",
     "str.status.done": "Realizado",
     "str.status.canceled": "Cancelado",
     "str.status.expired": "Vencido",
@@ -916,5 +917,7 @@
     "str.on" : "em",
     "str.at" : "às",
     "msg.new.incident.notification": "Incidente reportado",
-    "msg.new.sos.notification": "Alerta de SOS reportado"
+    "msg.new.sos.notification": "Alerta de SOS reportado",
+    "str.status.in.progress": "Em andamento",
+    "str.event.status.in_progress" : "Em andamento"
 }

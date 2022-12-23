@@ -99,6 +99,8 @@ export default {
                 return 'str.event.status.finished'
             case 'PENDENT':
                 return 'str.event.status.pendent'
+            case 'IN_PROGRESS':
+                return 'str.event.status.in_progress'
 
             default:
                 return ''

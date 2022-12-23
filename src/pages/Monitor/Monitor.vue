@@ -130,7 +130,7 @@
                                     <i class="fa fa-fw fa-map-marker-alt"></i>
                                 </a>
                                 <a
-                                    v-if="selectedEvent?.photoURL && selectedEvent?.photoURL !== 'https://'"
+                                    v-if="selectedEvent?.photoURL && selectedEvent?.photoURL?.length > 0"
                                     v-on:click="showPhoto()"
                                     data-toggle="tooltip"
                                     data-container="body"
@@ -138,9 +138,10 @@
                                     class="cursor-mouse"
                                 >
                                     <i class="fa fa-fw fa-image"></i>
+                                    <i v-if="selectedEvent?.photoURL === 'https://'" class="fa fa-fw fa-clock small-icon"> </i>
                                 </a>
                                 <a
-                                    v-if="selectedEvent?.soundURL && selectedEvent?.soundURL !== 'https://'"
+                                    v-if="selectedEvent?.soundURL && selectedEvent?.soundURL?.length > 0"
                                     v-on:click="showSound()"
                                     data-toggle="tooltip"
                                     data-container="body"
@@ -148,9 +149,10 @@
                                     class="cursor-mouse"
                                 >
                                     <i class="fa fa-fw fa-volume-up"></i>
+                                    <i v-if="selectedEvent?.soundURL === 'https://'" class="fa fa-fw fa-clock small-icon"> </i>
                                 </a>
                                 <a
-                                    v-if="selectedEvent?.signatureURL && selectedEvent?.signatureURL !== 'https://'"
+                                    v-if="selectedEvent?.signatureURL && selectedEvent?.signatureURL?.length > 0"
                                     v-on:click="showSignature()"
                                     data-toggle="tooltip"
                                     data-container="body"
@@ -158,6 +160,7 @@
                                     class="cursor-mouse"
                                 >
                                     <i class="fa fa-fw fa-pen"></i>
+                                    <i v-if="selectedEvent?.signatureURL === 'https://'" class="fa fa-fw fa-clock small-icon"> </i>
                                 </a>
                                 <a v-if="selectedEvent?.deviceInfo" v-on:click="showDeviceInfo()" data-toggle="tooltip" data-container="body" data-title="Device Info" class="cursor-mouse">
                                     <i class="fa fa-fw fa-info-circle"></i>
@@ -177,25 +180,27 @@
                             </div>
 
                             <div class="result-price">
-                                <a @click="handleAnswerEvent()" class="btn btn-yellow d-block w-100"> {{ $t('str.monitor.answer.event') }} </a>
+                                <a @click="handleAnswerEvent()" class="btn d-block w-100" v-bind:class="{ 'btn-yellow': selectedEvent?.type === 'INCIDENT', 'btn-red': selectedEvent?.type === 'SOS_ALERT' }">
+                                    {{ $t('str.monitor.answer.event') }}
+                                </a>
                             </div>
                         </div>
                     </panel>
                 </div>
             </div>
         </div>
+        <notifications group="top-right" position="top right" :speed="1000" />
         <Map :data="selectedEvent" />
-        <Photo :data="selectedEvent" />
-        <Signature :data="selectedEvent" />
-        <Sound :data="selectedEvent" />
+        <Photo :photoURL="selectedEvent?.photoURL" />
+        <Signature :signatureURL="selectedEvent?.signatureURL" />
+        <Sound :soundURL="selectedEvent?.soundURL" />
         <DeviceInfo :data="selectedEvent" />
-        <notifications position="top left" />
     </div>
 </template>
 
 <script>
 import Controller from './CrtMonitor.vue'
-// import Common from '../../common/Common.vue'
+import Common from '../../common/Common.vue'
 import { EVENT_TYPES } from '../../utils/events'
 import Map from './Components/Map/Map.vue'
 import Photo from './Components/Photo/Photo.vue'
@@ -227,7 +232,6 @@ export default {
             sites: [],
             items: [],
             events: [],
-            notifications: [],
             selectedEvent: null,
             answerEvent: null,
             filters: {
@@ -249,6 +253,7 @@ export default {
     },
     created() {
         const state = this
+
         state.$registerEvent.$on('refreshList', function () {
             state.filter()
         })
@@ -258,17 +263,37 @@ export default {
         })
 
         const siteId = state.$session.get('user')?.site
+
         onSnapshot(doc(db, 'notifications', siteId), async document => {
             const type = document.data()?.type
 
-            if (type === 'INCIDENT') {
+            if (type && type.length > 0) {
+                if (type === 'INCIDENT') {
+                    Common.show(this, 'top-right', 'warn', this.$t('msg.new.incident.notification'))
+                } else if (type === 'SOS_ALERT') {
+                    state.$registerEvent.$emit('soundAlert')
+                }
                 await deleteDoc(doc(db, 'notifications', siteId))
-                state.filter()
-            } else if (type === 'SOS_ALERT') {
-                state.$registerEvent.$emit('soundAlert')
-                state.filter()
-                await deleteDoc(doc(db, 'notifications', siteId))
+                await state.filter()
             }
+        })
+
+        onSnapshot(doc(db, 'updatedMedias', siteId), async document => {
+            console.log('updatedMedias')
+            const patrolAction = document.data()?.patrolAction
+            const type = document.data()?.type
+
+            if (patrolAction === state.selectedEvent?._id) {
+                const url = document.data()?.url
+                if (type === 'PHOTO') {
+                    state.selectedEvent.photoURL = url
+                } else if (type === 'SIGNATURE') {
+                    state.selectedEvent.signatureURL = url
+                } else if (type === 'SOUND') {
+                    state.selectedEvent.soundURL = url
+                }
+            }
+            await deleteDoc(doc(db, 'updatedMedias', siteId))
         })
     },
     methods: Controller.methods,
@@ -324,6 +349,16 @@ export default {
     padding: 0.2rem;
     display: flex;
     align-items: center;
+}
+
+.disabled-icon {
+    color: #ccc;
+}
+
+.small-icon {
+    font-size: 0.5rem;
+    margin: 0 0rem;
+    color: var(--app-component-color);
 }
 
 img {

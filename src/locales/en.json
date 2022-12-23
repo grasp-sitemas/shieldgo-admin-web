@@ -777,6 +777,7 @@
     "DONE": "Done",
     "FINISHED": "Finished",
     "PENDENT": "Pendent",
+    "ÏN_PROGRESS": "In progress",
     "str.status.done": "Done",
     "str.status.canceled": "Canceled",
     "str.status.expired": "Expired",
@@ -922,5 +923,9 @@
     "str.monitor.without.status" : "No status",
     "str.monitor.answer.event" : "Answer Event",
     "str.on" : "on",
-    "str.at" : "at"
+    "str.at" : "at",
+    "msg.new.incident.notification": "New Incident Reported",
+    "msg.new.sos.notification": "New SOS Alert Reported",
+    "str.status.in.progress": "In Progress",
+    "str.event.status.in_progress" : "In Progress"
 }

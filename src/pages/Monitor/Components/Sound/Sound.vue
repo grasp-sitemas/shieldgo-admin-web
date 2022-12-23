@@ -1,7 +1,7 @@
 <template>
     <b-modal body-class="soundModal" id="soundModal" :hide-header="true" :hide-footer="true" size="l" class="modal-message">
         <audio controls autoplay class="audio">
-            <source v-if="soundURL" v-bind:src="`${domain}${soundURL}`" type="audio/mpeg" />
+            <source v-if="sound" v-bind:src="`${domain}${sound}`" type="audio/mpeg" />
             {{ $t('str.browser.not.support.audio') }}
         </audio>
     </b-modal>
@@ -10,15 +10,15 @@
 <script>
 import Endpoints from '../../../../common/Endpoints.vue'
 export default {
-    props: ['data'],
+    props: ['soundURL'],
     watch: {
-        data: function () {
-            this.soundURL = this.data?.soundURL
+        soundURL: function () {
+            this.sound = this?.soundURL
         },
     },
     data() {
         return {
-            soundURL: {},
+            sound: null,
             domain: Endpoints.domain,
         }
     },

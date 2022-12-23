@@ -71,6 +71,7 @@
             <div class="col-md-4 mb-3">
                 <label class="form-label" for="statusField">{{ $t('str.register.status.field') }}</label>
                 <select v-model="filters.status" @change="filter" class="form-select" id="statusField">
+                    <option value="IN_PROGRESS">{{ $t('str.status.in.progress') }}</option>
                     <option value="ACTIVE">{{ $t('str.status.pending') }}</option>
                     <option value="FINISHED">{{ $t('str.status.done') }}</option>
                     <option value="EXPIRED">{{ $t('str.status.expired') }}</option>
@@ -100,7 +101,20 @@
                         {{ formatDate(props.formattedRow[props.column.field]) }}
                     </span>
                     <span v-else-if="props.column.field === 'status'">
-                        <span class="badge" v-bind:class="props.formattedRow[props.column.field] === 'ACTIVE' ? 'bg-success' : 'bg-danger'">
+                        <span
+                            class="badge"
+                            v-bind:class="
+                                props.formattedRow[props.column.field] === 'ACTIVE'
+                                    ? 'bg-blue'
+                                    : props.formattedRow[props.column.field] === 'IN_PROGRESS'
+                                    ? 'bg-success'
+                                    : props.formattedRow[props.column.field] === 'FINISHED'
+                                    ? 'bg-info'
+                                    : props.formattedRow[props.column.field] === 'EXPIRED'
+                                    ? 'bg-danger'
+                                    : 'bg-danger'
+                            "
+                        >
                             {{ $t(getStatusName(props.formattedRow[props.column.field])) }}
                         </span>
                     </span>

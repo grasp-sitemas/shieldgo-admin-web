@@ -40,6 +40,13 @@ export default {
                 this.events = events
                 if (!this.selectedEvent && events?.length > 0) {
                     this.selectedEvent = this.events[0]
+
+                    const filters = {
+                        patrolAction: this.selectedEvent?._id,
+                        status: 'ACTIVE',
+                    }
+
+                    this.attendances = await Services.getEventAttendances(this, filters)
                 }
             } catch (error) {
                 console.log(error)
@@ -47,49 +54,56 @@ export default {
 
             this.isLoading = false
         },
+        checkRequiredField(field) {
+            return this.errors.includes(field)
+        },
+        removeRequiredField(field) {
+            this.errors = this.errors.filter(item => item !== field)
+        },
         handleAnswerEvent: async function () {
             this.answerEventEnabled = true
         },
-        handleSendAttendanceEvent: async function () {
-            this.isLoadingAttendanceButton = true
+        sendAttendanceEvent: async function () {
+            if (!this.isLoadingAttendanceButton) {
+                this.isLoadingAttendanceButton = true
 
-            const attendance = {
-                account: this.selectedEvent?.account?._id,
-                client: this.selectedEvent?.client?._id,
-                site: this.selectedEvent?.site?._id,
-                event: this.selectedEvent?.event?._id,
-                type: this.attendance?.type,
-                notes: this.attendance?.notes,
-                patrolAction: this.selectedEvent?._id,
-                createDate: moment().utc(true).format(),
-                status: 'ACTIVE',
-            }
-
-            attendance.operator = await this.getOperatorId()
-
-            try {
-                await Services.createAttendance(this, attendance)
-                this.answerEventEnabled = false
-                this.isLoadingAttendanceButton = false
-                Common.show(this, 'bottom-right', 'success', 'str.attendance_created')
-
-                const filters = {
+                const attendance = {
+                    account: this.selectedEvent?.account?._id,
+                    client: this.selectedEvent?.client?._id,
+                    site: this.selectedEvent?.site?._id,
+                    event: this.selectedEvent?.event?._id,
+                    type: this.attendance?.type,
+                    notes: this.attendance?.notes,
                     patrolAction: this.selectedEvent?._id,
+                    createDate: moment().utc(true).format(),
                     status: 'ACTIVE',
                 }
 
-                this.attendances = await Services.getEventAttendances(this, filters)
+                attendance.operator = await this.getOperatorId()
 
-                this.clearForm()
-            } catch (error) {
-                console.log(error)
-                this.isLoadingAttendanceButton = false
-                Common.show(this, 'bottom-right', 'danger', 'str.error_creating_attendance')
+                try {
+                    await Services.createAttendance(this, attendance)
+                    this.answerEventEnabled = false
+                    this.isLoadingAttendanceButton = false
+                    this.clearForm()
+
+                    Common.show(this, 'bottom-right', 'success', 'str.attendance_created')
+                    const filters = {
+                        patrolAction: this.selectedEvent?._id,
+                        status: 'ACTIVE',
+                    }
+
+                    this.attendances = await Services.getEventAttendances(this, filters)
+                } catch (error) {
+                    console.log(error)
+                    this.isLoadingAttendanceButton = false
+                    Common.show(this, 'bottom-right', 'danger', 'str.error_creating_attendance')
+                }
             }
         },
         clearForm: function () {
-            this.attendance.type = null
-            this.attendance.notes = null
+            this.attendance.type = ''
+            this.attendance.notes = ''
         },
         formatPatrolActions: function (list) {
             const data = list.map(item => {
@@ -209,6 +223,7 @@ export default {
         handleSelectEvent: async function (event) {
             this.selectedEvent = event
             this.answerEventEnabled = false
+            this.removeRequiredField('attendanceOptions')
 
             //get attendances for event
             const filters = {
@@ -308,6 +323,15 @@ export default {
             }
 
             this.clients = await Services.getClientsByAccount(this, account)
+        },
+        checkForm: async function () {
+            if (!this.attendance?.type || this.attendance?.type === '') {
+                this.errors.push('attendanceOptions')
+            }
+
+            if (!this.errors || this.errors.length === 0) {
+                await this.sendAttendanceEvent()
+            }
         },
         changeClient: async function () {
             const client = this.filters.client

@@ -179,11 +179,62 @@
                                 </div>
                             </div>
 
-                            <div class="result-price">
+                            <div v-if="!answerEventEnabled && attendances?.length === 0" class="result-price">
                                 <a @click="handleAnswerEvent()" class="btn d-block w-100" v-bind:class="{ 'btn-yellow': selectedEvent?.type === 'INCIDENT', 'btn-red': selectedEvent?.type === 'SOS_ALERT' }">
                                     {{ $t('str.monitor.answer.event') }}
                                 </a>
                             </div>
+                        </div>
+                    </panel>
+                </div>
+                <div class="col-xl-4 col-lg-6" v-if="answerEventEnabled || attendances?.length > 0">
+                    <panel :title="$t('str.event.attendance')">
+                        <div class="result-info">
+                            <div class="flex-1 mb-3">
+                                <label class="form-label" for="attendancesOptionsField">{{ $t('str.attendances.options.field') }}</label>
+                                <select v-model="attendance.type" class="form-select" id="attendancesOptionsField">
+                                    <option value="">{{ $t('str.register.select.placeholder') }}</option>
+                                    <option v-for="attendance in attendancesTypes" :value="attendance._id" :key="attendance._id">
+                                        {{ $t(attendance._id) }}
+                                    </option>
+                                </select>
+                            </div>
+                            <div class="flex-1 mb-3">
+                                <label class="form-label" for="attendancesNotesField">{{ $t('str.attendances.notes.field') }}</label>
+                                <textarea v-model="attendance.notes" class="form-control" id="attendancesNotesField" rows="3"></textarea>
+                            </div>
+                            <div class="result-price">
+                                <a
+                                    @click="handleSendAttendanceEvent()"
+                                    class="btn d-block w-100"
+                                    v-bind:class="{ 'btn-yellow': selectedEvent?.type === 'INCIDENT', 'btn-red': selectedEvent?.type === 'SOS_ALERT' }"
+                                >
+                                    <i v-if="isLoadingAttendanceButton" class="fas fa-spinner fa-spin" />
+                                    {{ $t('str.btn.attendance.send') }}
+                                </a>
+                            </div>
+                            <hr class="bg-gray-500" />
+                        </div>
+
+                        <div class="result-info pd-0">
+                            <label class="form-label">{{ $t('str.attendances.history.list') }}</label>
+
+                            <table class="table table-hover table-striped table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">{{ $t('str.attendances.date.field') }}</th>
+                                        <th scope="col">{{ $t('str.attendances.type.field') }}</th>
+                                        <th scope="col">{{ $t('str.attendances.notes.field') }}</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr v-for="attendance in attendances" :key="attendance._id">
+                                        <td>{{ formatDate(attendance.createDate) }}</td>
+                                        <td>{{ $t(attendance.type) }}</td>
+                                        <td>{{ attendance.notes }}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
                         </div>
                     </panel>
                 </div>
@@ -210,6 +261,7 @@ import DeviceInfo from './Components/DeviceInfo/DeviceInfo.vue'
 import db from '../../firebaseInit.js'
 import { doc, onSnapshot, deleteDoc } from 'firebase/firestore'
 import Vue from 'vue'
+import moment from 'moment'
 Vue.prototype.$registerEvent = new Vue()
 
 export default {
@@ -223,6 +275,7 @@ export default {
     data() {
         return {
             isLoading: true,
+            isLoadingAttendanceButton: false,
             domain: '',
             valuekey: 0,
             eventTypes: EVENT_TYPES,
@@ -232,7 +285,23 @@ export default {
             sites: [],
             items: [],
             events: [],
+            attendances: [],
             selectedEvent: null,
+            selectedAttendence: null,
+            attendancesTypes: [],
+            answerEventEnabled: false,
+            attendance: {
+                account: null,
+                client: null,
+                site: null,
+                operator: null,
+                event: '',
+                type: '',
+                notes: '',
+                patrolAction: '',
+                createDate: moment().utc(true).format(),
+                status: 'ACTIVE',
+            },
             answerEvent: null,
             filters: {
                 types: [],
@@ -359,6 +428,10 @@ export default {
     font-size: 0.5rem;
     margin: 0 0rem;
     color: var(--app-component-color);
+}
+
+.pd-0 {
+    padding-top: 0;
 }
 
 img {

@@ -927,5 +927,15 @@
     "msg.new.incident.notification": "New Incident Reported",
     "msg.new.sos.notification": "New SOS Alert Reported",
     "str.status.in.progress": "In Progress",
-    "str.event.status.in_progress" : "In Progress"
+    "str.event.status.in_progress" : "In Progress",
+    "str.event.attendance": "Event attendance",
+    "str.btn.attendance.send": "Send",
+    "str.attendances.options.field": "Options",
+    "str.attendances.notes.field": "Notes",
+    "str.attendances.history.list": "History",
+    "str.attendances.type.field": "Type",
+    "str.attendances.date.field": "Date",
+    "str.attendance_created": "Attendance created",
+    "str.error_creating_attendance": "Error creating attendance",
+    "CALL_VIGILANT": "Call Vigilant"
 }

@@ -10,6 +10,8 @@ export default {
 
         payload.domain = Endpoints.domain
         payload.isSuperAdminMaster = await Common.isSuperAdminMaster(payload)
+        payload.attendancesTypes = await Services.getAttendancesOptionsTypes(payload)
+
         if (payload.isSuperAdminMaster) {
             payload.accounts = await Services.getAccounts(payload)
         } else {
@@ -24,6 +26,9 @@ export default {
         payload.isLoading = false
     },
     methods: {
+        getOperatorId: async function () {
+            return this.$session.get('user')?._id
+        },
         filter: async function () {
             this.isLoading = true
             this.items = []
@@ -42,7 +47,50 @@ export default {
 
             this.isLoading = false
         },
-        handleAnswerEvent: async function () {},
+        handleAnswerEvent: async function () {
+            this.answerEventEnabled = true
+        },
+        handleSendAttendanceEvent: async function () {
+            this.isLoadingAttendanceButton = true
+
+            const attendance = {
+                account: this.selectedEvent?.account?._id,
+                client: this.selectedEvent?.client?._id,
+                site: this.selectedEvent?.site?._id,
+                event: this.selectedEvent?.event?._id,
+                type: this.attendance?.type,
+                notes: this.attendance?.notes,
+                patrolAction: this.selectedEvent?._id,
+                createDate: moment().utc(true).format(),
+                status: 'ACTIVE',
+            }
+
+            attendance.operator = await this.getOperatorId()
+
+            try {
+                await Services.createAttendance(this, attendance)
+                this.answerEventEnabled = false
+                this.isLoadingAttendanceButton = false
+                Common.show(this, 'bottom-right', 'success', 'str.attendance_created')
+
+                const filters = {
+                    patrolAction: this.selectedEvent?._id,
+                    status: 'ACTIVE',
+                }
+
+                this.attendances = await Services.getEventAttendances(this, filters)
+
+                this.clearForm()
+            } catch (error) {
+                console.log(error)
+                this.isLoadingAttendanceButton = false
+                Common.show(this, 'bottom-right', 'danger', 'str.error_creating_attendance')
+            }
+        },
+        clearForm: function () {
+            this.attendance.type = null
+            this.attendance.notes = null
+        },
         formatPatrolActions: function (list) {
             const data = list.map(item => {
                 const { _id, status, account, client, site, event, type, date, vigilant, patrol, soundURL, photoURL, signatureURL, incidents, deviceInfo, geolocation, notes } = item
@@ -69,7 +117,6 @@ export default {
                 }
             })
 
-            // Thiago Simon reported an incident on 12/12/2022 2:00 PM
             const formatData = []
             data.forEach(item => {
                 const dataItem = item
@@ -152,8 +199,24 @@ export default {
 
             return formatData
         },
-        handleSelectEvent: function (event) {
+        formatDate: function (date) {
+            const dateTimezone = moment(date).utc(false)
+            const formattedDate = dateTimezone.format('DD/MM/YYYY')
+            const formattedTime = dateTimezone.format('HH:mm')
+
+            return formattedDate + ' - ' + formattedTime
+        },
+        handleSelectEvent: async function (event) {
             this.selectedEvent = event
+            this.answerEventEnabled = false
+
+            //get attendances for event
+            const filters = {
+                patrolAction: event?._id,
+                status: 'ACTIVE',
+            }
+
+            this.attendances = await Services.getEventAttendances(this, filters)
         },
         initTable() {
             this.columns = [
@@ -279,7 +342,6 @@ export default {
         showDeviceInfo() {
             this.$bvModal.show('deviceInfoModal')
         },
-        formatDate: Common.formatDateAndTime,
         show() {
             Common.show(this, 'bottom-right', 'error', this.$t('response.user.invalid.subtype'))
         },

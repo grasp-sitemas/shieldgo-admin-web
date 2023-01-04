@@ -938,5 +938,7 @@
     "REPORT_UNDUE_SOS": "Relatar acionamento indevido de pânico",
     "REPORT_TEST_BY_CUSTOMER":"Relatar teste realizado pelo cliente",
     "REPORT_TEST_BY_THIRD_PARTIES":"Relatar teste realizado por terceiros",
-    "REPORT_FAILURE_TO_CONTACT_PRIORITY_PHONES":"Relatar falha no contato com telefones prioritarios"
+    "REPORT_FAILURE_TO_CONTACT_PRIORITY_PHONES":"Relatar falha no contato com telefones prioritarios",
+    "OTHERS": "Outros",
+    "str.attendances.options.field.error": "Opção é obrigatória"
 }

@@ -167,7 +167,6 @@
                                 </a>
                             </div>
 
-                            <!-- render incident list in selectedEvent?.incidents -->
                             <div v-if="selectedEvent?.incidents?.length > 0" class="mb-3">
                                 <div class="text-opacity-50 small fw-bold">{{ $t('str.monitor.details.incidents') }}:</div>
                                 <div class="text-opacity-50 small fw-bold">
@@ -192,23 +191,27 @@
                         <div class="result-info">
                             <div class="flex-1 mb-3">
                                 <label class="form-label" for="attendancesOptionsField">{{ $t('str.attendances.options.field') }}</label>
-                                <select v-model="attendance.type" class="form-select" id="attendancesOptionsField">
+
+                                <select
+                                    v-model="attendance.type"
+                                    class="form-select"
+                                    id="attendancesOptionsField"
+                                    @focus="removeRequiredField('attendanceOptions')"
+                                    v-bind:class="checkRequiredField('attendanceOptions') ? 'is-invalid' : ''"
+                                >
                                     <option value="">{{ $t('str.register.select.placeholder') }}</option>
                                     <option v-for="attendance in attendancesTypes" :value="attendance._id" :key="attendance._id">
                                         {{ $t(attendance._id) }}
                                     </option>
                                 </select>
+                                <div class="invalid-feedback">{{ $t('str.attendances.options.field.error') }}</div>
                             </div>
                             <div class="flex-1 mb-3">
                                 <label class="form-label" for="attendancesNotesField">{{ $t('str.attendances.notes.field') }}</label>
                                 <textarea v-model="attendance.notes" class="form-control" id="attendancesNotesField" rows="3"></textarea>
                             </div>
                             <div class="result-price">
-                                <a
-                                    @click="handleSendAttendanceEvent()"
-                                    class="btn d-block w-100"
-                                    v-bind:class="{ 'btn-yellow': selectedEvent?.type === 'INCIDENT', 'btn-red': selectedEvent?.type === 'SOS_ALERT' }"
-                                >
+                                <a v-on:click="checkForm()" class="btn d-block w-100" v-bind:class="{ 'btn-yellow': selectedEvent?.type === 'INCIDENT', 'btn-red': selectedEvent?.type === 'SOS_ALERT' }">
                                     <i v-if="isLoadingAttendanceButton" class="fas fa-spinner fa-spin" />
                                     {{ $t('str.btn.attendance.send') }}
                                 </a>

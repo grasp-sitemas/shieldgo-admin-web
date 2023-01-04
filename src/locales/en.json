@@ -937,5 +937,16 @@
     "str.attendances.date.field": "Date",
     "str.attendance_created": "Attendance created",
     "str.error_creating_attendance": "Error creating attendance",
-    "CALL_VIGILANT": "Call Vigilant"
+    "CALL_CLIENT": "Call Client",
+    "CALL_VIGILANT": "Call Vigilant",
+    "CALL_SUPERVISOR": "Call Supervisor",
+    "CALL_POLICE": "Call Police (190)",
+    "CALL_FIREMEN": "Call Firemen (193)",
+    "REPORT_ACCIDENTAL_SOS": "Report accidental SOS",
+    "REPORT_UNDUE_SOS": "Report undue SOS",
+    "REPORT_TEST_BY_CUSTOMER": "Report test by customer",
+    "REPORT_TEST_BY_THIRD_PARTIES": "Report test by third parties",
+    "REPORT_FAILURE_TO_CONTACT_PRIORITY_PHONES": "Report failure to contact priority phones",
+    "OTHERS": "Others",
+    "str.attendances.options.field.error": "Options is required"
 }

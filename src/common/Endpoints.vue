@@ -2,12 +2,12 @@
 const domain = 'https://api-gateway-shield.herokuapp.com'
 // const domain = 'http://localhost:3000'
 // const socketDomain = 'http://localhost:5004'
-const socketDomain = 'https://ms-socket-shield.herokuapp.com'
+// const socketDomain = 'https://ms-socket-shield.herokuapp.com'
 const viaCepDomain = 'https://viacep.com.br/ws/'
 
 export default {
     domain: domain,
-    socketDomain: socketDomain,
+    // socketDomain: socketDomain,
     appointments: {
         filter: `${domain}/api/company/appointments/filter/v1/`,
         appointment: `${domain}/api/company/appointments/v1/`,
@@ -23,6 +23,10 @@ export default {
         filter: `${domain}/api/company/events/filter/v1/`,
         event: `${domain}/api/company/events/v1/`,
         delete: `${domain}/api/company/events/delete/v1/`,
+        attendances: {
+            filter: `${domain}/api/users/attendances/filter/v1/`,
+            attendance: `${domain}/api/users/attendances/v1/`,
+        },
     },
     systemUsers: {
         changeLanguage: `${domain}/api/users/system/change/language/v1/`,
@@ -86,7 +90,7 @@ export default {
         find: `${viaCepDomain}`,
     },
     helpers: {
-        companyType: `${domain}/api/helpers/data/company/types/v1/`,
+        attendancesTypes: `${domain}/api/helpers/data/events/attendances/types/v1/`,
     },
     location: {
         geolocation: `https://maps.googleapis.com/maps/api/geocode/json?latlng=`,

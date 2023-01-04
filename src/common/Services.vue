@@ -163,6 +163,15 @@ export default {
         const response = await Request.do(state, 'GET', Request.getDefaultHeader(state), {}, `${Endpoints.patrolActions.patrolAction}/${id}`)
         return response?.data?.result || {}
     },
+    getAttendancesOptionsTypes: async function (state) {
+        const response = await Request.do(state, 'GET', Request.getDefaultHeader(state), {}, `${Endpoints.helpers.attendancesTypes}`)
+        return response?.data?.results || []
+    },
+
+    getEventAttendances: async function (state, filters) {
+        const response = await Request.do(state, 'POST', Request.getDefaultHeader(state), filters, `${Endpoints.events.attendances.filter}`)
+        return response?.data?.results || []
+    },
     getScheduleById: async function (state, filters) {
         const response = await Request.do(state, 'POST', Request.getDefaultHeader(state), filters, `${Endpoints.schedules.filter}`)
         return response?.data?.results[0] || []
@@ -190,6 +199,10 @@ export default {
     getPatrolActionsByEvent: async function (state, filters) {
         const response = await Request.do(state, 'POST', Request.getDefaultHeader(state), filters, `${Endpoints.patrolActions.filter}`)
         return response?.data?.results || []
+    },
+    createAttendance: async function (state, attendance) {
+        const response = await Request.do(state, 'POST', Request.getDefaultHeader(state), attendance, `${Endpoints.events.attendances.attendance}`)
+        return response?.data?.result || null
     },
 }
 </script>

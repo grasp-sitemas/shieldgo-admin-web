@@ -6,3 +6,8 @@ export const EVENT_TYPES = [
     // { value: 'START_PATROL', label: 'str.event.filter.start_patrol' },
     // { value: 'END_PATROL', label: 'str.event.filter.end_patrol' },
 ]
+
+export const EVENT_STATUS = {
+    ACTIVE: 'ACTIVE',
+    ARCHIVED: 'ARCHIVED',
+}

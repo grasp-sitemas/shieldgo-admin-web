@@ -397,6 +397,25 @@ export default {
             }
             await deleteDoc(doc(db, 'updatedMedias', siteId))
         })
+
+        onSnapshot(doc(db, 'updateAttendanceEvent', siteId), async document => {
+            if (document?.data()?.attendance) {
+                const attendance = JSON.parse(document.data()?.attendance)
+                const operator = JSON.parse(document.data()?.operator)
+
+                console.log('attendance', attendance)
+                console.log('patrolActionId' + document.data()?.patrolActionId)
+                const patrolActionId = document.data()?.patrolActionId
+
+                await state.filter()
+
+                if (patrolActionId === state.selectedEvent?._id && operator?._id !== state.user?._id) {
+                    attendance.operator = operator
+                    state.selectedEvent.attendance = attendance
+                }
+                await deleteDoc(doc(db, 'updateAttendanceEvent', siteId))
+            }
+        })
     },
     methods: Controller.methods,
 }

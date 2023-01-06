@@ -913,7 +913,7 @@
     "str.monitor.details.vigilant.email": "E-mail",
     "str.monitor.alone.patrol" : "Evento sem ronda",
     "str.monitor.without.status" : "Sem status",
-    "str.monitor.answer.event" : "Responder evento",
+    "str.monitor.answer.event" : "Atender evento",
     "str.on" : "em",
     "str.at" : "às",
     "msg.new.incident.notification": "Incidente reportado",
@@ -940,5 +940,15 @@
     "REPORT_TEST_BY_THIRD_PARTIES":"Relatar teste realizado por terceiros",
     "REPORT_FAILURE_TO_CONTACT_PRIORITY_PHONES":"Relatar falha no contato com telefones prioritarios",
     "OTHERS": "Outros",
-    "str.attendances.options.field.error": "Opção é obrigatória"
+    "str.attendances.options.field.error": "Opção é obrigatória",
+    "str.events.title": "Eventos",
+    "str.monitor.details.attendance.by": "Atendido por",
+    "str.monitor.details.attendance.date": "Data do atendimento",
+    "str.btn.attendance.close": "Finalizar atendimento",
+    "str.are.you.sure.close": "Tem certeza que deseja finalizar o atendimento?",
+    "str.title.yes": "Sim",
+    "str.title.close.attendance": "Finalizar",
+    "str.title.cancel": "Cancelar",
+    "str.monitor.details.attendance.opened.date": "Data de abertura",
+    "str.monitor.details.attendance.closed.date": "Data de fechamento"
 }

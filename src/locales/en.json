@@ -948,5 +948,15 @@
     "REPORT_TEST_BY_THIRD_PARTIES": "Report test by third parties",
     "REPORT_FAILURE_TO_CONTACT_PRIORITY_PHONES": "Report failure to contact priority phones",
     "OTHERS": "Others",
-    "str.attendances.options.field.error": "Options is required"
+    "str.attendances.options.field.error": "Options is required",
+    "str.events.title": "Events",
+    "str.monitor.details.attendance.by": "Attendance by",
+    "str.monitor.details.attendance.date": "Attendance date",
+    "str.btn.attendance.close": "Close attendance",
+    "str.are.you.sure.close": "Are you sure you want to close this attendance?",
+    "str.title.yes": "Yes",
+    "str.title.cancel": "Cancel",
+    "str.title.close.attendance": "Close",
+    "str.monitor.details.attendance.opened.date": "Opened date",
+    "str.monitor.details.attendance.closed.date": "Closed date"
 }

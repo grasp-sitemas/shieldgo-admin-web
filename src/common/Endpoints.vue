@@ -66,6 +66,7 @@ export default {
     patrolActions: {
         patrolAction: `${domain}/api/users/patrol/actions/v1/`,
         filter: `${domain}/api/users/patrol/actions/filter/v1/`,
+        attendanceEvent: `${domain}/api/users/patrol/actions/attendance/v1/`,
     },
     patrolPoints: {
         patrolPoint: `${domain}/api/company/patrolpoints/v1/`,

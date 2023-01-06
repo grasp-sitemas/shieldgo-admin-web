@@ -204,5 +204,14 @@ export default {
         const response = await Request.do(state, 'POST', Request.getDefaultHeader(state), attendance, `${Endpoints.events.attendances.attendance}`)
         return response?.data?.result || null
     },
+    attendanceEvent: async function (state, patrolActionId, attendance) {
+        const body = {
+            patrolActionId: patrolActionId,
+            attendance: attendance,
+        }
+
+        const response = await Request.do(state, 'POST', Request.getDefaultHeader(state), body, `${Endpoints.patrolActions.attendanceEvent}`)
+        return response?.data?.result || null
+    },
 }
 </script>

@@ -57,22 +57,27 @@
             </div> -->
             <div class="row">
                 <div class="col-xl-4 col-lg-6">
-                    <panel title="Eventos">
+                    <panel :title="$t('str.events.title')">
                         <div class="list-group list-group-flush rounded-bottom overflow-hidden panel-body p-0">
-                            <a @click="handleSelectEvent(event)" v-for="event in events" :key="event.id" class="list-group-item list-group-item-action d-flex cursor-mouse">
-                                <div class="me-3 fs-16px">
-                                    <i v-bind:class="event?.icon" />
-                                </div>
-                                <div class="flex-fill">
-                                    <div class="fs-14px lh-12 mb-2px fw-bold">{{ $t(event?.type) }}</div>
-                                    <div class="mb-1 fs-12px">
-                                        <div class="flex-1">{{ event?.description }}</div>
+                            <div @click="handleSelectEvent(event)" v-for="event in events" :key="event.id">
+                                <a v-if="event?.attendance?.status === 'IN_PROGRESS' || !event?.attendance?.status" class="list-group-item list-group-item-action d-flex cursor-mouse">
+                                    <div class="me-3 fs-16px">
+                                        <i v-bind:class="event?.icon" />
                                     </div>
-                                    <div class="mb-1">
-                                        <span v-bind:class="event?.tag">{{ $t(event?.type) }}</span>
+                                    <div class="flex-fill">
+                                        <div class="fs-14px lh-12 mb-2px fw-bold">{{ $t(event?.type) }}</div>
+                                        <div class="mb-1 fs-12px">
+                                            <div class="flex-1">{{ event?.description }}</div>
+                                        </div>
+                                        <div class="mb-1">
+                                            <span v-bind:class="event?.tag">{{ $t(event?.type) }}</span>
+                                        </div>
                                     </div>
-                                </div>
-                            </a>
+                                    <div v-if="!event?.attendance || !event?.attendance?.isAttendance" class="dot animated-dot">
+                                        <i class="fa fa-circle dot-color" />
+                                    </div>
+                                </a>
+                            </div>
                         </div>
                     </panel>
                 </div>
@@ -124,6 +129,24 @@
                                 </div>
                             </div>
                             <hr class="bg-gray-500" />
+
+                            <div v-if="selectedEvent?.attendance?.isAttendance" class="flex-1 mb-3">
+                                <div class="text-opacity-50 small fw-bold">
+                                    {{ $t('str.monitor.details.attendance.by') }}:
+                                    <label class="info-result">{{ selectedEvent?.attendance?.operator?.firstName }} {{ selectedEvent?.attendance?.operator?.lastName }}</label>
+                                </div>
+                                <div class="text-opacity-50 small fw-bold">
+                                    {{ $t('str.monitor.details.attendance.opened.date') }}:
+                                    <label class="info-result">{{ formatDate(selectedEvent?.attendance?.openedDate) }}</label>
+                                </div>
+                                <!-- //close date -->
+                                <div v-if="selectedEvent?.attendance?.closedDate" class="text-opacity-50 small fw-bold">
+                                    {{ $t('str.monitor.details.attendance.closed.date') }}:
+                                    <label class="info-result">{{ formatDate(selectedEvent?.attendance?.closedDate) }}</label>
+                                </div>
+
+                                <hr class="bg-gray-500" />
+                            </div>
 
                             <div class="btn-row mb-4">
                                 <a v-if="selectedEvent?.geolocation" v-on:click="showMap()" data-toggle="tooltip" data-container="body" data-title="Map" class="cursor-mouse">
@@ -178,20 +201,20 @@
                                 </div>
                             </div>
 
-                            <div v-if="!answerEventEnabled && attendances?.length === 0" class="result-price">
-                                <a @click="handleAnswerEvent()" class="btn d-block w-100" v-bind:class="{ 'btn-yellow': selectedEvent?.type === 'INCIDENT', 'btn-red': selectedEvent?.type === 'SOS_ALERT' }">
+                            <div v-if="!selectedEvent?.attendance || !selectedEvent?.attendance?.isAttendance" class="result-price">
+                                <a @click="handleAttendanceEvent()" class="btn d-block w-100" v-bind:class="{ 'btn-yellow': selectedEvent?.type === 'INCIDENT', 'btn-red': selectedEvent?.type === 'SOS_ALERT' }">
                                     {{ $t('str.monitor.answer.event') }}
                                 </a>
                             </div>
                         </div>
                     </panel>
                 </div>
-                <div class="col-xl-4 col-lg-6" v-if="answerEventEnabled || attendances?.length > 0">
+
+                <div class="col-xl-4 col-lg-6 panel-attendance-body p-0" v-if="selectedEvent?.attendance?.isAttendance">
                     <panel :title="$t('str.event.attendance')">
-                        <div class="result-info">
+                        <div v-if="selectedEvent?.attendance?.operator?._id === user._id && selectedEvent?.attendance?.status === 'IN_PROGRESS'" class="result-info overflow-hidden">
                             <div class="flex-1 mb-3">
                                 <label class="form-label" for="attendancesOptionsField">{{ $t('str.attendances.options.field') }}</label>
-
                                 <select
                                     v-model="attendance.type"
                                     class="form-select"
@@ -210,10 +233,15 @@
                                 <label class="form-label" for="attendancesNotesField">{{ $t('str.attendances.notes.field') }}</label>
                                 <textarea v-model="attendance.notes" class="form-control" id="attendancesNotesField" rows="3"></textarea>
                             </div>
-                            <div class="result-price">
-                                <a v-on:click="checkForm()" class="btn d-block w-100" v-bind:class="{ 'btn-yellow': selectedEvent?.type === 'INCIDENT', 'btn-red': selectedEvent?.type === 'SOS_ALERT' }">
-                                    <i v-if="isLoadingAttendanceButton" class="fas fa-spinner fa-spin" />
+                            <div class="result-price d-flex justify-content-between align-items-center mb-3">
+                                <a v-on:click="checkForm()" class="btn d-block w-50 m-2" v-bind:class="{ 'btn-yellow': selectedEvent?.type === 'INCIDENT', 'btn-red': selectedEvent?.type === 'SOS_ALERT' }">
+                                    <i v-if="isLoadingSendAttendanceButton" class="fas fa-spinner fa-spin" />
                                     {{ $t('str.btn.attendance.send') }}
+                                </a>
+                                <!-- close attendance button -->
+                                <a v-on:click="confirmCloseAttendance" class="btn d-block w-50 m-2 btn-gray">
+                                    <!-- <i v-if="isLoadingCloseAttendanceButton" class="fas fa-spinner fa-spin" /> -->
+                                    {{ $t('str.btn.attendance.close') }}
                                 </a>
                             </div>
                             <hr class="bg-gray-500" />
@@ -227,7 +255,7 @@
                                     <tr>
                                         <th scope="col">{{ $t('str.attendances.date.field') }}</th>
                                         <th scope="col">{{ $t('str.attendances.type.field') }}</th>
-                                        <th scope="col">{{ $t('str.attendances.notes.field') }}</th>
+                                        <th width="30%" scope="col">{{ $t('str.attendances.notes.field') }}</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -278,7 +306,8 @@ export default {
     data() {
         return {
             isLoading: true,
-            isLoadingAttendanceButton: false,
+            isLoadingSendAttendanceButton: false,
+            isLoadingAttendanceEventButton: false,
             domain: '',
             valuekey: 0,
             eventTypes: EVENT_TYPES,
@@ -288,11 +317,12 @@ export default {
             sites: [],
             items: [],
             events: [],
+            user: null,
             attendances: [],
             selectedEvent: null,
             selectedAttendence: null,
             attendancesTypes: [],
-            answerEventEnabled: false,
+            attendanceEventEnabled: false,
             attendance: {
                 account: null,
                 client: null,
@@ -398,8 +428,17 @@ export default {
     margin-left: 0.3121875rem;
 }
 
-.panel .panel-body {
-    max-height: 75vh !important;
+.panel-body {
+    max-height: 80vh !important;
+    overflow-y: auto !important;
+}
+
+.panel-attendance-body {
+    max-height: 88vh !important;
+    overflow-y: auto !important;
+}
+
+.overflow-y {
     overflow-y: auto !important;
 }
 
@@ -435,6 +474,26 @@ export default {
 
 .pd-0 {
     padding-top: 0;
+}
+
+.dot {
+    position: absolute;
+    bottom: 0.8rem;
+    right: 0.8rem;
+}
+.animated-dot {
+    animation: blinker 1s linear infinite;
+}
+
+.dot-color {
+    color: lightskyblue;
+    font-size: 0.5rem;
+}
+
+@keyframes blinker {
+    50% {
+        opacity: 0;
+    }
 }
 
 img {

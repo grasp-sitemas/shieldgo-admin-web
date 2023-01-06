@@ -19,6 +19,8 @@ export default {
             payload.filters.account = payload.$session.get('user')?.account?._id
         }
 
+        payload.user = payload.$session.get('user')
+
         await payload.initTable()
         await payload.selectAllTypes()
         await payload.filter()
@@ -60,12 +62,89 @@ export default {
         removeRequiredField(field) {
             this.errors = this.errors.filter(item => item !== field)
         },
-        handleAnswerEvent: async function () {
-            this.answerEventEnabled = true
+        handleAttendanceEvent: async function () {
+            if (this.isLoadingAttendanceEventButton || this.attendanceEventEnabled) return
+
+            this.attendanceEventEnabled = true
+
+            const patrolActionId = this.selectedEvent?._id
+            const userId = await this.getOperatorId()
+            const attendance = {
+                isAttendance: true,
+                openedDate: moment().utc(true).format(),
+                operator: userId,
+                status: 'IN_PROGRESS',
+            }
+
+            try {
+                const result = await Services.attendanceEvent(this, patrolActionId, attendance)
+                if (result && this.selectedEvent) {
+                    this.selectedEvent.attendance = {
+                        isAttendance: result?.attendance?.isAttendance,
+                        openedDate: result?.attendance?.date,
+                        closedDate: result?.attendance?.closedDate,
+                        operator: this.user,
+                        status: result?.attendance?.status,
+                    }
+                }
+
+                this.attendanceEventEnabled = false
+                this.isLoadingAttendanceEventButton = false
+                this.clearForm()
+            } catch (error) {
+                console.log(error)
+            }
+        },
+        closeAttendance: async function () {
+            this.attendanceEventEnabled = true
+
+            const patrolActionId = this.selectedEvent?._id
+            const userId = await this.getOperatorId()
+            const attendance = {
+                isAttendance: true,
+                closedDate: moment().utc(true).format(),
+                operator: userId,
+                status: 'CLOSED',
+            }
+
+            try {
+                const result = await Services.attendanceEvent(this, patrolActionId, attendance)
+                if (result && this.selectedEvent) {
+                    this.selectedEvent.attendance = {
+                        isAttendance: result?.attendance?.isAttendance,
+                        openedDate: result?.attendance?.openedDate,
+                        closedDate: result?.attendance?.closedDate,
+                        operator: this.user,
+                        status: result?.attendance?.status,
+                    }
+                }
+
+                this.attendanceEventEnabled = false
+                this.isLoadingAttendanceEventButton = false
+                this.clearForm()
+            } catch (error) {
+                console.log(error)
+            }
+        },
+        confirmCloseAttendance: async function () {
+            this.$swal({
+                title: this.$t('str.are.you.sure'),
+                text: this.$t('str.are.you.sure.close'),
+                showCancelButton: true,
+                buttonsStyling: false,
+                confirmButtonText: this.$t('str.title.close.attendance'),
+                cancelButtonText: this.$t('str.title.cancel'),
+                confirmButtonClass: 'btn me-5px btn-danger',
+                cancelButtonClass: 'btn btn-default',
+            }).then(result => {
+                if (result.isConfirmed && result.value) {
+                    this.closeAttendance()
+                }
+            })
         },
         sendAttendanceEvent: async function () {
-            if (!this.isLoadingAttendanceButton) {
-                this.isLoadingAttendanceButton = true
+            if (!this.isLoadingSendAttendanceButton) {
+                this.isLoadingSendAttendanceButton = true
 
                 const attendance = {
                     account: this.selectedEvent?.account?._id,
@@ -83,8 +162,8 @@ export default {
 
                 try {
                     await Services.createAttendance(this, attendance)
-                    this.answerEventEnabled = false
-                    this.isLoadingAttendanceButton = false
+                    this.attendanceEventEnabled = false
+                    this.isLoadingSendAttendanceButton = false
                     this.clearForm()
 
                     Common.show(this, 'bottom-right', 'success', 'str.attendance_created')
@@ -96,7 +175,7 @@ export default {
                     this.attendances = await Services.getEventAttendances(this, filters)
                 } catch (error) {
                     console.log(error)
-                    this.isLoadingAttendanceButton = false
+                    this.isLoadingSendAttendanceButton = false
                     Common.show(this, 'bottom-right', 'danger', 'str.error_creating_attendance')
                 }
             }
@@ -107,7 +186,7 @@ export default {
         },
         formatPatrolActions: function (list) {
             const data = list.map(item => {
-                const { _id, status, account, client, site, event, type, date, vigilant, patrol, soundURL, photoURL, signatureURL, incidents, deviceInfo, geolocation, notes } = item
+                const { _id, status, account, client, site, event, type, date, vigilant, patrol, soundURL, photoURL, signatureURL, incidents, deviceInfo, geolocation, notes, attendance } = item
 
                 return {
                     _id: _id,
@@ -127,6 +206,7 @@ export default {
                     geolocation: geolocation || {},
                     notes: notes ? notes : '',
                     date,
+                    attendance,
                     status: status,
                 }
             })
@@ -222,7 +302,7 @@ export default {
         },
         handleSelectEvent: async function (event) {
             this.selectedEvent = event
-            this.answerEventEnabled = false
+            this.attendanceEventEnabled = false
             this.removeRequiredField('attendanceOptions')
 
             //get attendances for event

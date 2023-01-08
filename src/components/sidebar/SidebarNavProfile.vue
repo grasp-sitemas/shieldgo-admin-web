@@ -15,8 +15,14 @@
         </div>
 
         <div id="appSidebarProfileMenu" class="collapse" v-bind:class="{ 'd-block': this.stat == 'expand' && !this.appOptions.pageSidebarMinified, 'd-none': this.stat == 'collapse' }">
-            <div class="menu-item pt-5px">
-                <a href="#/settings" class="menu-link">
+            <div class="menu-item pt-5px" v-for="(menu, index) in companyMenus" :key="index">
+                <a :href="menu.path" class="menu-link">
+                    <div class="menu-icon"><i :class="menu.icon"></i></div>
+                    <div class="menu-text">{{ $t(menu.title) }}</div>
+                </a>
+            </div>
+
+            <!-- <a href="#/settings" class="menu-link">
                     <div class="menu-icon"><i class="fa fa-cog"></i></div>
                     <div class="menu-text">{{ $t('str.sidebar.menu.settings') }}</div>
                 </a>
@@ -32,7 +38,7 @@
                     <div class="menu-icon"><i class="fa fa-file-contract"></i></div>
                     <div class="menu-text">{{ $t('str.sidebar.menu.actions.log') }}</div>
                 </a>
-            </div>
+            </div> -->
             <!-- <div class="menu-item pb-5px">
                 <a href="javascript:;" class="menu-link">
                     <div class="menu-icon"><i class="fa fa-question-circle"></i></div>
@@ -47,6 +53,7 @@
 <script>
 import AppOptions from '../../config/AppOptions.vue'
 import Controller from './CrtSidebar.vue'
+import { COMPANY_MENU } from '../../utils/menus.js'
 import Vue from 'vue'
 Vue.prototype.$registerEvent = new Vue()
 
@@ -59,6 +66,8 @@ export default {
             user: null,
             valuekey: 0,
             stat: '',
+            companyMenus: [],
+            companyMenuOptions: COMPANY_MENU,
         }
     },
     methods: Controller.methods,
@@ -70,6 +79,7 @@ export default {
     },
     mounted() {
         Controller.init(this)
+        this.applyCompanyMenuRole(this)
     },
 }
 </script>

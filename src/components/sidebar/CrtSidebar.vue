@@ -94,9 +94,13 @@ export default {
         },
         applyMenuRole: function (state) {
             const role = state?.user?.companyUser?.subtype
-            if (role !== 'SUPER_ADMIN_MASTER' && role !== 'ADMIN_MASTER') {
-                state.menus = state.menus.filter(menu => menu?.path !== '/companies')
-            }
+            const menus = state.menus.filter(menu => menu.roles.includes(role))
+            state.menus = menus
+        },
+        applyCompanyMenuRole: function (state) {
+            const role = state?.user?.companyUser?.subtype
+            const menus = state.companyMenuOptions.filter(menu => menu.roles.includes(role))
+            state.companyMenus = menus
         },
         refreshUser(state) {
             Request.do(

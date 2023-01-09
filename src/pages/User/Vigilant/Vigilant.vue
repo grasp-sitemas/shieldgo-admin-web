@@ -229,7 +229,7 @@
             </form>
         </panel>
         <notifications group="bottom-right" position="bottom right" :speed="500" />
-        <ListVigilant v-on:load-item="selectItem" :isSuperAdminMaster="isSuperAdminMaster" :accounts="accounts" />
+        <ListVigilant v-on:load-item="selectItem" :isSuperAdminMaster="isSuperAdminMaster" :accounts="accounts" :clients="clients" />
     </div>
 </template>
 

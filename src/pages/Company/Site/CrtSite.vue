@@ -19,11 +19,11 @@ const instanceateAddress = (addressObj, geo) => {
 export default {
     init: async payload => {
         payload.domain = Endpoints.domain
-        payload.data.account = Common.getAccountId(payload)
+        payload.data.account = await Common.getAccountId(payload)
 
         payload.isSuperAdminMaster = await Common.isSuperAdminMaster(payload)
         if (payload.isSuperAdminMaster) {
-            payload.accounts = await Services.getAccounts(payload)
+            payload.accounts = await payload.$session.get('user')?.account?._id
         } else {
             payload.clients = await Services.getClients(payload)
         }

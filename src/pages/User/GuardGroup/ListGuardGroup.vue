@@ -64,7 +64,7 @@
                         {{ props.formattedRow[props.column.field]?.name }}
                     </span>
                     <span v-else-if="props.column.field === 'vigilants'">
-                        {{ props.formattedRow[props.column.field]?.length  }}
+                        {{ props.formattedRow[props.column.field]?.length }}
                     </span>
                     <span v-else-if="props.column.field === 'createDate'">
                         {{ formatDate(props.formattedRow[props.column.field]) }}
@@ -97,10 +97,17 @@ export default {
             type: Array,
             default: () => [],
         },
+        clients: {
+            type: Array,
+            default: () => [],
+        },
     },
     watch: {
         accounts: function () {
             this.listAccounts = this.accounts
+        },
+        clients: function () {
+            this.listClients = this.clients
         },
     },
     data() {

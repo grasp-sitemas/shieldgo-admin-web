@@ -236,7 +236,7 @@
             </form>
         </panel>
         <notifications group="bottom-right" position="bottom right" :speed="500" />
-        <ListUser v-on:load-item="selectItem" :isSuperAdminMaster="isSuperAdminMaster" :accounts="accounts" />
+        <ListUser v-on:load-item="selectItem" :isSuperAdminMaster="isSuperAdminMaster" :accounts="accounts" :clients="clients" :sites="sites" :roles="roles" :states="states" />
     </div>
 </template>
 

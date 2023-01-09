@@ -13,7 +13,7 @@ export default {
         return response?.data?.results || []
     },
     getClients: async function (state) {
-        const account = state.$session.get('user')?.account?._id
+        const account = state.$session.get('user')?.account?._id || ''
 
         const filters = {
             name: '',
@@ -23,6 +23,23 @@ export default {
         }
 
         if (account) {
+            const response = await Request.do(state, 'POST', Request.getDefaultHeader(state), filters, `${Endpoints.companies.filter}`)
+            return response?.data?.results || []
+        }
+
+        return []
+    },
+    getSites: async function (state) {
+        const client = state.$session.get('user')?.client?._id || ''
+
+        const filters = {
+            name: '',
+            client: client,
+            status: 'ACTIVE',
+            type: 'SITES',
+        }
+
+        if (client) {
             const response = await Request.do(state, 'POST', Request.getDefaultHeader(state), filters, `${Endpoints.companies.filter}`)
             return response?.data?.results || []
         }

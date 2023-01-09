@@ -110,10 +110,17 @@ export default {
             type: Array,
             default: () => [],
         },
+        clients: {
+            type: Array,
+            default: () => [],
+        },
     },
     watch: {
         accounts: function () {
             this.listAccounts = this.accounts
+        },
+        clients: function () {
+            this.listClients = this.clients
         },
     },
     data() {

@@ -46,7 +46,8 @@ export default {
             user: null,
         }
     },
-    mounted() {
+    beforeCreate() {},
+    created() {
         Controller.init(this)
         Controller.methods.applyMenuRole(this)
     },

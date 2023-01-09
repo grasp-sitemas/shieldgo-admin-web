@@ -49,7 +49,7 @@
                 :pagination-options="paginationOptions"
                 :sort-options="{
                     enabled: true,
-                    multipleColumns: true
+                    multipleColumns: true,
                 }"
             >
                 <div slot="emptystate" class="vgt-center-align vgt-text-disabled">
@@ -113,10 +113,17 @@ export default {
             type: Array,
             default: () => [],
         },
+        clients: {
+            type: Array,
+            default: () => [],
+        },
     },
     watch: {
         accounts: function () {
             this.listAccounts = this.accounts
+        },
+        clients: function () {
+            this.listClients = this.clients
         },
     },
     data() {

@@ -69,8 +69,10 @@
                     <span v-else-if="props.column.field === 'account'">
                         {{ props.formattedRow[props.column.field]?.name }}
                     </span>
-                    <span v-else-if="props.column.field === 'geolocation' && props.formattedRow[props.column.field]?.latitude && props.formattedRow[props.column.field]?.longitude">
-                        {{ 'Lat: ' + props.formattedRow[props.column.field]?.latitude + ' Lng: ' + props.formattedRow[props.column.field]?.longitude }}
+                    <span v-else-if="props.column.field === 'geolocation'">
+                        <span v-if="props.formattedRow[props.column.field]?.latitude && props.formattedRow[props.column.field]?.longitude">
+                            {{ 'Lat: ' + props.formattedRow[props.column.field]?.latitude + ' Lng: ' + props.formattedRow[props.column.field]?.longitude }}
+                        </span>
                     </span>
                     <span v-else-if="props.column.field === 'client'">
                         {{ props.formattedRow[props.column.field]?.name }}
@@ -90,7 +92,7 @@
                 </template>
             </vue-good-table>
         </panel>
-        <CheckPointModal :isSuperAdminMaster="isSuperAdminMaster" :accounts="accounts" />
+        <CheckPointModal :isSuperAdminMaster="isSuperAdminMaster" :accounts="accounts" :clients="clients" />
     </div>
 </template>
 
@@ -113,10 +115,17 @@ export default {
             type: Array,
             default: () => [],
         },
+        clients: {
+            type: Array,
+            default: () => [],
+        },
     },
     watch: {
         accounts: function () {
             this.listAccounts = this.accounts
+        },
+        clients: function () {
+            this.listClients = this.clients
         },
     },
     data() {

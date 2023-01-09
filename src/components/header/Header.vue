@@ -83,7 +83,7 @@
                         <span class="badge bg-danger rounded-pill ms-auto pb-4px">2</span>
                     </a>
                     <a href="javascript:;" class="dropdown-item">Calendar</a> -->
-                    <a href="#/settings" class="dropdown-item">{{ $t('str.header.menu.settings') }}</a>
+                    <!-- <a href="#/settings" class="dropdown-item">{{ $t('str.header.menu.settings') }}</a> -->
                     <a href="#/change-password" class="dropdown-item">{{ $t('str.header.menu.change.password') }}</a>
                     <div class="dropdown-divider"></div>
                     <a class="dropdown-item" v-on:click="logout">{{ $t('str.header.menu.signout') }} </a>

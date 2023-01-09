@@ -14,7 +14,6 @@
             <form>
                 <fieldset>
                     <div v-if="data._id" class="row">
-                
                         <div class="col-md-4 mb-3">
                             <label class="form-label" for="statusField">{{ $t('str.register.status.field') }}</label>
                             <select v-model="data.status" class="form-select" id="statusField">
@@ -119,8 +118,8 @@
                                 @focus="removeRequiredField('number')"
                                 class="form-control"
                                 type="number"
-								key="numberField"
-								ref="numberField"
+                                key="numberField"
+                                ref="numberField"
                                 :placeholder="$t('str.register.site.number.placeholder')"
                             />
                             <div class="invalid-feedback">{{ $t('str.register.site.number.required') }}</div>

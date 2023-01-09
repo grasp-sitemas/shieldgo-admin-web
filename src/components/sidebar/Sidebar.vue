@@ -9,17 +9,10 @@
                 'app-sidebar-grid': appOptions.appSidebarGrid,
             }"
         >
-            <!-- BEGIN scrollbar -->
             <vue-custom-scrollbar class="app-sidebar-content" v-bind:class="{ 'h-100 ps': appOptions.appSidebarFixed }">
-                <!-- begin sidebar user -->
                 <sidebar-nav-profile v-if="!appOptions.appSidebarSearch"></sidebar-nav-profile>
-                <!-- end sidebar user -->
-
-                <!-- begin sidebar nav -->
                 <sidebar-nav ref="sidebarNav" v-bind:scrollTop="scrollTop" v-on:show-float-submenu="handleShowFloatSubmenu" v-on:hide-float-submenu="handleHideFloatSubmenu"></sidebar-nav>
-                <!-- end sidebar nav -->
             </vue-custom-scrollbar>
-            <!-- END scrollbar -->
         </div>
         <div class="app-sidebar-bg"></div>
         <div class="app-sidebar-mobile-backdrop"><a href="#" v-on:click="dismissSidebarMobile" class="stretched-link"></a></div>

@@ -162,7 +162,16 @@
                     <div class="row">
                         <div class="col-md-4 mb-3">
                             <label class="form-label" for="cepField">{{ $t('str.register.user.cep.field') }}</label>
-                            <input type="tel" v-mask="'#####-###'" key="cepField" @input="inputCep()" @keyup.delete="handleCEPDelete" v-model="data.address.cep" class="form-control" :placeholder="$t('str.register.user.cep.placeholder')" />
+                            <input
+                                type="tel"
+                                v-mask="'#####-###'"
+                                key="cepField"
+                                @input="inputCep()"
+                                @keyup.delete="handleCEPDelete"
+                                v-model="data.address.cep"
+                                class="form-control"
+                                :placeholder="$t('str.register.user.cep.placeholder')"
+                            />
                             <div class="invalid-feedback">{{ $t('str.register.user.cep.required') }}</div>
                         </div>
                         <div v-if="data?.address?.cep?.length === 9" class="col-md-4 mb-3">
@@ -227,7 +236,7 @@
             </form>
         </panel>
         <notifications group="bottom-right" position="bottom right" :speed="500" />
-        <ListUser v-on:load-item="selectItem" :isSuperAdminMaster="isSuperAdminMaster" :accounts="accounts" />
+        <ListUser v-on:load-item="selectItem" :isSuperAdminMaster="isSuperAdminMaster" :accounts="accounts" :clients="clients" :sites="sites" :roles="roles" :states="states" />
     </div>
 </template>
 

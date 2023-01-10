@@ -30,7 +30,11 @@ export default {
         return new Date(text).toLocaleDateString()
     },
     formatDateTime: text => {
-        return new Date(text).toLocaleString()
+        const dateTimezone = moment(text).utc(true)
+        const formattedDate = dateTimezone.format('DD/MM/YYYY')
+        const formattedTime = dateTimezone.format('HH:mm')
+
+        return formattedDate + ' - ' + formattedTime
     },
     checkValidDate: function (date) {
         const currentDate = moment().format('DD-MM-YYYY')
@@ -107,7 +111,7 @@ export default {
         }
     },
     formatDateAndTime(date) {
-        return moment(date).utc().format('DD/MM/YYYY HH:mm:ss')
+        return moment(date).utc(true).format('DD/MM/YYYY HH:mm:ss')
     },
     checkCPF: str => {
         /* eslint-disable */

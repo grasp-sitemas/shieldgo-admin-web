@@ -27,6 +27,9 @@ export default {
 
             return true
         },
+        navigateByRole: async function (subtype) {
+            return subtype === 'SUPER_ADMIN_MASTER' || subtype === 'ADMIN' || subtype === 'MANAGER' ? '/dashboard' : subtype === 'OPERATOR' ? '/monitor' : null
+        },
         signIn: function () {
             if (this.checkForm()) {
                 this.loading = true
@@ -38,7 +41,7 @@ export default {
                         Request.getDefaultHeader(this),
                         this.data,
                         `${Endpoints.systemUsers.login}`,
-                        (userResponse, fullResponse) => {
+                        async (userResponse, fullResponse) => {
                             this.loading = false
                             if (userResponse.status === 200) {
                                 this.$session.destroy()
@@ -46,13 +49,14 @@ export default {
                                 this.$session.set('user', userResponse.result)
                                 this.$session.set('token', userResponse.token)
                                 this.$session.set('correlationId', fullResponse.headers['x-correlation-id'])
-                                const subtype = userResponse?.result?.companyUser?.subtype
 
-                                if (this.checkRole(subtype)) {
-                                    this.$i18n.locale = userResponse.result.language
-                                    this.$router.push({ path: '/dashboard' })
-                                    window.location.href = '?#/dashboard'
-                                    location.reload()
+                                const subtype = userResponse?.result?.companyUser?.subtype
+                                const routeToNavigate = await this.navigateByRole(subtype)
+
+                                if (routeToNavigate) {
+                                    const language = userResponse?.result?.language
+                                    this.$i18n.locale = language
+                                    this.$router.push({ path: routeToNavigate })
                                 } else {
                                     Common.show(this, 'bottom-right', 'error', this.$t('response.user.invalid.subtype'))
                                 }

@@ -60,7 +60,7 @@
                     <panel :title="$t('str.events.title')">
                         <div class="list-group list-group-flush rounded-bottom overflow-hidden panel-body p-0">
                             <div @click="handleSelectEvent(event)" v-for="event in events" :key="event.id">
-                                <a v-if="event?.attendance?.status === 'IN_PROGRESS' || !event?.attendance?.status" class="list-group-item list-group-item-action d-flex cursor-mouse">
+                                <a class="list-group-item list-group-item-action d-flex cursor-mouse">
                                     <div class="me-3 fs-16px">
                                         <i v-bind:class="event?.icon" />
                                     </div>
@@ -378,8 +378,8 @@ export default {
                 } else if (type === 'SOS_ALERT') {
                     state.$registerEvent.$emit('soundAlert')
                 }
-                deleteDoc(doc(db, 'notifications', siteId))
-                state.filter()
+                await deleteDoc(doc(db, 'notifications', siteId))
+                await state.filter()
             }
         })
 
@@ -403,6 +403,7 @@ export default {
 
         onSnapshot(doc(db, 'updateAttendanceEvent', siteId), async document => {
             if (document?.data()?.attendance) {
+                console.log('updateAttendanceEvent')
                 const attendance = JSON.parse(document.data()?.attendance)
                 const operator = JSON.parse(document.data()?.operator)
 

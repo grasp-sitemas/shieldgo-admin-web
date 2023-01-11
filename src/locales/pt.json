@@ -827,7 +827,7 @@
     "str.event.status.canceled": "Cancelado",
     "str.event.status.done": "Realizado",
     "str.event.status.expired": "Vencido",
-    "str.event.status.finished": "Finalizado",
+    "str.event.status.finished": "Realizado",
     "str.event.status.pendent": "Pendente",
     "MULTIMEDIA": "Multimídia",
     "SCAN": "Scan",

@@ -5,7 +5,6 @@
         </ol>
         <h1 class="page-header">{{ $t('str.form.title.timeline') }}</h1>
         <hr />
-
         <div class="row">
             <div v-if="isSuperAdminMaster" class="col-md-4 mb-3">
                 <label class="form-label" for="accountField">{{ $t('str.register.guard.groups.account.field') }}</label>
@@ -18,7 +17,7 @@
 
                 <div class="invalid-feedback">{{ $t('str.register.guard.groups.account.required') }}</div>
             </div>
-            <div class="col-md-4 mb-3">
+            <div v-if="role === 'SUPER_ADMIN_MASTER' || role === 'ADMIN' || role === 'MANAGER'" class="col-md-4 mb-3">
                 <label class="form-label" for="clientField">{{ $t('str.register.guard.groups.client.field') }}</label>
                 <select v-model="filters.client" @change="changeClient" class="form-select" id="clientField">
                     <option value="">{{ $t('str.register.select.placeholder') }}</option>
@@ -151,6 +150,7 @@ export default {
             columns: [],
             isLoading: false,
             dateRange: {},
+            role: '',
             filters: {
                 account: '',
                 client: '',

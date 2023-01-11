@@ -12,6 +12,7 @@
             <div v-if="menu.badge" class="menu-badge">{{ menu.badge }}</div>
             <div v-else class="menu-caret"></div>
         </a>
+
         <div
             class="menu-submenu"
             v-bind:class="{ 'd-block': this.stat == 'expand', 'd-none': this.stat == 'collapse' }"

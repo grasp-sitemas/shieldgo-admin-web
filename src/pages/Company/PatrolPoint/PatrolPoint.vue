@@ -9,7 +9,6 @@
         <h1 class="page-header">
             {{ $t('str.form.title.patrol.points') }}
         </h1>
-
         <panel v-if="data._id" :title="$t('str.register.form.title')">
             <form>
                 <fieldset>
@@ -38,7 +37,7 @@
                             </select>
                             <div class="invalid-feedback">{{ $t('str.register.check.point.account.required') }}</div>
                         </div>
-                        <div class="col-md-3 mb-3">
+                        <div v-if="role === 'SUPER_ADMIN_MASTER' || role === 'ADMIN' || role === 'MANAGER'" class="col-md-3 mb-3">
                             <label class="form-label" for="clientField">{{ $t('str.register.check.point.client.field') }}</label>
                             <select
                                 v-model="data.client"
@@ -152,7 +151,7 @@
         </panel>
         <notifications group="bottom-right" position="bottom right" :speed="500" />
         <QrCodeModal :qrcodeId="data._id" :data="data" />
-        <ListPatrolPoint v-on:load-item="selectItem" :isSuperAdminMaster="isSuperAdminMaster" :accounts="accounts" :clients="clients" />
+        <ListPatrolPoint v-on:load-item="selectItem" :isSuperAdminMaster="isSuperAdminMaster" :accounts="accounts" :clients="clients" :role="role" />
     </div>
 </template>
 
@@ -182,6 +181,7 @@ export default {
             accounts: [],
             clients: [],
             sites: [],
+            role: '',
             valuekey: 0,
             isSuperAdminMaster: false,
             data: {

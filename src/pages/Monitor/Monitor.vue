@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div v-if="!isLoading">
         <div style="min-height: 100vh; background-size: 360px; background-position: right bottom">
             <div class="d-flex align-items-center mb-3">
                 <h1 class="page-header mb-0">{{ $t('str.form.title.monitor') }}</h1>
@@ -278,6 +278,9 @@
         <Sound :soundURL="selectedEvent?.soundURL" />
         <DeviceInfo :data="selectedEvent" />
     </div>
+    <div v-else class="center-spinner">
+        <i class="fas fa-spinner fa-spin" />
+    </div>
 </template>
 
 <script>
@@ -306,6 +309,7 @@ export default {
     data() {
         return {
             isLoading: true,
+            isLoadingEvents: false,
             isLoadingSendAttendanceButton: false,
             isLoadingAttendanceEventButton: false,
             domain: '',
@@ -364,19 +368,18 @@ export default {
             state.initTable()
         })
 
-        const siteId = state.$session.get('user')?.site
+        const siteId = state.$session.get('user')?.site?._id
 
         onSnapshot(doc(db, 'notifications', siteId), async document => {
             const type = document.data()?.type
-
             if (type && type.length > 0) {
                 if (type === 'INCIDENT') {
-                    Common.show(this, 'top-right', 'warn', this.$t('msg.new.incident.notification'))
+                    Common.show(state, 'top-right', 'warn', state.$t('msg.new.incident.notification'))
                 } else if (type === 'SOS_ALERT') {
                     state.$registerEvent.$emit('soundAlert')
                 }
-                await deleteDoc(doc(db, 'notifications', siteId))
-                await state.filter()
+                deleteDoc(doc(db, 'notifications', siteId))
+                state.filter()
             }
         })
 
@@ -518,5 +521,13 @@ export default {
 img {
     max-width: 100% !important;
     display: block;
+}
+
+.center-spinner {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    margin-top: 22%;
 }
 </style>

@@ -6,16 +6,20 @@ import moment from 'moment'
 export default {
     init: async payload => {
         payload.initRangeDate()
-        payload.isSuperAdminMaster = await Common.isSuperAdminMaster(payload)
-
         await payload.initTable()
 
-        if (payload.isSuperAdminMaster) {
+        payload.isSuperAdminMaster = await Common.isSuperAdminMaster(payload)
+        const role = await Common.getSubtype(payload)
+        if (role === 'SUPER_ADMIN_MASTER') {
             payload.accounts = await Services.getAccounts(payload)
-        } else {
+        } else if (role === 'ADMIN') {
             payload.clients = await Services.getClients(payload)
+        } else if (role === 'MANAGER' || role === 'OPERATOR') {
+            const client = await Common.getClientId(payload)
+            payload.filters.client = client
+            payload.sites = await Services.getSites(payload)
         }
-
+        payload.role = role
         payload.filter()
     },
     methods: {

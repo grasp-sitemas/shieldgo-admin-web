@@ -5,6 +5,7 @@ import Request from '../../common/Request.vue'
 export default {
     init: payload => {
         payload.user = payload.$session.get('user')
+        payload.role = payload.user?.companyUser?.subtype
         payload.domain = Endpoints.domain
         payload.valuekey += 1
     },

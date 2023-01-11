@@ -7,7 +7,7 @@
                 <div class="menu-profile-info">
                     <div class="d-flex align-items-center">
                         <div class="flex-grow-1">{{ getCompanyName() }}</div>
-                        <div class="menu-caret ms-auto"></div>
+                        <div v-if="role !== 'OPERATOR'" class="menu-caret ms-auto"></div>
                     </div>
                     <small>{{ $t(this?.user?.companyUser?.subtype) }}</small>
                 </div>
@@ -64,6 +64,7 @@ export default {
             appOptions: AppOptions,
             domain: null,
             user: null,
+            role: null,
             valuekey: 0,
             stat: '',
             companyMenus: [],

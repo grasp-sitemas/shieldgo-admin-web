@@ -16,10 +16,10 @@ export default {
             payload.accounts = await Services.getAccounts(payload)
         } else {
             payload.clients = await Services.getClients(payload)
-            payload.filters.account = payload.$session.get('user')?.account?._id
+            payload.filters.account = await payload.$session.get('user')?.account?._id
         }
 
-        payload.user = payload.$session.get('user')
+        payload.user = await payload.$session.get('user')
 
         await payload.initTable()
         await payload.selectAllTypes()
@@ -32,7 +32,7 @@ export default {
             return this.$session.get('user')?._id
         },
         filter: async function () {
-            this.isLoading = true
+            this.isLoadingEvents = true
             this.items = []
 
             try {
@@ -51,10 +51,11 @@ export default {
                     this.attendances = await Services.getEventAttendances(this, filters)
                 }
             } catch (error) {
+                this.isLoadingEvents = false
                 console.log(error)
             }
 
-            this.isLoading = false
+            this.isLoadingEvents = false
         },
         checkRequiredField(field) {
             return this.errors.includes(field)

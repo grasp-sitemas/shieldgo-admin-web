@@ -18,7 +18,7 @@
                     </select>
                     <div class="invalid-feedback">{{ $t('str.register.guard.groups.account.required') }}</div>
                 </div>
-                <div class="col-md-3 mb-3">
+                <div v-if="role === 'SUPER_ADMIN_MASTER' || role === 'ADMIN' || role === 'MANAGER'" class="col-md-3 mb-3">
                     <label class="form-label" for="clientField">{{ $t('str.register.guard.groups.client.field') }}</label>
                     <select v-model="filters.client" @change="changeClient" class="form-select" id="clientField">
                         <option value="">{{ $t('str.register.select.placeholder') }}</option>
@@ -92,13 +92,14 @@
                 </template>
             </vue-good-table>
         </panel>
-        <CheckPointModal :isSuperAdminMaster="isSuperAdminMaster" :accounts="accounts" :clients="clients" />
+        <CheckPointModal :isSuperAdminMaster="isSuperAdminMaster" :accounts="accounts" :clients="clients" :sites="listSites" :role="role" />
     </div>
 </template>
 
 <script>
 import Controller from './CrtListPatrolPoint.vue'
 import CheckPointModal from './CheckPointModal/CheckPointModal.vue'
+import Services from '../../../common/Services.vue'
 import Vue from 'vue'
 Vue.prototype.$registerEvent = new Vue()
 
@@ -119,6 +120,10 @@ export default {
             type: Array,
             default: () => [],
         },
+        role: {
+            type: String,
+            default: '',
+        },
     },
     watch: {
         accounts: function () {
@@ -127,11 +132,17 @@ export default {
         clients: function () {
             this.listClients = this.clients
         },
+        role: async function () {
+            if (this.role === 'OPERATOR') {
+                this.listSites = await Services.getSites(this)
+            }
+        },
     },
     data() {
         return {
             items: [],
             isLoading: false,
+            subTypeUser: '',
             filters: {
                 account: '',
                 client: '',

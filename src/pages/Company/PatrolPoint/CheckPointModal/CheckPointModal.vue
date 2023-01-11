@@ -33,7 +33,7 @@
                     </select>
                     <div class="invalid-feedback">{{ $t('str.register.incident.account.required') }}</div>
                 </div>
-                <div class="col-md-4 mb-3">
+                <div v-if="role === 'SUPER_ADMIN_MASTER' || role === 'ADMIN' || role === 'MANAGER'" class="col-md-4 mb-3">
                     <label class="form-label" for="clientField">{{ $t('str.register.incident.client.field') }}</label>
                     <select
                         v-model="data.client"
@@ -117,6 +117,23 @@ export default {
             type: Boolean,
             default: false,
         },
+        role: {
+            type: String,
+            default: () => '',
+        },
+    },
+    watch: {
+        role: function () {
+            if (this.role === 'ADMIN') {
+                this.data.account = this.$session.get('user')?.account?._id
+            } else if (this.role === 'MANAGER') {
+                this.data.account = this.$session.get('user')?.account?._id
+                this.data.client = this.$session.get('user')?.client?._id
+            } else if (this.role === 'OPERATOR') {
+                this.data.account = this.$session.get('user')?.account?._id
+                this.data.client = this.$session.get('user')?.client?._id
+            }
+        },
     },
     data() {
         return {
@@ -137,5 +154,4 @@ export default {
 }
 </script>
 
-<style>
-</style>
+<style></style>

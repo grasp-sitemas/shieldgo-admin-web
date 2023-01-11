@@ -81,6 +81,9 @@ export default {
     isOperator: state => {
         return state.$session.get('user')?.companyUser?.subtype === 'OPERATOR' ? true : false
     },
+    getSubtype: state => {
+        return state.$session.get('user')?.companyUser?.subtype ? state.$session.get('user')?.companyUser?.subtype : null
+    },
     getAccountId: state => {
         const type = state.$session.get('user')?.account?.type
         return type === 'ACCOUNT' && state.$session.get('user')?.account ? state.$session.get('user')?.account?._id : ''

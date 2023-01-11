@@ -7,7 +7,15 @@
                     {{ data?.name }}
                 </h5>
             </h4>
-            <span class="badge align-badge" v-bind:class="data.status === 'ACTIVE' ? 'bg-success' : 'bg-danger'"> {{ $t(getStatusName(data.status)) }} </span>
+
+            <span
+                class="badge align-badge"
+                v-bind:class="
+                    data.status === 'ACTIVE' ? 'bg-blue' : data.status === 'IN_PROGRESS' ? 'bg-success' : data.status === 'FINISHED' ? 'bg-info' : data.status === 'EXPIRED' ? 'bg-danger' : 'bg-danger'
+                "
+            >
+                {{ $t(getStatusName(data.status)) }}
+            </span>
 
             <a class="btn-close cursor_pointer" @click="$bvModal.hide('infoItemModal')"></a>
         </template>

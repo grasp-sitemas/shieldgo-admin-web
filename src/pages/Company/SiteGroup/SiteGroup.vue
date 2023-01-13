@@ -70,23 +70,6 @@
                             />
                             <div class="invalid-feedback">{{ $t('str.register.site.groups.name.required') }}</div>
                         </div>
-                        <!-- <div class="col-md-4 mb-3">
-                            <label class="form-label" for="siteField">{{ $t('str.register.site.groups.site.field') }}</label>
-                            <select
-                                v-model="data.site"
-                                @change="changeSite"
-                                class="form-select"
-                                v-bind:class="checkRequiredField('site') ? 'is-invalid' : ''"
-                                @focus="removeRequiredField('site')"
-                                id="siteField"
-                            >
-                                <option value="">{{ $t('str.register.select.placeholder') }}</option>
-                                <option v-for="site in sites" :value="site._id" :key="site._id">
-                                    {{ site.name }}
-                                </option>
-                            </select>
-                            <div class="invalid-feedback">{{ $t('str.register.site.groups.site.required') }}</div>
-                        </div> -->
                     </div>
                     <div class="row">
                         <div class="col-md-12 mb-3">

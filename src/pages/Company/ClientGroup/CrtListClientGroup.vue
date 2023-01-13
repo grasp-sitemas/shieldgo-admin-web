@@ -19,7 +19,7 @@ export default {
                 'POST',
                 Request.getDefaultHeader(this),
                 this.filters,
-                `${Endpoints.guardGroups.filter}`,
+                `${Endpoints.clientGroups.filter}`,
                 response => {
                     this.items = response.results
                     this.isLoading = false
@@ -38,8 +38,6 @@ export default {
             delete data.password
 
             data.account = data?.account?._id || ''
-            data.client = data?.client?._id || ''
-            data.site = data?.site?._id || ''
 
             if (!data?.address?._id) {
                 data.address = {}
@@ -50,51 +48,37 @@ export default {
         initTable() {
             this.columns = [
                 {
-                    label: this.$t('str.table.guard.groups.column.name'),
+                    label: this.$t('str.table.client.groups.column.name'),
                     field: 'name',
                     width: '20%',
                     thClass: 'text-nowrap',
                     tdClass: 'text-nowrap',
                 },
                 {
-                    label: this.$t('str.table.guard.groups.column.assigned.guards'),
-                    field: 'vigilants',
-                    width: '15%',
+                    label: this.$t('str.table.client.groups.column.assigned.clients'),
+                    field: 'clients',
+                    width: '20%',
                     thClass: 'text-nowrap',
                     tdClass: 'text-nowrap',
                 },
                 {
-                    label: this.$t('str.table.guard.groups.column.account'),
+                    label: this.$t('str.table.client.groups.column.account'),
                     field: 'account',
-                    width: '15%',
+                    width: '20%',
                     thClass: 'text-nowrap',
                     tdClass: 'text-nowrap',
                 },
                 {
-                    label: this.$t('str.table.guard.groups.column.client'),
-                    field: 'client',
-                    width: '15%',
-                    thClass: 'text-nowrap',
-                    tdClass: 'text-nowrap',
-                },
-                {
-                    label: this.$t('str.table.guard.groups.column.site'),
-                    field: 'site',
-                    width: '15%',
-                    thClass: 'text-nowrap',
-                    tdClass: 'text-nowrap',
-                },
-                {
-                    label: this.$t('str.table.guard.groups.column.creat.at'),
+                    label: this.$t('str.table.client.groups.column.creat.at'),
                     field: 'createDate',
-                    width: '10%',
+                    width: '20%',
                     tdClass: 'text-nowrap',
                     thClass: 'text-nowrap',
                 },
                 {
-                    label: this.$t('str.table.guard.groups.column.status'),
+                    label: this.$t('str.table.client.groups.column.status'),
                     field: 'status',
-                    width: '10%',
+                    width: '20%',
                     tdClass: 'text-nowrap',
                     thClass: 'text-nowrap',
                 },
@@ -127,25 +111,10 @@ export default {
 
             this.sites = []
             this.filters.client = ''
-            this.filters.site = ''
 
             this.filter()
 
             this.listClients = await Services.getClientsByAccount(this, account)
-        },
-        changeClient: async function () {
-            const client = this.filters.client
-
-            if (client === '') {
-                this.filters.site = ''
-            }
-
-            this.filter()
-
-            this.listSites = await Services.getSitesByClient(this, client)
-        },
-        changeSite: function () {
-            this.filter()
         },
         formatDate: Common.formatDateAndTime,
     },

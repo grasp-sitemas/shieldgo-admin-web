@@ -9,7 +9,7 @@ export default {
         payload.domain = Endpoints.domain
         payload.isSuperAdminMaster = await Common.isSuperAdminMaster(payload)
         payload.accounts = await Services.getAccounts(payload)
-        payload.data.account = Common.getAccountId(payload)
+        payload.data.account = await Common.getAccountId(payload)
     },
     methods: {
         clearForm() {

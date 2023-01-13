@@ -10,29 +10,25 @@ export default {
         payload.data.account = Common.getAccountId(payload)
 
         payload.isSuperAdminMaster = await Common.isSuperAdminMaster(payload)
-        if (payload.isSuperAdminMaster) {
+        const role = await Common.getSubtype(payload)
+        if (role === 'SUPER_ADMIN_MASTER') {
             payload.accounts = await Services.getAccounts(payload)
-        } else {
+        } else if (role === 'ADMIN') {
             payload.clients = await Services.getClients(payload)
         }
+        payload.role = role
     },
     methods: {
         clearForm() {
             this.errors = []
             this.data = {
                 name: '',
-                vigilants: [],
+                sites: [],
                 account: '',
                 client: '',
-                site: '',
                 status: 'ACTIVE',
             }
-            this.vigilants = []
             this.clients = []
-
-            if (!this.isSuperAdminMaster) {
-                this.sites = []
-            }
 
             this.data.account = Common.getAccountId(this)
             this.isLoading = false
@@ -45,7 +41,7 @@ export default {
                     this.data._id ? 'put' : 'post',
                     Request.getDefaultHeader(this),
                     this.data,
-                    `${Endpoints.guardGroups.guardGroup}${this.data._id ? this.data._id : ''}`,
+                    `${Endpoints.clientGroups.clientGroup}${this.data._id ? this.data._id : ''}`,
                     response => {
                         if (response.status === 200) {
                             Common.show(this, 'bottom-right', 'success', this.data._id ? this.$t('str.form.update.success') : this.$t('str.form.create.success'))
@@ -74,7 +70,7 @@ export default {
                     'DELETE',
                     Request.getDefaultHeader(this),
                     this.data,
-                    `${Endpoints.guardGroups.guardGroup}${this.data._id}`,
+                    `${Endpoints.clientGroups.clientGroup}${this.data._id}`,
                     response => {
                         if (response.status === 200) {
                             Common.show(this, 'bottom-right', 'success', this.$t('str.form.archive.success'))
@@ -112,32 +108,14 @@ export default {
             return this.errors.includes(field)
         },
         removeRequiredField(field) {
-            if (field === 'allAddress') {
-                this.errors = this.errors.filter(item => item !== 'cep' && item !== 'address' && item !== 'number' && item !== 'neighborhood' && item !== 'city' && item !== 'state')
-            } else {
-                this.errors = this.errors.filter(item => item !== field)
-            }
+            this.errors = this.errors.filter(item => item !== field)
         },
         checkForm() {
             if (!this.data.name || this.data.name === '') {
                 this.errors.push('name')
             }
-            if (!this.data.account || this.data.account === '') {
-                this.errors.push('account')
-            }
-            if (!this.data.client || this.data.client === '') {
-                this.errors.push('client')
-            }
-            if (!this.data.site || this.data.site === '') {
-                this.errors.push('site')
-            }
-
-            if (!this.data.client || this.data.client === '') {
-                this.data.client === ''
-            }
-
-            if (!this.data.site || this.data.site === '') {
-                this.data.site === ''
+            if (!this.data.clients || this.data.clients?.length === 0) {
+                this.errors.push('clients')
             }
 
             if (!this.errors || this.errors.length === 0) {
@@ -145,72 +123,30 @@ export default {
             }
         },
         changeAccount: async function () {
-            this.sites = []
-            this.data.client = ''
-            this.data.site = ''
+            this.clients = []
+            this.data.clients = []
 
             const account = this.data.account
 
             this.clients = await Services.getClientsByAccount(this, account)
         },
-        changeClient: async function () {
-            const client = this.data.client
-
-            if (client === '') {
-                this.data.site = ''
-            }
-
-            this.sites = await Services.getSitesByClient(this, client)
-        },
-        changeSite: async function () {
-            const site = this.data.site
-
-            if (site === '') {
-                this.data.vigilants = []
-            }
-            this.data.vigilants = []
-            this.vigilants = await Services.getVigilantsBySite(this, site)
-        },
-        changeRole: async function () {
-            this.data.client = ''
-            this.data.site = ''
-        },
         selectItem: async function (item) {
             this.errors = []
             const data = item
-            if (data.site) {
-                this.vigilants = await Services.getVigilantsBySite(this, item.site)
-
-                const mappedVigilants = data.vigilants.map(vigilant => {
-                    return {
-                        _id: vigilant._id,
-                        firstName: vigilant.firstName,
-                        lastName: vigilant.lastName,
-                        fullName: `${vigilant.firstName} ${vigilant.lastName}`,
-                    }
-                })
-
-                data.vigilants = mappedVigilants ? mappedVigilants : []
-            }
-
-            if (data.account) {
-                this.clients = await Services.getClientsByAccount(this, item.account)
-            }
-
-            if (data.client) {
-                this.sites = await Services.getSitesByClient(this, item.client)
-            }
 
             this.data = data
 
             document.body.scrollTop = 0 // For Safari
             document.documentElement.scrollTop = 0 // For Chrome, Firefox, IE and Opera
         },
-        async selectAllVigilants() {
-            this.data.vigilants = this.vigilants
+        selectAllClients() {
+            this.data.clients = this.clients
+            if (this.clients.length > 0) {
+                this.removeRequiredField('clients')
+            }
         },
-        removeAllVigilants() {
-            this.data.vigilants = []
+        removeAllClients() {
+            this.data.clients = []
         },
     },
 }

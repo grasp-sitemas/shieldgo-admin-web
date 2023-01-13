@@ -1012,5 +1012,18 @@
     "str.register.client.groups.name.placeholder": "Enter the name",
     "str.register.client.groups.name.required": "Name is required",
     "str.register.client.group.remove.all.clients.label": "Remove all",
-    "str.register.client.group.select.all.clients.label": "Select all"
+    "str.register.client.group.select.all.clients.label": "Select all",
+    "str.register.site.group.remove.all.sites.label": "Remove all",
+    "str.register.site.group.select.all.sites.label": "Select all",
+    "SITE_GROUP": "Site Group",
+    "CLIENT_GROUP": "Client Group",
+    "str.log.domain.site_group": "Site Group",
+    "str.log.domain.client_group": "Client Group",
+    "PATROL-ACTION": "Patrol Action",
+    "PATROL-POINT": "Patrol Point",
+    "GUARD-GROUP": "Guard Group",   
+    "SITE-GROUP": "Site Group",
+    "CLIENT-GROUP": "Client Group",
+    "ALL": "All",
+    "str.log.domain.all": "All"
 }

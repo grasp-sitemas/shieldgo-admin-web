@@ -1006,5 +1006,18 @@
     "str.register.client.groups.name.required": "Nome é obrigatório",
     "str.register.client.group.remove.all.clients.label": "Remover todos",
     "str.register.client.group.select.all.clients.label": "Selecionar todos",
-    "str.register.client.groups.clients.field": "Clientes"
+    "str.register.client.groups.clients.field": "Clientes",
+    "str.register.site.group.remove.all.sites.label": "Remover todos",
+    "str.register.site.group.select.all.sites.label": "Selecionar todos",
+    "SITE_GROUP": "Grupo de sites",
+    "CLIENT_GROUP": "Grupo de clientes",
+    "str.log.domain.site_group": "Grupo de sites",
+    "str.log.domain.client_group": "Grupo de clientes",
+    "PATROL-ACTION": "Ação de patrulha",
+    "PATROL-POINT": "Pontos de ronda",
+    "GUARD-GROUP": "Grupo de vigilantes",   
+    "SITE-GROUP": "Grupo de sites",
+    "CLIENT-GROUP": "Grupo de clientes",
+    "ALL": "Todos",
+    "str.log.domain.all": "Todos"
 }

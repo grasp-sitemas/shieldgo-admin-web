@@ -74,14 +74,14 @@
                     <div class="row">
                         <div class="col-md-12 mb-3">
                             <label class="form-label" for="sitesField">{{ $t('str.register.site.groups.sites.field') }}</label>
-                            <span v-show="data.site" @click="removeAllsites()" disabled class="badge bg-dark rounded-5 cursor_pointer f-right badge-ml-5">{{
+                            <span v-show="data.client" @click="removeAllSites()" disabled class="badge bg-dark rounded-5 cursor_pointer f-right badge-ml-5">{{
                                 $t('str.register.site.group.remove.all.sites.label')
                             }}</span>
-                            <span v-show="data.site" @click="selectAllSites()" disabled class="badge bg-dark rounded-5 cursor_pointer f-right">{{ $t('str.register.site.group.select.all.sites.label') }}</span>
+                            <span v-show="data.client" @click="selectAllSites()" disabled class="badge bg-dark rounded-5 cursor_pointer f-right">{{ $t('str.register.site.group.select.all.sites.label') }}</span>
                             <v-select
                                 taggable
                                 multiple
-                                label="fullName"
+                                label="name"
                                 key="sitesField"
                                 v-model="data.sites"
                                 :options="sites"
@@ -116,7 +116,6 @@ import Vue from 'vue'
 Vue.prototype.$registerEvent = new Vue()
 
 import { STATES } from '../../../utils/states.js'
-import { ROLES } from '../../../utils/roles.js'
 
 export default {
     components: {
@@ -125,7 +124,6 @@ export default {
     data() {
         return {
             states: STATES,
-            roles: ROLES,
             domain: null,
             file: null,
             isLoading: false,
@@ -134,6 +132,7 @@ export default {
             clients: [],
             sites: [],
             vigilants: [],
+            role: '',
             valuekey: 0,
             isSuperAdminMaster: false,
             data: {

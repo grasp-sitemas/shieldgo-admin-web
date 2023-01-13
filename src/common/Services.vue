@@ -67,6 +67,7 @@ export default {
             name: '',
             client: client,
             status: 'ACTIVE',
+            type: 'SITE',
         }
 
         if (client) {

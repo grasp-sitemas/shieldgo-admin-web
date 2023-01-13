@@ -20,7 +20,25 @@ export default {
         await payload.filter()
     },
     methods: {
-        filter: function () {
+        handleDomains: async function (value) {
+            const selectedDomains = this.filters.domains
+            const hasAllDomains = selectedDomains.includes('ALL')
+
+            if (hasAllDomains && value !== 'ALL') {
+                this.filters.domains = this.filters.domains.filter(domain => domain !== 'ALL')
+                await this.filter()
+                return
+            }
+
+            if (hasAllDomains && value === 'ALL') {
+                this.filters.domains = this.domains.map(domain => domain.value)
+            } else if (!hasAllDomains && value === 'ALL') {
+                this.filters.domains = []
+            }
+
+            await this.filter()
+        },
+        filter: async function () {
             this.isLoading = true
             this.items = []
 

@@ -6,15 +6,16 @@ import Services from '../../../common/Services.vue'
 
 export default {
     init: async payload => {
-        payload.domain = Endpoints.domain
         payload.data.account = Common.getAccountId(payload)
 
         payload.isSuperAdminMaster = await Common.isSuperAdminMaster(payload)
-        if (payload.isSuperAdminMaster) {
+        const role = await Common.getSubtype(payload)
+        if (role === 'SUPER_ADMIN_MASTER') {
             payload.accounts = await Services.getAccounts(payload)
-        } else {
+        } else if (role === 'ADMIN') {
             payload.clients = await Services.getClients(payload)
         }
+        payload.role = role
     },
     methods: {
         clearForm() {
@@ -40,7 +41,7 @@ export default {
                     this.data._id ? 'put' : 'post',
                     Request.getDefaultHeader(this),
                     this.data,
-                    `${Endpoints.guardGroups.guardGroup}${this.data._id ? this.data._id : ''}`,
+                    `${Endpoints.siteGroups.siteGroup}${this.data._id ? this.data._id : ''}`,
                     response => {
                         if (response.status === 200) {
                             Common.show(this, 'bottom-right', 'success', this.data._id ? this.$t('str.form.update.success') : this.$t('str.form.create.success'))
@@ -69,7 +70,7 @@ export default {
                     'DELETE',
                     Request.getDefaultHeader(this),
                     this.data,
-                    `${Endpoints.guardGroups.guardGroup}${this.data._id}`,
+                    `${Endpoints.siteGroups.siteGroup}${this.data._id}`,
                     response => {
                         if (response.status === 200) {
                             Common.show(this, 'bottom-right', 'success', this.$t('str.form.archive.success'))
@@ -107,11 +108,7 @@ export default {
             return this.errors.includes(field)
         },
         removeRequiredField(field) {
-            if (field === 'allAddress') {
-                this.errors = this.errors.filter(item => item !== 'cep' && item !== 'address' && item !== 'number' && item !== 'neighborhood' && item !== 'city' && item !== 'state')
-            } else {
-                this.errors = this.errors.filter(item => item !== field)
-            }
+            this.errors = this.errors.filter(item => item !== field)
         },
         checkForm() {
             if (!this.data.name || this.data.name === '') {
@@ -123,16 +120,8 @@ export default {
             if (!this.data.client || this.data.client === '') {
                 this.errors.push('client')
             }
-            if (!this.data.site || this.data.site === '') {
-                this.errors.push('site')
-            }
-
-            if (!this.data.client || this.data.client === '') {
-                this.data.client === ''
-            }
-
-            if (!this.data.site || this.data.site === '') {
-                this.data.site === ''
+            if (!this.data.sites || this.data.sites.length === 0) {
+                this.errors.push('sites')
             }
 
             if (!this.errors || this.errors.length === 0) {
@@ -157,46 +146,22 @@ export default {
 
             this.sites = await Services.getSitesByClient(this, client)
         },
-        changeRole: async function () {
-            this.data.client = ''
-            this.data.site = ''
-        },
         selectItem: async function (item) {
             this.errors = []
-            const data = item
-            if (data.site) {
-                this.vigilants = await Services.getVigilantsBySite(this, item.site)
 
-                const mappedVigilants = data.vigilants.map(vigilant => {
-                    return {
-                        _id: vigilant._id,
-                        firstName: vigilant.firstName,
-                        lastName: vigilant.lastName,
-                        fullName: `${vigilant.firstName} ${vigilant.lastName}`,
-                    }
-                })
-
-                data.vigilants = mappedVigilants ? mappedVigilants : []
-            }
-
-            if (data.account) {
-                this.clients = await Services.getClientsByAccount(this, item.account)
-            }
-
-            if (data.client) {
-                this.sites = await Services.getSitesByClient(this, item.client)
-            }
-
-            this.data = data
+            this.data = item
 
             document.body.scrollTop = 0 // For Safari
             document.documentElement.scrollTop = 0 // For Chrome, Firefox, IE and Opera
         },
-        async selectAllVigilants() {
-            this.data.vigilants = this.vigilants
+        selectAllSites() {
+            this.data.sites = this.sites
+            if (this.clients.length > 0) {
+                this.removeRequiredField('sites')
+            }
         },
-        removeAllVigilants() {
-            this.data.vigilants = []
+        removeAllSites() {
+            this.data.sites = []
         },
     },
 }

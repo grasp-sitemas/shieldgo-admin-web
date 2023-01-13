@@ -105,7 +105,6 @@ import Vue from 'vue'
 Vue.prototype.$registerEvent = new Vue()
 
 import { STATES } from '../../../utils/states.js'
-import { ROLES } from '../../../utils/roles.js'
 
 export default {
     components: {
@@ -114,7 +113,6 @@ export default {
     data() {
         return {
             states: STATES,
-            roles: ROLES,
             isLoading: false,
             errors: [],
             accounts: [],

@@ -60,11 +60,10 @@
                     <span v-else-if="props.column.field === 'client'">
                         {{ props.formattedRow[props.column.field]?.name }}
                     </span>
-                    <span v-else-if="props.column.field === 'site'">
-                        {{ props.formattedRow[props.column.field]?.name }}
-                    </span>
-                    <span v-else-if="props.column.field === 'vigilants'">
-                        {{ props.formattedRow[props.column.field]?.length }}
+                    <span v-else-if="props.column.field === 'sites'">
+                        <p v-for="site in props.formattedRow[props.column.field]" :key="site._id" class="m-0">
+                            {{ site.name }}
+                        </p>
                     </span>
                     <span v-else-if="props.column.field === 'createDate'">
                         {{ formatDate(props.formattedRow[props.column.field]) }}
@@ -117,13 +116,11 @@ export default {
             filters: {
                 account: '',
                 client: '',
-                site: '',
                 status: 'ACTIVE',
                 name: '',
             },
             listAccounts: [],
             listClients: [],
-            listSites: [],
             columns: [],
             paginationOptions: {},
         }

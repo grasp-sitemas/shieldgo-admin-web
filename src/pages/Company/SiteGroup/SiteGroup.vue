@@ -2,12 +2,12 @@
     <div :key="valuekey">
         <ol class="breadcrumb float-xl-end">
             <li class="breadcrumb-item">
-                <a href="#/groups/guards">{{ $t('str.breadcrumb.guard.groups') }}</a>
+                <a href="#/groups/sites">{{ $t('str.breadcrumb.site.groups') }}</a>
             </li>
         </ol>
 
         <h1 class="page-header">
-            {{ $t('str.form.title.guard.groups') }}
+            {{ $t('str.form.title.site.groups') }}
         </h1>
 
         <panel :title="$t('str.register.form.title')">
@@ -24,7 +24,7 @@
                     </div>
                     <div class="row">
                         <div v-if="isSuperAdminMaster" class="col-md-4 mb-3">
-                            <label class="form-label" for="accountField">{{ $t('str.register.guard.groups.account.field') }}</label>
+                            <label class="form-label" for="accountField">{{ $t('str.register.site.groups.account.field') }}</label>
                             <select
                                 v-model="data.account"
                                 @change="changeAccount"
@@ -38,10 +38,10 @@
                                     {{ account.name }}
                                 </option>
                             </select>
-                            <div class="invalid-feedback">{{ $t('str.register.guard.groups.account.required') }}</div>
+                            <div class="invalid-feedback">{{ $t('str.register.site.groups.account.required') }}</div>
                         </div>
                         <div class="col-md-4 mb-3">
-                            <label class="form-label" for="clientField">{{ $t('str.register.guard.groups.client.field') }}</label>
+                            <label class="form-label" for="clientField">{{ $t('str.register.site.groups.client.field') }}</label>
                             <select
                                 v-model="data.client"
                                 @change="changeClient"
@@ -55,10 +55,23 @@
                                     {{ client.name }}
                                 </option>
                             </select>
-                            <div class="invalid-feedback">{{ $t('str.register.guard.groups.client.required') }}</div>
+                            <div class="invalid-feedback">{{ $t('str.register.site.groups.client.required') }}</div>
                         </div>
                         <div class="col-md-4 mb-3">
-                            <label class="form-label" for="siteField">{{ $t('str.register.guard.groups.site.field') }}</label>
+                            <label class="form-label" for="nameField">{{ $t('str.register.site.groups.name.field') }}</label>
+                            <input
+                                v-model="data.name"
+                                class="form-control"
+                                v-bind:class="checkRequiredField('name') ? 'is-invalid' : ''"
+                                @focus="removeRequiredField('name')"
+                                type="text"
+                                key="nameField"
+                                :placeholder="$t('str.register.site.groups.name.placeholder')"
+                            />
+                            <div class="invalid-feedback">{{ $t('str.register.site.groups.name.required') }}</div>
+                        </div>
+                        <!-- <div class="col-md-4 mb-3">
+                            <label class="form-label" for="siteField">{{ $t('str.register.site.groups.site.field') }}</label>
                             <select
                                 v-model="data.site"
                                 @change="changeSite"
@@ -72,38 +85,23 @@
                                     {{ site.name }}
                                 </option>
                             </select>
-                            <div class="invalid-feedback">{{ $t('str.register.guard.groups.site.required') }}</div>
-                        </div>
+                            <div class="invalid-feedback">{{ $t('str.register.site.groups.site.required') }}</div>
+                        </div> -->
                     </div>
                     <div class="row">
-                        <div class="col-md-4 mb-3">
-                            <label class="form-label" for="nameField">{{ $t('str.register.guard.groups.name.field') }}</label>
-                            <input
-                                v-model="data.name"
-                                class="form-control"
-                                v-bind:class="checkRequiredField('name') ? 'is-invalid' : ''"
-                                @focus="removeRequiredField('name')"
-                                type="text"
-                                key="nameField"
-                                :placeholder="$t('str.register.guard.groups.name.placeholder')"
-                            />
-                            <div class="invalid-feedback">{{ $t('str.register.guard.groups.name.required') }}</div>
-                        </div>
-                        <div class="col-md-8 mb-3">
-                            <label class="form-label" for="vigilantsField">{{ $t('str.register.guard.groups.vigilants.field') }}</label>
-                            <span v-show="data.site" @click="removeAllVigilants()" disabled class="badge bg-dark rounded-5 cursor_pointer f-right badge-ml-5">{{
-                                $t('str.register.guard.group.remove.all.vigilants.label')
+                        <div class="col-md-12 mb-3">
+                            <label class="form-label" for="sitesField">{{ $t('str.register.site.groups.sites.field') }}</label>
+                            <span v-show="data.site" @click="removeAllsites()" disabled class="badge bg-dark rounded-5 cursor_pointer f-right badge-ml-5">{{
+                                $t('str.register.site.group.remove.all.sites.label')
                             }}</span>
-                            <span v-show="data.site" @click="selectAllVigilants()" disabled class="badge bg-dark rounded-5 cursor_pointer f-right">{{
-                                $t('str.register.guard.group.select.all.vigilants.label')
-                            }}</span>
+                            <span v-show="data.site" @click="selectAllSites()" disabled class="badge bg-dark rounded-5 cursor_pointer f-right">{{ $t('str.register.site.group.select.all.sites.label') }}</span>
                             <v-select
                                 taggable
                                 multiple
                                 label="fullName"
-                                key="vigilantsField"
-                                v-model="data.vigilants"
-                                :options="vigilants"
+                                key="sitesField"
+                                v-model="data.sites"
+                                :options="sites"
                                 :create-option="vigilant => ({ _id: '' })"
                                 :placeholder="$t('str.register.select.placeholder')"
                             />
@@ -124,13 +122,13 @@
             </form>
         </panel>
         <notifications group="bottom-right" position="bottom right" :speed="500" />
-        <ListGuardGroup v-on:load-item="selectItem" :isSuperAdminMaster="isSuperAdminMaster" :accounts="accounts" :clients="clients" />
+        <ListSiteGroup v-on:load-item="selectItem" :isSuperAdminMaster="isSuperAdminMaster" :accounts="accounts" :clients="clients" />
     </div>
 </template>
 
 <script>
-import ListGuardGroup from './ListGuardGroup.vue'
-import Controller from './CrtGuardGroup.vue'
+import ListSiteGroup from './ListSiteGroup.vue'
+import Controller from './CrtSiteGroup.vue'
 import Vue from 'vue'
 Vue.prototype.$registerEvent = new Vue()
 
@@ -139,7 +137,7 @@ import { ROLES } from '../../../utils/roles.js'
 
 export default {
     components: {
-        ListGuardGroup,
+        ListSiteGroup,
     },
     data() {
         return {
@@ -157,10 +155,9 @@ export default {
             isSuperAdminMaster: false,
             data: {
                 name: '',
-                vigilants: [],
+                sites: [],
                 account: '',
                 client: '',
-                site: '',
                 status: 'ACTIVE',
             },
         }

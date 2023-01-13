@@ -4,6 +4,7 @@ import VueSession from 'vue-session'
 
 import Companies from '../pages/Company/Company/Company.vue'
 import ChangePassword from '../pages/User/ChangePassword/ChangePassword.vue'
+import ClientGroup from '../pages/Company/ClientGroup/ClientGroup.vue'
 import Clients from '../pages/Company/Client/Client.vue'
 import Dashboard from '../pages/Dashboard/Dashboard.vue'
 import GuardGroup from '../pages/User/GuardGroup/GuardGroup.vue'
@@ -16,6 +17,7 @@ import PatrolPoint from '../pages/Company/PatrolPoint/PatrolPoint.vue'
 import Profile from '../pages/User/Profile/Profile.vue'
 import RegisterData from '../pages/Company/RegisterData/RegisterData.vue'
 import Settings from '../pages/Settings/Settings.vue'
+import SiteGroup from '../pages/Company/SiteGroup/SiteGroup.vue'
 import Sites from '../pages/Company/Site/Site.vue'
 import Schedule from '../pages/Schedule/Schedule.vue'
 import Timeline from '../pages/Timeline/Timeline.vue'
@@ -66,6 +68,14 @@ const routes = [
         },
     },
     {
+        path: '/groups/clients',
+        name: 'client-groups',
+        component: ClientGroup,
+        beforeEnter: (_to, _from, next) => {
+            next(checkSession())
+        },
+    },
+    {
         path: '/change-password',
         name: 'change-password',
         component: ChangePassword,
@@ -82,7 +92,7 @@ const routes = [
         },
     },
     {
-        path: '/guard-groups',
+        path: '/groups/guards',
         name: 'guard-groups',
         component: GuardGroup,
         beforeEnter: (_to, _from, next) => {
@@ -141,6 +151,14 @@ const routes = [
         path: '/sites',
         name: 'sites',
         component: Sites,
+        beforeEnter: (_to, _from, next) => {
+            next(checkSession())
+        },
+    },
+    {
+        path: '/groups/sites',
+        name: 'site-groups',
+        component: SiteGroup,
         beforeEnter: (_to, _from, next) => {
             next(checkSession())
         },

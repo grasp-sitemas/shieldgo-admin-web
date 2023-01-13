@@ -2,7 +2,7 @@
     <div :key="valuekey">
         <ol class="breadcrumb float-xl-end">
             <li class="breadcrumb-item">
-                <a href="#/groups/guards">{{ $t('str.breadcrumb.guard.groups') }}</a>
+                <a href="#/guard-groups">{{ $t('str.breadcrumb.guard.groups') }}</a>
             </li>
         </ol>
 
@@ -124,13 +124,13 @@
             </form>
         </panel>
         <notifications group="bottom-right" position="bottom right" :speed="500" />
-        <ListGuardGroup v-on:load-item="selectItem" :isSuperAdminMaster="isSuperAdminMaster" :accounts="accounts" :clients="clients" />
+        <ListClientGroup v-on:load-item="selectItem" :isSuperAdminMaster="isSuperAdminMaster" :accounts="accounts" :clients="clients" />
     </div>
 </template>
 
 <script>
-import ListGuardGroup from './ListGuardGroup.vue'
-import Controller from './CrtGuardGroup.vue'
+import ListClientGroup from './ListClientGroup.vue'
+import Controller from './CrtClientGroup.vue'
 import Vue from 'vue'
 Vue.prototype.$registerEvent = new Vue()
 
@@ -139,7 +139,7 @@ import { ROLES } from '../../../utils/roles.js'
 
 export default {
     components: {
-        ListGuardGroup,
+        ListClientGroup,
     },
     data() {
         return {

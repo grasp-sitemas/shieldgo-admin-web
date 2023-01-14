@@ -27,26 +27,35 @@ export default {
                 client: '',
                 status: 'ACTIVE',
             }
-            this.sites = []
+            this.selectedSites = []
             this.clients = []
 
             this.data.account = Common.getAccountId(this)
             this.isLoading = false
         },
         save() {
+            if (this.isLoading) return
+
             this.isLoading = true
+
+            const formData = this.data
+            const sites = this.data.sites
+
+            formData.sites = formData.sites.map(site => site._id)
+
             try {
                 Request.do(
                     this,
-                    this.data._id ? 'put' : 'post',
+                    formData._id ? 'put' : 'post',
                     Request.getDefaultHeader(this),
-                    this.data,
-                    `${Endpoints.siteGroups.siteGroup}${this.data._id ? this.data._id : ''}`,
+                    formData,
+                    `${Endpoints.siteGroups.siteGroup}${formData._id ? formData._id : ''}`,
                     response => {
                         if (response.status === 200) {
-                            Common.show(this, 'bottom-right', 'success', this.data._id ? this.$t('str.form.update.success') : this.$t('str.form.create.success'))
+                            Common.show(this, 'bottom-right', 'success', formData._id ? this.$t('str.form.update.success') : this.$t('str.form.create.success'))
                             this.data.status = response?.result?.status
                             this.data._id = response?.result?._id
+                            this.data.sites = sites
                             this.$registerEvent.$emit('refreshList')
                             this.isLoading = false
                         }
@@ -132,6 +141,7 @@ export default {
             this.sites = []
             this.data.client = ''
             this.data.sites = []
+            this.selectedSites = []
 
             const account = this.data.account
 
@@ -139,6 +149,8 @@ export default {
         },
         changeClient: async function () {
             const client = this.data.client
+
+            this.selectedSites = []
 
             if (client === '') {
                 this.data.sites = []
@@ -151,17 +163,32 @@ export default {
 
             this.data = item
 
+            const client = this.data.client
+
+            this.sites = await Services.getSitesByClient(this, client)
+
             document.body.scrollTop = 0 // For Safari
             document.documentElement.scrollTop = 0 // For Chrome, Firefox, IE and Opera
         },
         selectAllSites() {
-            this.data.sites = this.sites
+            this.selectedSites = this.sites
             if (this.clients.length > 0) {
                 this.removeRequiredField('sites')
             }
         },
         removeAllSites() {
-            this.data.sites = []
+            this.selectedSites = []
+        },
+        addSiteGroup: function () {
+            // only add sites that are not already in the data.sites
+            const sitesToAdd = this.selectedSites.filter(item => {
+                return !this.data.sites.some(site => site._id === item._id)
+            })
+
+            this.data.sites = this.data.sites.concat(sitesToAdd)
+        },
+        removeSite: function (site) {
+            this.data.sites = this.data.sites.filter(item => item !== site)
         },
     },
 }

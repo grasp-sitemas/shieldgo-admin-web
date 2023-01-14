@@ -1025,5 +1025,9 @@
     "SITE-GROUP": "Site Group",
     "CLIENT-GROUP": "Client Group",
     "ALL": "All",
-    "str.log.domain.all": "All"
+    "str.log.domain.all": "All",
+    "str.register.site.groups.sites.table.name": "Site",
+    "str.register.site.groups.sites.table.client": "Client",
+    "str.register.site.groups.add.button": "Add",
+    "str.register.site.group.remove.site.label": "Remove"
 }

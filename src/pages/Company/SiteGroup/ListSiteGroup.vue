@@ -22,16 +22,6 @@
                     </select>
                     <div class="invalid-feedback">{{ $t('str.register.site.groups.client.required') }}</div>
                 </div>
-                <div class="col-md-3 mb-3">
-                    <label class="form-label" for="siteField">{{ $t('str.register.site.groups.site.field') }}</label>
-                    <select v-model="filters.site" @change="changeSite" class="form-select" id="siteField">
-                        <option value="">{{ $t('str.register.select.placeholder') }}</option>
-                        <option v-for="site in listSites" :value="site._id" :key="site._id">
-                            {{ site.name }}
-                        </option>
-                    </select>
-                    <div class="invalid-feedback">{{ $t('str.register.site.groups.site.required') }}</div>
-                </div>
                 <div class="col-md-3">
                     <label class="form-label" for="statusField">{{ $t('str.register.status.field') }}</label>
                     <select v-model="filters.status" @change="filter" class="form-select" id="statusField">

@@ -24,6 +24,7 @@ const sidebarMenu = [
         path: '/groups',
         icon: 'fa fa-align-left',
         title: 'str.sidebar.menu.group.management',
+        roles: [ROLES.SUPER_ADMIN_MASTER, ROLES.ADMIN, ROLES.MANAGER],
         children: [
             {
                 path: '/groups/guards',

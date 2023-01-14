@@ -23,6 +23,22 @@
                         </div>
                     </div>
                     <div class="row">
+                        <div class="col-md-4 mb-3">
+                            <label class="form-label" for="nameField">{{ $t('str.register.site.groups.name.field') }}</label>
+                            <input
+                                v-model="data.name"
+                                class="form-control"
+                                v-bind:class="checkRequiredField('name') ? 'is-invalid' : ''"
+                                @focus="removeRequiredField('name')"
+                                type="text"
+                                key="nameField"
+                                :placeholder="$t('str.register.site.groups.name.placeholder')"
+                            />
+                            <div class="invalid-feedback">{{ $t('str.register.site.groups.name.required') }}</div>
+                        </div>
+                    </div>
+
+                    <div class="row">
                         <div v-if="isSuperAdminMaster" class="col-md-4 mb-3">
                             <label class="form-label" for="accountField">{{ $t('str.register.site.groups.account.field') }}</label>
                             <select
@@ -58,21 +74,6 @@
                             <div class="invalid-feedback">{{ $t('str.register.site.groups.client.required') }}</div>
                         </div>
                         <div class="col-md-4 mb-3">
-                            <label class="form-label" for="nameField">{{ $t('str.register.site.groups.name.field') }}</label>
-                            <input
-                                v-model="data.name"
-                                class="form-control"
-                                v-bind:class="checkRequiredField('name') ? 'is-invalid' : ''"
-                                @focus="removeRequiredField('name')"
-                                type="text"
-                                key="nameField"
-                                :placeholder="$t('str.register.site.groups.name.placeholder')"
-                            />
-                            <div class="invalid-feedback">{{ $t('str.register.site.groups.name.required') }}</div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-12 mb-3">
                             <label class="form-label" for="sitesField">{{ $t('str.register.site.groups.sites.field') }}</label>
                             <span v-show="data.client" @click="removeAllSites()" disabled class="badge bg-dark rounded-5 cursor_pointer f-right badge-ml-5">{{
                                 $t('str.register.site.group.remove.all.sites.label')
@@ -83,11 +84,43 @@
                                 multiple
                                 label="name"
                                 key="sitesField"
-                                v-model="data.sites"
+                                v-model="selectedSites"
                                 :options="sites"
-                                :create-option="vigilant => ({ _id: '' })"
+                                :create-option="site => ({ _id: '' })"
                                 :placeholder="$t('str.register.select.placeholder')"
                             />
+                        </div>
+                    </div>
+                    <div v-if="selectedSites?.length > 0" class="row">
+                        <!-- button for add  -->
+                        <div class="col-md-4 mb-3">
+                            <!-- warning button  -->
+
+                            <button @click="addSiteGroup()" class="btn btn-warning w-50" type="button">
+                                {{ $t('str.register.site.groups.add.button') }}
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-12 mb-3">
+                            <table class="table table-striped table-hover">
+                                <thead class="thead-dark dark">
+                                    <tr>
+                                        <th>{{ $t('str.register.site.groups.sites.table.name') }}</th>
+                                        <th>{{ $t('str.register.site.groups.sites.table.client') }}</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr v-for="site in data.sites" :key="site._id">
+                                        <td>{{ site.name }}</td>
+                                        <td>{{ site.client?.name }}</td>
+                                        <td>
+                                            <span @click="removeSite(site)" disabled class="badge bg-dark rounded-5 cursor_pointer">{{ $t('str.register.site.group.remove.site.label') }}</span>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
                         </div>
                     </div>
 
@@ -115,23 +148,18 @@ import Controller from './CrtSiteGroup.vue'
 import Vue from 'vue'
 Vue.prototype.$registerEvent = new Vue()
 
-import { STATES } from '../../../utils/states.js'
-
 export default {
     components: {
         ListSiteGroup,
     },
     data() {
         return {
-            states: STATES,
-            domain: null,
-            file: null,
             isLoading: false,
             errors: [],
             accounts: [],
             clients: [],
             sites: [],
-            vigilants: [],
+            selectedSites: [],
             role: '',
             valuekey: 0,
             isSuperAdminMaster: false,

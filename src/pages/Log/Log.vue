@@ -3,7 +3,6 @@
         <panel :title="$t('str.table.list.logs')" bodyClass="p-0">
             <div class="row">
                 <div class="col-md-3 mb-3 p-3">
-                    {{ filters.domains }}
                     <div id="accordion" class="accordion rounded overflow-hidden">
                         <b-card class="bg-gray-800 text-white border-0 rounded-0" no-body>
                             <b-card-header header-tag="header" class="card-header bg-gray-900 text-white pointer-cursor px-3 py-10px d-flex align-items-center" v-b-toggle.companies>

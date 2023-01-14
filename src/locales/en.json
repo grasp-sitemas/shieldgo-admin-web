@@ -1029,5 +1029,9 @@
     "str.register.site.groups.sites.table.name": "Site",
     "str.register.site.groups.sites.table.client": "Client",
     "str.register.site.groups.add.button": "Add",
-    "str.register.site.group.remove.site.label": "Remove"
+    "str.register.site.group.remove.site.label": "Remove",
+    "str.register.user.siteGroup.field":  "Site Group",
+    "str.register.user.siteGroup.required": "Site Group is required",
+    "str.register.user.clientGroup.field":  "Client Group",
+    "str.register.user.clientGroup.required": "Client Group is required"
 }

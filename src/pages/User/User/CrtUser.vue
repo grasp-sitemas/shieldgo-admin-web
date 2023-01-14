@@ -21,11 +21,19 @@ export default {
         payload.domain = Endpoints.domain
         payload.data.account = await Common.getAccountId(payload)
 
+        payload.role = await Common.getSubtype(payload)
+
         payload.isSuperAdminMaster = await Common.isSuperAdminMaster(payload)
         if (payload.isSuperAdminMaster) {
             payload.accounts = await Services.getAccounts(payload)
-        } else {
+        } else if (payload.role === 'ADMIN') {
             payload.clients = await Services.getClients(payload)
+            payload.siteGroups = await Services.getSiteGroupsByAccount(payload, payload.data.account)
+            payload.clientGroups = await Services.getClientGroupsByAccount(payload, payload.data.account)
+        }
+
+        if (payload.role !== 'ADMIN' && payload.role !== 'SUPER_ADMIN_MASTER') {
+            payload.roles = payload.roles.filter(role => role.value !== 'ADMIN')
         }
     },
     methods: {
@@ -108,6 +116,8 @@ export default {
                 account: '',
                 client: '',
                 site: '',
+                siteGroup: '',
+                clientGroup: '',
                 companyUser: {
                     status: 'ACTIVE',
                     subtype: '',
@@ -222,19 +232,19 @@ export default {
             }
         },
         async checkForm() {
-            const role = this.data.companyUser.subtype
+            // const role = this.data.companyUser.subtype
 
             if (!this.data.account || this.data.account === '') {
                 this.errors.push('account')
             }
 
-            if (role !== 'ADMIN' && (!this.data.client || this.data.client === '')) {
-                this.errors.push('client')
-            }
+            // if (role !== 'ADMIN' && (!this.data.client || this.data.client === '')) {
+            //     this.errors.push('client')
+            // }
 
-            if (role === 'OPERATOR' && (!this.data.site || this.data.site === '')) {
-                this.errors.push('site')
-            }
+            // if (role === 'OPERATOR' && (!this.data.site || this.data.site === '')) {
+            //     this.errors.push('site')
+            // }
 
             if (!this.data.firstName || this.data.firstName === '') {
                 this.errors.push('firstName')
@@ -258,6 +268,14 @@ export default {
             }
             if (!this.data.site || this.data.site === '') {
                 delete this.data.site
+            }
+
+            if (!this.data.clientGroup || this.data.clientGroup === '') {
+                delete this.data.clientGroup
+            }
+
+            if (!this.data.siteGroup || this.data.siteGroup === '') {
+                delete this.data.siteGroup
             }
 
             if (!this.errors || this.errors.length === 0) {
@@ -327,6 +345,7 @@ export default {
             this.data.site = ''
 
             this.clients = await Services.getClientsByAccount(this, account)
+            this.siteGroups = await Services.getSiteGroupsByAccount(this, account)
         },
         changeClient: async function () {
             const client = this.data.client
@@ -361,12 +380,28 @@ export default {
                 }
             }
 
+            if (item?.siteGroup) {
+                item.siteGroup = item.siteGroup._id
+            }
+
+            if (item?.clientGroup) {
+                item.clientGroup = item.clientGroup._id
+            }
+
             if (item.account) {
                 this.clients = await Services.getClientsByAccount(this, item.account)
             }
 
             if (item.client) {
                 this.sites = await Services.getSitesByClient(this, item.client)
+            }
+
+            if (item?.companyUser?.subtype === 'OPERATOR') {
+                this.siteGroups = await Services.getSiteGroupsByAccount(this, item?.account._id)
+            }
+
+            if (item?.companyUser?.subtype === 'MANAGER') {
+                this.clientGroups = await Services.getClientGroupsByAccount(this, item?.account._id)
             }
 
             this.data = item

@@ -58,7 +58,7 @@
                             </select>
                             <div class="invalid-feedback">{{ $t('str.register.user.account.required') }}</div>
                         </div>
-                        <div v-if="data.companyUser.subtype === 'OPERATOR' || data.companyUser.subtype === 'MANAGER'" class="col-md-4 mb-3">
+                        <!-- <div v-if="data.companyUser.subtype === 'OPERATOR' || data.companyUser.subtype === 'MANAGER'" class="col-md-4 mb-3">
                             <label class="form-label" for="clientField">{{ $t('str.register.user.client.field') }}</label>
                             <select
                                 v-model="data.client"
@@ -74,7 +74,7 @@
                                 </option>
                             </select>
                             <div class="invalid-feedback">{{ $t('str.register.user.client.required') }}</div>
-                        </div>
+                        </div> -->
                         <div v-if="data.companyUser.subtype === 'MANAGER'" class="col-md-4 mb-3">
                             <label class="form-label" for="clientGroupField">{{ $t('str.register.user.clientGroup.field') }}</label>
                             <select
@@ -92,7 +92,7 @@
                             </select>
                             <div class="invalid-feedback">{{ $t('str.register.user.client.required') }}</div>
                         </div>
-                        <div v-if="data.companyUser.subtype === 'OPERATOR'" class="col-md-4 mb-3">
+                        <!-- <div v-if="data.companyUser.subtype === 'OPERATOR'" class="col-md-4 mb-3">
                             <label class="form-label" for="siteField">{{ $t('str.register.user.site.field') }}</label>
                             <select v-model="data.site" class="form-select" v-bind:class="checkRequiredField('site') ? 'is-invalid' : ''" @focus="removeRequiredField('site')" id="siteField">
                                 <option value="">{{ $t('str.register.select.placeholder') }}</option>
@@ -101,7 +101,7 @@
                                 </option>
                             </select>
                             <div class="invalid-feedback">{{ $t('str.register.user.site.required') }}</div>
-                        </div>
+                        </div> -->
                         <div v-if="data.companyUser.subtype === 'OPERATOR' && data.account" class="col-md-4 mb-3">
                             <label class="form-label" for="siteGroupField">{{ $t('str.register.user.siteGroup.field') }}</label>
                             <select v-model="data.siteGroup" class="form-select" v-bind:class="checkRequiredField('siteGroup') ? 'is-invalid' : ''" @focus="removeRequiredField('site')" id="siteField">

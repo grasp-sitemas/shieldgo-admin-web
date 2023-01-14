@@ -67,6 +67,7 @@ export default {
             name: '',
             client: client,
             status: 'ACTIVE',
+            type: 'SITE',
         }
 
         if (client) {
@@ -229,6 +230,24 @@ export default {
 
         const response = await Request.do(state, 'POST', Request.getDefaultHeader(state), body, `${Endpoints.patrolActions.attendanceEvent}`)
         return response?.data?.result || null
+    },
+    getSiteGroupsByAccount: async function (state, account) {
+        const filters = {
+            account: account,
+            status: 'ACTIVE',
+        }
+
+        const response = await Request.do(state, 'POST', Request.getDefaultHeader(state), filters, `${Endpoints.siteGroups.filter}`)
+        return response?.data?.results || []
+    },
+    getClientGroupsByAccount: async function (state, account) {
+        const filters = {
+            account: account,
+            status: 'ACTIVE',
+        }
+
+        const response = await Request.do(state, 'POST', Request.getDefaultHeader(state), filters, `${Endpoints.clientGroups.filter}`)
+        return response?.data?.results || []
     },
 }
 </script>

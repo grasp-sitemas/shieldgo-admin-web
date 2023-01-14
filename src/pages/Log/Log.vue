@@ -47,7 +47,15 @@
                             <b-collapse id="domains" visible accordion="domainsSessions">
                                 <b-card-body>
                                     <div class="form-check form-switch mb-2" v-bind:key="item.id" v-for="item in this.domains">
-                                        <input v-model="filters.domains" @change="filter" :id="item.value" :value="item.value" :true-value="item.value" class="form-check-input" type="checkbox" />
+                                        <input
+                                            v-model="filters.domains"
+                                            @change="handleDomains(item.value)"
+                                            :id="item.value"
+                                            :value="item.value"
+                                            :true-value="item.value"
+                                            class="form-check-input"
+                                            type="checkbox"
+                                        />
                                         <label class="form-check-label" :for="item.value">{{ $t(item.label) }}</label>
                                     </div>
                                 </b-card-body>

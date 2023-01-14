@@ -95,7 +95,7 @@ export default {
         },
         applyMenuRole: function (state) {
             const role = state?.user?.companyUser?.subtype
-            const menus = state.menus.filter(menu => menu.roles.includes(role))
+            const menus = state.menus.filter(menu => menu?.roles?.includes(role))
             state.menus = menus
         },
         applyCompanyMenuRole: function (state) {

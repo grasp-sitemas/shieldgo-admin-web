@@ -6,51 +6,58 @@ import Services from '../../../common/Services.vue'
 
 export default {
     init: async payload => {
-        payload.domain = Endpoints.domain
+        payload.data.account = Common.getAccountId(payload)
+
         payload.isSuperAdminMaster = await Common.isSuperAdminMaster(payload)
-        payload.accounts = await Services.getAccounts(payload)
-        payload.data.account = await Common.getAccountId(payload)
+        const role = await Common.getSubtype(payload)
+        if (role === 'SUPER_ADMIN_MASTER') {
+            payload.accounts = await Services.getAccounts(payload)
+        } else if (role === 'ADMIN') {
+            payload.clients = await Services.getClients(payload)
+        }
+        payload.role = role
     },
     methods: {
         clearForm() {
             this.errors = []
-            this.file = null
             this.data = {
                 name: '',
-                email: '',
-                primaryPhone: '',
-                owner: '',
+                sites: [],
                 account: '',
-                type: 'CLIENT',
+                client: '',
                 status: 'ACTIVE',
             }
-            this.$refs.file.value = null
+            this.selectedSites = []
+            this.clients = []
+
             this.data.account = Common.getAccountId(this)
             this.isLoading = false
         },
         save() {
-            this.isLoading = true
-            let formData = new FormData()
+            if (this.isLoading) return
 
-            formData.append('file', this.file)
-            formData.append('jsonData', JSON.stringify(this.data))
+            this.isLoading = true
+
+            const formData = this.data
+            const sites = this.data.sites
+
+            formData.sites = formData.sites.map(site => site._id)
 
             try {
                 Request.do(
                     this,
-                    this.data._id ? 'put' : 'post',
+                    formData._id ? 'put' : 'post',
                     Request.getDefaultHeader(this),
                     formData,
-                    `${Endpoints.companies.formData}${this.data._id ? this.data._id : ''}`,
+                    `${Endpoints.siteGroups.siteGroup}${formData._id ? formData._id : ''}`,
                     response => {
                         if (response.status === 200) {
-                            this.isLoading = false
-                            Common.show(this, 'bottom-right', 'success', this.data._id ? this.$t('str.form.update.success') : this.$t('str.form.create.success'))
-                            const { _id, status } = response?.result
-                            this.data._id = _id
-                            this.data.status = status
+                            Common.show(this, 'bottom-right', 'success', formData._id ? this.$t('str.form.update.success') : this.$t('str.form.create.success'))
+                            this.data.status = response?.result?.status
+                            this.data._id = response?.result?._id
+                            this.data.sites = sites
                             this.$registerEvent.$emit('refreshList')
-                            // this.valuekey += 1
+                            this.isLoading = false
                         }
                     },
                     error => {
@@ -72,7 +79,7 @@ export default {
                     'DELETE',
                     Request.getDefaultHeader(this),
                     this.data,
-                    `${Endpoints.companies.company}${this.data._id}`,
+                    `${Endpoints.siteGroups.siteGroup}${this.data._id}`,
                     response => {
                         if (response.status === 200) {
                             Common.show(this, 'bottom-right', 'success', this.$t('str.form.archive.success'))
@@ -116,21 +123,72 @@ export default {
             if (!this.data.name || this.data.name === '') {
                 this.errors.push('name')
             }
-
             if (!this.data.account || this.data.account === '') {
                 this.errors.push('account')
             }
+            if (!this.data.client || this.data.client === '') {
+                this.errors.push('client')
+            }
+            if (!this.data.sites || this.data.sites.length === 0) {
+                this.errors.push('sites')
+            }
 
             if (!this.errors || this.errors.length === 0) {
-                this.save(this.data)
+                this.save()
             }
         },
-        selectItem: function (item) {
+        changeAccount: async function () {
+            this.sites = []
+            this.data.client = ''
+            this.data.sites = []
+            this.selectedSites = []
+
+            const account = this.data.account
+
+            this.clients = await Services.getClientsByAccount(this, account)
+        },
+        changeClient: async function () {
+            const client = this.data.client
+
+            this.selectedSites = []
+
+            if (client === '') {
+                this.data.sites = []
+            }
+
+            this.sites = await Services.getSitesByClient(this, client)
+        },
+        selectItem: async function (item) {
             this.errors = []
-            this.file = null
+
             this.data = item
+
+            const client = this.data.client
+
+            this.sites = await Services.getSitesByClient(this, client)
+
             document.body.scrollTop = 0 // For Safari
             document.documentElement.scrollTop = 0 // For Chrome, Firefox, IE and Opera
+        },
+        selectAllSites() {
+            this.selectedSites = this.sites
+            if (this.clients.length > 0) {
+                this.removeRequiredField('sites')
+            }
+        },
+        removeAllSites() {
+            this.selectedSites = []
+        },
+        addSiteGroup: function () {
+            // only add sites that are not already in the data.sites
+            const sitesToAdd = this.selectedSites.filter(item => {
+                return !this.data.sites.some(site => site._id === item._id)
+            })
+
+            this.data.sites = this.data.sites.concat(sitesToAdd)
+        },
+        removeSite: function (site) {
+            this.data.sites = this.data.sites.filter(item => item !== site)
         },
     },
 }

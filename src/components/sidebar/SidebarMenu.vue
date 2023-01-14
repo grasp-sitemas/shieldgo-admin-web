@@ -16,35 +16,33 @@ const sidebarMenu = [
     { path: '/patrol-points', icon: 'fa fa-road', title: 'str.sidebar.menu.patrol.points', roles: [ROLES.SUPER_ADMIN_MASTER, ROLES.ADMIN, ROLES.MANAGER, ROLES.OPERATOR] },
     { path: '/incidents', icon: 'fa fa-person-burst', title: 'str.sidebar.menu.incidents', roles: [ROLES.SUPER_ADMIN_MASTER, ROLES.ADMIN, ROLES.MANAGER] },
     { path: '/vigilants', icon: 'fa fa-person-military-pointing', title: 'str.sidebar.menu.vigilants', roles: [ROLES.SUPER_ADMIN_MASTER, ROLES.ADMIN, ROLES.MANAGER] },
-    { path: '/guard-groups', icon: 'fa fa-people-group', title: 'str.sidebar.menu.guard.groups', roles: [ROLES.SUPER_ADMIN_MASTER, ROLES.ADMIN, ROLES.MANAGER] },
+    // { path: '/guard-groups', icon: 'fa fa-people-group', title: 'str.sidebar.menu.guard.groups', roles: [ROLES.SUPER_ADMIN_MASTER, ROLES.ADMIN, ROLES.MANAGER] },
     { path: '/schedules', icon: 'fa fa-calendar', title: 'str.sidebar.menu.schedules', roles: [ROLES.SUPER_ADMIN_MASTER, ROLES.ADMIN, ROLES.MANAGER] },
     { path: '/timeline', icon: 'fa fa-bars-staggered', title: 'str.sidebar.menu.timeline', roles: [ROLES.SUPER_ADMIN_MASTER, ROLES.ADMIN, ROLES.MANAGER, ROLES.OPERATOR] },
     { path: '/users', icon: 'fa fa-users', title: 'str.sidebar.menu.users', roles: [ROLES.SUPER_ADMIN_MASTER, ROLES.ADMIN, ROLES.MANAGER] },
-    // {
-    //     path: '/menu',
-    //     icon: 'fa fa-align-left',
-    //     title: 'Menu Level',
-    //     children: [
-    //         {
-    //             path: '/menu/menu-1-1',
-    //             title: 'Menu 1.1',
-    //             children: [
-    //                 {
-    //                     path: '/menu/menu-1-1/menu-2-1',
-    //                     title: 'Menu 2.1',
-    //                     children: [
-    //                         { path: '/menu/menu-1-1/menu-2-1/menu-3-1', title: 'Menu 3.1' },
-    //                         { path: '/menu/menu-1-1/menu-2-1/menu-3-2', title: 'Menu 3.2' },
-    //                     ],
-    //                 },
-    //                 { path: '/menu/menu-1-1/menu-2-2', title: 'Menu 2.2' },
-    //                 { path: '/menu/menu-1-1/menu-2-3', title: 'Menu 2.3' },
-    //             ],
-    //         },
-    //         { path: '/menu/menu-1-2', title: 'Menu 1.2' },
-    //         { path: '/menu/menu-1-3', title: 'Menu 1.3' },
-    //     ],
-    // },
+    {
+        path: '/groups',
+        icon: 'fa fa-align-left',
+        title: 'str.sidebar.menu.group.management',
+        roles: [ROLES.SUPER_ADMIN_MASTER, ROLES.ADMIN, ROLES.MANAGER],
+        children: [
+            {
+                path: '/groups/guards',
+                title: 'str.sidebar.menu.guard.groups',
+                roles: [ROLES.SUPER_ADMIN_MASTER, ROLES.ADMIN, ROLES.MANAGER],
+            },
+            {
+                path: '/groups/sites',
+                title: 'str.sidebar.menu.site.groups',
+                roles: [ROLES.SUPER_ADMIN_MASTER, ROLES.ADMIN, ROLES.MANAGER],
+            },
+            {
+                path: '/groups/clients',
+                title: 'str.sidebar.menu.client.groups',
+                roles: [ROLES.SUPER_ADMIN_MASTER, ROLES.ADMIN],
+            },
+        ],
+    },
 ]
 
 export default sidebarMenu

@@ -7,50 +7,48 @@ import Services from '../../../common/Services.vue'
 export default {
     init: async payload => {
         payload.domain = Endpoints.domain
+        payload.data.account = Common.getAccountId(payload)
+
         payload.isSuperAdminMaster = await Common.isSuperAdminMaster(payload)
-        payload.accounts = await Services.getAccounts(payload)
-        payload.data.account = await Common.getAccountId(payload)
+        const role = await Common.getSubtype(payload)
+        if (role === 'SUPER_ADMIN_MASTER') {
+            payload.accounts = await Services.getAccounts(payload)
+        } else if (role === 'ADMIN') {
+            payload.clients = await Services.getClients(payload)
+        }
+        payload.role = role
     },
     methods: {
         clearForm() {
             this.errors = []
-            this.file = null
             this.data = {
                 name: '',
-                email: '',
-                primaryPhone: '',
-                owner: '',
+                sites: [],
                 account: '',
-                type: 'CLIENT',
+                client: '',
                 status: 'ACTIVE',
             }
-            this.$refs.file.value = null
+            this.clients = []
+
             this.data.account = Common.getAccountId(this)
             this.isLoading = false
         },
         save() {
             this.isLoading = true
-            let formData = new FormData()
-
-            formData.append('file', this.file)
-            formData.append('jsonData', JSON.stringify(this.data))
-
             try {
                 Request.do(
                     this,
                     this.data._id ? 'put' : 'post',
                     Request.getDefaultHeader(this),
-                    formData,
-                    `${Endpoints.companies.formData}${this.data._id ? this.data._id : ''}`,
+                    this.data,
+                    `${Endpoints.clientGroups.clientGroup}${this.data._id ? this.data._id : ''}`,
                     response => {
                         if (response.status === 200) {
-                            this.isLoading = false
                             Common.show(this, 'bottom-right', 'success', this.data._id ? this.$t('str.form.update.success') : this.$t('str.form.create.success'))
-                            const { _id, status } = response?.result
-                            this.data._id = _id
-                            this.data.status = status
+                            this.data.status = response?.result?.status
+                            this.data._id = response?.result?._id
                             this.$registerEvent.$emit('refreshList')
-                            // this.valuekey += 1
+                            this.isLoading = false
                         }
                     },
                     error => {
@@ -72,7 +70,7 @@ export default {
                     'DELETE',
                     Request.getDefaultHeader(this),
                     this.data,
-                    `${Endpoints.companies.company}${this.data._id}`,
+                    `${Endpoints.clientGroups.clientGroup}${this.data._id}`,
                     response => {
                         if (response.status === 200) {
                             Common.show(this, 'bottom-right', 'success', this.$t('str.form.archive.success'))
@@ -116,21 +114,39 @@ export default {
             if (!this.data.name || this.data.name === '') {
                 this.errors.push('name')
             }
-
-            if (!this.data.account || this.data.account === '') {
-                this.errors.push('account')
+            if (!this.data.clients || this.data.clients?.length === 0) {
+                this.errors.push('clients')
             }
 
             if (!this.errors || this.errors.length === 0) {
-                this.save(this.data)
+                this.save()
             }
         },
-        selectItem: function (item) {
+        changeAccount: async function () {
+            this.clients = []
+            this.data.clients = []
+
+            const account = this.data.account
+
+            this.clients = await Services.getClientsByAccount(this, account)
+        },
+        selectItem: async function (item) {
             this.errors = []
-            this.file = null
-            this.data = item
+            const data = item
+
+            this.data = data
+
             document.body.scrollTop = 0 // For Safari
             document.documentElement.scrollTop = 0 // For Chrome, Firefox, IE and Opera
+        },
+        selectAllClients() {
+            this.data.clients = this.clients
+            if (this.clients.length > 0) {
+                this.removeRequiredField('clients')
+            }
+        },
+        removeAllClients() {
+            this.data.clients = []
         },
     },
 }

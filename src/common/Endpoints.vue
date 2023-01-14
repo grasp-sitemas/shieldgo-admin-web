@@ -79,6 +79,16 @@ export default {
         filter: `${domain}/api/users/guardgroups/filter/v1/`,
         delete: `${domain}/api/users/guardgroups/delete/v1/`,
     },
+    siteGroups: {
+        siteGroup: `${domain}/api/company/sitegroups/v1/`,
+        filter: `${domain}/api/company/sitegroups/filter/v1/`,
+        delete: `${domain}/api/company/sitegroups/delete/v1/`,
+    },
+    clientGroups: {
+        clientGroup: `${domain}/api/company/clientgroups/v1/`,
+        filter: `${domain}/api/company/clientgroups/filter/v1/`,
+        delete: `${domain}/api/company/clientgroups/delete/v1/`,
+    },
     logs: {
         filter: `${domain}/api/logs/filter/v1/`,
     },

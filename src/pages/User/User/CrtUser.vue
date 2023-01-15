@@ -367,6 +367,14 @@ export default {
                 this.data.site = ''
                 this.removeRequiredField('site')
             }
+
+            if (this.data.account) {
+                if (role === 'MANAGER') {
+                    this.clientGroups = await Services.getClientGroupsByAccount(this, this.data.account)
+                } else if (role === 'OPERATOR') {
+                    this.siteGroups = await Services.getSiteGroupsByAccount(this, this.data.account)
+                }
+            }
         },
         selectItem: async function (item) {
             this.errors = []

@@ -70,6 +70,8 @@ export default {
 
             const patrolActionId = this.selectedEvent?._id
             const userId = await this.getOperatorId()
+            const siteGroup = this.$session.get('user')?.siteGroup?._id
+
             const attendance = {
                 isAttendance: true,
                 openedDate: moment().utc(true).format(),
@@ -78,7 +80,7 @@ export default {
             }
 
             try {
-                const result = await Services.attendanceEvent(this, patrolActionId, attendance)
+                const result = await Services.attendanceEvent(this, patrolActionId, attendance, siteGroup)
                 if (result && this.selectedEvent) {
                     this.selectedEvent.attendance = {
                         isAttendance: result?.attendance?.isAttendance,
@@ -159,6 +161,7 @@ export default {
                     status: 'ACTIVE',
                 }
 
+                attendance.siteGroup = await this.$session.get('user')?.siteGroup?._id
                 attendance.operator = await this.getOperatorId()
 
                 try {

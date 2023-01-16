@@ -403,23 +403,6 @@ export default {
                 }
                 await deleteDoc(doc(db, 'updatedMedias', site))
             })
-
-            onSnapshot(doc(db, 'updateAttendanceEvent', site), async document => {
-                if (document?.data()?.attendance) {
-                    console.log('updateAttendanceEvent')
-                    const attendance = JSON.parse(document.data()?.attendance)
-                    const operator = JSON.parse(document.data()?.operator)
-                    console.log('attendance', attendance)
-                    console.log('patrolActionId' + document.data()?.patrolActionId)
-                    const patrolActionId = document.data()?.patrolActionId
-                    await state.filter()
-                    if (patrolActionId === state.selectedEvent?._id && operator?._id !== state.user?._id) {
-                        attendance.operator = operator
-                        state.selectedEvent.attendance = attendance
-                    }
-                    await deleteDoc(doc(db, 'updateAttendanceEvent', site))
-                }
-            })
         })
 
         onSnapshot(doc(db, 'updateAttendanceEventReport', siteGroupId), async document => {
@@ -431,6 +414,23 @@ export default {
                 }
                 state.attendances = await Services.getEventAttendances(state, filters)
                 await deleteDoc(doc(db, 'updateAttendanceEventReport', siteGroupId))
+            }
+        })
+
+        onSnapshot(doc(db, 'updateAttendanceEvent', siteGroupId), async document => {
+            if (document?.data()?.attendance) {
+                console.log('updateAttendanceEvent')
+                const attendance = JSON.parse(document.data()?.attendance)
+                const operator = JSON.parse(document.data()?.operator)
+                console.log('attendance', attendance)
+                console.log('patrolActionId' + document.data()?.patrolActionId)
+                const patrolActionId = document.data()?.patrolActionId
+                await state.filter()
+                if (patrolActionId === state.selectedEvent?._id && operator?._id !== state.user?._id) {
+                    attendance.operator = operator
+                    state.selectedEvent.attendance = attendance
+                }
+                await deleteDoc(doc(db, 'updateAttendanceEvent', siteGroupId))
             }
         })
     },

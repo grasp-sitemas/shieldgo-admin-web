@@ -222,10 +222,11 @@ export default {
         const response = await Request.do(state, 'POST', Request.getDefaultHeader(state), attendance, `${Endpoints.events.attendances.attendance}`)
         return response?.data?.result || null
     },
-    attendanceEvent: async function (state, patrolActionId, attendance) {
+    attendanceEvent: async function (state, patrolActionId, attendance, siteGroup) {
         const body = {
             patrolActionId: patrolActionId,
             attendance: attendance,
+            siteGroup: siteGroup,
         }
 
         const response = await Request.do(state, 'POST', Request.getDefaultHeader(state), body, `${Endpoints.patrolActions.attendanceEvent}`)

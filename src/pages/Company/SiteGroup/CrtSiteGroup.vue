@@ -165,6 +165,9 @@ export default {
 
             const client = this.data.client
 
+            this.selectedSites = []
+
+            this.clients = await Services.getClientsByAccount(this, this.data.account)
             this.sites = await Services.getSitesByClient(this, client)
 
             document.body.scrollTop = 0 // For Safari

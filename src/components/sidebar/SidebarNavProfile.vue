@@ -10,6 +10,9 @@
                         <div v-if="role !== 'OPERATOR'" class="menu-caret ms-auto"></div>
                     </div>
                     <small>{{ $t(this?.user?.companyUser?.subtype) }}</small>
+                    <!-- <div v-if="role === 'OPERATOR'" class="ms-auto">
+                        <small>{{ $t('str.sidebar.menu.site.group') }}: {{ this?.user?.siteGroup?.name }}</small>
+                    </div> -->
                 </div>
             </a>
         </div>
@@ -45,7 +48,7 @@
                     <div class="menu-text">Helps</div>
                 </a>
             </div> -->
-            <div class="menu-divider m-0"></div>
+            <!-- <div class="menu-divider m-0"></div> -->
         </div>
     </div>
 </template>

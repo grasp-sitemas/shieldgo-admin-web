@@ -1027,5 +1027,6 @@
     "str.register.user.siteGroup.field":  "Grupo de sites",
     "str.register.user.siteGroup.required": "O grupo de sites é obrigatório",
     "str.register.user.clientGroup.field":  "Grupo de clientes",
-    "str.register.user.clientGroup.required": "O grupo de clientes é obrigatório"
+    "str.register.user.clientGroup.required": "O grupo de clientes é obrigatório",
+    "str.sidebar.menu.site.group": "Grupo de site"
 }

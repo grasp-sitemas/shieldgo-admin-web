@@ -285,6 +285,7 @@
 
 <script>
 import Controller from './CrtMonitor.vue'
+import Services from '../../common/Services.vue'
 import Common from '../../common/Common.vue'
 import { EVENT_TYPES } from '../../utils/events'
 import Map from './Components/Map/Map.vue'
@@ -368,8 +369,8 @@ export default {
             state.initTable()
         })
 
-        const siteIds = state.$session.get('user')?.siteGroup.sites
-
+        const siteIds = state.$session.get('user')?.siteGroup?.sites
+        const siteGroupId = state.$session.get('user')?.siteGroup?._id
         // subscribe notifications snapshot in array of sites ids
         siteIds.forEach(site => {
             onSnapshot(doc(db, 'notifications', site), async document => {
@@ -403,23 +404,34 @@ export default {
                 await deleteDoc(doc(db, 'updatedMedias', site))
             })
 
-            onSnapshot(doc(db, 'updatedMedias', site), async document => {
-                console.log('updatedMedias')
-                const patrolAction = document.data()?.patrolAction
-                const type = document.data()?.type
-
-                if (patrolAction === state.selectedEvent?._id) {
-                    const url = document.data()?.url
-                    if (type === 'PHOTO') {
-                        state.selectedEvent.photoURL = url
-                    } else if (type === 'SIGNATURE') {
-                        state.selectedEvent.signatureURL = url
-                    } else if (type === 'SOUND') {
-                        state.selectedEvent.soundURL = url
+            onSnapshot(doc(db, 'updateAttendanceEvent', site), async document => {
+                if (document?.data()?.attendance) {
+                    console.log('updateAttendanceEvent')
+                    const attendance = JSON.parse(document.data()?.attendance)
+                    const operator = JSON.parse(document.data()?.operator)
+                    console.log('attendance', attendance)
+                    console.log('patrolActionId' + document.data()?.patrolActionId)
+                    const patrolActionId = document.data()?.patrolActionId
+                    await state.filter()
+                    if (patrolActionId === state.selectedEvent?._id && operator?._id !== state.user?._id) {
+                        attendance.operator = operator
+                        state.selectedEvent.attendance = attendance
                     }
+                    await deleteDoc(doc(db, 'updateAttendanceEvent', site))
                 }
-                await deleteDoc(doc(db, 'updatedMedias', site))
             })
+        })
+
+        onSnapshot(doc(db, 'updateAttendanceEventReport', siteGroupId), async document => {
+            if (document?.data()?.patrolActionId) {
+                const patrolAction = document.data()?.patrolActionId
+                const filters = {
+                    patrolAction: patrolAction,
+                    status: 'ACTIVE',
+                }
+                state.attendances = await Services.getEventAttendances(state, filters)
+                await deleteDoc(doc(db, 'updateAttendanceEventReport', siteGroupId))
+            }
         })
     },
     methods: Controller.methods,

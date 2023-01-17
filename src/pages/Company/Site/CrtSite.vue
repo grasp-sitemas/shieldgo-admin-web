@@ -18,15 +18,20 @@ const instanceateAddress = (addressObj, geo) => {
 
 export default {
     init: async payload => {
-        payload.domain = Endpoints.domain
-        payload.data.account = await Common.getAccountId(payload)
+        payload.data.account = Common.getAccountId(payload)
 
         payload.isSuperAdminMaster = await Common.isSuperAdminMaster(payload)
-        if (payload.isSuperAdminMaster) {
-            payload.accounts = await payload.$session.get('user')?.account?._id
-        } else {
+        const role = await Common.getSubtype(payload)
+        if (role === 'SUPER_ADMIN_MASTER') {
+            payload.accounts = await Services.getAccounts(payload)
+        } else if (role === 'ADMIN') {
             payload.clients = await Services.getClients(payload)
+        } else if (role === 'MANAGER' || role === 'OPERATOR') {
+            const client = await Common.getClientId(payload)
+            payload.data.client = client
+            payload.sites = await Services.getSites(payload)
         }
+        payload.role = role
     },
     methods: {
         inputCep() {

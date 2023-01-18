@@ -60,7 +60,7 @@
                     <panel :title="$t('str.events.title')">
                         <div class="list-group list-group-flush rounded-bottom overflow-hidden panel-body p-0">
                             <div @click="handleSelectEvent(event)" v-for="event in events" :key="event.id">
-                                <a class="list-group-item list-group-item-action d-flex cursor-mouse">
+                                <a class="list-group-item list-group-item-action d-flex cursor-mouse" v-bind:class="selectedEvent?._id === event?._id ? 'list-group-selected' : ''">
                                     <div class="me-3 fs-16px">
                                         <i v-bind:class="event?.icon" />
                                     </div>
@@ -236,7 +236,7 @@
                             <div class="result-price d-flex justify-content-between align-items-center mb-3">
                                 <a v-on:click="checkForm()" class="btn d-block w-50 m-2" v-bind:class="{ 'btn-yellow': selectedEvent?.type === 'INCIDENT', 'btn-red': selectedEvent?.type === 'SOS_ALERT' }">
                                     <i v-if="isLoadingSendAttendanceButton" class="fas fa-spinner fa-spin" />
-                                    {{ $t('str.btn.attendance.send') }}
+                                    {{ $t('str.btn.attendance.register') }}
                                 </a>
                                 <!-- close attendance button -->
                                 <a v-on:click="confirmCloseAttendance" class="btn d-block w-50 m-2 btn-gray">
@@ -259,6 +259,9 @@
                                     </tr>
                                 </thead>
                                 <tbody>
+                                    <tr v-if="attendances.length === 0">
+                                        <td colspan="3" class="text-center">{{ $t('str.msg.waiting.attendance.by.operator') }}</td>
+                                    </tr>
                                     <tr v-for="attendance in attendances" :key="attendance._id">
                                         <td>{{ formatDate(attendance.createDate) }}</td>
                                         <td>{{ $t(attendance.type) }}</td>
@@ -272,6 +275,7 @@
             </div>
         </div>
         <notifications group="top-right" position="top right" :speed="1000" />
+        <notifications group="bottom-right" position="bottom right" :speed="1000" />
         <Map :data="selectedEvent" />
         <Photo :photoURL="selectedEvent?.photoURL" />
         <Signature :signatureURL="selectedEvent?.signatureURL" />
@@ -417,6 +421,18 @@ export default {
             }
         })
 
+        onSnapshot(doc(db, 'updateCloseAttendanceEvent', siteGroupId), async document => {
+            const patrolActionId = document.data()?.patrolActionId
+            if (patrolActionId) {
+                await state.filter()
+                if (patrolActionId === state.selectedEvent?._id) {
+                    state.selectedEvent = null
+                    state.attendances = []
+                }
+                await deleteDoc(doc(db, 'updateCloseAttendanceEvent', siteGroupId))
+            }
+        })
+
         onSnapshot(doc(db, 'updateAttendanceEvent', siteGroupId), async document => {
             if (document?.data()?.attendance) {
                 console.log('updateAttendanceEvent')
@@ -426,7 +442,7 @@ export default {
                 console.log('patrolActionId' + document.data()?.patrolActionId)
                 const patrolActionId = document.data()?.patrolActionId
                 await state.filter()
-                if (patrolActionId === state.selectedEvent?._id && operator?._id !== state.user?._id) {
+                if (patrolActionId === state.selectedEvent?._id) {
                     attendance.operator = operator
                     state.selectedEvent.attendance = attendance
                 }
@@ -543,5 +559,10 @@ img {
     align-items: center;
     height: 100%;
     margin-top: 22%;
+}
+
+.list-group-selected {
+    color: var(--app-component-hover-color);
+    background-color: var(--app-component-hover-bg);
 }
 </style>

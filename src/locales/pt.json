@@ -944,7 +944,7 @@
     "str.events.title": "Eventos",
     "str.monitor.details.attendance.by": "Atendido por",
     "str.monitor.details.attendance.date": "Data do atendimento",
-    "str.btn.attendance.close": "Finalizar atendimento",
+    "str.btn.attendance.close": "Finalizar",
     "str.are.you.sure.close": "Tem certeza que deseja finalizar o atendimento?",
     "str.title.yes": "Sim",
     "str.title.close.attendance": "Finalizar",
@@ -1028,5 +1028,8 @@
     "str.register.user.siteGroup.required": "O grupo de sites é obrigatório",
     "str.register.user.clientGroup.field":  "Grupo de clientes",
     "str.register.user.clientGroup.required": "O grupo de clientes é obrigatório",
-    "str.sidebar.menu.site.group": "Grupo de site"
+    "str.sidebar.menu.site.group": "Grupo de site",
+    "str.btn.attendance.register": "Registrar",
+    "str.msg.waiting.attendance.by.operator": "Aguardando atendimento pelo operador",
+    "str.monitor.register.message.require": "Para finalizar o atendimento é necessário registrar uma resposta"
 }

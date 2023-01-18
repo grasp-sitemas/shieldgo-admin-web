@@ -84,7 +84,7 @@ export default {
                 if (result && this.selectedEvent) {
                     this.selectedEvent.attendance = {
                         isAttendance: result?.attendance?.isAttendance,
-                        openedDate: result?.attendance?.date,
+                        openedDate: result?.attendance?.openedDate,
                         closedDate: result?.attendance?.closedDate,
                         operator: this.user,
                         status: result?.attendance?.status,
@@ -103,6 +103,8 @@ export default {
 
             const patrolActionId = this.selectedEvent?._id
             const userId = await this.getOperatorId()
+            const siteGroup = this.$session.get('user')?.siteGroup?._id
+
             const attendance = {
                 isAttendance: true,
                 closedDate: moment().utc(true).format(),
@@ -111,11 +113,13 @@ export default {
             }
 
             try {
-                const result = await Services.attendanceEvent(this, patrolActionId, attendance)
+                const result = await Services.attendanceEvent(this, patrolActionId, attendance, siteGroup)
+                console.log('result', result)
                 if (result && this.selectedEvent) {
+                    const openedDate = this?.selectedEvent.attendance?.openedDate
                     this.selectedEvent.attendance = {
                         isAttendance: result?.attendance?.isAttendance,
-                        openedDate: result?.attendance?.openedDate,
+                        openedDate: openedDate,
                         closedDate: result?.attendance?.closedDate,
                         operator: this.user,
                         status: result?.attendance?.status,
@@ -130,6 +134,11 @@ export default {
             }
         },
         confirmCloseAttendance: async function () {
+            if (!this.attendances || this.attendances.length === 0) {
+                Common.show(this, 'bottom-right', 'error', this.$t('str.monitor.register.message.require'))
+                return
+            }
+
             this.$swal({
                 title: this.$t('str.are.you.sure'),
                 text: this.$t('str.are.you.sure.close'),
@@ -170,7 +179,6 @@ export default {
                     this.isLoadingSendAttendanceButton = false
                     this.clearForm()
 
-                    Common.show(this, 'bottom-right', 'success', 'str.attendance_created')
                     const filters = {
                         patrolAction: this.selectedEvent?._id,
                         status: 'ACTIVE',

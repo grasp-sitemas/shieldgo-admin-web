@@ -19,18 +19,11 @@ export default {
     methods: {
         clearForm() {
             this.errors = []
-            this.data = {
-                name: '',
-                vigilants: [],
-                account: '',
-                client: '',
-                site: '',
-                status: 'ACTIVE',
-            }
+            this.data = this.guardGroupObj
             this.vigilants = []
             this.clients = []
 
-            if(!this.isSuperAdminMaster){
+            if (!this.isSuperAdminMaster) {
                 this.sites = []
             }
 

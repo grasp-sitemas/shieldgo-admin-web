@@ -22,14 +22,7 @@ export default {
     methods: {
         clearForm() {
             this.errors = []
-            this.data = {
-                name: '',
-                priority: null,
-                account: '',
-                client: '',
-                site: '',
-                status: 'ACTIVE',
-            }
+            this.data = this.incidentObj
             this.data.account = Common.getAccountId(this)
             this.isLoading = false
         },

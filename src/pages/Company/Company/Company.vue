@@ -224,8 +224,8 @@ import ListCompany from './ListCompany.vue'
 import Controller from './CrtCompany.vue'
 import Vue from 'vue'
 Vue.prototype.$registerEvent = new Vue()
-
-import { STATES } from '../../../utils/states.js'
+import { company } from '../../../types/company'
+import { STATES } from '../../../utils/states'
 
 export default {
     components: {
@@ -239,29 +239,8 @@ export default {
             isLoading: false,
             errors: [],
             valuekey: 0,
-            data: {
-                name: '',
-                fantasyName: '',
-                personType: 'LEGAL',
-                document: '',
-                email: '',
-                primaryPhone: '',
-                secondaryPhone: '',
-                logoURL: '',
-                address: {
-                    cep: '',
-                    address: '',
-                    number: '',
-                    complement: '',
-                    neighborhood: '',
-                    city: '',
-                    state: '',
-                    ibge: '',
-                    gia: '',
-                },
-                type: 'ACCOUNT',
-                status: 'ACTIVE',
-            },
+            companyObj: company,
+            data: company,
         }
     },
     mounted() {

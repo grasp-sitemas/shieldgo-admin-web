@@ -1,0 +1,27 @@
+export const schedule = {
+    name: '',
+    guardGroup: '',
+    account: '',
+    client: '',
+    site: '',
+    frequency: '',
+    frequencyMonth: {
+        day: '',
+    },
+    frequencyYear: {
+        month: '',
+        day: '',
+    },
+    points: [],
+    vigilants: [],
+    weeklyDays: [],
+    beginDate: null,
+    endDate: null,
+    beginHour: '',
+    endHour: '',
+    sendAlert: false,
+    notifyVigilants: false,
+    timeSlot: 15,
+    type: 'FREE-PROGRAM',
+    status: 'ACTIVE',
+}

@@ -106,36 +106,7 @@ export default {
             this.errors = []
             this.file = null
             this.$refs.file.value = null
-            this.data = {
-                firstName: '',
-                lastName: '',
-                email: '',
-                oldEmail: '',
-                primaryPhone: '',
-                photoURL: '',
-                account: '',
-                client: '',
-                site: '',
-                siteGroup: '',
-                clientGroup: '',
-                companyUser: {
-                    status: 'ACTIVE',
-                    subtype: '',
-                },
-                address: {
-                    cep: '',
-                    address: '',
-                    number: '',
-                    complement: '',
-                    neighborhood: '',
-                    city: '',
-                    state: '',
-                    ibge: '',
-                    gia: '',
-                },
-                type: 'USER-COMPANY',
-                status: 'ACTIVE',
-            }
+            this.data = this.userObj
             this.data.account = Common.getAccountId(this)
             this.isLoading = false
         },

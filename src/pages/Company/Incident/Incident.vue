@@ -123,7 +123,7 @@ import TemplateModal from './TemplateModal/TemplateModal.vue'
 import Controller from './CrtIncident.vue'
 import { INCIDENT_TEMPLATES_PT, INCIDENT_TEMPLATES_EN } from './utils/incidents.js'
 import Vue from 'vue'
-
+import { incident } from '../../../types/incident'
 Vue.prototype.$registerEvent = new Vue()
 
 export default {
@@ -141,14 +141,8 @@ export default {
             sites: [],
             templates: [],
             valuekey: 0,
-            data: {
-                name: '',
-                priority: null,
-                account: '',
-                client: '',
-                site: '',
-                status: 'ACTIVE',
-            },
+            incidentObj: incident,
+            data: incident,
             priorities: [
                 {
                     value: 2,

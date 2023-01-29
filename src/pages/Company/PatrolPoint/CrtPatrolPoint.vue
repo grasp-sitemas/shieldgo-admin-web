@@ -24,21 +24,7 @@ export default {
     methods: {
         clearForm() {
             this.errors = []
-            this.data = {
-                name: '',
-                notes: '',
-                type: '',
-                account: '',
-                client: '',
-                site: '',
-                geolocation: {
-                    latitude: '',
-                    longitude: '',
-                },
-                radius: null,
-                address: {},
-                status: 'ACTIVE',
-            }
+            this.data = this.patrolPointObj
             this.data.account = Common.getAccountId(this)
             this.isLoading = false
         },

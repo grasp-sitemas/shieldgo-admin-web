@@ -162,7 +162,7 @@ import QrCodeModal from './QrCodeModal/QrCodeModal.vue'
 import Map from './Map/Map.vue'
 import Vue from 'vue'
 Vue.prototype.$registerEvent = new Vue()
-
+import { patrolPoint } from '../../../types/patrolPoint'
 import { STATES } from '../../../utils/states.js'
 import { ROLES } from '../../../utils/roles.js'
 
@@ -184,21 +184,8 @@ export default {
             role: '',
             valuekey: 0,
             isSuperAdminMaster: false,
-            data: {
-                name: '',
-                notes: '',
-                type: '',
-                account: '',
-                client: '',
-                site: '',
-                geolocation: {
-                    latitude: '',
-                    longitude: '',
-                },
-                radius: null,
-                address: {},
-                status: 'ACTIVE',
-            },
+            data: patrolPoint,
+            patrolPointObj: patrolPoint,
         }
     },
     mounted() {

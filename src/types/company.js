@@ -1,0 +1,23 @@
+export const company = {
+    name: '',
+    fantasyName: '',
+    personType: 'LEGAL',
+    document: '',
+    email: '',
+    primaryPhone: '',
+    secondaryPhone: '',
+    logoURL: '',
+    address: {
+        cep: '',
+        address: '',
+        number: '',
+        complement: '',
+        neighborhood: '',
+        city: '',
+        state: '',
+        ibge: '',
+        gia: '',
+    },
+    type: 'ACCOUNT',
+    status: 'ACTIVE',
+}

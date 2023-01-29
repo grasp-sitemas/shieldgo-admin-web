@@ -272,7 +272,7 @@ import ListUser from './ListUser.vue'
 import Controller from './CrtUser.vue'
 import Vue from 'vue'
 Vue.prototype.$registerEvent = new Vue()
-
+import { user } from '../../../types/user'
 import { STATES } from '../../../utils/states.js'
 import { ROLES } from '../../../utils/roles.js'
 export default {
@@ -296,36 +296,8 @@ export default {
             valuekey: 0,
             showPassword: false,
             isSuperAdminMaster: false,
-            data: {
-                firstName: '',
-                lastName: '',
-                email: '',
-                oldEmail: '',
-                primaryPhone: '',
-                photoURL: '',
-                account: '',
-                client: '',
-                site: '',
-                siteGroup: '',
-                clientGroup: '',
-                companyUser: {
-                    status: 'ACTIVE',
-                    subtype: '',
-                },
-                address: {
-                    cep: '',
-                    address: '',
-                    number: '',
-                    complement: '',
-                    neighborhood: '',
-                    city: '',
-                    state: '',
-                    ibge: '',
-                    gia: '',
-                },
-                type: 'USER-COMPANY',
-                status: 'ACTIVE',
-            },
+            data: user,
+            userObj: user,
         }
     },
     mounted() {

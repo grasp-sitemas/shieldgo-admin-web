@@ -101,26 +101,7 @@ export default {
         clearForm() {
             this.errors = []
             this.file = null
-            this.data = {
-                name: '',
-                logoURL: '',
-                client: '',
-                account: '',
-                primaryPhone: '',
-                address: {
-                    cep: '',
-                    address: '',
-                    number: '',
-                    complement: '',
-                    neighborhood: '',
-                    city: '',
-                    state: '',
-                    ibge: '',
-                    gia: '',
-                },
-                type: 'SITE',
-                status: 'ACTIVE',
-            }
+            this.data = this.siteObj
             this.isLoading = false
         },
         save() {

@@ -190,7 +190,7 @@ import ListSite from './ListSite.vue'
 import Controller from './CrtSite.vue'
 import Vue from 'vue'
 Vue.prototype.$registerEvent = new Vue()
-
+import { site } from '../../../types/site'
 import { STATES } from '../../../utils/states.js'
 
 export default {
@@ -208,26 +208,8 @@ export default {
             clients: [],
             valuekey: 0,
             isSuperAdminMaster: false,
-            data: {
-                name: '',
-                logoURL: '',
-                client: '',
-                account: '',
-                primaryPhone: '',
-                address: {
-                    cep: '',
-                    address: '',
-                    number: '',
-                    complement: '',
-                    neighborhood: '',
-                    city: '',
-                    state: '',
-                    ibge: '',
-                    gia: '',
-                },
-                type: 'SITE',
-                status: 'ACTIVE',
-            },
+            data: site,
+            siteObj: site,
         }
     },
     mounted() {

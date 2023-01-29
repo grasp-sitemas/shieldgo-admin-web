@@ -291,8 +291,21 @@
                     <span v-if="props.column.field === 'type'">
                         {{ $t(props.formattedRow[props.column.field]) }}
                     </span>
-                    <span v-else-if="props.column.field === 'geolocation' && props.formattedRow[props.column.field]?.latitude && props.formattedRow[props.column.field]?.longitude">
-                        {{ 'Lat: ' + props.formattedRow[props.column.field]?.latitude + ' Lng: ' + props.formattedRow[props.column.field]?.longitude }}
+
+                    <span v-else-if="props.column.field === 'geolocation'">
+                        <span
+                            v-if="
+                                props.formattedRow[props.column.field]?.latitude &&
+                                props.formattedRow[props.column.field]?.longitude &&
+                                props.formattedRow[props.column.field]?.latitude?.length > 0 &&
+                                props.formattedRow[props.column.field]?.longitude?.length > 0
+                            "
+                        >
+                            {{ 'Lat: ' + props.formattedRow[props.column.field]?.latitude + ' Lng: ' + props.formattedRow[props.column.field]?.longitude }}
+                        </span>
+                        <span v-else>
+                            <i class="fas fa-ban"></i>
+                        </span>
                     </span>
                     <span v-else>
                         {{ props.formattedRow[props.column.field] }}
@@ -335,7 +348,9 @@
 <script>
 import Controller from './CrtCreateScheduleModal.vue'
 import { FREQUENCIES, WEEKLY_DAYS, MONTHS } from '../../../utils/schedules.js'
+import { schedule } from '../../../types/schedule'
 import moment from 'moment'
+
 export default {
     props: {
         selectedDate: {
@@ -396,33 +411,8 @@ export default {
             weeklyDays: WEEKLY_DAYS,
             months: MONTHS,
             table: null,
-            data: {
-                name: '',
-                guardGroup: '',
-                account: '',
-                client: '',
-                site: '',
-                frequency: '',
-                frequencyMonth: {
-                    day: '',
-                },
-                frequencyYear: {
-                    month: '',
-                    day: '',
-                },
-                points: [],
-                vigilants: [],
-                weeklyDays: [],
-                beginDate: null,
-                endDate: null,
-                beginHour: '',
-                endHour: '',
-                sendAlert: false,
-                notifyVigilants: false,
-                timeSlot: 15,
-                type: 'FREE-PROGRAM',
-                status: 'ACTIVE',
-            },
+            data: schedule,
+            scheduleObj: schedule,
             columns: [],
             paginationOptions: {},
             selectOptions: {},

@@ -103,47 +103,44 @@ export default {
             this.isLoading = false
         },
         save() {
-            if (!this.isLoading) {
-                this.isLoading = true
-                let formData = new FormData()
+            let formData = new FormData()
 
-                formData.append('file', this.file)
-                formData.append('jsonData', JSON.stringify(this.data))
+            formData.append('file', this.file)
+            formData.append('jsonData', JSON.stringify(this.data))
 
-                try {
-                    Request.do(
-                        this,
-                        this.data._id ? 'put' : 'post',
-                        Request.getDefaultHeader(this),
-                        formData,
-                        `${Endpoints.systemUsers.formData}${this.data._id ? this.data._id : ''}`,
-                        response => {
-                            if (response.status === 200) {
-                                Common.show(this, 'bottom-right', 'success', this.data._id ? this.$t('str.form.update.success') : this.$t('str.form.create.success'))
-                                const { _id, status, photoURL, email, username } = response?.result
-                                this.data._id = _id
-                                this.data.status = status
-                                this.data.photoURL = photoURL
-                                this.data.email = email
-                                this.data.oldEmail = email
-                                this.data.username = username
-                                this.data.oldUsername = username
-                                this.data.password = ''
-                                this.isLoading = false
-                                this.$registerEvent.$emit('refreshList')
-                            }
-                        },
-                        error => {
+            try {
+                Request.do(
+                    this,
+                    this.data._id ? 'put' : 'post',
+                    Request.getDefaultHeader(this),
+                    formData,
+                    `${Endpoints.systemUsers.formData}${this.data._id ? this.data._id : ''}`,
+                    response => {
+                        if (response.status === 200) {
+                            Common.show(this, 'bottom-right', 'success', this.data._id ? this.$t('str.form.update.success') : this.$t('str.form.create.success'))
+                            const { _id, status, photoURL, email, username } = response?.result
+                            this.data._id = _id
+                            this.data.status = status
+                            this.data.photoURL = photoURL
+                            this.data.email = email
+                            this.data.oldEmail = email
+                            this.data.username = username
+                            this.data.oldUsername = username
+                            this.data.password = ''
                             this.isLoading = false
-                            Common.show(this, 'bottom-right', 'warn', this.$t('str.form.update.generic.error'))
-                            console.log(error)
-                        },
-                    )
-                } catch (error) {
-                    this.isLoading = false
-                    Common.show(this, 'bottom-right', 'warn', this.$t('str.form.update.generic.error'))
-                    console.log(error)
-                }
+                            this.$registerEvent.$emit('refreshList')
+                        }
+                    },
+                    error => {
+                        this.isLoading = false
+                        Common.show(this, 'bottom-right', 'warn', this.$t('str.form.update.generic.error'))
+                        console.log(error)
+                    },
+                )
+            } catch (error) {
+                this.isLoading = false
+                Common.show(this, 'bottom-right', 'warn', this.$t('str.form.update.generic.error'))
+                console.log(error)
             }
         },
         archive() {
@@ -198,6 +195,8 @@ export default {
             }
         },
         async checkForm() {
+            if (this.isLoading) return
+
             if (!this.data.account || this.data.account === '') {
                 this.errors.push('account')
             }
@@ -232,15 +231,18 @@ export default {
             }
 
             if (!this.errors || this.errors.length === 0) {
+                this.isLoading = true
                 const resEmail = await Services.emailAlreadyExists(this, this.data.email)
                 if (resEmail.alreadyExist && this.data.email !== this.data.oldEmail) {
                     Common.show(this, 'bottom-right', 'warn', this.$t('str.email.already.in.use'))
+                    this.isLoading = false
                     return
                 }
 
                 const resUsername = await Services.usernameAlreadyExists(this, this.data.username)
                 if (resUsername.alreadyExist && this.data.username !== this.data.oldUsername) {
                     Common.show(this, 'bottom-right', 'warn', this.$t('str.username.already.in.use'))
+                    this.isLoading = false
                     return
                 }
 
@@ -254,61 +256,6 @@ export default {
                     },
                 )
             }
-
-            //     if (res.alreadyExist === false) {
-            //         this.loadGeolocation(
-            //             async data => {
-            //                 await this.save(data)
-            //             },
-            //             async error => {
-            //                 this.data.address.name = 'MAIN'
-            //                 await this.save(error)
-            //             },
-            //         )
-            //     } else {
-            //         Common.show(this, 'bottom-right', 'warn', this.$t('str.email.already.in.use'))
-            //     }
-            // } else {
-            //     this.loadGeolocation(
-            //         async data => {
-            //             await this.save(data)
-            //         },
-            //         async error => {
-            //             this.data.address.name = 'MAIN'
-            //             await this.save(error)
-            //         },
-            //     )
-            // }
-
-            // if (!this.errors || this.errors.length === 0) {
-            //     if (this.data.email !== this.data.oldEmail) {
-            //         const res = await Services.emailAlreadyExists(this, this.data.email)
-
-            //         if (res.alreadyExist === false) {
-            //             this.loadGeolocation(
-            //                 async data => {
-            //                     await this.save(data)
-            //                 },
-            //                 async error => {
-            //                     this.data.address.name = 'MAIN'
-            //                     await this.save(error)
-            //                 },
-            //             )
-            //         } else {
-            //             Common.show(this, 'bottom-right', 'warn', this.$t('str.email.already.in.use'))
-            //         }
-            //     } else {
-            //         this.loadGeolocation(
-            //             async data => {
-            //                 await this.save(data)
-            //             },
-            //             async error => {
-            //                 this.data.address.name = 'MAIN'
-            //                 await this.save(error)
-            //             },
-            //         )
-            //     }
-            // }
         },
         loadGeolocation: function (callbackSuccess, callbackError) {
             let state = this
@@ -335,7 +282,6 @@ export default {
                 async error => {
                     this.data.address.name = 'MAIN'
                     await this.save(error)
-                    this.isLoading = false
                 },
             )
         },

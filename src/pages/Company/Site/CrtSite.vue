@@ -106,42 +106,39 @@ export default {
             this.isLoading = false
         },
         async save() {
-            const state = this
             let formData = new FormData()
 
-            const data = state.data
+            const data = this.data
 
-            formData.append('file', state.file)
+            formData.append('file', this.file)
             formData.append('jsonData', JSON.stringify(data))
 
             try {
                 Request.do(
-                    state,
+                    this,
                     data._id ? 'put' : 'post',
-                    Request.getDefaultHeader(state),
+                    Request.getDefaultHeader(this),
                     formData,
                     `${Endpoints.companies.formData}${data._id ? data._id : ''}`,
                     response => {
                         if (response.status === 200) {
                             data._id = response?.result?._id
                             data.status = response?.result?.status
-                            state.data = data
-                            alert('Salvo com sucesso' + data._id)
-
-                            // Common.show(state, 'bottom-right', 'success', data._id ? state.$t('str.form.update.success') : state.$t('str.form.create.success'))
-
-                            // state.$registerEvent.$emit('refreshList')
+                            this.data = data
+                            Common.show(this, 'bottom-right', 'success', data._id ? this.$t('str.form.update.success') : this.$t('str.form.create.success'))
+                            this.$registerEvent.$emit('refreshList')
+                            this.isLoading = false
                         }
                     },
                     error => {
-                        state.isLoading = false
-                        Common.show(state, 'bottom-right', 'warn', state.$t('str.form.update.generic.error'))
+                        this.isLoading = false
+                        Common.show(this, 'bottom-right', 'warn', this.$t('str.form.update.generic.error'))
                         console.log(error)
                     },
                 )
             } catch (error) {
-                state.isLoading = false
-                Common.show(state, 'bottom-right', 'warn', state.$t('str.form.update.generic.error'))
+                this.isLoading = false
+                Common.show(this, 'bottom-right', 'warn', this.$t('str.form.update.generic.error'))
                 console.log(error)
             }
         },
@@ -197,6 +194,8 @@ export default {
             }
         },
         checkForm() {
+            if (this.isLoading) return
+
             if (!this.data.name || this.data.name === '') {
                 this.errors.push('name')
             }
@@ -231,12 +230,10 @@ export default {
                 this.loadGeolocation(
                     async data => {
                         await this.save(data)
-                        this.isLoading = false
                     },
                     async error => {
                         this.data.address.name = 'MAIN'
                         await this.save(error)
-                        this.isLoading = false
                     },
                 )
             }

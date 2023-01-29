@@ -111,7 +111,7 @@
                                         <th></th>
                                     </tr>
                                 </thead>
-                                <tbody>
+                                <tbody v-if="data?.sites?.length > 0">
                                     <tr v-for="site in data.sites" :key="site._id">
                                         <td>{{ site.name }}</td>
                                         <td>{{ site.client?.name }}</td>

@@ -200,7 +200,6 @@ export default {
     data() {
         return {
             states: STATES,
-            domain: null,
             file: null,
             isLoading: false,
             errors: [],

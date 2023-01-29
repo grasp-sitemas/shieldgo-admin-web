@@ -86,7 +86,7 @@
                             <i v-if="isLoading === true" class="fas fa-spinner fa-pulse"></i>
                             {{ $t('str.btn.save') }}
                         </button>
-                        <button @click="$bvModal.hide('checkPointModal')" type="submit" class="ms-10px btn btn-secondary w-200px">
+                        <button @click="closeModal()" type="submit" class="ms-10px btn btn-secondary w-200px">
                             {{ $t('str.btn.close') }}
                         </button>
                     </div>

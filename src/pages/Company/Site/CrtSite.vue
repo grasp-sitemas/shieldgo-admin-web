@@ -98,44 +98,50 @@ export default {
                 },
             )
         },
-        clearForm() {
+        async clearForm() {
             this.errors = []
             this.file = null
             this.data = this.siteObj
+            this.data.account = await Common.getAccountId(this)
             this.isLoading = false
         },
-        save() {
+        async save() {
+            const state = this
             let formData = new FormData()
 
-            formData.append('file', this.file)
-            formData.append('jsonData', JSON.stringify(this.data))
+            const data = state.data
+
+            formData.append('file', state.file)
+            formData.append('jsonData', JSON.stringify(data))
 
             try {
                 Request.do(
-                    this,
-                    this.data._id ? 'put' : 'post',
-                    Request.getDefaultHeader(this),
+                    state,
+                    data._id ? 'put' : 'post',
+                    Request.getDefaultHeader(state),
                     formData,
-                    `${Endpoints.companies.formData}${this.data._id ? this.data._id : ''}`,
+                    `${Endpoints.companies.formData}${data._id ? data._id : ''}`,
                     response => {
                         if (response.status === 200) {
-                            Common.show(this, 'bottom-right', 'success', this.data._id ? this.$t('str.form.update.success') : this.$t('str.form.create.success'))
-                            const { _id, status, logoURL } = response?.result
-                            this.data._id = _id
-                            this.data.status = status
-                            this.data.logoURL = logoURL
-                            this.$registerEvent.$emit('refreshList')
+                            data._id = response?.result?._id
+                            data.status = response?.result?.status
+                            state.data = data
+                            alert('Salvo com sucesso' + data._id)
+
+                            // Common.show(state, 'bottom-right', 'success', data._id ? state.$t('str.form.update.success') : state.$t('str.form.create.success'))
+
+                            // state.$registerEvent.$emit('refreshList')
                         }
                     },
                     error => {
-                        this.isLoading = false
-                        Common.show(this, 'bottom-right', 'warn', this.$t('str.form.update.generic.error'))
+                        state.isLoading = false
+                        Common.show(state, 'bottom-right', 'warn', state.$t('str.form.update.generic.error'))
                         console.log(error)
                     },
                 )
             } catch (error) {
-                this.isLoading = false
-                Common.show(this, 'bottom-right', 'warn', this.$t('str.form.update.generic.error'))
+                state.isLoading = false
+                Common.show(state, 'bottom-right', 'warn', state.$t('str.form.update.generic.error'))
                 console.log(error)
             }
         },

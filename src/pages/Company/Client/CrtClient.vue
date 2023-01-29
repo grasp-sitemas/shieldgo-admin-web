@@ -12,12 +12,10 @@ export default {
         payload.data.account = await Common.getAccountId(payload)
     },
     methods: {
-        clearForm() {
+        async clearForm() {
             this.errors = []
-            this.file = null
             this.data = this.clientObj
-            this.$refs.file.value = null
-            this.data.account = Common.getAccountId(this)
+            this.data.account = await Common.getAccountId(this)
             this.isLoading = false
         },
         save() {
@@ -57,7 +55,7 @@ export default {
                 console.log(error)
             }
         },
-        archive() {
+        async archive() {
             try {
                 Request.do(
                     this,
@@ -82,7 +80,7 @@ export default {
                 Common.show(this, 'bottom-right', 'warn', this.$t('str.form.archive.generic.error'))
             }
         },
-        confirmArchive() {
+        async confirmArchive() {
             this.$swal({
                 title: this.$t('str.are.you.sure'),
                 text: this.$t('str.are.you.sure.archive'),
@@ -92,9 +90,9 @@ export default {
                 cancelButtonText: this.$t('str.btn.cancel'),
                 confirmButtonClass: 'btn me-5px btn-warning',
                 cancelButtonClass: 'btn btn-default',
-            }).then(result => {
+            }).then(async result => {
                 if (result.isConfirmed && result.value) {
-                    this.archive()
+                    await this.archive()
                 }
             })
         },

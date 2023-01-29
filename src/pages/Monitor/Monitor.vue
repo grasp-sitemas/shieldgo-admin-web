@@ -362,7 +362,7 @@ export default {
     mounted() {
         Controller.init(this)
     },
-    created() {
+    async created() {
         const state = this
 
         state.$registerEvent.$on('refreshList', function () {
@@ -373,83 +373,88 @@ export default {
             state.initTable()
         })
 
-        const siteIds = state.$session.get('user')?.siteGroup?.sites
-        const siteGroupId = state.$session.get('user')?.siteGroup?._id
+        const siteIds = await state.$session.get('user')?.siteGroup?.sites
+        const siteGroupId = await state.$session.get('user')?.siteGroup?._id
         // subscribe notifications snapshot in array of sites ids
-        siteIds.forEach(site => {
-            onSnapshot(doc(db, 'notifications', site), async document => {
-                const type = document.data()?.type
-                if (type && type.length > 0) {
-                    if (type === 'INCIDENT') {
-                        Common.show(state, 'top-right', 'warn', state.$t('msg.new.incident.notification'))
-                    } else if (type === 'SOS_ALERT') {
-                        state.$registerEvent.$emit('soundAlert')
+
+        if (siteIds && siteIds?.length > 0) {
+            siteIds.forEach(site => {
+                onSnapshot(doc(db, 'notifications', site), async document => {
+                    const type = document.data()?.type
+                    if (type && type.length > 0) {
+                        if (type === 'INCIDENT') {
+                            Common.show(state, 'top-right', 'warn', state.$t('msg.new.incident.notification'))
+                        } else if (type === 'SOS_ALERT') {
+                            state.$registerEvent.$emit('soundAlert')
+                        }
+                        await deleteDoc(doc(db, 'notifications', site))
+                        await state.filter()
                     }
-                    await deleteDoc(doc(db, 'notifications', site))
-                    await state.filter()
-                }
-            })
+                })
 
-            onSnapshot(doc(db, 'updatedMedias', site), async document => {
-                console.log('updatedMedias')
-                const patrolAction = document.data()?.patrolAction
-                const type = document.data()?.type
+                onSnapshot(doc(db, 'updatedMedias', site), async document => {
+                    console.log('updatedMedias')
+                    const patrolAction = document.data()?.patrolAction
+                    const type = document.data()?.type
 
-                if (patrolAction === state.selectedEvent?._id) {
-                    const url = document.data()?.url
-                    if (type === 'PHOTO') {
-                        state.selectedEvent.photoURL = url
-                    } else if (type === 'SIGNATURE') {
-                        state.selectedEvent.signatureURL = url
-                    } else if (type === 'SOUND') {
-                        state.selectedEvent.soundURL = url
+                    if (patrolAction === state.selectedEvent?._id) {
+                        const url = document.data()?.url
+                        if (type === 'PHOTO') {
+                            state.selectedEvent.photoURL = url
+                        } else if (type === 'SIGNATURE') {
+                            state.selectedEvent.signatureURL = url
+                        } else if (type === 'SOUND') {
+                            state.selectedEvent.soundURL = url
+                        }
                     }
-                }
-                await deleteDoc(doc(db, 'updatedMedias', site))
+                    await deleteDoc(doc(db, 'updatedMedias', site))
+                })
             })
-        })
+        }
 
-        onSnapshot(doc(db, 'updateAttendanceEventReport', siteGroupId), async document => {
-            const patrolActionId = document.data()?.patrolActionId
-            if (patrolActionId === state.selectedEvent?._id) {
-                const patrolAction = document.data()?.patrolActionId
-                const filters = {
-                    patrolAction: patrolAction,
-                    status: 'ACTIVE',
-                }
-                state.attendances = await Services.getEventAttendances(state, filters)
-                await deleteDoc(doc(db, 'updateAttendanceEventReport', siteGroupId))
-            }
-        })
-
-        onSnapshot(doc(db, 'updateCloseAttendanceEvent', siteGroupId), async document => {
-            const patrolActionId = document.data()?.patrolActionId
-            if (patrolActionId) {
-                await state.filter()
-                if (patrolActionId === state.selectedEvent?._id) {
-                    state.selectedEvent = null
-                    state.attendances = []
-                }
-                await deleteDoc(doc(db, 'updateCloseAttendanceEvent', siteGroupId))
-            }
-        })
-
-        onSnapshot(doc(db, 'updateAttendanceEvent', siteGroupId), async document => {
-            if (document?.data()?.attendance) {
-                console.log('updateAttendanceEvent')
-                const attendance = JSON.parse(document.data()?.attendance)
-                const operator = JSON.parse(document.data()?.operator)
-                console.log('attendance', attendance)
-                console.log('patrolActionId' + document.data()?.patrolActionId)
+        if (siteGroupId) {
+            onSnapshot(doc(db, 'updateAttendanceEventReport', siteGroupId), async document => {
                 const patrolActionId = document.data()?.patrolActionId
-                await state.filter()
                 if (patrolActionId === state.selectedEvent?._id) {
-                    attendance.operator = operator
-                    state.selectedEvent.attendance = attendance
+                    const patrolAction = document.data()?.patrolActionId
+                    const filters = {
+                        patrolAction: patrolAction,
+                        status: 'ACTIVE',
+                    }
+                    state.attendances = await Services.getEventAttendances(state, filters)
+                    await deleteDoc(doc(db, 'updateAttendanceEventReport', siteGroupId))
                 }
-                await deleteDoc(doc(db, 'updateAttendanceEvent', siteGroupId))
-            }
-        })
+            })
+
+            onSnapshot(doc(db, 'updateCloseAttendanceEvent', siteGroupId), async document => {
+                const patrolActionId = document.data()?.patrolActionId
+                if (patrolActionId) {
+                    await state.filter()
+                    if (patrolActionId === state.selectedEvent?._id) {
+                        state.selectedEvent = null
+                        state.attendances = []
+                    }
+                    await deleteDoc(doc(db, 'updateCloseAttendanceEvent', siteGroupId))
+                }
+            })
+
+            onSnapshot(doc(db, 'updateAttendanceEvent', siteGroupId), async document => {
+                if (document?.data()?.attendance) {
+                    console.log('updateAttendanceEvent')
+                    const attendance = JSON.parse(document.data()?.attendance)
+                    const operator = JSON.parse(document.data()?.operator)
+                    console.log('attendance', attendance)
+                    console.log('patrolActionId' + document.data()?.patrolActionId)
+                    const patrolActionId = document.data()?.patrolActionId
+                    await state.filter()
+                    if (patrolActionId === state.selectedEvent?._id) {
+                        attendance.operator = operator
+                        state.selectedEvent.attendance = attendance
+                    }
+                    await deleteDoc(doc(db, 'updateAttendanceEvent', siteGroupId))
+                }
+            })
+        }
     },
     methods: Controller.methods,
 }

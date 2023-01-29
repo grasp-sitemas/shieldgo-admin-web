@@ -146,6 +146,7 @@
 import ListSiteGroup from './ListSiteGroup.vue'
 import Controller from './CrtSiteGroup.vue'
 import Vue from 'vue'
+import { siteGroup } from '../../../types/siteGroup'
 Vue.prototype.$registerEvent = new Vue()
 
 export default {
@@ -163,13 +164,8 @@ export default {
             role: '',
             valuekey: 0,
             isSuperAdminMaster: false,
-            data: {
-                name: '',
-                sites: [],
-                account: '',
-                client: '',
-                status: 'ACTIVE',
-            },
+            data: siteGroup,
+            siteGroupObj: siteGroup,
         }
     },
     mounted() {

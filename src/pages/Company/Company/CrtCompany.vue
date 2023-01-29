@@ -88,29 +88,7 @@ export default {
         },
         clearForm() {
             this.errors = []
-            this.data = {
-                name: '',
-                fantasyName: '',
-                personType: '',
-                document: '',
-                email: '',
-                primaryPhone: '',
-                secondaryPhone: '',
-                logoURL: '',
-                address: {
-                    cep: '',
-                    address: '',
-                    number: '',
-                    complement: '',
-                    neighborhood: '',
-                    city: '',
-                    state: '',
-                    ibge: '',
-                    gia: '',
-                },
-                type: 'ACCOUNT',
-                status: 'ACTIVE',
-            }
+            this.data = this.companyObj
             this.file = null
             this.$refs.file.value = null
             this.isLoading = false

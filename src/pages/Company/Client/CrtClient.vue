@@ -15,15 +15,7 @@ export default {
         clearForm() {
             this.errors = []
             this.file = null
-            this.data = {
-                name: '',
-                email: '',
-                primaryPhone: '',
-                owner: '',
-                account: '',
-                type: 'CLIENT',
-                status: 'ACTIVE',
-            }
+            this.data = this.clientObj
             this.$refs.file.value = null
             this.data.account = Common.getAccountId(this)
             this.isLoading = false

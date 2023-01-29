@@ -410,7 +410,8 @@ export default {
         })
 
         onSnapshot(doc(db, 'updateAttendanceEventReport', siteGroupId), async document => {
-            if (document?.data()?.patrolActionId) {
+            const patrolActionId = document.data()?.patrolActionId
+            if (patrolActionId === state.selectedEvent?._id) {
                 const patrolAction = document.data()?.patrolActionId
                 const filters = {
                     patrolAction: patrolAction,

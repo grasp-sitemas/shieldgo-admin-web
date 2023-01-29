@@ -94,7 +94,7 @@ import ListClient from './ListClient.vue'
 import Controller from './CrtClient.vue'
 import Vue from 'vue'
 Vue.prototype.$registerEvent = new Vue()
-
+import { client } from '../../../types/client'
 import { STATES } from '../../../utils/states.js'
 
 export default {
@@ -111,15 +111,8 @@ export default {
             accounts: [],
             valuekey: 0,
             isSuperAdminMaster: false,
-            data: {
-                name: '',
-                email: '',
-                primaryPhone: '',
-                owner: '',
-                account: '',
-                type: 'CLIENT',
-                status: 'ACTIVE',
-            },
+            data: client,
+            clientObj: client,
         }
     },
     mounted() {

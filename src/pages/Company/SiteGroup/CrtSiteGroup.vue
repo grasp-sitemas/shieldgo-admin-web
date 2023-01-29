@@ -20,13 +20,7 @@ export default {
     methods: {
         clearForm() {
             this.errors = []
-            this.data = {
-                name: '',
-                sites: [],
-                account: '',
-                client: '',
-                status: 'ACTIVE',
-            }
+            this.data = this.siteGroupObj
             this.selectedSites = []
             this.clients = []
 

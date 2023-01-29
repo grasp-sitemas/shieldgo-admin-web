@@ -23,10 +23,8 @@ export default {
             this.errors = []
             this.data = {
                 name: '',
-                sites: [],
+                clients: [],
                 account: '',
-                client: '',
-                status: 'ACTIVE',
             }
             this.clients = []
 

@@ -1,8 +1,8 @@
 export const site = {
     name: '',
     logoURL: '',
-    client: '',
     account: '',
+    client: '',
     primaryPhone: '',
     address: {
         cep: '',
@@ -14,6 +14,9 @@ export const site = {
         state: '',
         ibge: '',
         gia: '',
+        name: '',
+        lat: '',
+        lng: '',
     },
     type: 'SITE',
     status: 'ACTIVE',

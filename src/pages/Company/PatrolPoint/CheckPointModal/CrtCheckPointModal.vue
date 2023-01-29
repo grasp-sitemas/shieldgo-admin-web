@@ -94,14 +94,20 @@ export default {
                 console.log(error)
             }
         },
+        closeModal() {
+            this.clearForm()
+            this.$bvModal.hide('checkPointModal')
+        },
         clearForm() {
             this.errors = []
+            this.quantity = null
+            this.isSelected = false
             this.data = {
                 account: '',
                 client: '',
                 site: '',
-                status: 'ACTIVE',
                 type: 'QRCODE',
+                status: 'ACTIVE',
             }
             if (this.isSuperAdminMaster) {
                 this.clients = []

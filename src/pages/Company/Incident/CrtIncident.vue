@@ -26,7 +26,7 @@ export default {
             this.data.account = Common.getAccountId(this)
             this.isLoading = false
         },
-        save() {
+        async save() {
             try {
                 Request.do(
                     this,

@@ -9,6 +9,7 @@
         <h1 class="page-header">
             {{ $t('str.form.title.patrol.points') }}
         </h1>
+
         <panel v-if="data._id" :title="$t('str.register.form.title')">
             <form>
                 <fieldset>
@@ -149,6 +150,7 @@
                 </fieldset>
             </form>
         </panel>
+
         <notifications group="bottom-right" position="bottom right" :speed="500" />
         <QrCodeModal :qrcodeId="data._id" :data="data" />
         <ListPatrolPoint v-on:load-item="selectItem" :isSuperAdminMaster="isSuperAdminMaster" :accounts="accounts" :clients="clients" :role="role" />

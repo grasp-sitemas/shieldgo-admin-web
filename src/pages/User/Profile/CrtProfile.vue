@@ -87,33 +87,6 @@ export default {
                 },
             )
         },
-        clearForm() {
-            this.errors = []
-            this.file = null
-            this.$refs.file.value = null
-            this.data = {
-                firstName: '',
-                lastName: '',
-                email: '',
-                primaryPhone: '',
-                secondaryPhone: '',
-                photoURL: '',
-                address: {
-                    cep: '',
-                    address: '',
-                    number: '',
-                    complement: '',
-                    neighborhood: '',
-                    city: '',
-                    state: '',
-                    ibge: '',
-                    gia: '',
-                },
-                type: 'USER-COMPANY',
-                status: 'ACTIVE',
-            }
-            this.isProcessing = false
-        },
         getMe() {
             Request.do(
                 this,

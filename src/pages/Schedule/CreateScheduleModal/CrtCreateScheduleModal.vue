@@ -265,33 +265,8 @@ export default {
             this.vigilants = []
             this.guardGroups = []
 
-            this.data = {
-                name: '',
-                guardGroup: '',
-                account: '',
-                client: '',
-                site: '',
-                frequency: '',
-                frequencyMonth: {
-                    day: '',
-                },
-                frequencyYear: {
-                    month: '',
-                    day: '',
-                },
-                points: [],
-                vigilants: [],
-                weeklyDays: [],
-                beginDate: null,
-                endDate: null,
-                beginHour: '',
-                endHour: '',
-                sendAlert: false,
-                notifyVigilants: false,
-                timeSlot: 15,
-                type: 'FREE-PROGRAM',
-                status: 'ACTIVE',
-            }
+            this.data = this.scheduleObj
+
             if (this.isSuperAdminMaster) {
                 this.clientList = []
                 this.siteList = []

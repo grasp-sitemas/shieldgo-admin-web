@@ -94,8 +94,6 @@
                     <div v-if="selectedSites?.length > 0" class="row">
                         <!-- button for add  -->
                         <div class="col-md-4 mb-3">
-                            <!-- warning button  -->
-
                             <button @click="addSiteGroup()" class="btn btn-warning w-50" type="button">
                                 {{ $t('str.register.site.groups.add.button') }}
                             </button>
@@ -103,12 +101,14 @@
                     </div>
 
                     <div class="row">
+                        <label class="form-label" for="sitesField">{{ $t('str.register.site.groups.sites.table.title') }}</label>
                         <div class="col-md-12 mb-3">
-                            <table class="table table-striped table-hover">
+                            <table class="table table-bordered">
                                 <thead class="thead-dark dark">
                                     <tr>
                                         <th>{{ $t('str.register.site.groups.sites.table.name') }}</th>
                                         <th>{{ $t('str.register.site.groups.sites.table.client') }}</th>
+                                        <th></th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -174,4 +174,8 @@ export default {
     methods: Controller.methods,
 }
 </script>
-<style lang="scss"></style>
+<style lang="scss" scoped>
+.dark-shadow {
+    background-color: inset 0 0 0 9999px var(--bs-table-accent-bg) !important;
+}
+</style>

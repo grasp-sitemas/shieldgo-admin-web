@@ -241,6 +241,7 @@ Vue.prototype.$registerEvent = new Vue()
 
 import { STATES } from '../../../utils/states.js'
 import { ROLES } from '../../../utils/roles.js'
+import { vigilant } from '../../../types/vigilant'
 export default {
     components: {
         ListVigilant,
@@ -259,36 +260,8 @@ export default {
             valuekey: 0,
             showPassword: false,
             isSuperAdminMaster: false,
-            data: {
-                firstName: '',
-                lastName: '',
-                email: '',
-                oldEmail: '',
-                username: '',
-                oldUsername: '',
-                primaryPhone: '',
-                photoURL: '',
-                account: '',
-                client: '',
-                site: '',
-                customerUser: {
-                    status: 'ACTIVE',
-                    subtype: 'VIGILANT',
-                },
-                address: {
-                    cep: '',
-                    address: '',
-                    number: '',
-                    complement: '',
-                    neighborhood: '',
-                    city: '',
-                    state: '',
-                    ibge: '',
-                    gia: '',
-                },
-                type: 'USER-CUSTOMER',
-                status: 'ACTIVE',
-            },
+            data: vigilant,
+            vigilantObj: vigilant,
         }
     },
     mounted() {

@@ -80,7 +80,16 @@
                     <div class="row">
                         <div class="col-md-4 mb-3">
                             <label class="form-label" for="cepField">{{ $t('str.register.user.cep.field') }}</label>
-                            <input type="tel" v-mask="'#####-###'" key="cepField" @input="inputCep()" @keyup.delete="handleCEPDelete" v-model="data.address.cep" class="form-control" :placeholder="$t('str.register.user.cep.placeholder')" />
+                            <input
+                                type="tel"
+                                v-mask="'#####-###'"
+                                key="cepField"
+                                @input="inputCep()"
+                                @keyup.delete="handleCEPDelete"
+                                v-model="data.address.cep"
+                                class="form-control"
+                                :placeholder="$t('str.register.user.cep.placeholder')"
+                            />
                         </div>
                         <div v-if="data?.address?.cep?.length === 9" class="col-md-4 mb-3">
                             <label class="form-label" for="addressField">{{ $t('str.register.user.address.field') }}</label>
@@ -88,14 +97,7 @@
                         </div>
                         <div v-if="data?.address?.cep?.length === 9" class="col-md-4 mb-3">
                             <label class="form-label" for="numberField">{{ $t('str.register.user.number.field') }}</label>
-                            <input 
-                                v-model="data.address.number" 
-                                class="form-control" 
-                                type="number" 								
-                                key="numberField"
-								ref="numberField"
-                                :placeholder="$t('str.register.user.number.placeholder')" 
-                            />
+                            <input v-model="data.address.number" class="form-control" type="number" key="numberField" ref="numberField" :placeholder="$t('str.register.user.number.placeholder')" />
                         </div>
                     </div>
                     <div class="row" v-if="data?.address?.cep?.length === 9">

@@ -133,9 +133,9 @@ import ListGuardGroup from './ListGuardGroup.vue'
 import Controller from './CrtGuardGroup.vue'
 import Vue from 'vue'
 Vue.prototype.$registerEvent = new Vue()
-
-import { STATES } from '../../../utils/states.js'
-import { ROLES } from '../../../utils/roles.js'
+import { guardGroup } from '../../../types/guardGroup'
+import { STATES } from '../../../utils/states'
+import { ROLES } from '../../../utils/roles'
 
 export default {
     components: {
@@ -155,14 +155,8 @@ export default {
             vigilants: [],
             valuekey: 0,
             isSuperAdminMaster: false,
-            data: {
-                name: '',
-                vigilants: [],
-                account: '',
-                client: '',
-                site: '',
-                status: 'ACTIVE',
-            },
+            data: guardGroup,
+            guardGroupObj: guardGroup,
         }
     },
     mounted() {

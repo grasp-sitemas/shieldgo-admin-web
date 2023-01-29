@@ -201,7 +201,7 @@
                                 </div>
                             </div>
 
-                            <div v-if="!selectedEvent?.attendance || !selectedEvent?.attendance?.isAttendance" class="result-price">
+                            <div v-if="(!selectedEvent?.attendance || !selectedEvent?.attendance?.isAttendance) && user?.companyUser?.subtype === 'OPERATOR'" class="result-price">
                                 <a @click="handleAttendanceEvent()" class="btn d-block w-100" v-bind:class="{ 'btn-yellow': selectedEvent?.type === 'INCIDENT', 'btn-red': selectedEvent?.type === 'SOS_ALERT' }">
                                     {{ $t('str.monitor.answer.event') }}
                                 </a>

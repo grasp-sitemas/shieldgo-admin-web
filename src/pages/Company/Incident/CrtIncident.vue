@@ -27,30 +27,35 @@ export default {
             this.isLoading = false
         },
         async save() {
-            try {
-                Request.do(
-                    this,
-                    this.data._id ? 'put' : 'post',
-                    Request.getDefaultHeader(this),
-                    this.data,
-                    `${Endpoints.incidents.incident}${this.data._id ? this.data._id : ''}`,
-                    response => {
-                        if (response.status === 200) {
-                            Common.show(this, 'bottom-right', 'success', this.data._id ? this.$t('str.form.update.success') : this.$t('str.form.create.success'))
-                            this.data = response?.result
-                            this.$registerEvent.$emit('refreshList')
-                        }
-                    },
-                    error => {
-                        this.isLoading = false
-                        Common.show(this, 'bottom-right', 'warn', this.$t('str.form.update.generic.error'))
-                        console.log(error)
-                    },
-                )
-            } catch (error) {
-                this.isLoading = false
-                Common.show(this, 'bottom-right', 'warn', this.$t('str.form.update.generic.error'))
-                console.log(error)
+            if (!this.isLoading) {
+                this.isLoading = true
+
+                try {
+                    Request.do(
+                        this,
+                        this.data._id ? 'put' : 'post',
+                        Request.getDefaultHeader(this),
+                        this.data,
+                        `${Endpoints.incidents.incident}${this.data._id ? this.data._id : ''}`,
+                        response => {
+                            if (response.status === 200) {
+                                Common.show(this, 'bottom-right', 'success', this.data._id ? this.$t('str.form.update.success') : this.$t('str.form.create.success'))
+                                this.data = response?.result
+                                this.$registerEvent.$emit('refreshList')
+                                this.isLoading = false
+                            }
+                        },
+                        error => {
+                            this.isLoading = false
+                            Common.show(this, 'bottom-right', 'warn', this.$t('str.form.update.generic.error'))
+                            console.log(error)
+                        },
+                    )
+                } catch (error) {
+                    this.isLoading = false
+                    Common.show(this, 'bottom-right', 'warn', this.$t('str.form.update.generic.error'))
+                    console.log(error)
+                }
             }
         },
         archive() {
@@ -118,9 +123,7 @@ export default {
             }
 
             if (!this.errors || this.errors.length === 0) {
-                this.isLoading = true
                 await this.save()
-                this.isLoading = false
             }
         },
         checkCompanyFields() {

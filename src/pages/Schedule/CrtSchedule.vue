@@ -16,10 +16,16 @@ export default {
         payload.initCalendar()
 
         payload.isSuperAdminMaster = await Common.isSuperAdminMaster(payload)
-        if (payload.isSuperAdminMaster) {
+        const role = await Common.getSubtype(payload)
+        if (role === 'SUPER_ADMIN_MASTER') {
             payload.accounts = await Services.getAccounts(payload)
         } else {
             payload.clients = await Services.getClients(payload)
+            payload.filters.account = await Common.getAccountId(payload)
+
+            if (role === 'MANAGER') {
+                payload.filters.client = await Common.getClientId(payload)
+            }
         }
 
         payload.getAppointments()

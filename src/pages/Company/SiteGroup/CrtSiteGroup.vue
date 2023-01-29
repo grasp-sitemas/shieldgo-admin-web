@@ -27,7 +27,7 @@ export default {
             this.data.account = Common.getAccountId(this)
             this.isLoading = false
         },
-        save() {
+        async save() {
             if (this.isLoading) return
 
             this.isLoading = true
@@ -47,9 +47,9 @@ export default {
                     response => {
                         if (response.status === 200) {
                             Common.show(this, 'bottom-right', 'success', formData._id ? this.$t('str.form.update.success') : this.$t('str.form.create.success'))
+                            this.data.sites = sites
                             this.data.status = response?.result?.status
                             this.data._id = response?.result?._id
-                            this.data.sites = sites
                             this.$registerEvent.$emit('refreshList')
                             this.isLoading = false
                         }
@@ -113,7 +113,7 @@ export default {
         removeRequiredField(field) {
             this.errors = this.errors.filter(item => item !== field)
         },
-        checkForm() {
+        async checkForm() {
             if (!this.data.name || this.data.name === '') {
                 this.errors.push('name')
             }
@@ -128,7 +128,7 @@ export default {
             }
 
             if (!this.errors || this.errors.length === 0) {
-                this.save()
+                await this.save()
             }
         },
         changeAccount: async function () {

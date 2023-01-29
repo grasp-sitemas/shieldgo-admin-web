@@ -680,7 +680,7 @@
     "str.register.schedule.name.field": "Nome",
     "str.register.schedule.name.placeholder": "Digite o nome",
     "str.register.schedule.name.required": "O nome é obrigatório",
-    "str.register.schedule.guardgroup.field": "Grupo de guardas",
+    "str.register.schedule.guardgroup.field": "Grupo de vigilantes",
     "str.register.schedule.vigilants.field": "Vigilantes",
     "str.register.schedule.invited.vigilants.field": "Vigilantes atribuidos",
     "str.register.schedule.select.all.vigilants.label": "Selecionar todos",

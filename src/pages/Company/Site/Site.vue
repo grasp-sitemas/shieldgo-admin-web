@@ -169,7 +169,7 @@
 
                     <div class="btn-center mt-4 mb-2">
                         <button @click="checkForm" type="submit" class="btn btn-primary w-200px me-10px is-loading">
-                            <i v-if="isLoading === true" class="fas fa-spinner fa-pulse"></i>
+                            <i v-if="isLoading" class="fas fa-spinner fa-pulse" />
                             {{ $t('str.btn.save') }}
                         </button>
                         <button @click="clearForm" type="submit" class="btn btn-default w-200px">{{ $t('str.btn.new.form') }}</button>

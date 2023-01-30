@@ -168,8 +168,9 @@ export default {
     methods: Controller.methods,
     mounted() {},
     created() {
+        Controller.init(this)
+
         const state = this
-        Controller.init(state)
         state.$registerEvent.$on('changeLanguage', function () {
             state.initTable()
             state.initRangeDate()

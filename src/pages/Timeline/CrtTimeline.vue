@@ -6,9 +6,15 @@ import moment from 'moment'
 export default {
     init: async payload => {
         payload.initRangeDate()
-        await payload.initTable()
 
         payload.isSuperAdminMaster = await Common.isSuperAdminMaster(payload)
+
+        await payload.initTable()
+
+        if (!payload.isSuperAdminMaster) {
+            payload.columns.splice(5, 1)
+        }
+
         const role = await Common.getSubtype(payload)
         if (role === 'SUPER_ADMIN_MASTER') {
             payload.accounts = await Services.getAccounts(payload)
@@ -39,7 +45,7 @@ export default {
             this.items = await Services.getEventsByDate(this, this.filters)
             this.isLoading = false
         },
-        initTable() {
+        async initTable() {
             this.columns = [
                 {
                     label: this.$t('str.table.timeline.column.name'),
@@ -135,12 +141,13 @@ export default {
                 pageLabel: this.$t('str.table.pagination.page'),
                 allLabel: this.$t('str.table.pagination.all.label'),
             }
-
-            if (!this.isSuperAdminMaster) {
-                this.columns.splice(5, 1)
-            }
         },
-        initRangeDate() {
+        initRangeDate: async function () {
+            const startDate = moment().subtract(0, 'days')
+            const endDate = moment()
+            const prevStartDate = moment().subtract(15, 'days').format('D MMMM YYYY')
+            const prevEndDate = moment().subtract(8, 'days').format('D MMMM YYYY')
+
             this.dateRange = {
                 opens: 'right',
                 singleDatePicker: false,
@@ -151,10 +158,10 @@ export default {
                 autoApply: false,
                 linkedCalendars: false,
                 range: {
-                    startDate: moment().subtract(0, 'days'),
-                    endDate: moment(),
-                    prevStartDate: moment().subtract('days', 15).format('D MMMM YYYY'),
-                    prevEndDate: moment().subtract('days', 8).format('D MMMM YYYY'),
+                    startDate: startDate,
+                    endDate: endDate,
+                    prevStartDate: prevStartDate,
+                    prevEndDate: prevEndDate,
                 },
                 sampleLocaleData: {
                     direction: 'ltr',
@@ -190,6 +197,7 @@ export default {
                 },
             }
         },
+
         selectItem(params) {
             const data = JSON.parse(JSON.stringify(params.row))
 

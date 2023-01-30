@@ -92,6 +92,7 @@ export default {
                 client: '',
                 type: 'SITE',
                 status: 'ACTIVE',
+                statusActive: false,
                 name: '',
             },
             columns: [],

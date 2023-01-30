@@ -7,8 +7,14 @@ import Services from '../../../common/Services.vue'
 export default {
     init: async payload => {
         payload.filters.account = await Common.getAccountId(payload)
-        payload.initTable()
-        payload.filter()
+
+        setTimeout(async () => {
+            await payload.initTable()
+            if (!payload.isSuperAdminMaster) {
+                payload.columns.splice(1, 1)
+            }
+            await payload.filter()
+        }, 500)
     },
     methods: {
         filter: function () {
@@ -47,14 +53,15 @@ export default {
 
             this.$emit('load-item', data)
         },
-        initTable() {
+        initTable: async function () {
             this.columns = [
                 {
                     label: this.$t('str.table.user.column.name'),
-                    field: 'firstName',
-                    width: '10%',
+                    field: 'fullName',
+                    width: '20%',
                     thClass: 'text-nowrap',
                     tdClass: 'text-nowrap',
+                    sortable: true,
                 },
                 {
                     label: this.$t('str.table.user.column.account'),
@@ -62,6 +69,7 @@ export default {
                     width: '10%',
                     thClass: 'text-nowrap',
                     tdClass: 'text-nowrap',
+                    sortable: true,
                 },
                 {
                     label: this.$t('str.table.user.column.client'),
@@ -76,13 +84,15 @@ export default {
                     width: '10%',
                     thClass: 'text-nowrap',
                     tdClass: 'text-nowrap',
+                    sortable: true,
                 },
                 {
                     label: this.$t('str.table.user.column.role'),
-                    field: 'companyUser.subtype',
                     width: '10%',
+                    field: 'companyUser.subtype',
                     thClass: 'text-nowrap',
                     tdClass: 'text-nowrap',
+                    sortable: true,
                 },
                 {
                     label: this.$t('str.table.user.column.email'),
@@ -90,29 +100,32 @@ export default {
                     width: '10%',
                     tdClass: 'text-nowrap',
                     thClass: 'text-nowrap',
+                    sortable: true,
                 },
                 {
                     label: this.$t('str.table.user.column.phone'),
                     field: 'primaryPhone',
-                    type: 'phone',
                     width: '10%',
+                    type: 'phone',
                     tdClass: 'text-nowrap',
                     thClass: 'text-nowrap',
+                    sortable: true,
                 },
-                {
-                    label: this.$t('str.table.user.column.address'),
-                    field: 'address',
-                    type: 'address',
-                    width: '20%',
-                    tdClass: 'text-nowrap',
-                    thClass: 'text-nowrap',
-                },
+                // {
+                //     label: this.$t('str.table.user.column.address'),
+                //     field: 'address',
+                //     type: 'address',
+                //     width: '20%',
+                //     tdClass: 'text-nowrap',
+                //     thClass: 'text-nowrap',
+                // },
                 {
                     label: this.$t('str.table.user.column.creat.at'),
                     field: 'createDate',
                     width: '10%',
                     tdClass: 'text-nowrap',
                     thClass: 'text-nowrap',
+                    sortable: true,
                 },
                 {
                     label: this.$t('str.table.user.column.status'),
@@ -120,8 +133,10 @@ export default {
                     width: '10%',
                     tdClass: 'text-nowrap',
                     thClass: 'text-nowrap',
+                    sortable: true,
                 },
             ]
+
             this.paginationOptions = {
                 enabled: true,
                 mode: 'records',
@@ -139,10 +154,6 @@ export default {
                 ofLabel: this.$t('str.table.pagination.of.label.page'),
                 pageLabel: this.$t('str.table.pagination.page'),
                 allLabel: this.$t('str.table.pagination.all.label'),
-            }
-
-            if (!this.isSuperAdminMaster) {
-                this.columns.splice(1, 1)
             }
         },
         changeAccount: async function () {

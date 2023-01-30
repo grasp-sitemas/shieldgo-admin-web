@@ -7,8 +7,14 @@ import Services from '../../../common/Services.vue'
 export default {
     init: async payload => {
         payload.filters.account = await Common.getAccountId(payload)
-        payload.initTable()
-        payload.filter()
+
+        setTimeout(async () => {
+            await payload.initTable()
+            if (!payload.isSuperAdminMaster) {
+                payload.columns.splice(1, 1)
+            }
+            await payload.filter()
+        }, 500)
     },
     methods: {
         filter: function () {
@@ -47,11 +53,11 @@ export default {
 
             this.$emit('load-item', data)
         },
-        initTable() {
+        async initTable() {
             this.columns = [
                 {
                     label: this.$t('str.table.user.column.name'),
-                    field: 'firstName',
+                    field: 'fullName',
                     width: '20%',
                     thClass: 'text-nowrap',
                     tdClass: 'text-nowrap',
@@ -97,16 +103,15 @@ export default {
                     tdClass: 'text-nowrap',
                     thClass: 'text-nowrap',
                 },
-                {
-                    label: this.$t('str.table.user.column.address'),
-                    field: 'address',
-                    type: 'address',
-                    width: '10%',
-                    tdClass: 'text-nowrap',
-                    thClass: 'text-nowrap',
-                    sortable: true,
-
-                },
+                // {
+                //     label: this.$t('str.table.user.column.address'),
+                //     field: 'address',
+                //     type: 'address',
+                //     width: '10%',
+                //     tdClass: 'text-nowrap',
+                //     thClass: 'text-nowrap',
+                //     sortable: true,
+                // },
                 {
                     label: this.$t('str.table.user.column.creat.at'),
                     field: 'createDate',
@@ -114,7 +119,6 @@ export default {
                     tdClass: 'text-nowrap',
                     thClass: 'text-nowrap',
                     sortable: true,
-
                 },
                 {
                     label: this.$t('str.table.user.column.status'),
@@ -123,7 +127,6 @@ export default {
                     tdClass: 'text-nowrap',
                     thClass: 'text-nowrap',
                     sortable: true,
-
                 },
             ]
             this.paginationOptions = {
@@ -143,10 +146,6 @@ export default {
                 ofLabel: this.$t('str.table.pagination.of.label.page'),
                 pageLabel: this.$t('str.table.pagination.page'),
                 allLabel: this.$t('str.table.pagination.all.label'),
-            }
-
-            if (!this.isSuperAdminMaster) {
-                this.columns.splice(1, 1)
             }
         },
         changeAccount: async function () {

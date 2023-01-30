@@ -40,14 +40,7 @@
             </div>
             <div class="col-md-4 mb-3">
                 <label class="form-label" for="clientField">{{ $t('str.register.incident.client.field') }}</label>
-                <select
-                    v-model="data.client"
-                    @change="changeClient"
-                    class="form-select"
-                    v-bind:class="checkRequiredField('client') ? 'is-invalid' : ''"
-                    @focus="removeRequiredField('client')"
-                    id="clientField"
-                >
+                <select v-model="data.client" @change="changeClient" class="form-select" v-bind:class="checkRequiredField('client') ? 'is-invalid' : ''" @focus="removeRequiredField('client')" id="clientField">
                     <option value="">{{ $t('str.register.select.placeholder') }}</option>
                     <option v-for="client in clients" :value="client._id" :key="client._id">
                         {{ client.name }}
@@ -59,7 +52,7 @@
                 <label class="form-label" for="siteField">{{ $t('str.register.incident.site.field') }}</label>
                 <select v-model="data.site" class="form-select" v-bind:class="checkRequiredField('site') ? 'is-invalid' : ''" @focus="removeRequiredField('site')" id="siteField">
                     <option value="">{{ $t('str.register.select.placeholder') }}</option>
-                    <option v-for="site in sites" :value="site._id" :key="site._id">
+                    <option v-for="site in listSites" :value="site._id" :key="site._id">
                         {{ site.name }}
                     </option>
                 </select>
@@ -80,8 +73,6 @@
                 </div>
             </div>
         </div>
-        
-
         <notifications group="bottom-right" position="bottom right" :speed="500" />
     </b-modal>
 </template>
@@ -111,12 +102,18 @@ export default {
             default: false,
         },
     },
+    watch: {
+        sites: function () {
+            this.listSites = this?.sites
+        },
+    },
     data() {
         return {
             errors: [],
             isSelected: false,
             isLoading: false,
             template: null,
+            listSites: [],
             data: {
                 name: '',
                 priority: null,
@@ -127,9 +124,11 @@ export default {
             },
         }
     },
+    mounted() {
+        Controller.init(this)
+    },
     methods: Controller.methods,
 }
 </script>
 
-<style lang="scss" scoped>
-</style>
+<style lang="scss" scoped></style>

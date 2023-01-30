@@ -109,15 +109,19 @@ export default {
             if (!this.data.account || this.data.account === '') {
                 this.errors.push('account')
             }
+
             if (!this.data.client || this.data.client === '') {
                 this.errors.push('client')
             }
+
             if (!this.data.site || this.data.site === '') {
                 this.errors.push(this.$t('site'))
             }
+
             if (!this.data.name || this.data.name === '') {
                 this.errors.push(this.$t('name'))
             }
+
             if (this.data.priority === null || this.data.priority === '') {
                 this.errors.push(this.$t('priority'))
             }

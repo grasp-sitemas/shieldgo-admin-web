@@ -5,6 +5,9 @@ import Endpoints from '../../../../common/Endpoints.vue'
 import Request from '../../../../common/Request.vue'
 
 export default {
+    init: async payload => {
+        payload.data.account = await Common.getAccountId(payload)
+    },
     methods: {
         checkRequiredField(field) {
             return this.errors.includes(field)
@@ -29,17 +32,20 @@ export default {
                 this.data.site = ''
             }
 
-            this.sites = await Services.getSitesByClient(this, client)
+            this.listSites = await Services.getSitesByClient(this, client)
         },
         handleTemplate: function (item) {
             this.isSelected = !this.isSelected
             this.template = item && this.isSelected ? item : null
             this.errors = []
         },
-        checkForm() {
-            if (!this.data.account || this.data.account === '') {
+        async checkForm() {
+            if (this.isLoading) return
+
+            if (this.isSuperAdminMaster && (!this.data.account || this.data.account === '')) {
                 this.errors.push('account')
             }
+
             if (!this.data.client || this.data.client === '') {
                 this.errors.push('client')
             }
@@ -48,12 +54,11 @@ export default {
             }
 
             if (!this.errors || this.errors.length === 0) {
-                this.save()
+                this.isLoading = true
+                await this.save()
             }
         },
-        save() {
-            this.isLoading = true
-
+        async save() {
             const arrayOfData = []
             const incidents = this.template?.incidents
             incidents.forEach(incident => {
@@ -107,7 +112,7 @@ export default {
             }
             if (this.isSuperAdminMaster) {
                 this.clients = []
-                this.sites = []
+                this.listSites = []
             } else this.data.account = Common.getAccountId(this)
 
             this.isLoading = false

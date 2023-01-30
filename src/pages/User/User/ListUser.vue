@@ -53,8 +53,8 @@
                     <span v-if="!isLoading && items?.length === 0">{{ $t('str.table.subtitle.no.data') }}</span>
                 </div>
 
-                <template slot="table-row" slot-scope="props">
-                    <span v-if="props.column.field === 'address' && props.formattedRow[props.column.field].address">
+                <template slot="table-row" slot-scope="props" v-if="items?.length > 0">
+                    <!-- <span v-if="props.column.field === 'address' && props.formattedRow[props.column.field].address">
                         {{
                             props.formattedRow[props.column.field].address +
                             ' ' +
@@ -66,17 +66,9 @@
                             '- ' +
                             props.formattedRow[props.column.field].state
                         }}
-                    </span>
-                    <span v-else-if="props.column.field === 'companyUser.subtype'">
-                        {{ $t(props.formattedRow[props.column.field]) }}
-                    </span>
-                    <span v-else-if="props.column.field === 'account'">
-                        {{ props.formattedRow[props.column.field]?.name }}
-                    </span>
-                    <span v-else-if="props.column.field === 'client'">
-                        {{ props.formattedRow[props.column.field]?.name }}
-                    </span>
-                    <span v-else-if="props.column.field === 'site'">
+                    </span> -->
+
+                    <span v-if="props.column.field === 'account' || props.column.field === 'client' || props.column.field === 'site'">
                         {{ props.formattedRow[props.column.field]?.name }}
                     </span>
                     <span v-else-if="props.column.field === 'createDate'">
@@ -84,6 +76,9 @@
                     </span>
                     <span v-else-if="props.column.field === 'status'">
                         <span class="badge" v-bind:class="props.formattedRow[props.column.field] === 'ACTIVE' ? 'bg-success' : 'bg-danger'"> {{ $t(props.formattedRow[props.column.field]) }} </span>
+                    </span>
+                    <span v-else-if="props.column.field === 'companyUser.subtype'">
+                        {{ $t(props.formattedRow[props.column.field]) }}
                     </span>
                     <span v-else>
                         {{ props.formattedRow[props.column.field] }}
@@ -126,7 +121,7 @@ export default {
     data() {
         return {
             items: [],
-            isLoading: false,
+            isLoading: true,
             filters: {
                 account: '',
                 client: '',
@@ -154,6 +149,7 @@ export default {
             state.initTable()
         })
     },
+
     methods: Controller.methods,
 }
 </script>

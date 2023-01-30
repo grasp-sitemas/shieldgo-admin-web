@@ -6,7 +6,12 @@ import Services from '../../../common/Services.vue'
 export default {
     init: async payload => {
         payload.filters.account = await Common.getAccountId(payload)
-        payload.initTable()
+
+        await payload.initTable()
+        if (!payload.isSuperAdminMaster) {
+            payload.columns.splice(2, 1)
+        }
+
         payload.filter()
     },
     methods: {
@@ -45,7 +50,7 @@ export default {
 
             this.$emit('load-item', data)
         },
-        initTable() {
+        async initTable() {
             this.columns = [
                 {
                     label: this.$t('str.table.client.groups.column.name'),
@@ -100,10 +105,6 @@ export default {
                 ofLabel: this.$t('str.table.pagination.of.label.page'),
                 pageLabel: this.$t('str.table.pagination.page'),
                 allLabel: this.$t('str.table.pagination.all.label'),
-            }
-
-            if (!this.isSuperAdminMaster) {
-                this.columns.splice(2, 1)
             }
         },
         changeAccount: async function () {

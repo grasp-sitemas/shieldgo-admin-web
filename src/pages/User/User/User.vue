@@ -158,6 +158,7 @@
                             <label class="form-label">{{ $t('str.register.user.email.field') }}</label>
                             <input
                                 class="form-control"
+                                :autocomplete="'username'"
                                 v-bind:class="checkRequiredField('email') ? 'is-invalid' : ''"
                                 @focus="removeRequiredField('email')"
                                 v-model="data.email"
@@ -171,11 +172,11 @@
                             <div class="input-group">
                                 <input
                                     class="form-control"
+                                    :autocomplete="'new-password'"
                                     v-bind:class="checkRequiredField('password') ? 'is-invalid' : ''"
                                     @focus="removeRequiredField('password')"
                                     v-model="data.password"
                                     v-bind:type="showPassword ? 'text' : 'password'"
-                                    autocomplete="off"
                                     :placeholder="$t('str.register.user.password.placeholder')"
                                 />
                                 <span class="input-group-text" v-on:click="showPassword = !showPassword">

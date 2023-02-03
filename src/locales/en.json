@@ -1034,9 +1034,10 @@
     "str.register.user.siteGroup.required": "Site Group is required",
     "str.register.user.clientGroup.field":  "Client Group",
     "str.register.user.clientGroup.required": "Client Group is required",
-    "str.sidebar.menu.site.group": "Grupo de site",
+    "str.sidebar.menu.site.group": "Site group",
     "str.btn.attendance.register": "Register",
     "str.msg.waiting.attendance.by.operator": "waiting for operator attendance",
     "str.monitor.register.message.require": "To close the attendance, you must register the message",
-    "str.register.site.groups.sites.table.title": "Sites x Clients list"
+    "str.register.site.groups.sites.table.title": "Sites x Clients list",
+    "IN_PROGRESS": "In Progress"
 }

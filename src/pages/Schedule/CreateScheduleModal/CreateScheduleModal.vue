@@ -1,5 +1,5 @@
 <template>
-    <b-modal no-close-on-backdrop id="createScheduleModal" @hide="clearForm" :hide-footer="true" size="lg" class="modal-message">
+    <b-modal no-close-on-backdrop id="createScheduleModal" @hide="closeModal" :hide-footer="true" size="lg" class="modal-message">
         <template slot="modal-header">
             <h4 class="modal-title">{{ $t('str.modal.create.schedule.title') }}</h4>
             <a class="btn-close cursor_pointer" @click="$bvModal.hide('createScheduleModal')"></a>
@@ -334,7 +334,7 @@
                     <button v-if="data._id && data.status === 'ACTIVE'" v-on:click="confirmArchive" type="submit" class="ms-10px btn btn-warning w-200px">
                         {{ $t('str.btn.cancel') }}
                     </button>
-                    <button @click="$bvModal.hide('createScheduleModal')" type="submit" class="ms-10px btn btn-secondary w-200px">
+                    <button @click="closeModal()" type="submit" class="ms-10px btn btn-secondary w-200px">
                         {{ $t('str.btn.close') }}
                     </button>
                 </div>
@@ -424,6 +424,7 @@ export default {
     },
     created() {
         let state = this
+
         state.$registerEvent.$on('changeLanguage', function () {
             state.initTable()
         })

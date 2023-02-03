@@ -1,15 +1,11 @@
 <script>
+import Common from '../../common/Common.vue'
 import Endpoints from '../../common/Endpoints.vue'
 import Request from '../../common/Request.vue'
 
 export default {
     init: async payload => {
-        payload.getMe()
-
-        if (payload.browserDarkMode()) {
-            payload.darkMode = true
-            payload.handleSetDarkMode(true)
-        }
+        await payload.getMe()
     },
     methods: {
         browserDarkMode() {
@@ -25,20 +21,63 @@ export default {
                 response => {
                     if (response) {
                         this.user = response?.result
+                        this.darkMode = this.user.darkMode
+
+                        if (this.darkMode) {
+                            document.body.classList.add('dark-mode')
+                            this.$registerEvent.$emit('setDarkMode', true)
+                        } else {
+                            document.body.classList.remove('dark-mode')
+                            this.$registerEvent.$emit('setDarkMode', false)
+                        }
+
+                        this.isLoading = false
                     }
                 },
                 error => {
                     console.log(error)
+                    this.isLoading = false
                 },
             )
+        },
+        updateDarkMode() {
+            const data = this.user
+            data.darkMode = this.darkMode
+
+            try {
+                Request.do(
+                    this,
+                    'put',
+                    Request.getDefaultHeader(this),
+                    data,
+                    `${Endpoints.systemUsers.systemUser}${data._id}`,
+                    response => {
+                        if (response.status === 200) {
+                            this.$session.set('user', response.result)
+                            Common.show(this, 'bottom-right', 'success', this.$t('str.form.update.success'))
+                        }
+                    },
+                    error => {
+                        Common.show(this, 'bottom-right', 'warn', this.$t('str.form.update.generic.error'))
+                        console.log(error)
+                    },
+                )
+            } catch (error) {
+                Common.show(this, 'bottom-right', 'warn', this.$t('str.form.update.generic.error'))
+                console.log(error)
+            }
         },
         handleSetDarkMode: function (e) {
             const value = e.target.checked
             if (value === true) {
                 document.body.classList.add('dark-mode')
+                this.$registerEvent.$emit('setDarkMode', true)
             } else {
                 document.body.classList.remove('dark-mode')
+                this.$registerEvent.$emit('setDarkMode', false)
             }
+
+            this.updateDarkMode()
         },
     },
 }

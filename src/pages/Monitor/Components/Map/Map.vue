@@ -29,7 +29,12 @@
 
 <script>
 export default {
-    props: ['data'],
+    props: {
+        data: {
+            type: Object,
+            default: () => ({}),
+        },
+    },
     watch: {
         data: function () {
             this.geolocation = this.data?.geolocation
@@ -37,7 +42,10 @@ export default {
     },
     data() {
         return {
-            geolocation: {},
+            geolocation: {
+                latitude: 0,
+                longitude: 0,
+            },
         }
     },
 }

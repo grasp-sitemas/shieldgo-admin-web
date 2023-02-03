@@ -13,7 +13,7 @@ export default {
     props: ['photoURL'],
     watch: {
         photoURL: function () {
-            this.photo = this?.photoURL
+            this.photo = this.photoURL
         },
     },
     data() {

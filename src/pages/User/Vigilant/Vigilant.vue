@@ -124,6 +124,7 @@
                         <div class="col-md-4 mb-3">
                             <label class="form-label">{{ $t('str.register.vigilant.email.field') }}</label>
                             <input
+                                :autocomplete="'username'"
                                 class="form-control"
                                 v-bind:class="checkRequiredField('email') || checkRequiredField('emailAlreadyExists') ? 'is-invalid' : ''"
                                 @focus="removeRequiredField('email')"
@@ -138,6 +139,7 @@
                             <label class="form-label">{{ $t('str.register.vigilant.password.field') }}</label>
                             <div class="input-group">
                                 <input
+                                    :autocomplete="'new-password'"
                                     class="form-control"
                                     v-bind:class="checkRequiredField('password') ? 'is-invalid' : ''"
                                     @focus="removeRequiredField('password')"

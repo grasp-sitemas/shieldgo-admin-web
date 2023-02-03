@@ -30,7 +30,6 @@ export default {
             const account = this.data.account
             this.clientList = await Services.getClientsByAccount(this, account)
         },
-
         changeClient: async function () {
             const client = this.data.client
 
@@ -232,6 +231,50 @@ export default {
             this.data.vigilants = []
             this.removeRequiredField('vigilants')
         },
+        async closeModal() {
+            this.data = {
+                name: '',
+                guardGroup: '',
+                account: '',
+                client: '',
+                site: '',
+                frequency: '',
+                frequencyMonth: {
+                    day: '',
+                },
+                frequencyYear: {
+                    month: '',
+                    day: '',
+                },
+                points: [],
+                vigilants: [],
+                weeklyDays: [],
+                beginDate: null,
+                endDate: null,
+                beginHour: '',
+                endHour: '',
+                sendAlert: false,
+                notifyVigilants: false,
+                timeSlot: 15,
+                type: 'FREE-P(ROGRAM',
+                status: 'ACTIVE',
+            }
+
+            this.guardGroups = []
+            this.patrolPoints = []
+            this.vigilants = []
+
+            if (!this.isSuperAdminMaster) {
+                this.data.account = await Common.getAccountId(this)
+                this.accountList = []
+            } else {
+                this.clientList = []
+            }
+
+            this.siteList = []
+
+            this.$bvModal.hide('createScheduleModal')
+        },
         clearFields() {
             this.data.vigilants = []
             this.data.points = []
@@ -258,7 +301,7 @@ export default {
                 this.data.frequencyMonth.day = 31
             }
         },
-        clearForm() {
+        clearForm: async function () {
             this.errors = []
 
             this.patrolPoints = []
@@ -270,7 +313,7 @@ export default {
             if (this.isSuperAdminMaster) {
                 this.clientList = []
                 this.siteList = []
-            } else this.data.account = Common.getAccountId(this)
+            } else this.data.account = await Common.getAccountId(this)
             this.selectOptions.enabled = true
             this.isLoading = false
         },

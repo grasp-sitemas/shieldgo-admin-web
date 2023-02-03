@@ -26,6 +26,7 @@
                                 <input
                                     v-model="data.password"
                                     class="form-control"
+                                    :autocomplete="'new-password'"
                                     v-bind:class="checkRequiredField('password') ? 'is-invalid' : ''"
                                     @focus="removeRequiredField('password')"
                                     key="passwordField"

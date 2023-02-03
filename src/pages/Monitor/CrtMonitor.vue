@@ -6,50 +6,62 @@ import Endpoints from '../../common/Endpoints.vue'
 
 export default {
     init: async payload => {
-        payload.selectedEvent = null
+        const initState = async function () {
+            try {
+                payload.domain = Endpoints.domain
 
-        payload.domain = Endpoints.domain
-        payload.isSuperAdminMaster = await Common.isSuperAdminMaster(payload)
-        payload.attendancesTypes = await Services.getAttendancesOptionsTypes(payload)
+                setTimeout(async () => {
+                    payload.isSuperAdminMaster = await Common.isSuperAdminMaster(payload)
+                    payload.attendancesTypes = await Services.getAttendancesOptionsTypes(payload)
+                    await payload.selectAllTypes()
 
-        if (payload.isSuperAdminMaster) {
-            payload.accounts = await Services.getAccounts(payload)
-        } else {
-            payload.clients = await Services.getClients(payload)
-            payload.filters.account = await payload.$session.get('user')?.account?._id
+                    if (payload.isSuperAdminMaster) {
+                        payload.accounts = await Services.getAccounts(payload)
+                    } else {
+                        payload.clients = await Services.getClients(payload)
+                        payload.filters.account = await payload.$session.get('user')?.account?._id
+                    }
+
+                    payload.user = await payload.$session.get('user')
+
+                    await payload.filter()
+
+                    if (payload?.events?.length > 0) {
+                        const event = JSON.parse(JSON.stringify(payload.events[0]))
+                        payload.selectedEvent = event
+
+                        const filters = {
+                            patrolAction: payload.selectedEvent?._id,
+                            status: 'ACTIVE',
+                        }
+
+                        payload.isLoadingAttendanceList = true
+                        payload.attendances = await Services.getEventAttendances(payload, filters)
+                        payload.isLoadingAttendanceList = false
+                    }
+                }, 1000)
+            } catch (error) {
+                console.log(error)
+                payload.isLoading = false
+                payload.isLoadingAttendanceList = false
+            }
         }
 
-        payload.user = await payload.$session.get('user')
-
-        await payload.initTable()
-        await payload.selectAllTypes()
-        await payload.filter()
-
+        await initState()
         payload.isLoading = false
     },
     methods: {
         getOperatorId: async function () {
             return this.$session.get('user')?._id
         },
-        filter: async function () {
+        async filter() {
             this.isLoadingEvents = true
             this.items = []
 
             try {
                 this.items = await Services.getPatrolActions(this, this.filters)
-                const events = this.formatPatrolActions(this.items)
-
+                const events = await this.formatPatrolActions(this.items)
                 this.events = events
-                if (!this.selectedEvent && events?.length > 0) {
-                    this.selectedEvent = this.events[0]
-
-                    const filters = {
-                        patrolAction: this.selectedEvent?._id,
-                        status: 'ACTIVE',
-                    }
-
-                    this.attendances = await Services.getEventAttendances(this, filters)
-                }
             } catch (error) {
                 this.isLoadingEvents = false
                 console.log(error)
@@ -184,10 +196,13 @@ export default {
                         status: 'ACTIVE',
                     }
 
+                    this.isLoadingAttendanceList = true
                     this.attendances = await Services.getEventAttendances(this, filters)
+                    this.isLoadingAttendanceList = false
                 } catch (error) {
                     console.log(error)
                     this.isLoadingSendAttendanceButton = false
+                    this.isLoadingAttendanceList = false
                     Common.show(this, 'bottom-right', 'danger', 'str.error_creating_attendance')
                 }
             }
@@ -196,7 +211,7 @@ export default {
             this.attendance.type = ''
             this.attendance.notes = ''
         },
-        formatPatrolActions: function (list) {
+        formatPatrolActions: async function (list) {
             const data = list.map(item => {
                 const { _id, status, account, client, site, event, type, date, vigilant, patrol, soundURL, photoURL, signatureURL, incidents, deviceInfo, geolocation, notes, attendance } = item
 
@@ -313,7 +328,7 @@ export default {
             return formattedDate + ' - ' + formattedTime
         },
         handleSelectEvent: async function (event) {
-            this.selectedEvent = event
+            this.selectedEvent = JSON.parse(JSON.stringify(event))
             this.attendanceEventEnabled = false
             this.removeRequiredField('attendanceOptions')
 
@@ -324,85 +339,6 @@ export default {
             }
 
             this.attendances = await Services.getEventAttendances(this, filters)
-        },
-        initTable() {
-            this.columns = [
-                {
-                    label: this.$t('str.table.actions.log.column.user'),
-                    field: 'systemUser',
-                    width: '20%',
-                    sortable: true,
-                    thClass: 'text-nowrap',
-                    tdClass: 'text-nowrap',
-                },
-                {
-                    label: this.$t('str.table.actions.log.column.domain'),
-                    field: 'domain',
-                    width: '15%',
-                    sortable: true,
-                    firstSortType: 'desc',
-                    thClass: 'text-nowrap',
-                    tdClass: 'text-nowrap',
-                },
-                {
-                    label: this.$t('str.table.actions.log.column.operation'),
-                    field: 'operation',
-                    width: '15%',
-                    sortable: true,
-                    thClass: 'text-nowrap',
-                    tdClass: 'text-nowrap',
-                },
-                {
-                    label: this.$t('str.table.actions.log.column.account'),
-                    field: 'account',
-                    width: '15%',
-                    thClass: 'text-nowrap',
-                    tdClass: 'text-nowrap',
-                },
-                {
-                    label: this.$t('str.table.actions.log.column.client'),
-                    field: 'client',
-                    width: '10%',
-                    thClass: 'text-nowrap',
-                    tdClass: 'text-nowrap',
-                },
-                {
-                    label: this.$t('str.table.actions.log.column.site'),
-                    field: 'site',
-                    width: '10%',
-                    thClass: 'text-nowrap',
-                    tdClass: 'text-nowrap',
-                },
-                {
-                    label: this.$t('str.table.actions.log.column.creat.at'),
-                    field: 'createDate',
-                    width: '10%',
-                    tdClass: 'text-nowrap',
-                    thClass: 'text-nowrap',
-                },
-            ]
-            this.paginationOptions = {
-                enabled: true,
-                mode: 'records',
-                perPage: 15,
-                position: 'bottom',
-                perPageDropdown: [15, 50, 100],
-                dropdownAllowAll: false,
-                setCurrentPage: 1,
-                jumpFirstOrLast: true,
-                firstLabel: this.$t('str.table.pagination.first.page'),
-                lastLabel: this.$t('str.table.pagination.last.page'),
-                nextLabel: this.$t('str.table.pagination.next.page'),
-                prevLabel: this.$t('str.table.pagination.prev.page'),
-                rowsPerPageLabel: this.$t('str.table.pagination.rows.per.page.lavel'),
-                ofLabel: this.$t('str.table.pagination.of.label.page'),
-                pageLabel: this.$t('str.table.pagination.page'),
-                allLabel: this.$t('str.table.pagination.all.label'),
-            }
-
-            if (!this.isSuperAdminMaster) {
-                this.columns.splice(3, 1)
-            }
         },
         changeAccount: async function () {
             const account = this.filters.account

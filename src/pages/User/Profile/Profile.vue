@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div v-if="!isLoading">
         <ol class="breadcrumb float-xl-end">
             <li class="breadcrumb-item">
                 <a href="#/profile">{{ $t('str.breadcrumb.profile') }}</a>
@@ -152,14 +152,15 @@
         </panel>
         <notifications group="bottom-right" position="bottom right" :speed="500" />
     </div>
+    <div v-else class="center-spinner">
+        <i class="fas fa-spinner fa-spin" />
+    </div>
 </template>
 
 <script>
 import Controller from './CrtProfile.vue'
 import { STATES } from '../../../utils/states.js'
-import Spinner from '../../../components/spinner/Spinner.vue'
 export default {
-    components: { Spinner },
     data() {
         return {
             states: STATES,

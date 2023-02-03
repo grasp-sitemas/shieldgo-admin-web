@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div v-if="!isLoading">
         <ol class="breadcrumb float-xl-end">
             <li class="breadcrumb-item">
                 <a href="#/settings">{{ $t('str.breadcrumb.settings') }}</a>
@@ -31,16 +31,21 @@
             </form>
         </panel>
     </div>
+    <div v-else class="center-spinner">
+        <i class="fas fa-spinner fa-spin" />
+    </div>
 </template>
 
 <script>
 import Controller from './CrtSettings.vue'
+import Vue from 'vue'
+Vue.prototype.$registerEvent = new Vue()
 
 export default {
     name: 'Settings',
     data() {
         return {
-            isLoading: false,
+            isLoading: true,
             errors: [],
             user: null,
             darkMode: false,

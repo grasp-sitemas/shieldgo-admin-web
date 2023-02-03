@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div v-if="!isLoading">
         <ol class="breadcrumb float-xl-end">
             <li class="breadcrumb-item">
                 <a href="#/register-data">{{ $t('str.breadcrumb.register.data') }}</a>
@@ -191,12 +191,13 @@
                             {{ $t('str.btn.save') }}
                         </button>
                     </div>
-
-                    <Spinner v-show="isLoading" />
                 </fieldset>
             </form>
         </panel>
         <notifications group="bottom-right" position="bottom right" :speed="500" />
+    </div>
+    <div v-else class="center-spinner">
+        <i class="fas fa-spinner fa-spin" />
     </div>
 </template>
 
@@ -204,11 +205,9 @@
 import Controller from './CrtRegisterData.vue'
 import { STATES } from '../../../utils/states.js'
 import Vue from 'vue'
-import Spinner from '../../../components/spinner/Spinner.vue'
 Vue.prototype.$registerEvent = new Vue()
 
 export default {
-    components: { Spinner },
     data() {
         return {
             states: STATES,

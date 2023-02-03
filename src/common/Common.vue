@@ -114,7 +114,7 @@ export default {
         }
     },
     formatDateAndTime(date) {
-        return moment(date).utc(true).format('DD/MM/YYYY HH:mm:ss')
+        return moment(date).utc(false).format('DD/MM/YYYY HH:mm:ss')
     },
     checkCPF: str => {
         /* eslint-disable */

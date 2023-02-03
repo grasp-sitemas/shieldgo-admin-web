@@ -1591,3 +1591,12 @@ body .daterangepicker.show-ranges.ltr .ranges, body .daterangepicker.show-ranges
 ::-webkit-scrollbar {
     width: 0px;
 }
+
+.center-spinner {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    margin-top: 22%;
+}
+

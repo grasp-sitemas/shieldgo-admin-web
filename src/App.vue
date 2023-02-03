@@ -167,6 +167,11 @@ export default {
     mounted() {
         this.$insProgress.finish()
         this.$i18n.locale = this.$session.get('user')?.language || 'pt'
+        const darkMode = this.$session.get('user')?.darkMode || false
+        if (darkMode) {
+            this.appOptions.appDarkMode = darkMode
+            this.handleSetDarkMode(darkMode)
+        }
     },
     created() {
         AppOptions.appBodyScrollTop = window.scrollY
@@ -177,9 +182,14 @@ export default {
         this.handleSetColor()
         this.handleSetFont()
 
-        if (AppOptions.appDarkMode) {
-            this.handleSetDarkMode(true)
-        }
+        this.$registerEvent.$on(
+            'setDarkMode',
+            function (value) {
+                AppOptions.appDarkMode = value
+                this.handleSetDarkMode(value)
+            }.bind(this),
+        )
+
         if (AppOptions.appTheme) {
             this.handleSetTheme(AppOptions.appTheme)
         }

@@ -86,8 +86,6 @@ export default {
                     },
                 },
             }
-
-            console.log('calendarOptions', this.calendarOptions.locale)
         },
 
         changeLanguage: function () {

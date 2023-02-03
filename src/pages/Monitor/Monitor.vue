@@ -1,5 +1,5 @@
 <template>
-    <div v-if="!isLoading">
+    <div v-if="!isLoading && events !== null">
         <div style="min-height: 100vh; background-size: 360px; background-position: right bottom">
             <div class="d-flex align-items-center mb-3">
                 <h1 class="page-header mb-0">{{ $t('str.form.title.monitor') }}</h1>
@@ -149,7 +149,7 @@
                             </div>
 
                             <div class="btn-row mb-4">
-                                <a v-if="selectedEvent?.geolocation" v-on:click="showMap()" data-toggle="tooltip" data-container="body" data-title="Map" class="cursor-mouse">
+                                <a v-if="selectedEvent?.geolocation" v-on:click="showMap" data-toggle="tooltip" data-container="body" data-title="Map" class="cursor-mouse">
                                     <i class="fa fa-fw fa-map-marker-alt"></i>
                                 </a>
                                 <a
@@ -259,10 +259,15 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr v-if="attendances.length === 0">
+                                    <tr v-if="isLoadingAttendanceList">
+                                        <td colspan="3" class="text-center">
+                                            <i class="fas fa-spinner fa-spin" />
+                                        </td>
+                                    </tr>
+                                    <tr v-else-if="!isLoadingAttendanceList && attendances.length === 0">
                                         <td colspan="3" class="text-center">{{ $t('str.msg.waiting.attendance.by.operator') }}</td>
                                     </tr>
-                                    <tr v-for="attendance in attendances" :key="attendance._id">
+                                    <tr v-else v-for="attendance in attendances" :key="attendance._id">
                                         <td>{{ formatDate(attendance.createDate) }}</td>
                                         <td>{{ $t(attendance.type) }}</td>
                                         <td>{{ attendance.notes }}</td>
@@ -276,10 +281,10 @@
         </div>
         <notifications group="top-right" position="top right" :speed="1000" />
         <notifications group="bottom-right" position="bottom right" :speed="1000" />
-        <Map :data="selectedEvent" />
         <Photo :photoURL="selectedEvent?.photoURL" />
         <Signature :signatureURL="selectedEvent?.signatureURL" />
         <Sound :soundURL="selectedEvent?.soundURL" />
+        <Map :data="selectedEvent" />
         <DeviceInfo :data="selectedEvent" />
     </div>
     <div v-else class="center-spinner">
@@ -317,6 +322,7 @@ export default {
             isLoadingEvents: false,
             isLoadingSendAttendanceButton: false,
             isLoadingAttendanceEventButton: false,
+            isLoadingAttendanceList: false,
             domain: '',
             valuekey: 0,
             eventTypes: EVENT_TYPES,
@@ -325,7 +331,7 @@ export default {
             clients: [],
             sites: [],
             items: [],
-            events: [],
+            events: null,
             user: null,
             attendances: [],
             selectedEvent: null,
@@ -353,14 +359,10 @@ export default {
                 site: '',
             },
             isSuperAdminMaster: false,
-            columns: [],
-            paginationOptions: {
-                perPage: 15,
-            },
         }
     },
-    mounted() {
-        Controller.init(this)
+    async mounted() {
+        await Controller.init(this)
     },
     async created() {
         const state = this

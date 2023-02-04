@@ -12,7 +12,7 @@ export default {
         const role = await Common.getSubtype(payload)
         if (role === 'SUPER_ADMIN_MASTER') {
             payload.accounts = await Services.getAccounts(payload)
-        } else if (role === 'ADMIN') {
+        } else if (role === 'ADMIN' || role === 'MANAGER') {
             payload.clients = await Services.getClients(payload)
         }
         payload.role = role

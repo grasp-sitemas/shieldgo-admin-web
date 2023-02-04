@@ -141,28 +141,17 @@ export default {
             this.sites = []
             this.data.client = ''
             this.data.site = ''
-
-            const account = this.data.account
-
-            this.clients = await Services.getClientsByAccount(this, account)
+            this.data.vigilants = []
+            this.clients = await Services.getClientsByAccount(this, this.data?.account)
         },
         changeClient: async function () {
-            const client = this.data.client
-
-            if (client === '') {
-                this.data.site = ''
-            }
-
-            this.sites = await Services.getSitesByClient(this, client)
+            this.data.vigilants = []
+            this.data.site = ''
+            this.sites = await Services.getSitesByClient(this, this.data?.client)
         },
         changeSite: async function () {
-            const site = this.data.site
-
-            if (site === '') {
-                this.data.vigilants = []
-            }
             this.data.vigilants = []
-            this.vigilants = await Services.getVigilantsBySite(this, site)
+            this.vigilants = await Services.getVigilantsBySite(this, this.data?.site)
         },
         changeRole: async function () {
             this.data.client = ''

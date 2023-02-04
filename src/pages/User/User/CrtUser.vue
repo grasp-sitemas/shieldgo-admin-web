@@ -26,7 +26,7 @@ export default {
         payload.isSuperAdminMaster = await Common.isSuperAdminMaster(payload)
         if (payload.isSuperAdminMaster) {
             payload.accounts = await Services.getAccounts(payload)
-        } else if (payload.role === 'ADMIN') {
+        } else if (payload.role === 'ADMIN' || payload.role === 'MANAGER') {
             payload.clients = await Services.getClients(payload)
             payload.siteGroups = await Services.getSiteGroupsByAccount(payload, payload.data.account)
             payload.clientGroups = await Services.getClientGroupsByAccount(payload, payload.data.account)
@@ -110,7 +110,7 @@ export default {
             this.data.account = Common.getAccountId(this)
             this.isLoading = false
         },
-        save() {
+        async save() {
             this.isLoading = true
 
             let formData = new FormData()

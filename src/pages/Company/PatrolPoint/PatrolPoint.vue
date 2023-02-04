@@ -184,6 +184,7 @@ export default {
             clients: [],
             sites: [],
             role: '',
+            user: {},
             valuekey: 0,
             isSuperAdminMaster: false,
             data: patrolPoint,

@@ -3,6 +3,10 @@ import Endpoints from './Endpoints.vue'
 import Request from './Request.vue'
 
 export default {
+    getMe: async function (state) {
+        const response = await Request.do(state, 'GET', Request.getDefaultHeader(state), {}, `${Endpoints.systemUsers.getMe}`)
+        return response?.data?.result || {}
+    },
     getAccounts: async function (state) {
         const filters = {
             name: '',
@@ -39,12 +43,8 @@ export default {
             type: 'SITE',
         }
 
-        if (client) {
-            const response = await Request.do(state, 'POST', Request.getDefaultHeader(state), filters, `${Endpoints.companies.filter}`)
-            return response?.data?.results || []
-        }
-
-        return []
+        const response = await Request.do(state, 'POST', Request.getDefaultHeader(state), filters, `${Endpoints.companies.filter}`)
+        return response?.data?.results || []
     },
     getClientsByAccount: async function (state, account) {
         const filters = {

@@ -58,7 +58,7 @@
                             </select>
                             <div class="invalid-feedback">{{ $t('str.register.user.account.required') }}</div>
                         </div>
-                        <!-- <div v-if="data.companyUser.subtype === 'OPERATOR' || data.companyUser.subtype === 'MANAGER'" class="col-md-4 mb-3">
+                        <div v-if="data.companyUser.subtype === 'OPERATOR' || data.companyUser.subtype === 'MANAGER'" class="col-md-4 mb-3">
                             <label class="form-label" for="clientField">{{ $t('str.register.user.client.field') }}</label>
                             <select
                                 v-model="data.client"
@@ -74,7 +74,7 @@
                                 </option>
                             </select>
                             <div class="invalid-feedback">{{ $t('str.register.user.client.required') }}</div>
-                        </div> -->
+                        </div>
                         <div v-if="data.companyUser.subtype === 'MANAGER'" class="col-md-4 mb-3">
                             <label class="form-label" for="clientGroupField">{{ $t('str.register.user.clientGroup.field') }}</label>
                             <select

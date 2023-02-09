@@ -58,8 +58,8 @@ export default {
             }
         },
         save() {
-            if (!this.isLoading) {
-                this.isLoading = true
+            if (!this.isSaveLoading) {
+                this.isSaveLoading = true
 
                 try {
                     Request.do(
@@ -70,19 +70,21 @@ export default {
                         `${Endpoints.schedules.schedule}`,
                         response => {
                             if (response.status === 200) {
-                                this.isLoading = false
+                                this.isSaveLoading = false
                                 this.$registerEvent.$emit('refreshSchedule')
                                 this.$bvModal.hide('createScheduleModal')
                             }
                         },
                         error => {
                             this.isLoading = false
+                            this.isSaveLoading = false
                             Common.show(this, 'bottom-right', 'warn', this.data._id ? this.$t('str.form.update.generic.error') : this.$t('str.form.save.generic.error'))
                             console.log(error)
                         },
                     )
                 } catch (error) {
                     this.isLoading = false
+                    this.isSaveLoading = false
                     Common.show(this, 'bottom-right', 'warn', this.data._id ? this.$t('str.form.update.generic.error') : this.$t('str.form.save.generic.error'))
                     console.log(error)
                 }
@@ -197,6 +199,7 @@ export default {
                 schedule: this.data._id,
             }
             await Services.cancelAppointmentSeries(this, filters)
+            this.isLoading = false
             this.$registerEvent.$emit('cancelAppointment')
         },
         cancelAppointmentOccurrence: async function () {
@@ -204,6 +207,7 @@ export default {
                 appointment: this.data.appointment,
             }
             await Services.cancelAppointmentOccurrence(this, filters)
+            this.isLoading = false
             this.$registerEvent.$emit('cancelAppointment')
         },
         changeFrequency: function () {
@@ -315,6 +319,7 @@ export default {
                 this.siteList = []
             } else this.data.account = await Common.getAccountId(this)
             this.selectOptions.enabled = true
+            this.isSaveLoading = false
             this.isLoading = false
         },
         initTable() {
@@ -399,35 +404,44 @@ export default {
             return this.data.name && this.data.frequency && this.data.vigilants.length > 0 && this.data.points.length > 0 && this.data.beginDate && this.data.endDate && this.data.client && this.data.site
         },
         async initSelectedAppointment() {
-            this.data.account = this.data?.account?._id
-            this.data.client = this.data?.client?._id
-            this.data.site = this.data?.site?._id
+            this.isLoading = true
 
-            if (Common.isSuperAdminMaster(this)) {
-                this.accountList = await Services.getAccounts(this)
-            }
+            try {
+                this.data.account = this.data?.account?._id
+                this.data.client = this.data?.client?._id
+                this.data.site = this.data?.site?._id
 
-            this.clientList = await Services.getClientsByAccount(this, this.data.account)
-            this.siteList = await Services.getSitesByClient(this, this.data.client)
-            this.guardGroups = await Services.getGuardGroupsBySite(this, this.data.site)
-
-            if (!this.data._id) {
-                this.patrolPoints = await Services.getPatrolPointsBySite(this, this.data.site)
-            } else {
-                this.patrolPoints = this.data?.points || []
-            }
-
-            this.vigilants = await Services.getVigilantsBySite(this, this.data.site)
-
-            const mappedVigilants = this.data.vigilants.map(vigilant => {
-                return {
-                    _id: vigilant._id,
-                    firstName: vigilant.firstName,
-                    lastName: vigilant.lastName,
-                    fullName: `${vigilant.firstName} ${vigilant.lastName}`,
+                if (Common.isSuperAdminMaster(this)) {
+                    this.accountList = await Services.getAccounts(this)
                 }
-            })
-            this.data.vigilants = mappedVigilants ? mappedVigilants : []
+
+                this.clientList = await Services.getClientsByAccount(this, this.data.account)
+                this.siteList = await Services.getSitesByClient(this, this.data.client)
+                this.guardGroups = await Services.getGuardGroupsBySite(this, this.data.site)
+
+                if (!this.data._id) {
+                    this.patrolPoints = await Services.getPatrolPointsBySite(this, this.data.site)
+                } else {
+                    this.patrolPoints = this.data?.points || []
+                }
+
+                this.vigilants = await Services.getVigilantsBySite(this, this.data.site)
+
+                const mappedVigilants = this.data.vigilants.map(vigilant => {
+                    return {
+                        _id: vigilant._id,
+                        firstName: vigilant.firstName,
+                        lastName: vigilant.lastName,
+                        fullName: `${vigilant.firstName} ${vigilant.lastName}`,
+                    }
+                })
+                this.data.vigilants = mappedVigilants ? mappedVigilants : []
+
+                this.isLoading = false
+            } catch (error) {
+                this.isLoading = false
+                console.log(error)
+            }
         },
     },
     checkEnableInput: function () {

@@ -2,7 +2,7 @@
 import Vue from 'vue'
 import VueSession from 'vue-session'
 
-import Companies from '../pages/Company/Company/Company.vue'
+import Companies from '../pages/Company/Company/ListCompany.vue'
 import ChangePassword from '../pages/User/ChangePassword/ChangePassword.vue'
 import ClientGroup from '../pages/Company/ClientGroup/ClientGroup.vue'
 import Clients from '../pages/Company/Client/Client.vue'

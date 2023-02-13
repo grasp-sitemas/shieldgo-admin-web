@@ -49,20 +49,25 @@
                 </template>
             </vue-good-table>
         </panel>
+        <CompanyModal :selectedData="data" />
     </div>
 </template>
 
 <script>
+import CompanyModal from './Company.vue'
 import Controller from './CrtListCompany.vue'
 import Vue from 'vue'
 Vue.prototype.$registerEvent = new Vue()
 
 export default {
-    components: {},
+    components: {
+        CompanyModal,
+    },
     data() {
         return {
             items: [],
             isLoading: false,
+            data: {},
             filters: {
                 type: 'ACCOUNT',
                 status: 'ACTIVE',

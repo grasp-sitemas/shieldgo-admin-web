@@ -38,7 +38,9 @@ export default {
                 data.address = {}
             }
 
-            this.$emit('load-item', data)
+            this.data = data
+
+            this.$bvModal.show('createCompanyModal')
         },
         initTable() {
             this.columns = [

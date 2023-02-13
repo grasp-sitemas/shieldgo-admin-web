@@ -179,6 +179,11 @@ export default {
                 this.errors = this.errors.filter(item => item !== field)
             }
         },
+        async closeModal() {
+            this.clearForm()
+
+            this.$bvModal.hide('createCompanyModal')
+        },
         checkForm() {
             if (!this.data.name || this.data.name === '') {
                 this.errors.push('name')
@@ -250,14 +255,7 @@ export default {
                 },
             )
         },
-        selectItem: function (item) {
-            this.errors = []
-            this.file = null
-            this.$refs.file.value = null
-            this.data = item
-            document.body.scrollTop = 0 // For Safari
-            document.documentElement.scrollTop = 0 // For Chrome, Firefox, IE and Opera
-        },
+
         handleFileUpload() {
             this.file = this.$refs.file.files[0]
         },

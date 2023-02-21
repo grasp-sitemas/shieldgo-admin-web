@@ -6,7 +6,7 @@
             <div v-if="menu.img" class="menu-icon-img"><img v-bind:src="menu.img" alt="" /></div>
             <div class="menu-text">
                 {{ $t(menu.title) }}
-                <span v-if="menu.label" class="menu-label">{{ menu.label }}</span>
+                <span v-if="menu.label" class="menu-label">{{ $t(menu.label) }}</span>
                 <i v-if="menu.highlight" class="fa fa-paper-plane text-theme"></i>
             </div>
             <div v-if="menu.badge" class="menu-badge">{{ menu.badge }}</div>
@@ -37,7 +37,7 @@
             <div v-if="menu.img" class="menu-icon-img"><img v-bind:src="menu.img" alt="" /></div>
             <div class="menu-text">
                 {{ $t(menu.title) }}
-                <span v-if="menu.label" class="menu-label">{{ menu.label }}</span>
+                <span v-if="menu.label" class="menu-label">{{ $t(menu.label) }}</span>
                 <i v-if="menu.highlight" class="fa fa-paper-plane text-theme"></i>
             </div>
             <div v-if="menu.badge" class="menu-badge">{{ menu.badge }}</div>

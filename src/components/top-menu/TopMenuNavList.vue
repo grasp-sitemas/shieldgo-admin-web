@@ -7,7 +7,7 @@
             <div class="menu-text">
                 {{ $t(menu.title) }}
                 <i v-if="menu.highlight" class="fa fa-paper-plane text-primary"></i>
-                <span v-if="menu.label" class="menu-label">{{ menu.label }}</span>
+                <span v-if="menu.label" class="menu-label">{{ $t(menu.label) }}</span>
             </div>
             <div v-if="menu.badge" class="menu-badge">{{ menu.badge }}</div>
             <div v-else class="menu-caret"></div>
@@ -31,7 +31,7 @@
             <div class="menu-text">
                 {{ $t(menu.title) }}
                 <i v-if="menu.highlight" class="fa fa-paper-plane text-theme"></i>
-                <span v-if="menu.label" class="menu-label">{{ menu.label }}</span>
+                <span v-if="menu.label" class="menu-label">{{ $t(menu.label) }}</span>
             </div>
             <div v-if="menu.badge" class="menu-badge">{{ menu.badge }}</div>
         </a>

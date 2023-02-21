@@ -106,6 +106,34 @@ export default {
         }
         return []
     },
+    getVigilantsByClient: async function (state, client) {
+        const filters = {
+            name: '',
+            client: client,
+            status: 'ACTIVE',
+            subtype: 'VIGILANT',
+        }
+
+        if (client) {
+            const response = await Request.do(state, 'POST', Request.getDefaultHeader(state), filters, `${Endpoints.systemUsers.customerUser.search}`)
+
+            const result = response?.data?.results
+            if (result && result.length > 0) {
+                const mappedResult = result.map(item => {
+                    return {
+                        _id: item._id,
+                        firstName: item.firstName,
+                        lastName: item.lastName,
+                        fullName: `${item.firstName} ${item.lastName}`,
+                        status: item.status,
+                    }
+                })
+                return mappedResult
+            }
+            return []
+        }
+        return []
+    },
     getVigilantsByGuardGroup: async function (state, guardGroup) {
         const filters = {
             guardGroup: guardGroup,

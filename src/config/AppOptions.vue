@@ -24,7 +24,7 @@ const appOptions = {
     appHeaderMegaMenu: false,
     appHeaderFixed: true,
     appHeaderMegaMenuMobileToggled: false,
-    appTopMenu: false,
+    appTopMenu: true,
     appTopMenuMobileToggled: false,
     appEmpty: false,
     appBodyScrollTop: 0,

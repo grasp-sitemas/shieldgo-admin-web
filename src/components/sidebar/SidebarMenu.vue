@@ -43,6 +43,31 @@ const sidebarMenu = [
             },
         ],
     },
+    {
+        path: '/reports/patrols',
+        icon: 'fa-solid fa-file-contract',
+        title: 'str.sidebar.menu.reports',
+        roles: [ROLES.SUPER_ADMIN_MASTER, ROLES.ADMIN, ROLES.MANAGER],
+        topMenu: true,
+        label: 'str.sidebar.menu.new',
+        children: [
+            {
+                path: '/reports/patrols/not-visited',
+                title: 'str.sidebar.menu.reports.patrols.not-visited',
+                roles: [ROLES.SUPER_ADMIN_MASTER, ROLES.ADMIN, ROLES.MANAGER],
+            },
+            {
+                path: '/reports/patrols/completed',
+                title: 'str.sidebar.menu.reports.completed.patrols',
+                roles: [ROLES.SUPER_ADMIN_MASTER, ROLES.ADMIN, ROLES.MANAGER],
+            },
+            {
+                path: '/reports/patrols/not-completed',
+                title: 'str.sidebar.menu.reports.not.completed.patrols',
+                roles: [ROLES.SUPER_ADMIN_MASTER, ROLES.ADMIN, ROLES.MANAGER],
+            },
+        ],
+    },
 ]
 
 export default sidebarMenu

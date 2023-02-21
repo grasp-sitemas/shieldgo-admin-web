@@ -1,0 +1,20 @@
+export const DATE_RANGE_CONFIG = {
+    opens: 'right',
+    singleDatePicker: false,
+    timePicker: false,
+    timePicker24Hour: false,
+    showWeekNumbers: false,
+    showDropdowns: false,
+    autoApply: false,
+    linkedCalendars: false,
+    range: {},
+    sampleLocaleData: {
+        direction: 'ltr',
+        format: 'dd/mm/yyyy',
+        separator: ' - ',
+        weekLabel: 'W',
+        daysOfWeek: [],
+        monthNames: [],
+        firstDay: 0,
+    },
+}

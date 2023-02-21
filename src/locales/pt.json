@@ -1033,5 +1033,24 @@
     "str.msg.waiting.attendance.by.operator": "Aguardando atendimento pelo operador",
     "str.monitor.register.message.require": "Para finalizar o atendimento é necessário registrar uma resposta",
     "str.register.site.groups.sites.table.title": "Lista de locais x clientes",
-    "IN_PROGRESS": "Em andamento"
+    "IN_PROGRESS": "Em andamento",
+    "str.sidebar.menu.reports": "Relatórios",
+    "str.sidebar.menu.reports.patrols.not-visited": "Rondas não visitadas",
+    "str.sidebar.menu.reports.patrols.not-visited.title": "Rondas não visitadas",
+    "str.sidebar.menu.reports.patrols.not-visited.description": "Relatório de rondas não visitadas",
+    "str.sidebar.menu.reports.patrols.not-visited.report": "Relatório de rondas não visitadas",
+    "str.sidebar.menu.reports.patrols.not-visited.report.description": "Relatório de rondas não visitadas",
+    "str.sidebar.menu.reports.patrols.completed": "Rondas concluídas",
+    "str.sidebar.menu.reports.patrols.completed.title": "Rondas concluídas",
+    "str.sidebar.menu.reports.patrols.completed.description": "Relatório de rondas concluídas",
+    "str.sidebar.menu.reports.patrols.completed.report": "Relatório de rondas concluídas",
+    "str.sidebar.menu.reports.patrols.completed.report.description": "Relatório de rondas concluídas",
+    "str.sidebar.menu.new": "Novo",
+    "str.sidebar.menu.reports.completed.patrols": "Rondas concluídas",
+    "str.sidebar.menu.reports.not.completed.patrols": "Rondas incompletas",
+    "str.form.title.logs": "Logs",
+    "str.generate.report": "Gerar relatório",
+    "str.clear.fields": "Limpar campos",
+    "str.reports.vigilant.field": "Vigilante"
+
 }

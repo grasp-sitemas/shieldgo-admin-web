@@ -1,5 +1,9 @@
 <template>
     <div>
+        <h1 class="page-header">
+            {{ $t('str.form.title.logs') }}
+        </h1>
+
         <panel :title="$t('str.table.list.logs')" bodyClass="p-0">
             <div class="row">
                 <div class="col-md-3 mb-3 p-3">

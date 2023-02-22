@@ -87,9 +87,9 @@
             <!-- aling buttons in same line -->
             <div class="row">
                 <div class="col-md-12 mb-3">
-                    <CsvDownload class="me-2" v-show="items?.length > 0" :jsonFields="jsonFields" :jsonData="items" :jsonMeta="jsonMeta" :filename="filename" :jsonTitle="jsonTitle" />
-                    <XlsDownload class="me-2" v-show="items?.length > 0" :jsonFields="jsonFields" :jsonData="items" :jsonMeta="jsonMeta" :filename="filename" :jsonTitle="jsonTitle" />
-                    <PdfDownload v-show="items?.length > 0" :pdfHeader="pdfHeader" :jsonData="items" :filename="filename" :jsonTitle="jsonTitle" />
+                    <CsvDownload class="me-2" v-show="items?.length > 0" :jsonFields="jsonFields" :jsonData="reportItems" :jsonMeta="jsonMeta" :filename="filename" :jsonTitle="jsonTitle" />
+                    <XlsDownload class="me-2" v-show="items?.length > 0" :jsonFields="jsonFields" :jsonData="reportItems" :jsonMeta="jsonMeta" :filename="filename" :jsonTitle="jsonTitle" />
+                    <PdfDownload v-show="items?.length > 0" :pdfHeader="pdfHeader" :jsonData="reportItems" :filename="filename" :jsonTitle="jsonTitle" />
                 </div>
             </div>
 
@@ -144,6 +144,7 @@ export default {
             vigilants: [],
             errors: [],
             items: [],
+            reportItems: [],
             paginationOptions: {},
             fields: [],
             isLoading: true,

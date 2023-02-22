@@ -45,7 +45,7 @@ export default {
         async downloadPDF() {
             let items = this.data
 
-            const generateData = function () {
+            const generateData = function (items) {
                 let result = []
 
                 if (items.length > 0) {
@@ -92,12 +92,22 @@ export default {
             doc.setFontSize(8)
             doc.setTextColor('#161B22')
             doc.text(this.$t('str.generated.on') + ': ' + moment().utc(true).format('DD/MM/YYYY HH:mm:ss'), 5, 15)
-            doc.text(this.$t('str.total.records') + ': ' + items.length, 5, 18)
 
-            //add name of account with de address
-
-            //add total rows
-            doc.table(5, 25, generateData(), headers, { autoSize: true, fontSize: 7, padding: 1 })
+            let y = 25 // initial y-coordinate for the first item
+            items.forEach((item, index) => {
+                if (index > 0) {
+                    doc.addPage() // add a new page for each account except the first one
+                    y = 25 // reset the y-coordinate to the top of the new page
+                    doc.setPage(y)
+                }
+                doc.text(item.account, 5, y)
+                y += 5
+                doc.text(item.accountAddress, 5, y)
+                y += 3
+                doc.table(5, y + 8, generateData(item.items), headers, { autoSize: true, fontSize: 7, padding: 1 })
+                y += item.items.length * 8
+                y += 10 // increment y-coordinate for the next item
+            })
 
             const pdfName = this.name + '.pdf'
             doc.save(pdfName)

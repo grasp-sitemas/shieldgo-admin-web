@@ -41,7 +41,13 @@ export default {
         async filter() {
             this.isSearchLoading = true
             this.items = []
-            this.items = await Services.filterReports(this, this.filters)
+
+            const results = await Services.filterReports(this, this.filters)
+            this.items = results?.tableItems
+            this.reportItems = results?.reportItems
+            console.log('this.items', this.items)
+            console.log('this.reportItems', this.reportItems)
+
             this.isSearchLoading = false
         },
         generateReport: async function () {},

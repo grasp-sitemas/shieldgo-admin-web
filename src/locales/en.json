@@ -1071,5 +1071,6 @@
     "str.total.records": "Total of records",
     "str.generated.on": "Generated on",
     "str.page": "Page",
-    "str.of": "of"
+    "str.of": "of",
+    "str.total.points": "Total points"
 }       

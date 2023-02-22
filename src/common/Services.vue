@@ -304,38 +304,68 @@ export default {
         const results = response?.data?.results
 
         if (results?.length > 0) {
-            const mappedResults = results.map(item => {
-                return {
-                    _id: item._id,
-                    patrolPoint: item.patrolPoint,
-                    event: item?.event,
-                    vigilant: item.vigilant,
-                    startDate: moment(item.startDate).utc(false).format('DD-MM-YYYY HH:mm:ss'),
-                    endDate: moment(item.endDate).utc(false).format('DD-MM-YYYY HH:mm:ss'),
-                    timeSlot: item.timeSlot,
-                    account: item.account.name,
+            const mappedResults = results.reduce((acc, item) => {
+                const items = item.items.map(i => ({
+                    patrolPoint: i.patrolPoint,
+                    event: i.event,
+                    vigilant: i.vigilant,
+                    startDate: moment(i.startDate).utc(false).format('DD-MM-YYYY HH:mm:ss'),
+                    endDate: moment(i.endDate).utc(false).format('DD-MM-YYYY HH:mm:ss'),
+                    timeSlot: i.timeSlot,
+                    client: i.client,
+                    site: i.site,
+                    schedule: i.schedule,
+                    checked: i.checked,
+                    account: item.name,
                     accountAddress:
-                        item.account?.address?.address +
+                        item?.address?.address +
                         ' ' +
-                        item.account?.address?.number +
+                        item?.address?.number +
                         ' ' +
-                        item.account?.address?.complement +
+                        item?.address?.complement +
                         ' ' +
-                        item.account?.address?.neighborhood +
+                        item?.address?.neighborhood +
                         ' ' +
-                        item.account?.address?.cep +
+                        item?.address?.cep +
                         ' ' +
-                        item.account?.address?.city +
+                        item?.address?.city +
                         ' ' +
-                        item.account?.address?.state,
+                        item?.address?.state,
+                }))
 
-                    client: item.client,
-                    site: item.site,
-                    schedule: item.schedule,
-                    checked: item.checked,
-                }
-            })
-            return mappedResults
+                return [
+                    ...acc,
+                    {
+                        _id: item._id,
+                        account: item.name,
+                        accountAddress:
+                            item?.address?.address +
+                            ' ' +
+                            item?.address?.number +
+                            ' ' +
+                            item?.address?.complement +
+                            ' ' +
+                            item?.address?.neighborhood +
+                            ' ' +
+                            item?.address?.cep +
+                            ' ' +
+                            item?.address?.city +
+                            ' ' +
+                            item?.address?.state,
+                        status: item.status,
+                        items: items,
+                    },
+                ]
+            }, [])
+
+            const flattenedItems = mappedResults.reduce((acc, item) => {
+                return [...acc, ...item.items]
+            }, [])
+
+            return {
+                tableItems: flattenedItems,
+                reportItems: mappedResults,
+            }
         }
         return []
     },

@@ -1,6 +1,6 @@
 <template>
-    <download-excel class="btn btn-primary" :fetch="fetchData" :data="data" :fields="fields" :meta="jsonMeta" :name="name" :header="title" type="csv">
-        <label style="cursor: pointer" class="download-csv">CSV</label>
+    <download-excel class="btn btn-primary" :fetch="fetchData" :data="data" :fields="fields" :meta="jsonMeta" :name="name" :header="title" type="xls">
+        <label style="cursor: pointer" class="download-csv">XLS</label>
     </download-excel>
 </template>
 
@@ -34,7 +34,7 @@ export default {
             this.title = this.jsonTitle
             this.fields = this.jsonFields
             this.meta = this.jsonMeta
-            this.name = this.filename + '.csv'
+            this.name = this.filename + '.xls'
         },
     },
     data() {

@@ -1035,9 +1035,9 @@
     "str.register.site.groups.sites.table.title": "Lista de locais x clientes",
     "IN_PROGRESS": "Em andamento",
     "str.sidebar.menu.reports": "Relatórios",
-    "str.sidebar.menu.reports.patrols.not-visited": "Rondas não visitadas",
+    "str.sidebar.menu.reports.patrols.not-visited": "Pontos  não visitados",
     "str.sidebar.menu.reports.patrols.not-visited.title": "Rondas não visitadas",
-    "str.sidebar.menu.reports.patrols.not-visited.description": "Relatório de rondas não visitadas",
+    "str.sidebar.menu.reports.patrols.not-visited.description": "Relatório de pontos de ronda não visitados",
     "str.sidebar.menu.reports.patrols.not-visited.report": "Relatório de rondas não visitadas",
     "str.sidebar.menu.reports.patrols.not-visited.report.description": "Relatório de rondas não visitadas",
     "str.sidebar.menu.reports.patrols.completed": "Rondas concluídas",
@@ -1059,5 +1059,10 @@
     "str.table.reports.column.ends.in": "Fim",
     "str.table.reports.column.account": "Empresa",
     "str.table.reports.column.client": "Cliente",
-    "str.table.reports.column.site": "Local"
+    "str.table.reports.column.site": "Local",
+    "str.total.pages": "Total de páginas",
+    "str.total.records": "Total de registros",
+    "str.generated.on": "Gerado em",
+    "str.page": "Página",
+    "str.of": "de"
 }

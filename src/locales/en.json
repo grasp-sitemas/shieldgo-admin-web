@@ -1044,7 +1044,7 @@
     "str.sidebar.menu.reports.patrols": "Patrols",
     "str.sidebar.menu.reports.patrols.not-visited": "Not visited patrols",
     "str.sidebar.menu.reports.patrols.not-visited.title": "Not visited patrols",
-    "str.sidebar.menu.reports.patrols.not-visited.description": "Not visited patrols report",
+    "str.sidebar.menu.reports.patrols.not-visited.description": "Not visited patrol points report",
     "str.sidebar.menu.reports.patrols.not-visited.report": "Not visited patrols report",
     "str.sidebar.menu.reports.patrols.not-visited.report.description": "Not visited patrols report",
     "str.sidebar.menu.reports.patrols.completed": "Completed patrols",
@@ -1066,5 +1066,10 @@
     "str.table.reports.column.ends.in": "End",
     "str.table.reports.column.account": "Account",
     "str.table.reports.column.client": "Client",
-    "str.table.reports.column.site": "Local"
+    "str.table.reports.column.site": "Local",
+    "str.total.pages": "Total of pages",
+    "str.total.records": "Total of records",
+    "str.generated.on": "Generated on",
+    "str.page": "Page",
+    "str.of": "of"
 }       

@@ -26,6 +26,11 @@ export default {
                 payload.columns.splice(4, 1)
             }
 
+            payload.jsonFields = payload.JSON_FIELDS_CSV[payload.$i18n.locale].json_fields
+            payload.jsonData = [payload.JSON_FIELDS_CSV[payload.$i18n.locale].json_data]
+            payload.jsonMeta = [payload.JSON_FIELDS_CSV[payload.$i18n.locale].json_meta]
+            payload.filename = payload.JSON_FIELDS_CSV[payload.$i18n.locale].filename
+
             payload.role = role
             payload.isLoading = false
         }, 1000)
@@ -34,25 +39,15 @@ export default {
         async filter() {
             this.isSearchLoading = true
             this.items = []
-
-            // if status is expired the set isDescSor   tByStartDate to true
-            if (this.filters.status === 'EXPIRED' || this.filters.status === 'DONE') {
-                this.filters.isDescSortByStartDate = true
-                this.filters.isSortByStartDate = false
-            } else {
-                this.filters.isSortByStartDate = true
-                this.filters.isDescSortByStartDate = false
-            }
-
-            this.items = await Services.getEventsByDate(this, this.filters)
+            this.items = await Services.filterReports(this, this.filters)
             this.isSearchLoading = false
         },
         generateReport: async function () {},
         async initTable() {
             this.columns = [
                 {
-                    label: this.$t('str.table.timeline.column.name'),
-                    field: 'name',
+                    label: this.$t('str.table.reports.column.patrolPoint'),
+                    field: 'patrolPoint',
                     width: '10%',
                     sortable: true,
                     firstSortType: 'desc',
@@ -60,7 +55,16 @@ export default {
                     tdClass: 'text-nowrap',
                 },
                 {
-                    label: this.$t('str.table.timeline.column.vigilant'),
+                    label: this.$t('str.table.reports.column.event'),
+                    field: 'event',
+                    width: '10%',
+                    sortable: true,
+                    firstSortType: 'desc',
+                    thClass: 'text-nowrap',
+                    tdClass: 'text-nowrap',
+                },
+                {
+                    label: this.$t('str.table.reports.column.vigilant'),
                     field: 'vigilant',
                     width: '10%',
                     sortable: true,
@@ -69,7 +73,7 @@ export default {
                     tdClass: 'text-nowrap',
                 },
                 {
-                    label: this.$t('str.table.timeline.column.starts.in'),
+                    label: this.$t('str.table.reports.column.starts.in'),
                     field: 'startDate',
                     width: '10%',
                     sortable: true,
@@ -77,31 +81,15 @@ export default {
                     thClass: 'text-nowrap',
                 },
                 {
-                    label: this.$t('str.table.timeline.column.ends.in'),
+                    label: this.$t('str.table.reports.column.ends.in'),
                     field: 'endDate',
                     width: '10%',
                     sortable: true,
                     tdClass: 'text-nowrap',
                     thClass: 'text-nowrap',
                 },
-                // {
-                //     label: this.$t('str.table.timeline.column.patrol.points'),
-                //     field: 'patrolPoints',
-                //     width: '20%',
-                //     sortable: true,
-                //     thClass: 'text-nowrap',
-                //     tdClass: 'text-nowrap',
-                // },
-                // {
-                //     label: this.$t('str.table.timeline.column.status'),
-                //     field: 'status',
-                //     width: '10%',
-                //     sortable: true,
-                //     thClass: 'text-nowrap',
-                //     tdClass: 'text-nowrap',
-                // },
                 {
-                    label: this.$t('str.table.timeline.column.account'),
+                    label: this.$t('str.table.reports.column.account'),
                     field: 'account',
                     width: '10%',
                     sortable: true,
@@ -109,7 +97,7 @@ export default {
                     tdClass: 'text-nowrap',
                 },
                 {
-                    label: this.$t('str.table.timeline.column.client'),
+                    label: this.$t('str.table.reports.column.client'),
                     field: 'client',
                     width: '10%',
                     sortable: true,
@@ -117,7 +105,7 @@ export default {
                     tdClass: 'text-nowrap',
                 },
                 {
-                    label: this.$t('str.table.timeline.column.site'),
+                    label: this.$t('str.table.reports.column.site'),
                     field: 'site',
                     width: '10%',
                     sortable: true,
@@ -131,7 +119,7 @@ export default {
                 mode: 'records',
                 perPage: 15,
                 position: 'bottom',
-                perPageDropdown: [15, 50, 100],
+                perPageDropdown: [15, 50, 100, 200, 500, 1000, 5000, 10000],
                 dropdownAllowAll: false,
                 setCurrentPage: 1,
                 jumpFirstOrLast: true,
@@ -153,9 +141,9 @@ export default {
                 client: '',
                 site: '',
                 vigilant: '',
-                status: '',
-                isSortByStartDate: true,
-                isDescSortByStartDate: false,
+                startDate: moment().utc(true),
+                endDate: moment().utc(true),
+                report: 'PATROL_POINTS_NOT_VISITED',
             }
             this.items = []
             this.initRangeDate()

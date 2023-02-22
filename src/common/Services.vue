@@ -1,6 +1,7 @@
 <script>
 import Endpoints from './Endpoints.vue'
 import Request from './Request.vue'
+import moment from 'moment'
 
 export default {
     getMe: async function (state) {
@@ -234,6 +235,26 @@ export default {
         const response = await Request.do(state, 'POST', Request.getDefaultHeader(state), filters, `${Endpoints.events.filter}`)
         return response?.data?.results || []
     },
+    getFormattedEventsByDate: async function (state, filters) {
+        const response = await Request.do(state, 'POST', Request.getDefaultHeader(state), filters, `${Endpoints.events.filter}`)
+        const results = response?.data?.results
+        if (results?.length > 0) {
+            const mappedResults = results.map(item => {
+                return {
+                    _id: item._id,
+                    event: item.name,
+                    vigilant: item.vigilant.fullName,
+                    startDate: moment(item.startDate).utc(false).format('YYYY-MM-DD HH:mm:ss'),
+                    endDate: moment(item.endDate).utc(false).format('YYYY-MM-DD HH:mm:ss'),
+                    account: item.account.name,
+                    client: item.client.name,
+                    site: item.site.name,
+                }
+            })
+            return mappedResults
+        }
+        return []
+    },
     emailAlreadyExists: async function (state, email) {
         const response = await Request.do(state, 'GET', Request.getDefaultHeader(state), {}, `${Endpoints.systemUsers.checkEmailExist}${email}`)
         return response?.data?.result || null
@@ -277,6 +298,46 @@ export default {
 
         const response = await Request.do(state, 'POST', Request.getDefaultHeader(state), filters, `${Endpoints.clientGroups.filter}`)
         return response?.data?.results || []
+    },
+    filterReports: async function (state, filters) {
+        const response = await Request.do(state, 'POST', Request.getDefaultHeader(state), filters, `${Endpoints.reports.filter}`)
+        const results = response?.data?.results
+
+        if (results?.length > 0) {
+            const mappedResults = results.map(item => {
+                return {
+                    _id: item._id,
+                    patrolPoint: item.patrolPoint,
+                    event: item?.event,
+                    vigilant: item.vigilant,
+                    startDate: moment(item.startDate).utc(false).format('DD-MM-YYYY HH:mm:ss'),
+                    endDate: moment(item.endDate).utc(false).format('DD-MM-YYYY HH:mm:ss'),
+                    timeSlot: item.timeSlot,
+                    account: item.account.name,
+                    accountAddress:
+                        item.account?.address?.address +
+                        ' ' +
+                        item.account?.address?.number +
+                        ' ' +
+                        item.account?.address?.complement +
+                        ' ' +
+                        item.account?.address?.neighborhood +
+                        ' ' +
+                        item.account?.address?.cep +
+                        ' ' +
+                        item.account?.address?.city +
+                        ' ' +
+                        item.account?.address?.state,
+
+                    client: item.client,
+                    site: item.site,
+                    schedule: item.schedule,
+                    checked: item.checked,
+                }
+            })
+            return mappedResults
+        }
+        return []
     },
 }
 </script>

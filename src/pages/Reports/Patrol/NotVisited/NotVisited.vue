@@ -73,26 +73,19 @@
                     </date-range-picker>
                 </div>
 
-                <div class="col-md-4 mt-3">
-                    <button @click="filter" type="submit" class="btn btn-primary w-200px me-10px is-loading">
+                <div class="col-md-4 mt-3 mb-2 text-center">
+                    <button @click="filter" type="submit" class="btn btn-primary w-200px me-10px is-loading mb-1">
                         <i v-if="isSearchLoading" class="fas fa-spinner fa-pulse"></i>
                         {{ $t('str.generate.report') }}
                     </button>
-                    <button @click="clearFilters" type="submit" class="btn btn-default w-200px me-10px">
+                    <button @click="clearFilters" type="submit" class="btn btn-default w-200px me-10px mb-1">
                         {{ $t('str.clear.fields') }}
                     </button>
                 </div>
-
-                <!-- <div class="col-md-4 mb-3">
-                <label class="form-label" for="statusField">{{ $t('str.register.status.field') }}</label>
-                <select v-model="filters.status" @change="filter" class="form-select" id="statusField">
-                    <option value="IN_PROGRESS">{{ $t('str.status.in.progress') }}</option>
-                    <option value="ACTIVE">{{ $t('str.status.pending') }}</option>
-                    <option value="FINISHED">{{ $t('str.status.done') }}</option>
-                    <option value="EXPIRED">{{ $t('str.status.expired') }}</option>
-                </select>
-            </div> -->
             </div>
+
+            <CsvDownload v-show="items?.length > 0" :jsonFields="jsonFields" :jsonData="items" :jsonMeta="jsonMeta" :filename="filename" />
+
             <vue-good-table
                 :columns="columns"
                 :rows="items"
@@ -105,35 +98,8 @@
                     <i v-if="isLoading" class="fas fa-spinner fa-spin" />
                     <span v-if="!isLoading && items?.length === 0">{{ $t('str.table.subtitle.no.data') }}</span>
                 </div>
-
                 <template slot="table-row" slot-scope="props">
-                    <span v-if="props.column.field === 'vigilant'"> {{ props.formattedRow[props.column.field]?.firstName }} {{ props.formattedRow[props.column.field]?.lastName }} </span>
-                    <span v-else-if="props.column.field === 'account' || props.column.field === 'client' || props.column.field === 'site'">
-                        {{ props.formattedRow[props.column.field]?.name }}
-                    </span>
-                    <span v-else-if="props.column.field === 'startDate' || props.column.field === 'endDate'">
-                        {{ formatDate(props.formattedRow[props.column.field]) }}
-                    </span>
-                    <!-- <span v-else-if="props.column.field === 'status'">
-                        <span
-                            class="badge"
-                            v-bind:class="
-                                props.formattedRow[props.column.field] === 'ACTIVE'
-                                    ? 'bg-blue'
-                                    : props.formattedRow[props.column.field] === 'IN_PROGRESS'
-                                    ? 'bg-success'
-                                    : props.formattedRow[props.column.field] === 'FINISHED'
-                                    ? 'bg-info'
-                                    : props.formattedRow[props.column.field] === 'EXPIRED'
-                                    ? 'bg-danger'
-                                    : 'bg-danger'
-                            "
-                        >
-                            {{ $t(getStatusName(props.formattedRow[props.column.field])) }}
-                        </span>
-                    </span> -->
-
-                    <span v-else>
+                    <span>
                         {{ props.formattedRow[props.column.field] }}
                     </span>
                 </template>
@@ -149,10 +115,15 @@
 import moment from 'moment'
 import Controller from './CrtNotVisited.vue'
 import { DATE_RANGE_CONFIG } from '../../../../utils/date'
+import CsvDownload from '../../Components/CsvDownload.vue'
 import Vue from 'vue'
+import { JSON_FIELDS_CSV } from './Utils/jsonFieldsCsv'
 Vue.prototype.$registerEvent = new Vue()
+
 export default {
-    components: {},
+    components: {
+        CsvDownload,
+    },
     data() {
         return {
             accounts: [],
@@ -162,7 +133,7 @@ export default {
             errors: [],
             items: [],
             paginationOptions: {},
-            columns: [],
+            fields: [],
             isLoading: true,
             isSearchLoading: false,
             dateRange: DATE_RANGE_CONFIG,
@@ -174,11 +145,15 @@ export default {
                 vigilant: '',
                 startDate: moment().utc(true),
                 endDate: moment().utc(true),
-                isDescSortByStartDate: false,
-                isSortByStartDate: true,
+                report: 'PATROL_POINTS_NOT_VISITED',
             },
             selectedItem: null,
             isSuperAdminMaster: false,
+            JSON_FIELDS_CSV: JSON_FIELDS_CSV,
+            jsonFields: JSON_FIELDS_CSV.pt.json_fields,
+            jsonData: [JSON_FIELDS_CSV.pt.json_data],
+            jsonMeta: [JSON_FIELDS_CSV.pt.json_meta],
+            filename: JSON_FIELDS_CSV.pt.filename,
         }
     },
     methods: Controller.methods,
@@ -190,6 +165,10 @@ export default {
         state.$registerEvent.$on('changeLanguage', function () {
             state.initTable()
             state.initRangeDate()
+            state.jsonFields = JSON_FIELDS_CSV[state.$i18n.locale].json_fields
+            state.jsonData = [JSON_FIELDS_CSV[state.$i18n.locale].json_data]
+            state.jsonMeta = [JSON_FIELDS_CSV[state.$i18n.locale].json_meta]
+            state.filename = JSON_FIELDS_CSV[state.$i18n.locale].filename
         })
     },
 }

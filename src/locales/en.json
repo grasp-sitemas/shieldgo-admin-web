@@ -1058,5 +1058,13 @@
     "str.form.title.logs": "Logs",
     "str.generate.report": "Generate report",
     "str.clear.fields": "Clear fields",
-    "str.reports.vigilant.field": "Guard"
+    "str.reports.vigilant.field": "Guard",
+    "str.table.reports.column.patrolPoint": "Patrol Point",
+    "str.table.reports.column.event": "Event",
+    "str.table.reports.column.vigilant": "Guard",
+    "str.table.reports.column.starts.in": "Start",
+    "str.table.reports.column.ends.in": "End",
+    "str.table.reports.column.account": "Account",
+    "str.table.reports.column.client": "Client",
+    "str.table.reports.column.site": "Local"
 }       

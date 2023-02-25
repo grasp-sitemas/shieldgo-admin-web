@@ -1,6 +1,6 @@
 <template>
     <div>
-        <h1 class="page-header">{{ $t('str.sidebar.menu.reports.patrols.not-visited.description') }}</h1>
+        <h1 class="page-header">{{ $t('str.sidebar.menu.reports.patrols.completed.description') }}</h1>
         <hr />
 
         <div v-if="!isLoading">
@@ -120,7 +120,7 @@
 
 <script>
 import moment from 'moment'
-import Controller from './CrtNotVisited.vue'
+import Controller from './CrtCompleted.vue'
 import { DATE_RANGE_CONFIG } from '../../../../utils/date'
 import CsvDownload from '../../Components/CsvDownload.vue'
 import XlsDownload from '../../Components/XlsDownload.vue'
@@ -164,11 +164,11 @@ export default {
             isSuperAdminMaster: false,
             JSON_FIELDS_CSV: JSON_FIELDS_CSV,
             PDF_HEADER: PDF_HEADER,
-            jsonFields: JSON_FIELDS_CSV.notCompletedPatrolPoints.pt.json_fields,
-            jsonData: [JSON_FIELDS_CSV.notCompletedPatrolPoints.pt.json_data],
-            jsonMeta: [JSON_FIELDS_CSV.notCompletedPatrolPoints.pt.json_meta],
-            filename: JSON_FIELDS_CSV.notCompletedPatrolPoints.pt.filename,
-            jsonTitle: JSON_FIELDS_CSV.notCompletedPatrolPoints.pt.title,
+            jsonFields: JSON_FIELDS_CSV.completedPatrolPoints.pt.json_fields,
+            jsonData: [JSON_FIELDS_CSV.completedPatrolPoints.pt.json_data],
+            jsonMeta: [JSON_FIELDS_CSV.completedPatrolPoints.pt.json_meta],
+            filename: JSON_FIELDS_CSV.completedPatrolPoints.pt.filename,
+            jsonTitle: JSON_FIELDS_CSV.completedPatrolPoints.pt.title,
             pdfHeader: PDF_HEADER.pt,
         }
     },
@@ -181,11 +181,11 @@ export default {
         state.$registerEvent.$on('changeLanguage', function () {
             state.initTable()
             state.initRangeDate()
-            state.jsonFields = JSON_FIELDS_CSV.notCompletedPatrolPoints[state.$i18n.locale].json_fields
-            state.jsonData = [JSON_FIELDS_CSV.notCompletedPatrolPoints[state.$i18n.locale].json_data]
-            state.jsonMeta = [JSON_FIELDS_CSV.notCompletedPatrolPoints[state.$i18n.locale].json_meta]
-            state.filename = JSON_FIELDS_CSV.notCompletedPatrolPoints[state.$i18n.locale].filename
-            state.jsonTitle = JSON_FIELDS_CSV.notCompletedPatrolPoints[state.$i18n.locale].title
+            state.jsonFields = JSON_FIELDS_CSV.completedPatrolPoints[state.$i18n.locale].json_fields
+            state.jsonData = [JSON_FIELDS_CSV.completedPatrolPoints[state.$i18n.locale].json_data]
+            state.jsonMeta = [JSON_FIELDS_CSV.completedPatrolPoints[state.$i18n.locale].json_meta]
+            state.filename = JSON_FIELDS_CSV.completedPatrolPoints[state.$i18n.locale].filename
+            state.jsonTitle = JSON_FIELDS_CSV.completedPatrolPoints[state.$i18n.locale].title
             state.pdfHeader = PDF_HEADER[state.$i18n.locale]
         })
     },

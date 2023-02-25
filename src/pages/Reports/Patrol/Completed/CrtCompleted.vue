@@ -26,11 +26,11 @@ export default {
                 payload.columns.splice(4, 1)
             }
 
-            payload.jsonFields = payload.JSON_FIELDS_CSV.notCompletedPatrolPoints[payload.$i18n.locale].json_fields
-            payload.jsonData = [payload.JSON_FIELDS_CSV.notCompletedPatrolPoints[payload.$i18n.locale].json_data]
-            payload.jsonMeta = [payload.JSON_FIELDS_CSV.notCompletedPatrolPoints[payload.$i18n.locale].json_meta]
-            payload.filename = payload.JSON_FIELDS_CSV.notCompletedPatrolPoints[payload.$i18n.locale].filename
-            payload.jsonTitle = payload.JSON_FIELDS_CSV.notCompletedPatrolPoints[payload.$i18n.locale].title
+            payload.jsonFields = payload.JSON_FIELDS_CSV.completedPatrolPoints[payload.$i18n.locale].json_fields
+            payload.jsonData = [payload.JSON_FIELDS_CSV.completedPatrolPoints[payload.$i18n.locale].json_data]
+            payload.jsonMeta = [payload.JSON_FIELDS_CSV.completedPatrolPoints[payload.$i18n.locale].json_meta]
+            payload.filename = payload.JSON_FIELDS_CSV.completedPatrolPoints[payload.$i18n.locale].filename
+            payload.jsonTitle = payload.JSON_FIELDS_CSV.completedPatrolPoints[payload.$i18n.locale].title
             payload.pdfHeader = payload.PDF_HEADER[payload.$i18n.locale]
 
             payload.role = role
@@ -43,12 +43,12 @@ export default {
             this.items = []
 
             const results = await Services.filterReports(this, this.filters)
+
             this.items = results?.tableItems
             this.reportItems = results?.reportItems
 
             this.isSearchLoading = false
         },
-        generateReport: async function () {},
         async initTable() {
             this.columns = [
                 {
@@ -94,6 +94,15 @@ export default {
                     tdClass: 'text-nowrap',
                     thClass: 'text-nowrap',
                 },
+                {
+                    label: this.$t('str.table.reports.column.scanned.date'),
+                    field: 'scannedDate',
+                    width: '10%',
+                    sortable: true,
+                    tdClass: 'text-nowrap',
+                    thClass: 'text-nowrap',
+                },
+
                 {
                     label: this.$t('str.table.reports.column.account'),
                     field: 'account',
@@ -153,7 +162,7 @@ export default {
             }
             this.items = []
             this.initRangeDate()
-            this.data.account = Common.getAccountId(this)
+            this.filters.account = Common.getAccountId(this)
         },
         initRangeDate: async function () {
             const startDate = moment().subtract(0, 'days')

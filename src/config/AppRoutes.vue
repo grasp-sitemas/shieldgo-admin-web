@@ -15,6 +15,7 @@ import Monitor from '../pages/Monitor/Monitor.vue'
 import PageNotFound from '../pages/PageNotFound/PageNotFound.vue'
 import PatrolPoint from '../pages/Company/PatrolPoint/PatrolPoint.vue'
 import PatrolNotVisited from '../pages/Reports/Patrol/NotVisited/NotVisited.vue'
+import PatrolCompleted from '../pages/Reports/Patrol/Completed/Completed.vue'
 import Profile from '../pages/User/Profile/Profile.vue'
 import RegisterData from '../pages/Company/RegisterData/RegisterData.vue'
 import Settings from '../pages/Settings/Settings.vue'
@@ -192,6 +193,14 @@ const routes = [
         path: '/vigilants',
         name: 'vigilants',
         component: Vigilant,
+        beforeEnter: (_to, _from, next) => {
+            next(checkSession())
+        },
+    },
+    {
+        path: '/reports/patrols/completed',
+        name: 'patrols-completed',
+        component: PatrolCompleted,
         beforeEnter: (_to, _from, next) => {
             next(checkSession())
         },

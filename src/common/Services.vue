@@ -299,75 +299,54 @@ export default {
         const response = await Request.do(state, 'POST', Request.getDefaultHeader(state), filters, `${Endpoints.clientGroups.filter}`)
         return response?.data?.results || []
     },
-    filterReports: async function (state, filters) {
+    completedPatrols: async function (state, filters) {
         const response = await Request.do(state, 'POST', Request.getDefaultHeader(state), filters, `${Endpoints.reports.filter}`)
         const results = response?.data?.results
 
         if (results?.length > 0) {
-            const mappedResults = results.reduce((acc, item) => {
-                const items = item.items.map(i => ({
-                    patrolPoint: i.patrolPoint,
-                    event: i.event,
-                    vigilant: i.vigilant,
-                    startDate: moment(i.startDate).utc(false).format('DD-MM-YYYY HH:mm:ss'),
-                    endDate: moment(i.endDate).utc(false).format('DD-MM-YYYY HH:mm:ss'),
-                    timeSlot: i.timeSlot,
-                    client: i.client,
-                    site: i.site,
-                    schedule: i.schedule,
-                    checked: i.checked,
-                    account: item.name,
-                    accountAddress:
-                        item?.address?.address +
-                        ' ' +
-                        item?.address?.number +
-                        ' ' +
-                        item?.address?.complement +
-                        ' ' +
-                        item?.address?.neighborhood +
-                        ' ' +
-                        item?.address?.cep +
-                        ' ' +
-                        item?.address?.city +
-                        ' ' +
-                        item?.address?.state,
-                }))
-
-                return [
-                    ...acc,
-                    {
-                        _id: item._id,
-                        account: item.name,
-                        accountAddress:
-                            item?.address?.address +
-                            ' ' +
-                            item?.address?.number +
-                            ' ' +
-                            item?.address?.complement +
-                            ' ' +
-                            item?.address?.neighborhood +
-                            ' ' +
-                            item?.address?.cep +
-                            ' ' +
-                            item?.address?.city +
-                            ' ' +
-                            item?.address?.state,
-                        status: item.status,
-                        items: items,
-                    },
-                ]
+            const flattenedItems = results.reduce((acc, item) => {
+                const items = item.schedules.reduce((acc, schedule) => {
+                    return [
+                        ...acc,
+                        ...schedule.items.reduce((acc, i) => {
+                            return [
+                                ...acc,
+                                ...i.actions.map(action => ({
+                                    patrolPoint: action.patrolPoint?.name,
+                                    event: schedule.name,
+                                    vigilant: i.vigilant,
+                                    scannedDate: moment(action.date).utc(false).format('DD-MM-YYYY HH:mm:ss'),
+                                    account: item.name,
+                                    client: i.client,
+                                    site: i.site,
+                                    startDate: moment(i.startDate).utc(false).format('DD-MM-YYYY HH:mm:ss'),
+                                    endDate: moment(i.endDate).utc(false).format('DD-MM-YYYY HH:mm:ss'),
+                                    frequency: schedule.frequency,
+                                })),
+                            ]
+                        }, []),
+                    ]
+                }, [])
+                return [...acc, ...items]
             }, [])
-
-            const flattenedItems = mappedResults.reduce((acc, item) => {
-                return [...acc, ...item.items]
-            }, [])
-
+            console.log(flattenedItems)
+            console.log(results)
             return {
                 tableItems: flattenedItems,
-                reportItems: mappedResults,
+                reportItems: results,
             }
         }
+
         return []
+    },
+    filterReports: async function (state, filters) {
+        switch (filters?.report) {
+            case 'PATROL_POINTS_COMPLETED':
+                return this.completedPatrols(state, filters)
+
+            default:
+                break
+        }
     },
 }
 </script>

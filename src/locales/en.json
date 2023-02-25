@@ -1072,5 +1072,15 @@
     "str.generated.on": "Generated on",
     "str.page": "Page",
     "str.of": "of",
-    "str.total.points": "Total points"
+    "str.total.points": "Total points",
+    "str.frequency": "Frequency",
+    "str.begin.date": "Begin date",
+    "str.end.date": "End date",
+    "str.begins.in": "Start in",
+    "str.ends.in": "End in",
+    "str.description": "Description",
+    "DAILY": "Daily",
+    "WEEKLY": "Weekly",
+    "MONTHLY": "Monthly",
+    "str.table.reports.column.scanned.date": "Scanned date"
 }       

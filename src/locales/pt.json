@@ -1065,5 +1065,15 @@
     "str.total.points": "Total de pontos",
     "str.generated.on": "Gerado em",
     "str.page": "Página",
-    "str.of": "de"
+    "str.of": "de",
+    "str.frequency": "Frequência",
+    "str.begin.date": "Data de início",
+    "str.end.date": "Data de fim",
+    "str.begins.in": "Início",
+    "str.ends.in": "Término",
+    "str.description": "Descrição",
+    "DAILY": "Diário",
+    "WEEKLY": "Semanal",
+    "MONTHLY": "Mensal",
+    "str.table.reports.column.scanned.date": "Data da leitura"
 }

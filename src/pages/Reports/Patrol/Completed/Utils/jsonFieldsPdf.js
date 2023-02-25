@@ -17,6 +17,10 @@ export const PDF_HEADER = {
             name: 'Data fim',
         },
         {
+            _id: 'scannedDate',
+            name: 'Data da leitura',
+        },
+        {
             _id: 'client',
             name: 'Cliente',
         },
@@ -41,6 +45,10 @@ export const PDF_HEADER = {
         {
             _id: 'endDate',
             name: 'End date',
+        },
+        {
+            _id: 'scannedDate',
+            name: 'Scanned date',
         },
         {
             _id: 'client',

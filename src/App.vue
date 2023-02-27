@@ -33,6 +33,7 @@
         <SidebarRight v-if="appOptions.appSidebarTwo" />
         <ThemePanel v-on:change-theme="handleChangeTheme" />
         <ScrollTopBtn />
+        <!-- <Pivot ref="pivot" v-bind:report="'https://cdn.flexmonster.com/reports/report.json'" /> -->
     </div>
     <div class="h-100" v-else>
         <router-view></router-view>

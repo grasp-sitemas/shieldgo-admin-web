@@ -51,6 +51,9 @@ export default {
         checkUsernameExist: `${domain}/api/users/check/username/v1/`,
         count: `${domain}/api/generic/count/byfilter/v1/`,
     },
+    reports: {
+        filter: `${domain}/api/users/reports/filter/v1/`,
+    },
     companies: {
         company: `${domain}/api/company/v1/`,
         formData: `${domain}/api/company/formdata/v1/`,

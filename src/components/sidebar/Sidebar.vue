@@ -9,7 +9,7 @@
                 'app-sidebar-grid': appOptions.appSidebarGrid,
             }"
         >
-            <vue-custom-scrollbar class="app-sidebar-content" v-bind:class="{ 'h-100 ps': appOptions.appSidebarFixed }">
+            <vue-custom-scrollbar class="app-sidebar-content mt-10px" v-bind:class="{ 'h-100 ps': appOptions.appSidebarFixed }">
                 <sidebar-nav-profile v-if="!appOptions.appSidebarSearch"></sidebar-nav-profile>
                 <sidebar-nav ref="sidebarNav" v-bind:scrollTop="scrollTop" v-on:show-float-submenu="handleShowFloatSubmenu" v-on:hide-float-submenu="handleHideFloatSubmenu"></sidebar-nav>
             </vue-custom-scrollbar>

@@ -8,6 +8,7 @@
         <template v-for="menu in menus">
             <sidebar-nav-list
                 ref="sidebarNavList"
+                v-show="!menu.topMenu"
                 v-bind:menu="menu"
                 v-bind:scrollTop="scrollTop"
                 v-bind:key="menu.path"

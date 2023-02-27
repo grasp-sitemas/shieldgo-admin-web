@@ -1600,3 +1600,22 @@ body .daterangepicker.show-ranges.ltr .ranges, body .daterangepicker.show-ranges
     margin-top: 22%;
 }
 
+@media (min-width: 768px){
+    .app-top-menu {
+        top: 60px !important;
+        position: fixed;
+        height: 40px;
+    }
+}
+
+@media (min-width: 768px) {
+    .app-top-menu .menu {
+        display: -webkit-box;
+        display: -ms-flexbox;
+        display: flex;
+        -ms-flex-wrap: nowrap;
+        flex-wrap: nowrap;
+        justify-content: center;
+
+    }
+}

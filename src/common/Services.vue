@@ -1,6 +1,7 @@
 <script>
 import Endpoints from './Endpoints.vue'
 import Request from './Request.vue'
+import moment from 'moment'
 
 export default {
     getMe: async function (state) {
@@ -87,6 +88,34 @@ export default {
         }
 
         if (site) {
+            const response = await Request.do(state, 'POST', Request.getDefaultHeader(state), filters, `${Endpoints.systemUsers.customerUser.search}`)
+
+            const result = response?.data?.results
+            if (result && result.length > 0) {
+                const mappedResult = result.map(item => {
+                    return {
+                        _id: item._id,
+                        firstName: item.firstName,
+                        lastName: item.lastName,
+                        fullName: `${item.firstName} ${item.lastName}`,
+                        status: item.status,
+                    }
+                })
+                return mappedResult
+            }
+            return []
+        }
+        return []
+    },
+    getVigilantsByClient: async function (state, client) {
+        const filters = {
+            name: '',
+            client: client,
+            status: 'ACTIVE',
+            subtype: 'VIGILANT',
+        }
+
+        if (client) {
             const response = await Request.do(state, 'POST', Request.getDefaultHeader(state), filters, `${Endpoints.systemUsers.customerUser.search}`)
 
             const result = response?.data?.results
@@ -206,6 +235,26 @@ export default {
         const response = await Request.do(state, 'POST', Request.getDefaultHeader(state), filters, `${Endpoints.events.filter}`)
         return response?.data?.results || []
     },
+    getFormattedEventsByDate: async function (state, filters) {
+        const response = await Request.do(state, 'POST', Request.getDefaultHeader(state), filters, `${Endpoints.events.filter}`)
+        const results = response?.data?.results
+        if (results?.length > 0) {
+            const mappedResults = results.map(item => {
+                return {
+                    _id: item._id,
+                    event: item.name,
+                    vigilant: item.vigilant.fullName,
+                    startDate: moment(item.startDate).utc(false).format('YYYY-MM-DD HH:mm:ss'),
+                    endDate: moment(item.endDate).utc(false).format('YYYY-MM-DD HH:mm:ss'),
+                    account: item.account.name,
+                    client: item.client.name,
+                    site: item.site.name,
+                }
+            })
+            return mappedResults
+        }
+        return []
+    },
     emailAlreadyExists: async function (state, email) {
         const response = await Request.do(state, 'GET', Request.getDefaultHeader(state), {}, `${Endpoints.systemUsers.checkEmailExist}${email}`)
         return response?.data?.result || null
@@ -249,6 +298,63 @@ export default {
 
         const response = await Request.do(state, 'POST', Request.getDefaultHeader(state), filters, `${Endpoints.clientGroups.filter}`)
         return response?.data?.results || []
+    },
+    searchPatrols: async function (state, filters) {
+        const response = await Request.do(state, 'POST', Request.getDefaultHeader(state), filters, `${Endpoints.reports.filter}`)
+        const results = response?.data?.results
+
+        if (results?.length > 0) {
+            const flattenedItems = results.reduce((acc, item) => {
+                const items = item.schedules.reduce((acc, schedule) => {
+                    return [
+                        ...acc,
+                        ...schedule?.items.reduce((acc, i) => {
+                            return [
+                                ...acc,
+                                ...i?.actions.map(action => ({
+                                    patrolPoint: action.patrolPoint?.name,
+                                    event: schedule.name,
+                                    vigilant: i.vigilant,
+                                    scannedDate: action.date ? moment(action.date).utc(false).format('DD-MM-YYYY HH:mm:ss') : '',
+                                    account: item.name,
+                                    client: i.client,
+                                    site: i.site,
+                                    startDate: moment(i.startDate).utc(false).format('DD-MM-YYYY HH:mm:ss'),
+                                    endDate: moment(i.endDate).utc(false).format('DD-MM-YYYY HH:mm:ss'),
+                                    frequency: schedule.frequency,
+                                })),
+                            ]
+                        }, []),
+                    ]
+                }, [])
+                return [...acc, ...items]
+            }, [])
+            console.log(flattenedItems)
+            console.log(results)
+            return {
+                tableItems: flattenedItems,
+                reportItems: results,
+            }
+        }
+
+        return []
+    },
+    sosAlerts: async function (state, filters) {
+        console.log(filters)
+        console.log(state)
+    },
+    filterReports: async function (state, filters) {
+        switch (filters?.report) {
+            case 'PATROL_POINTS_COMPLETED':
+                return this.searchPatrols(state, filters)
+            case 'PATROL_POINTS_NOT_VISITED':
+                return this.searchPatrols(state, filters)
+            case 'PATROL_POINTS_INCOMPLETED':
+                return this.searchPatrols(state, filters)
+
+            default:
+                break
+        }
     },
 }
 </script>

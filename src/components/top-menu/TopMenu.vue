@@ -1,6 +1,6 @@
 <template>
     <!-- begin #top-menu -->
-    <div id="top-menu" class="app-top-menu" v-bind:class="{ 'd-block': appOptions.appTopMenuMobileToggled }">
+    <div id="top-menu" class="app-top-menu app-top-menu-content" v-bind:class="{ 'd-block': appOptions.appTopMenuMobileToggled }">
         <!-- begin top-menu nav -->
         <top-menu-nav></top-menu-nav>
         <!-- end top-menu nav -->

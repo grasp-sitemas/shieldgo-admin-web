@@ -87,8 +87,8 @@
             <!-- aling buttons in same line -->
             <div class="row">
                 <div class="col-md-12 mb-3">
-                    <CsvDownload class="me-2" v-show="items?.length > 0" :jsonFields="jsonFields" :jsonData="reportItems" :jsonMeta="jsonMeta" :filename="filename" :jsonTitle="jsonTitle" />
-                    <XlsDownload class="me-2" v-show="items?.length > 0" :jsonFields="jsonFields" :jsonData="reportItems" :jsonMeta="jsonMeta" :filename="filename" :jsonTitle="jsonTitle" />
+                    <!-- <CsvDownload class="me-2" v-show="items?.length > 0" :jsonFields="jsonFields" :jsonData="reportItems" :jsonMeta="jsonMeta" :filename="filename" :jsonTitle="jsonTitle" />
+                    <XlsDownload class="me-2" v-show="items?.length > 0" :jsonFields="jsonFields" :jsonData="reportItems" :jsonMeta="jsonMeta" :filename="filename" :jsonTitle="jsonTitle" /> -->
                     <PdfDownload v-show="items?.length > 0" :pdfHeader="pdfHeader" :jsonData="reportItems" :filename="filename" :jsonTitle="jsonTitle" />
                 </div>
             </div>
@@ -122,8 +122,8 @@
 import moment from 'moment'
 import Controller from './CrtNotVisited.vue'
 import { DATE_RANGE_CONFIG } from '../../../../utils/date'
-import CsvDownload from '../../Components/CsvDownload.vue'
-import XlsDownload from '../../Components/XlsDownload.vue'
+// import CsvDownload from '../../Components/CsvDownload.vue'
+// import XlsDownload from '../../Components/XlsDownload.vue'
 import PdfDownload from '../../Components/PdfDownload.vue'
 import Vue from 'vue'
 import { JSON_FIELDS_CSV } from './Utils/jsonFieldsCsv'
@@ -132,8 +132,8 @@ Vue.prototype.$registerEvent = new Vue()
 
 export default {
     components: {
-        CsvDownload,
-        XlsDownload,
+        // CsvDownload,
+        // XlsDownload,
         PdfDownload,
     },
     data() {
@@ -164,11 +164,11 @@ export default {
             isSuperAdminMaster: false,
             JSON_FIELDS_CSV: JSON_FIELDS_CSV,
             PDF_HEADER: PDF_HEADER,
-            jsonFields: JSON_FIELDS_CSV.notCompletedPatrolPoints.pt.json_fields,
-            jsonData: [JSON_FIELDS_CSV.notCompletedPatrolPoints.pt.json_data],
-            jsonMeta: [JSON_FIELDS_CSV.notCompletedPatrolPoints.pt.json_meta],
-            filename: JSON_FIELDS_CSV.notCompletedPatrolPoints.pt.filename,
-            jsonTitle: JSON_FIELDS_CSV.notCompletedPatrolPoints.pt.title,
+            jsonFields: JSON_FIELDS_CSV.notVisitedPatrolPoint.pt.json_fields,
+            jsonData: [JSON_FIELDS_CSV.notVisitedPatrolPoint.pt.json_data],
+            jsonMeta: [JSON_FIELDS_CSV.notVisitedPatrolPoint.pt.json_meta],
+            filename: JSON_FIELDS_CSV.notVisitedPatrolPoint.pt.filename,
+            jsonTitle: JSON_FIELDS_CSV.notVisitedPatrolPoint.pt.title,
             pdfHeader: PDF_HEADER.pt,
         }
     },
@@ -181,11 +181,11 @@ export default {
         state.$registerEvent.$on('changeLanguage', function () {
             state.initTable()
             state.initRangeDate()
-            state.jsonFields = JSON_FIELDS_CSV.notCompletedPatrolPoints[state.$i18n.locale].json_fields
-            state.jsonData = [JSON_FIELDS_CSV.notCompletedPatrolPoints[state.$i18n.locale].json_data]
-            state.jsonMeta = [JSON_FIELDS_CSV.notCompletedPatrolPoints[state.$i18n.locale].json_meta]
-            state.filename = JSON_FIELDS_CSV.notCompletedPatrolPoints[state.$i18n.locale].filename
-            state.jsonTitle = JSON_FIELDS_CSV.notCompletedPatrolPoints[state.$i18n.locale].title
+            state.jsonFields = JSON_FIELDS_CSV.notVisitedPatrolPoint[state.$i18n.locale].json_fields
+            state.jsonData = [JSON_FIELDS_CSV.notVisitedPatrolPoint[state.$i18n.locale].json_data]
+            state.jsonMeta = [JSON_FIELDS_CSV.notVisitedPatrolPoint[state.$i18n.locale].json_meta]
+            state.filename = JSON_FIELDS_CSV.notVisitedPatrolPoint[state.$i18n.locale].filename
+            state.jsonTitle = JSON_FIELDS_CSV.notVisitedPatrolPoint[state.$i18n.locale].title
             state.pdfHeader = PDF_HEADER[state.$i18n.locale]
         })
     },

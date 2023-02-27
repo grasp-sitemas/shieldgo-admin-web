@@ -16,6 +16,7 @@ import PageNotFound from '../pages/PageNotFound/PageNotFound.vue'
 import PatrolPoint from '../pages/Company/PatrolPoint/PatrolPoint.vue'
 import PatrolNotVisited from '../pages/Reports/Patrol/NotVisited/NotVisited.vue'
 import PatrolCompleted from '../pages/Reports/Patrol/Completed/Completed.vue'
+import PatrolIncompleted from '../pages/Reports/Patrol/Incompleted/Incompleted.vue'
 import Profile from '../pages/User/Profile/Profile.vue'
 import RegisterData from '../pages/Company/RegisterData/RegisterData.vue'
 import Settings from '../pages/Settings/Settings.vue'
@@ -209,6 +210,14 @@ const routes = [
         path: '/reports/patrols/not-visited',
         name: 'patrols-not-visited',
         component: PatrolNotVisited,
+        beforeEnter: (_to, _from, next) => {
+            next(checkSession())
+        },
+    },
+    {
+        path: '/reports/patrols/incompleted',
+        name: 'patrols-incompleted',
+        component: PatrolIncompleted,
         beforeEnter: (_to, _from, next) => {
             next(checkSession())
         },

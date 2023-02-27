@@ -158,7 +158,7 @@ export default {
                 vigilant: '',
                 startDate: moment().utc(true),
                 endDate: moment().utc(true),
-                report: 'PATROL_POINTS_NOT_VISITED',
+                report: 'PATROL_POINTS_COMPLETED',
             }
             this.items = []
             this.initRangeDate()

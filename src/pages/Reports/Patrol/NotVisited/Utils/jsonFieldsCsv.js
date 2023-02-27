@@ -1,7 +1,7 @@
 import moment from 'moment'
 
 export const JSON_FIELDS_CSV = {
-    notCompletedPatrolPoints: {
+    notVisitedPatrolPoint: {
         pt: {
             json_fields: {
                 'Ponto de ronda': 'patrolPoint',
@@ -31,8 +31,8 @@ export const JSON_FIELDS_CSV = {
                     },
                 ],
             ],
-            title: 'Pontos de ronda não visitados',
-            filename: 'rondas_nao_visitadas_' + moment().format('DD-MM-YYYY'),
+            title: 'Rondas não realizadas - Pontos de ronda não visitados',
+            filename: 'rondas_nao_realizadas_' + moment().format('DD-MM-YYYY'),
         },
         en: {
             json_fields: {
@@ -63,8 +63,8 @@ export const JSON_FIELDS_CSV = {
                     },
                 ],
             ],
-            title: 'Not visited patrol points',
-            filename: 'not_visited_patrols_' + moment().format('YYYY-MM-DD'),
+            title: 'Missed patrols - Patrol points not visited',
+            filename: 'missed_patrols_' + moment().format('DD-MM-YYYY'),
         },
     },
 }

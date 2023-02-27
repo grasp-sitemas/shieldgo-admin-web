@@ -299,7 +299,7 @@ export default {
         const response = await Request.do(state, 'POST', Request.getDefaultHeader(state), filters, `${Endpoints.clientGroups.filter}`)
         return response?.data?.results || []
     },
-    completedPatrols: async function (state, filters) {
+    searchPatrols: async function (state, filters) {
         const response = await Request.do(state, 'POST', Request.getDefaultHeader(state), filters, `${Endpoints.reports.filter}`)
         const results = response?.data?.results
 
@@ -308,14 +308,14 @@ export default {
                 const items = item.schedules.reduce((acc, schedule) => {
                     return [
                         ...acc,
-                        ...schedule.items.reduce((acc, i) => {
+                        ...schedule?.items.reduce((acc, i) => {
                             return [
                                 ...acc,
-                                ...i.actions.map(action => ({
+                                ...i?.actions.map(action => ({
                                     patrolPoint: action.patrolPoint?.name,
                                     event: schedule.name,
                                     vigilant: i.vigilant,
-                                    scannedDate: moment(action.date).utc(false).format('DD-MM-YYYY HH:mm:ss'),
+                                    scannedDate: action.date ? moment(action.date).utc(false).format('DD-MM-YYYY HH:mm:ss') : '',
                                     account: item.name,
                                     client: i.client,
                                     site: i.site,
@@ -339,10 +339,18 @@ export default {
 
         return []
     },
+    sosAlerts: async function (state, filters) {
+        console.log(filters)
+        console.log(state)
+    },
     filterReports: async function (state, filters) {
         switch (filters?.report) {
             case 'PATROL_POINTS_COMPLETED':
-                return this.completedPatrols(state, filters)
+                return this.searchPatrols(state, filters)
+            case 'PATROL_POINTS_NOT_VISITED':
+                return this.searchPatrols(state, filters)
+            case 'PATROL_POINTS_INCOMPLETED':
+                return this.searchPatrols(state, filters)
 
             default:
                 break

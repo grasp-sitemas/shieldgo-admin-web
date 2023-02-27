@@ -1,7 +1,7 @@
 <template>
     <!-- menu with submenu -->
-    <div v-if="menu.children" class="menu-item has-sub" v-bind:class="{ active: subIsActive(menu.path) }">
-        <a href="#" class="menu-link" v-on:click.prevent.stop="expand()">
+    <div v-if="menu.children" class="menu-item has-sub">
+        <a href="#" class="menu-link">
             <div v-if="menu.icon" class="menu-icon"><i v-bind:class="menu.icon"></i></div>
             <div v-if="menu.img" class="menu-icon-img"><img v-bind:src="menu.img" alt="" /></div>
             <div class="menu-text">
@@ -72,8 +72,10 @@ export default {
             this.$emit('collapse-other', this.menu)
         },
         handleCollapseOther: function (menu) {
-            for (var i = 0; i < this.menu.children.length; i++) {
-                this.$refs.topMenuNavList[i].collapse(menu)
+            if (menu) {
+                for (var i = 0; i < this.menu.children.length; i++) {
+                    this.$refs.topMenuNavList[i].collapse(menu)
+                }
             }
         },
         subIsActive(path) {

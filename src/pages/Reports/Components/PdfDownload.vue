@@ -69,7 +69,7 @@ export default {
                     item.actions.forEach(action => {
                         const startDate = moment(item?.startDate).utc(false).format('DD/MM/YYYY HH:mm:ss')
                         const endDate = moment(item?.endDate).utc(false).format('DD/MM/YYYY HH:mm:ss')
-                        const scannedDate = moment(action?.date).utc(false).format('DD/MM/YYYY HH:mm:ss')
+                        const scannedDate = action?.date ? moment(action?.date).utc(false).format('DD/MM/YYYY HH:mm:ss') : ' '
 
                         const newItem = {
                             patrolPoint: action?.patrolPoint?.name ? String(action.patrolPoint.name) : ' ',

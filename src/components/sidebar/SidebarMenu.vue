@@ -52,18 +52,19 @@ const sidebarMenu = [
         label: 'str.sidebar.menu.new',
         children: [
             {
-                path: '/reports/patrols/not-visited',
-                title: 'str.sidebar.menu.reports.patrols.not-visited',
-                roles: [ROLES.SUPER_ADMIN_MASTER, ROLES.ADMIN, ROLES.MANAGER],
-            },
-            {
                 path: '/reports/patrols/completed',
                 title: 'str.sidebar.menu.reports.completed.patrols',
                 roles: [ROLES.SUPER_ADMIN_MASTER, ROLES.ADMIN, ROLES.MANAGER],
             },
+
             {
-                path: '/reports/patrols/not-completed',
+                path: '/reports/patrols/incompleted',
                 title: 'str.sidebar.menu.reports.not.completed.patrols',
+                roles: [ROLES.SUPER_ADMIN_MASTER, ROLES.ADMIN, ROLES.MANAGER],
+            },
+            {
+                path: '/reports/patrols/not-visited',
+                title: 'str.sidebar.menu.reports.patrols.not-visited',
                 roles: [ROLES.SUPER_ADMIN_MASTER, ROLES.ADMIN, ROLES.MANAGER],
             },
         ],

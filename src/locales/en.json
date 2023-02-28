@@ -1084,5 +1084,9 @@
     "DAILY": "Daily",
     "WEEKLY": "Weekly",
     "MONTHLY": "Monthly",
-    "str.table.reports.column.scanned.date": "Scanned date"
+    "str.table.reports.column.scanned.date": "Scanned date",
+    "str.sidebar.menu.reports.sos.alert": "SOS alerts",
+    "str.sidebar.menu.reports.sos.alert.description":  "SOS alerts",
+    "str.attendance.opened.at": "Opened at",
+    "str.attendance.closed.at": "Closed at"
 }       

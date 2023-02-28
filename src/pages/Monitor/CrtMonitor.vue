@@ -114,11 +114,13 @@ export default {
             this.attendanceEventEnabled = true
 
             const patrolActionId = this.selectedEvent?._id
+            const openedDate = this.selectedEvent.attendance?.openedDate
             const userId = await this.getOperatorId()
             const siteGroup = this.$session.get('user')?.siteGroup?._id
 
             const attendance = {
                 isAttendance: true,
+                openedDate: openedDate,
                 closedDate: moment().utc(true).format(),
                 operator: userId,
                 status: 'CLOSED',
@@ -128,7 +130,6 @@ export default {
                 const result = await Services.attendanceEvent(this, patrolActionId, attendance, siteGroup)
                 console.log('result', result)
                 if (result && this.selectedEvent) {
-                    const openedDate = this?.selectedEvent.attendance?.openedDate
                     this.selectedEvent.attendance = {
                         isAttendance: result?.attendance?.isAttendance,
                         openedDate: openedDate,

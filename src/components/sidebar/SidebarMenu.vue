@@ -67,6 +67,11 @@ const sidebarMenu = [
                 title: 'str.sidebar.menu.reports.patrols.not-visited',
                 roles: [ROLES.SUPER_ADMIN_MASTER, ROLES.ADMIN, ROLES.MANAGER],
             },
+            {
+                path: '/reports/sos-alert',
+                title: 'str.sidebar.menu.reports.sos.alert',
+                roles: [ROLES.SUPER_ADMIN_MASTER, ROLES.ADMIN, ROLES.MANAGER],
+            },
         ],
     },
 ]

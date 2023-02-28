@@ -66,19 +66,13 @@
                     <span v-else-if="props.column.field === 'note'">
                         {{ props.formattedRow[props.column.field] }}
                     </span>
-                    <span v-else-if="props.column.field === 'account'">
+                    <span v-else-if="props.column.field === 'account' || props.column.field === 'client' || props.column.field === 'site'">
                         {{ props.formattedRow[props.column.field]?.name }}
                     </span>
                     <span v-else-if="props.column.field === 'geolocation'">
                         <span v-if="props.formattedRow[props.column.field]?.latitude && props.formattedRow[props.column.field]?.longitude">
                             {{ 'Lat: ' + props.formattedRow[props.column.field]?.latitude + ' Lng: ' + props.formattedRow[props.column.field]?.longitude }}
                         </span>
-                    </span>
-                    <span v-else-if="props.column.field === 'client'">
-                        {{ props.formattedRow[props.column.field]?.name }}
-                    </span>
-                    <span v-else-if="props.column.field === 'site'">
-                        {{ props.formattedRow[props.column.field]?.name }}
                     </span>
                     <span v-else-if="props.column.field === 'createDate'">
                         {{ formatDate(props.formattedRow[props.column.field]) }}

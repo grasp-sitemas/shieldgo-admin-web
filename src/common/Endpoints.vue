@@ -25,6 +25,7 @@ export default {
         delete: `${domain}/api/company/events/delete/v1/`,
         attendances: {
             filter: `${domain}/api/users/attendances/filter/v1/`,
+
             attendance: `${domain}/api/users/attendances/v1/`,
         },
     },

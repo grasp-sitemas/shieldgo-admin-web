@@ -1,6 +1,6 @@
 <script>
-import Common from '../../../../common/Common.vue'
-import Services from '../../../../common/Services.vue'
+import Common from '../../../common/Common.vue'
+import Services from '../../../common/Services.vue'
 import moment from 'moment'
 
 export default {
@@ -23,14 +23,14 @@ export default {
             }
 
             if (!payload.isSuperAdminMaster) {
-                payload.columns.splice(6, 1)
+                payload.columns.splice(4, 1)
             }
 
-            payload.jsonFields = payload.JSON_FIELDS_CSV.incompletedPatrolPoints[payload.$i18n.locale].json_fields
-            payload.jsonData = [payload.JSON_FIELDS_CSV.incompletedPatrolPoints[payload.$i18n.locale].json_data]
-            payload.jsonMeta = [payload.JSON_FIELDS_CSV.incompletedPatrolPoints[payload.$i18n.locale].json_meta]
-            payload.filename = payload.JSON_FIELDS_CSV.incompletedPatrolPoints[payload.$i18n.locale].filename
-            payload.jsonTitle = payload.JSON_FIELDS_CSV.incompletedPatrolPoints[payload.$i18n.locale].title
+            payload.jsonFields = payload.JSON_FIELDS_CSV.sosAlert[payload.$i18n.locale].json_fields
+            payload.jsonData = [payload.JSON_FIELDS_CSV.sosAlert[payload.$i18n.locale].json_data]
+            payload.jsonMeta = [payload.JSON_FIELDS_CSV.sosAlert[payload.$i18n.locale].json_meta]
+            payload.filename = payload.JSON_FIELDS_CSV.sosAlert[payload.$i18n.locale].filename
+            payload.jsonTitle = payload.JSON_FIELDS_CSV.sosAlert[payload.$i18n.locale].title
             payload.pdfHeader = payload.PDF_HEADER[payload.$i18n.locale]
 
             payload.role = role
@@ -42,7 +42,7 @@ export default {
             this.isSearchLoading = true
             this.items = []
 
-            const results = await Services.filterReports(this, this.filters)
+            const results = await Services.sosAlerts(this, this.filters)
 
             this.items = results?.tableItems
             this.reportItems = results?.reportItems
@@ -52,11 +52,18 @@ export default {
         async initTable() {
             this.columns = [
                 {
-                    label: this.$t('str.table.reports.column.patrolPoint'),
-                    field: 'patrolPoint',
+                    label: this.$t('str.table.reports.column.date'),
+                    field: 'date',
                     width: '10%',
                     sortable: true,
-                    firstSortType: 'desc',
+                    thClass: 'text-nowrap',
+                    tdClass: 'text-nowrap',
+                },
+                {
+                    label: this.$t('str.table.reports.column.geolocation'),
+                    field: 'geolocation',
+                    width: '10%',
+                    sortable: true,
                     thClass: 'text-nowrap',
                     tdClass: 'text-nowrap',
                 },
@@ -65,44 +72,17 @@ export default {
                     field: 'event',
                     width: '10%',
                     sortable: true,
-                    firstSortType: 'desc',
                     thClass: 'text-nowrap',
                     tdClass: 'text-nowrap',
                 },
                 {
-                    label: this.$t('str.table.reports.column.vigilant'),
-                    field: 'vigilant',
-                    width: '10%',
-                    sortable: true,
-                    firstSortType: 'desc',
-                    thClass: 'text-nowrap',
-                    tdClass: 'text-nowrap',
-                },
-                {
-                    label: this.$t('str.table.reports.column.starts.in'),
-                    field: 'startDate',
+                    label: this.$t('str.table.reports.column.attendance'),
+                    field: 'attendance',
                     width: '10%',
                     sortable: true,
                     tdClass: 'text-nowrap',
                     thClass: 'text-nowrap',
                 },
-                {
-                    label: this.$t('str.table.reports.column.ends.in'),
-                    field: 'endDate',
-                    width: '10%',
-                    sortable: true,
-                    tdClass: 'text-nowrap',
-                    thClass: 'text-nowrap',
-                },
-                {
-                    label: this.$t('str.table.reports.column.scanned.date'),
-                    field: 'scannedDate',
-                    width: '10%',
-                    sortable: true,
-                    tdClass: 'text-nowrap',
-                    thClass: 'text-nowrap',
-                },
-
                 {
                     label: this.$t('str.table.reports.column.account'),
                     field: 'account',
@@ -158,7 +138,7 @@ export default {
                 vigilant: '',
                 startDate: moment().utc(true),
                 endDate: moment().utc(true),
-                report: 'PATROL_POINTS_INCOMPLETED',
+                report: 'SOS_ALERTS',
             }
             this.items = []
             this.initRangeDate()

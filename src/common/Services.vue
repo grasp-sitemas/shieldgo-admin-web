@@ -340,8 +340,35 @@ export default {
         return []
     },
     sosAlerts: async function (state, filters) {
-        console.log(filters)
-        console.log(state)
+        const response = await Request.do(state, 'POST', Request.getDefaultHeader(state), filters, `${Endpoints.reports.filter}`)
+        const results = response?.data?.results
+
+        if (results?.length > 0) {
+            const flattenedItems = results.reduce((acc, item) => {
+                const items = item.items.reduce((acc, i) => {
+                    return [
+                        ...acc,
+                        {
+                            date: i.date ? moment(i.date).utc(false).format('DD-MM-YYYY HH:mm:ss') : '',
+                            vigilant: i.vigilant,
+                            geolocation: i.geolocation,
+                            event: i.event,
+                            attendance: i.attendance,
+                            account: i.account,
+                            client: i.client,
+                            site: i.site,
+                        },
+                    ]
+                }, [])
+                return [...acc, ...items]
+            }, [])
+
+            return {
+                tableItems: flattenedItems,
+                reportItems: results,
+            }
+        }
+        return []
     },
     filterReports: async function (state, filters) {
         switch (filters?.report) {

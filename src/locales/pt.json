@@ -1077,5 +1077,23 @@
     "DAILY": "Diário",
     "WEEKLY": "Semanal",
     "MONTHLY": "Mensal",
-    "str.table.reports.column.scanned.date": "Data da leitura"
+    "str.table.reports.column.scanned.date": "Data da leitura",
+    "str.sidebar.menu.reports.sos.alert": "Alertas de SOS",
+    "str.sidebar.menu.reports.sos.alert.description": "Alertas de SOS",
+    "str.table.reports.column.geolocation": "Geolocalização",
+    "str.table.reports.column.date": "Data",
+    "str.table.reports.column.attendance": "Atendimento",
+    "str.attendance.opened.at": "Aberto em",
+    "str.attendance.closed.at": "Fechado em",
+    "str.yes": "Sim",
+    "str.no": "Não",
+    "str.attendance": "Atendimento",
+    "str.attendance.opened": "Aberto",
+    "str.attendance.closed": "Fechado",
+    "str.attendance.closed.by": "Fechado por",
+    "str.attendance.closed.by.operator": "Operador",
+    "OPENED": "Aberto",
+    "CLOSED": "Fechado",
+    "str.total.alerts": "Total de alertas"
+
 }

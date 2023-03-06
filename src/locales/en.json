@@ -1088,5 +1088,15 @@
     "str.sidebar.menu.reports.sos.alert": "SOS alerts",
     "str.sidebar.menu.reports.sos.alert.description":  "SOS alerts",
     "str.attendance.opened.at": "Opened at",
-    "str.attendance.closed.at": "Closed at"
+    "str.attendance.closed.at": "Closed at",
+    "str.yes": "Yes",
+    "str.no": "No",
+    "str.attendance": "Attendance",
+    "str.attendance.opened": "Opened",
+    "str.attendance.closed": "Closed",
+    "str.attendance.closed.by": "Closed by",
+    "str.attendance.closed.by.operator": "Closed by operator",
+    "OPENED": "Opened",
+    "CLOSED": "Closed",
+    "str.total.alerts": "Total alerts"
 }       

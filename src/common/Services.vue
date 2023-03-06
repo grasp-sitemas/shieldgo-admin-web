@@ -363,9 +363,6 @@ export default {
                 return [...acc, ...items]
             }, [])
 
-            console.log(flattenedItems)
-            console.log(results)
-
             return {
                 tableItems: flattenedItems,
                 reportItems: results,

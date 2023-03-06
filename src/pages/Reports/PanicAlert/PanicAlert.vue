@@ -137,10 +137,10 @@
                             <span v-if="props.formattedRow[props.column.field].operator">
                                 {{ props.formattedRow[props.column.field].operator }}
                             </span>
-                            <p v-if="props.formattedRow[props.column.field].openedDate">
+                            <p v-if="props.formattedRow[props.column.field].openedDate" class="m-0">
                                 {{ $t('str.attendance.opened.at') + ': ' + formatDate(props.formattedRow[props.column.field].openedDate) }}
                             </p>
-                            <p v-if="props.formattedRow[props.column.field].closedDate">
+                            <p v-if="props.formattedRow[props.column.field].closedDate" class="m-0">
                                 {{ $t('str.attendance.closed.at') + ': ' + formatDate(props.formattedRow[props.column.field].closedDate) }}
                             </p>
                         </span>
@@ -167,7 +167,7 @@ import Controller from './CrtPanicAlert.vue'
 import { DATE_RANGE_CONFIG } from '../../../utils/date'
 // import CsvDownload from '../../Components/CsvDownload.vue'
 // import XlsDownload from '../../Components/XlsDownload.vue'
-import PdfDownload from '../Components/PdfDownload.vue'
+import PdfDownload from './Components/PdfDownload.vue'
 import Vue from 'vue'
 import { JSON_FIELDS_CSV } from './Utils/jsonFieldsCsv'
 import { PDF_HEADER } from './Utils/jsonFieldsPdf'

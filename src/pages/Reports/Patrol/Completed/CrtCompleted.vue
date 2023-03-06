@@ -23,7 +23,7 @@ export default {
             }
 
             if (!payload.isSuperAdminMaster) {
-                payload.columns.splice(4, 1)
+                payload.columns.splice(6, 1)
             }
 
             payload.jsonFields = payload.JSON_FIELDS_CSV.completedPatrolPoints[payload.$i18n.locale].json_fields

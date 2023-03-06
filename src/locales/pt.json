@@ -1084,5 +1084,16 @@
     "str.table.reports.column.date": "Data",
     "str.table.reports.column.attendance": "Atendimento",
     "str.attendance.opened.at": "Aberto em",
-    "str.attendance.closed.at": "Fechado em"
+    "str.attendance.closed.at": "Fechado em",
+    "str.yes": "Sim",
+    "str.no": "Não",
+    "str.attendance": "Atendimento",
+    "str.attendance.opened": "Aberto",
+    "str.attendance.closed": "Fechado",
+    "str.attendance.closed.by": "Fechado por",
+    "str.attendance.closed.by.operator": "Operador",
+    "OPENED": "Aberto",
+    "CLOSED": "Fechado",
+    "str.total.alerts": "Total de alertas"
+
 }

@@ -53,8 +53,10 @@ export default {
                 return {
                     vigilant: item.vigilant ? String(item.vigilant) : ' ',
                     date: item?.date ? String(item.date) : ' ',
-                    geolocation: String(item.geolocation.latitude ? 'Lat: ' + item.geolocation.latitude + ' - ' : ' ') + String(item.geolocation.longitude ? 'Lng: ' + item.geolocation.longitude : ' '),
-                    deviceInfo: item.deviceInfo ? String(item.deviceInfo?.brand) + ' - ' + String(item.deviceInfo?.model) : ' ',
+                    latitude: item.geolocation?.latitude ? String(item.geolocation.latitude) : ' ',
+                    longitude: item.geolocation?.longitude ? String(item.geolocation.longitude) : ' ',
+                    deviceInfoBrand: item.deviceInfo?.brand ? String(item.deviceInfo.brand) : ' ',
+                    deviceInfoModel: item.deviceInfo?.model ? String(item.deviceInfo.model) : ' ',
                     isAttendance: item?.attendance?.isAttendance ? this.$t('str.yes') : this.$t('str.no'),
                     attendanceStatus: item?.attendance?.status ? this.$t(item.attendance.status) : ' ',
                     operator: item.attendance?.operator ? String(item.attendance?.operator) : ' ',
@@ -65,8 +67,6 @@ export default {
                     site: item.site ? String(item.site) : ' ',
                 }
             })
-
-            console.log('this.csvItems', this.csvItems)
 
             this.isSearchLoading = false
         },

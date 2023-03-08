@@ -31,6 +31,7 @@ export default {
             payload.jsonMeta = [payload.JSON_FIELDS_CSV.sosAlert[payload.$i18n.locale].json_meta]
             payload.filename = payload.JSON_FIELDS_CSV.sosAlert[payload.$i18n.locale].filename
             payload.jsonTitle = payload.JSON_FIELDS_CSV.sosAlert[payload.$i18n.locale].title
+            payload.pdfTitle = payload.JSON_FIELDS_CSV.sosAlert[payload.$i18n.locale].pdfTitle
             payload.pdfHeader = payload.PDF_HEADER[payload.$i18n.locale]
 
             payload.role = role
@@ -44,8 +45,28 @@ export default {
 
             const results = await Services.sosAlerts(this, this.filters)
 
-            this.items = results?.tableItems
+            const items = results?.tableItems
+            this.items = items
             this.reportItems = results?.reportItems
+
+            this.csvItems = items.map(item => {
+                return {
+                    vigilant: item.vigilant ? String(item.vigilant) : ' ',
+                    date: item?.date ? String(item.date) : ' ',
+                    geolocation: String(item.geolocation.latitude ? 'Lat: ' + item.geolocation.latitude + ' - ' : ' ') + String(item.geolocation.longitude ? 'Lng: ' + item.geolocation.longitude : ' '),
+                    deviceInfo: item.deviceInfo ? String(item.deviceInfo?.brand) + ' - ' + String(item.deviceInfo?.model) : ' ',
+                    isAttendance: item?.attendance?.isAttendance ? this.$t('str.yes') : this.$t('str.no'),
+                    attendanceStatus: item?.attendance?.status ? this.$t(item.attendance.status) : ' ',
+                    operator: item.attendance?.operator ? String(item.attendance?.operator) : ' ',
+                    openedDate: item.attendance?.openedDate ? String(item.attendance?.openedDate) : ' ',
+                    closedDate: item.attendance?.closedDate ? String(item.attendance?.closedDate) : ' ',
+                    account: item.account ? String(item.account) : ' ',
+                    client: item.client ? String(item.client) : ' ',
+                    site: item.site ? String(item.site) : ' ',
+                }
+            })
+
+            console.log('this.csvItems', this.csvItems)
 
             this.isSearchLoading = false
         },

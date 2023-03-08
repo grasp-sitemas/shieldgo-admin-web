@@ -219,15 +219,6 @@ export default {
                 },
             }
         },
-        selectItem(params) {
-            const data = JSON.parse(JSON.stringify(params.row))
-
-            delete data.vgt_id
-            delete data.originalIndex
-
-            this.selectedItem = data
-            this.$bvModal.show('infoItemModal')
-        },
         changeAccount: async function () {
             const account = this.filters.account
 

@@ -50,21 +50,29 @@ export default {
             this.reportItems = results?.reportItems
 
             this.csvItems = items.map(item => {
+                const latitude = item.geolocation?.latitude ? String(item.geolocation.latitude) : ' '
+                const longitude = item.geolocation?.longitude ? String(item.geolocation.longitude) : ' '
+                const brand = item.deviceInfo?.brand ? String(item.deviceInfo.brand) : ' '
+                const model = item.deviceInfo?.model ? String(item.deviceInfo.model) : ' '
+                const isAttendance = item?.attendance?.isAttendance ? this.$t('str.yes') : this.$t('str.no')
+                const attendanceStatus = item?.attendance?.status ? this.$t(item.attendance.status) : ' '
+                const openedDate = item?.attendance?.openedDate && item?.attendance?.openedDate?.length > 0 ? moment(item.attendance.openedDate).format('DD/MM/YYYY HH:mm:ss') : ' '
+                const closedDate = item?.attendance?.closedDate && item?.attendance?.closedDate?.length > 0 ? moment(item.attendance.closedDate).format('DD/MM/YYYY HH:mm:ss') : ' '
                 return {
-                    vigilant: item.vigilant ? String(item.vigilant) : ' ',
-                    date: item?.date ? String(item.date) : ' ',
-                    latitude: item.geolocation?.latitude ? String(item.geolocation.latitude) : ' ',
-                    longitude: item.geolocation?.longitude ? String(item.geolocation.longitude) : ' ',
-                    deviceInfoBrand: item.deviceInfo?.brand ? String(item.deviceInfo.brand) : ' ',
-                    deviceInfoModel: item.deviceInfo?.model ? String(item.deviceInfo.model) : ' ',
-                    isAttendance: item?.attendance?.isAttendance ? this.$t('str.yes') : this.$t('str.no'),
-                    attendanceStatus: item?.attendance?.status ? this.$t(item.attendance.status) : ' ',
-                    operator: item.attendance?.operator ? String(item.attendance?.operator) : ' ',
-                    openedDate: item.attendance?.openedDate ? String(item.attendance?.openedDate) : ' ',
-                    closedDate: item.attendance?.closedDate ? String(item.attendance?.closedDate) : ' ',
-                    account: item.account ? String(item.account) : ' ',
-                    client: item.client ? String(item.client) : ' ',
-                    site: item.site ? String(item.site) : ' ',
+                    vigilant: item.vigilant,
+                    date: item.date,
+                    latitude: latitude,
+                    longitude: longitude,
+                    deviceInfoBrand: brand,
+                    deviceInfoModel: model,
+                    isAttendance: isAttendance,
+                    attendanceStatus: attendanceStatus,
+                    operator: item.attendance?.operator,
+                    openedDate: openedDate,
+                    closedDate: closedDate,
+                    account: item.account,
+                    client: item.client,
+                    site: item.site,
                 }
             })
 

@@ -34,7 +34,7 @@ export const JSON_FIELDS_CSV = {
                 ],
             ],
             title: 'Rondas não realizadas - Pontos de ronda não visitados',
-            filename: 'rondas_nao_realizadas_' + moment().format('DD-MM-YYYY'),
+            filename: 'rondas_nao_realizadas_' + moment().format('DD/MM/YYYY'),
         },
         en: {
             json_fields: {
@@ -68,7 +68,7 @@ export const JSON_FIELDS_CSV = {
                 ],
             ],
             title: 'Missed patrols - Patrol points not visited',
-            filename: 'missed_patrols_' + moment().format('DD-MM-YYYY'),
+            filename: 'missed_patrols_' + moment().format('DD/MM/YYYY'),
         },
     },
 }

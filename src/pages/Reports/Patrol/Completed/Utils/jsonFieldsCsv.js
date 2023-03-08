@@ -36,7 +36,7 @@ export const JSON_FIELDS_CSV = {
                 ],
             ],
             title: 'Rondas concluídas - Pontos de ronda visitados',
-            filename: 'rondas_concluidas_' + moment().format('DD-MM-YYYY'),
+            filename: 'rondas_concluidas_' + moment().format('DD/MM/YYYY'),
         },
         en: {
             json_fields: {

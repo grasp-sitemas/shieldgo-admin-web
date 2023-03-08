@@ -315,12 +315,12 @@ export default {
                                     patrolPoint: action.patrolPoint?.name,
                                     event: schedule.name,
                                     vigilant: i.vigilant,
-                                    scannedDate: action.date ? moment(action.date).utc(false).format('DD-MM-YYYY HH:mm:ss') : '',
+                                    scannedDate: action.date ? moment(action.date).utc(false).format('DD/MM/YYYY HH:mm:ss') : '',
                                     account: item.name,
                                     client: i.client,
                                     site: i.site,
-                                    startDate: moment(i.startDate).utc(false).format('DD-MM-YYYY HH:mm:ss'),
-                                    endDate: moment(i.endDate).utc(false).format('DD-MM-YYYY HH:mm:ss'),
+                                    startDate: moment(i.startDate).utc(false).format('DD/MM/YYYY HH:mm:ss'),
+                                    endDate: moment(i.endDate).utc(false).format('DD/MM/YYYY HH:mm:ss'),
                                     frequency: schedule.frequency,
                                 })),
                             ]
@@ -349,7 +349,7 @@ export default {
                     return [
                         ...acc,
                         {
-                            date: i.date ? moment(i.date).utc(false).format('DD-MM-YYYY HH:mm:ss') : '',
+                            date: i.date ? moment(i.date).utc(false).format('DD/MM/YYYY HH:mm:ss') : '',
                             vigilant: i.vigilant,
                             geolocation: i.geolocation,
                             event: i.event,

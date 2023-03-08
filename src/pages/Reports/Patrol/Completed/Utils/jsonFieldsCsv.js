@@ -10,6 +10,7 @@ export const JSON_FIELDS_CSV = {
                 'Data de início': 'startDate',
                 'Data fim': 'endDate',
                 'Data da leitura': 'scannedDate',
+                Empresa: 'account',
                 Cliente: 'client',
                 Local: 'site',
             },
@@ -21,6 +22,7 @@ export const JSON_FIELDS_CSV = {
                     startDate: '',
                     endDate: '',
                     scannedDate: '',
+                    account: '',
                     client: '',
                     site: '',
                 },
@@ -34,7 +36,7 @@ export const JSON_FIELDS_CSV = {
                 ],
             ],
             title: 'Rondas concluídas - Pontos de ronda visitados',
-            filename: 'rondas_concluidas_' + moment().format('YYYY-MM-DD'),
+            filename: 'rondas_concluidas_' + moment().format('DD-MM-YYYY'),
         },
         en: {
             json_fields: {
@@ -44,7 +46,8 @@ export const JSON_FIELDS_CSV = {
                 'Start date': 'startDate',
                 'End date': 'endDate',
                 'Scanned date': 'scannedDate',
-                Account: 'client',
+                Account: 'account',
+                Client: 'client',
                 Local: 'site',
             },
             json_data: [
@@ -55,6 +58,7 @@ export const JSON_FIELDS_CSV = {
                     startDate: '',
                     endDate: '',
                     scannedDate: '',
+                    account: '',
                     client: '',
                     site: '',
                 },

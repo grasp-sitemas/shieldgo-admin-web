@@ -354,6 +354,7 @@ export default {
                             geolocation: i.geolocation,
                             event: i.event,
                             attendance: i.attendance,
+                            deviceInfo: i.deviceInfo,
                             account: i.account,
                             client: i.client,
                             site: i.site,

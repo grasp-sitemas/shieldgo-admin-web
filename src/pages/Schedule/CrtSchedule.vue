@@ -95,7 +95,7 @@ export default {
             this.calendarOptions.locale = locale
         },
         handleDateClick: function (arg) {
-            this.selectedDate = new Date(arg.dateStr).toLocaleDateString()
+            this.selectedDate = moment(arg.dateStr).format('YYYY-MM-DD')
             this.$bvModal.show('createScheduleModal')
         },
         getAppintmentById: function (id) {

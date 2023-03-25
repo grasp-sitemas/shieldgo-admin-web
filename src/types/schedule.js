@@ -20,7 +20,7 @@ export const schedule = {
     beginHour: '',
     endHour: '',
     sendAlert: false,
-    notifyVigilants: false,
+    notifyVigilants: true,
     timeSlot: 15,
     type: 'FREE-PROGRAM',
     status: 'ACTIVE',

@@ -1619,3 +1619,15 @@ body .daterangepicker.show-ranges.ltr .ranges, body .daterangepicker.show-ranges
 
     }
 }
+
+.app-sidebar .menu .menu-profile .menu-profile-cover 
+{
+    background-position: center;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-repeat: no-repeat;
+    background-size: cover;
+}

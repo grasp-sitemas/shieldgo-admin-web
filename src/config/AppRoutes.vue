@@ -27,6 +27,7 @@ import Timeline from '../pages/Timeline/Timeline.vue'
 import User from '../pages/User/User/User.vue'
 import Vigilant from '../pages/User/Vigilant/Vigilant.vue'
 import sosAlert from '../pages/Reports/PanicAlert/PanicAlert.vue'
+import IncidentReport from '../pages/Reports/Incident/Incident.vue'
 
 Vue.use(VueSession)
 
@@ -227,6 +228,14 @@ const routes = [
         path: '/reports/sos-alert',
         name: 'sos-alert',
         component: sosAlert,
+        beforeEnter: (_to, _from, next) => {
+            next(checkSession())
+        },
+    },
+    {
+        path: '/reports/incident',
+        name: 'incident',
+        component: IncidentReport,
         beforeEnter: (_to, _from, next) => {
             next(checkSession())
         },

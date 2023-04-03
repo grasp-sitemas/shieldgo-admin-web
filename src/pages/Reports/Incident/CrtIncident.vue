@@ -26,12 +26,12 @@ export default {
                 payload.columns.splice(4, 1)
             }
 
-            payload.jsonFields = payload.JSON_FIELDS_CSV.sosAlert[payload.$i18n.locale].json_fields
-            payload.jsonData = [payload.JSON_FIELDS_CSV.sosAlert[payload.$i18n.locale].json_data]
-            payload.jsonMeta = [payload.JSON_FIELDS_CSV.sosAlert[payload.$i18n.locale].json_meta]
-            payload.filename = payload.JSON_FIELDS_CSV.sosAlert[payload.$i18n.locale].filename
-            payload.jsonTitle = payload.JSON_FIELDS_CSV.sosAlert[payload.$i18n.locale].title
-            payload.pdfTitle = payload.JSON_FIELDS_CSV.sosAlert[payload.$i18n.locale].pdfTitle
+            payload.jsonFields = payload.JSON_FIELDS_CSV.incident[payload.$i18n.locale].json_fields
+            payload.jsonData = [payload.JSON_FIELDS_CSV.incident[payload.$i18n.locale].json_data]
+            payload.jsonMeta = [payload.JSON_FIELDS_CSV.incident[payload.$i18n.locale].json_meta]
+            payload.filename = payload.JSON_FIELDS_CSV.incident[payload.$i18n.locale].filename
+            payload.jsonTitle = payload.JSON_FIELDS_CSV.incident[payload.$i18n.locale].title
+            payload.pdfTitle = payload.JSON_FIELDS_CSV.incident[payload.$i18n.locale].pdfTitle
             payload.pdfHeader = payload.PDF_HEADER[payload.$i18n.locale]
 
             payload.role = role
@@ -41,7 +41,7 @@ export default {
     methods: {
         async filter() {
             this.items = []
-            const results = await Services.sosAlerts(this, this.filters)
+            const results = await Services.incidents(this, this.filters)
 
             const { tableItems, reportItems } = results
 
@@ -171,7 +171,7 @@ export default {
                 vigilant: '',
                 startDate: moment().utc(true),
                 endDate: moment().utc(true),
-                report: 'SOS_ALERTS',
+                report: 'INCIDENTS',
             }
             this.items = []
             this.initRangeDate()

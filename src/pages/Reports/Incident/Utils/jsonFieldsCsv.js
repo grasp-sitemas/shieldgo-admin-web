@@ -1,0 +1,98 @@
+import moment from 'moment'
+
+export const JSON_FIELDS_CSV = {
+    incident: {
+        pt: {
+            json_fields: {
+                Vigilante: 'vigilant',
+                Data: 'date',
+                Latitude: 'latitude',
+                Longitude: 'longitude',
+                'Marca aparelho': 'deviceInfoBrand',
+                'Modelo aparelho': 'deviceInfoModel',
+                Atendido: 'isAttendance',
+                Status: 'attendanceStatus',
+                Operador: 'operator',
+                Abertura: 'openedDate',
+                Fechamento: 'closedDate',
+                Cliente: 'client',
+                Local: 'site',
+            },
+            json_data: [
+                {
+                    vigilant: '',
+                    date: '',
+                    latitude: '',
+                    longitude: '',
+                    deviceInfoBrand: '',
+                    deviceInfoModel: '',
+                    isAttendance: '',
+                    attendanceStatus: '',
+                    operator: '',
+                    openedDate: '',
+                    closedDate: '',
+                    client: '',
+                    site: '',
+                },
+            ],
+            json_meta: [
+                [
+                    {
+                        key: 'charset',
+                        value: 'utf-8',
+                    },
+                ],
+            ],
+            pdfTitle: 'Incidentes',
+            title: 'Incidentes - ' + 'Relatório gerado em: ' + moment().format('DD/MM/YYYY') + ' às ' + moment().format('HH:mm:ss'),
+            filename: 'incidentes_' + moment().format('DD/MM/YYYY'),
+        },
+        en: {
+            json_fields: {
+                Vigilant: 'vigilant',
+                Date: 'date',
+                Latitude: 'latitude',
+                Longitude: 'longitude',
+                'Device brand': 'deviceInfoBrand',
+                'Device model': 'deviceInfoModel',
+                Attendance: 'isAttendance',
+                Status: 'attendanceStatus',
+                Operator: 'operator',
+                Opened: 'openedDate',
+                Closed: 'closedDate',
+                Account: 'account',
+                Client: 'client',
+                Local: 'site',
+            },
+            json_data: [
+                {
+                    vigilant: '',
+                    date: '',
+                    latitude: '',
+                    longitude: '',
+                    deviceInfoBrand: '',
+                    deviceInfoModel: '',
+                    isAttendance: '',
+                    attendanceStatus: '',
+                    operator: '',
+                    openedDate: '',
+                    closedDate: '',
+                    account: '',
+                    client: '',
+                    site: '',
+                },
+            ],
+            json_meta: [
+                [
+                    {
+                        key: 'charset',
+                        value: 'utf-8',
+                    },
+                ],
+            ],
+            pdfTitle: 'Incidents Report',
+            title: 'Incidents - ' + 'Report generated on: ' + moment().format('MM/DD/YYYY') + ' at ' + moment().format('HH:mm:ss'),
+            filename: 'incidents_' + moment().format('YYYY-MM-DD'),
+        },
+    },
+}

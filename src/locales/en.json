@@ -1101,5 +1101,11 @@
     "str.total.alerts": "Total alerts",
     "str.table.reports.column.date": "Date",
     "str.table.reports.column.geolocation": "Geolocation",
-    "str.table.reports.column.attendance": "Attendance"
+    "str.table.reports.column.attendance": "Attendance",
+    "str.sidebar.menu.reports.incidents": "Incidents",
+    "str.sidebar.menu.reports.incident.description": "Incidents",
+    "str.table.reports.column.priority": "Priority",
+    "str.client": "Client",
+    "str.period": "Period",
+    "str.total.incidents": "Total incidents"
 }       

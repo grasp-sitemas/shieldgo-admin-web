@@ -1094,6 +1094,11 @@
     "str.attendance.closed.by.operator": "Operador",
     "OPENED": "Aberto",
     "CLOSED": "Fechado",
-    "str.total.alerts": "Total de alertas"
-
+    "str.total.alerts": "Total de alertas",
+    "str.sidebar.menu.reports.incidents": "Incidentes",
+    "str.sidebar.menu.reports.incident.description": "Incidentes",
+    "str.table.reports.column.priority": "Prioridade",
+    "str.client": "Cliente",
+    "str.period": "Período",
+    "str.total.incidents": "Total de incidentes"
 }

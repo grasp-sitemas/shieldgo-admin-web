@@ -4,8 +4,8 @@ export const JSON_FIELDS_CSV = {
     incident: {
         pt: {
             json_fields: {
-                Vigilante: 'vigilant',
                 Data: 'date',
+                Vigilante: 'vigilant',
                 Latitude: 'latitude',
                 Longitude: 'longitude',
                 'Marca aparelho': 'deviceInfoBrand',
@@ -15,13 +15,16 @@ export const JSON_FIELDS_CSV = {
                 Operador: 'operator',
                 Abertura: 'openedDate',
                 Fechamento: 'closedDate',
+                Foto: 'photoURL',
+                Assinatura: 'signatureURL',
                 Cliente: 'client',
                 Local: 'site',
             },
             json_data: [
                 {
-                    vigilant: '',
                     date: '',
+                    vigilant: '',
+                    event: '',
                     latitude: '',
                     longitude: '',
                     deviceInfoBrand: '',
@@ -31,6 +34,8 @@ export const JSON_FIELDS_CSV = {
                     operator: '',
                     openedDate: '',
                     closedDate: '',
+                    photoURL: '',
+                    signatureURL: '',
                     client: '',
                     site: '',
                 },
@@ -49,20 +54,21 @@ export const JSON_FIELDS_CSV = {
         },
         en: {
             json_fields: {
-                Vigilant: 'vigilant',
                 Date: 'date',
+                Vigilant: 'vigilant',
                 Latitude: 'latitude',
                 Longitude: 'longitude',
                 'Device brand': 'deviceInfoBrand',
                 'Device model': 'deviceInfoModel',
-                Attendance: 'isAttendance',
+                Attended: 'isAttendance',
                 Status: 'attendanceStatus',
                 Operator: 'operator',
                 Opened: 'openedDate',
                 Closed: 'closedDate',
-                Account: 'account',
+                Photo: 'photoURL',
+                Signature: 'signatureURL',
                 Client: 'client',
-                Local: 'site',
+                Site: 'site',
             },
             json_data: [
                 {
@@ -77,7 +83,8 @@ export const JSON_FIELDS_CSV = {
                     operator: '',
                     openedDate: '',
                     closedDate: '',
-                    account: '',
+                    photoURL: '',
+                    signatureURL: '',
                     client: '',
                     site: '',
                 },

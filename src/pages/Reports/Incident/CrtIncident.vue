@@ -2,6 +2,8 @@
 import Common from '../../../common/Common.vue'
 import Services from '../../../common/Services.vue'
 import moment from 'moment'
+import Endpoints from '../../../common/Endpoints.vue'
+const domain = Endpoints.domain
 
 export default {
     init: async payload => {
@@ -61,9 +63,12 @@ export default {
                     const attendanceStatus = item?.attendance?.status ? this.$t(item.attendance.status) : ' '
                     const openedDate = item?.attendance?.openedDate && item?.attendance?.openedDate?.length > 0 ? moment(item.attendance.openedDate).format('DD/MM/YYYY HH:mm:ss') : ' '
                     const closedDate = item?.attendance?.closedDate && item?.attendance?.closedDate?.length > 0 ? moment(item.attendance.closedDate).format('DD/MM/YYYY HH:mm:ss') : ' '
+                    const photoURL = item?.photoURL ? domain + item.photoURL : ' '
+                    const signatureURL = item?.signatureURL ? domain + item.signatureURL : ' '
+
                     return {
-                        vigilant: item.vigilant,
                         date: item.date,
+                        vigilant: item.vigilant,
                         latitude: latitude,
                         longitude: longitude,
                         deviceInfoBrand: brand,
@@ -73,7 +78,8 @@ export default {
                         operator: item.attendance?.operator,
                         openedDate: openedDate,
                         closedDate: closedDate,
-                        account: item.account,
+                        photoURL: photoURL,
+                        signatureURL: signatureURL,
                         client: item.client,
                         site: item.site,
                     }

@@ -1,21 +1,18 @@
 export const PDF_HEADER = {
     pt: [
+        // {
+        //     _id: 'site',
+        //     name: 'Local',
+        // },
         {
-            _id: 'client',
-            name: 'Cliente',
-        },
-        {
-            _id: 'site',
-            name: 'Local',
+            _id: 'date',
+            name: 'Data',
         },
         {
             _id: 'vigilant',
             name: 'Vigilante',
         },
-        {
-            _id: 'date',
-            name: 'Data',
-        },
+
         // {
         //     _id: 'geolocation',
         //     name: 'Geolocalização',
@@ -54,21 +51,17 @@ export const PDF_HEADER = {
         },
     ],
     en: [
+        // {
+        //     _id: 'site',
+        //     name: 'Local',
+        // },
         {
-            _id: 'client',
-            name: 'Client',
-        },
-        {
-            _id: 'site',
-            name: 'Local',
+            _id: 'date',
+            name: 'Date',
         },
         {
             _id: 'vigilant',
             name: 'Vigilant',
-        },
-        {
-            _id: 'date',
-            name: 'Date',
         },
         // {
         //     _id: 'geolocation',

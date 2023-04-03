@@ -8,10 +8,10 @@
 <script>
 import moment from 'moment'
 import jsPDF from 'jspdf'
-import Endpoints from '../../../../common/Endpoints.vue'
 import axios from 'axios'
+import Endpoints from '../../../../common/Endpoints.vue'
 const domain = Endpoints.domain
-import 'jspdf-autotable'
+
 export default {
     props: {
         jsonData: {
@@ -66,19 +66,20 @@ export default {
 
             let headers = createHeaders(this.headers)
 
-            let renderImagePromises = []
-
             async function generateData(items, state) {
                 const results = []
 
-                items.forEach(item => {
+                for (const item of items) {
+                    const photoBase64 = item?.photoURL && item?.photoURL !== 'https://' ? await getBase64Image(domain + String(item.photoURL)) : null
+                    const signatureBase64 = item?.signatureURL && item.signatureURL !== 'https://' ? await getBase64Image(domain + String(item.signatureURL)) : null
+
                     const newItem = {
                         _id: String(item._id),
                         account: String(item.account),
                         client: String(item.client),
                         site: String(item.site),
                         vigilant: String(item.vigilant),
-                        date: String(item.date),
+                        date: item.date ? moment(item.date).utc(false).format('DD/MM/YYYY HH:mm:ss') : ' ',
                         event: item?.event ? String(item.event?.name) : ' ',
                         geolocation: item.geolocation ? String(item.geolocation.latitude) + ' - ' + String(item.geolocation.longitude) : ' ',
                         deviceInfo: item.deviceInfo ? String(item.deviceInfo?.brand) + ' - ' + String(item.deviceInfo?.model) : ' ',
@@ -87,22 +88,25 @@ export default {
                         operator: item?.attendance?.operator ? String(item?.attendance?.operator) : ' ',
                         openedDate: item?.attendance?.openedDate ? moment(item?.attendance?.openedDate).utc(false).format('DD/MM/YYYY HH:mm:ss') : ' ',
                         closedDate: item?.attendance?.closedDate ? moment(item?.attendance?.closedDate).utc(false).format('DD/MM/YYYY HH:mm:ss') : ' ',
-                        photoURL: item?.photoURL ? String(item.photoURL) : ' ',
-                        signatureURL: item?.signatureURL ? String(item.signatureURL) : ' ',
+                        photoURL: photoBase64,
+                        signatureURL: signatureBase64,
                     }
 
                     results.push(newItem)
-                })
+                }
                 return results
             }
 
             function createHeaders(keys) {
                 const result = []
                 for (let i = 0; i < keys.length; i += 1) {
+                    const baseWidth = 28
                     result.push({
-                        dataKey: keys[i]._id,
-                        header: keys[i].name,
-                        width: 45,
+                        id: keys[i]._id,
+                        name: keys[i]._id,
+                        prompt: keys[i].name,
+                        width: baseWidth,
+                        maxWidth: 32,
                         align: 'left',
                         padding: 0,
                     })
@@ -110,27 +114,34 @@ export default {
                 return result
             }
 
-            // function renderImageCell(doc, data) {
-            //     return new Promise(async resolve => {
-            //         const url = data.cell.raw
-            //         const { x, y } = data.cell
+            function arrayBufferToBase64(buffer) {
+                let binary = ''
+                const bytes = new Uint8Array(buffer)
+                const len = bytes.byteLength
+                for (let i = 0; i < len; i++) {
+                    binary += String.fromCharCode(bytes[i])
+                }
+                return window.btoa(binary)
+            }
 
-            //         if (url && url !== 'https://') {
-            //             try {
-            //                 const imageResponse = await axios.get(`${domain}${url}`, { responseType: 'arraybuffer' })
-            //                 console.log('imageResponseColun', imageResponse)
-            //                 const imageData = new Uint8Array(imageResponse.data)
-            //                 const imageMimeType = 'image/png'
-            //                 const imageBase64 = btoa(String.fromCharCode.apply(null, imageData))
+            async function getBase64Image(imgUrl) {
+                try {
+                    const response = await axios.get(imgUrl, { responseType: 'arraybuffer' })
+                    const mimeType = 'image/png'
 
-            //                 doc.addImage(`data:${imageMimeType};base64,${imageBase64}`, 'PNG', x, y, 40, 40)
-            //             } catch (error) {
-            //                 console.error('Error while adding image to PDF:', error)
-            //             }
-            //         }
-            //         resolve()
-            //     })
-            // }
+                    const base64 = arrayBufferToBase64(response.data)
+                    return `data:${mimeType};base64,${base64}`
+                } catch (error) {
+                    console.log(error)
+                    return null
+                }
+            }
+
+            function drawImageInCell(doc, base64Image, x, y, width, height) {
+                if (base64Image) {
+                    doc.addImage(base64Image, 'PNG', x, y, width, height)
+                }
+            }
 
             try {
                 doc.setFont('helvetica', 'bold')
@@ -151,14 +162,15 @@ export default {
                             y = 25
                         }
 
-                        // add company image logo to pdf
-                        const logoURL = item?.logoURL
-                        const logoResponse = await axios.get(`${domain}${logoURL}`, { responseType: 'arraybuffer' })
-                        console.log('logoResponse', logoResponse)
-                        const logoData = new Uint8Array(logoResponse.data)
-                        const logoMimeType = 'image/png'
-                        const logoBase64 = btoa(String.fromCharCode.apply(null, logoData))
-                        doc.addImage(`data:${logoMimeType};base64,${logoBase64}`, 'PNG', 250, 10, 20, 20)
+                        try {
+                            const logoURL = item?.logoURL
+                            const logoBase64 = await getBase64Image(`${domain}${logoURL}`)
+                            if (logoBase64) {
+                                doc.addImage(logoBase64, 'PNG', 250, 10, 20, 20)
+                            }
+                        } catch (e) {
+                            console.log('error', e)
+                        }
 
                         doc.setFontSize(12)
                         doc.setFont('helvetica', 'bold')
@@ -196,49 +208,66 @@ export default {
                                 const textWidth = (doc.getStringUnitWidth(totalAlerts) * doc.internal.getFontSize()) / doc.internal.scaleFactor
                                 const textOffset = doc.internal.pageSize.width - textWidth
                                 doc.text(totalAlerts, textOffset - 15, y)
-                                y += 4
+                                y += 15
 
                                 doc.setFontSize(6)
 
-                                const data = await generateData(client.items, this)
+                                let data = await generateData(client.items, this)
 
-                                doc.autoTable({
-                                    startY: y,
-                                    body: data,
-                                    columns: headers,
-                                    styles: { fontSize: 6, cellPadding: 1, overflow: 'linebreak' },
-                                    columnStyles: { photoURL: { cellWidth: 45 }, signatureURL: { cellWidth: 45 } },
-                                    didDrawCell: data => {
-                                        if (data.column.dataKey === 'photoURL' || data.column.dataKey === 'signatureURL') {
-                                            renderImagePromises.push(
-                                                (async () => {
-                                                    const url = data.cell.raw
-                                                    const { x, y } = data.cell
+                                // Desenhar os cabeçalhos da tabela
+                                doc.setFont('helvetica', 'bold')
+                                doc.setFontSize(10)
+                                for (let j = 0; j < headers.length; j++) {
+                                    let header = headers[j]
+                                    if (header.id === 'photoURL' || header.id === 'signatureURL') {
+                                        doc.text(header.prompt, 5 + j * header.maxWidth, y)
+                                    } else {
+                                        doc.text(header.prompt, 5 + j * header.width, y)
+                                    }
+                                }
+                                y += 10
 
-                                                    if (url && url !== 'https://') {
-                                                        try {
-                                                            const imageResponse = await axios.get(`${domain}${url}`, { responseType: 'arraybuffer' })
-                                                            console.log('imageResponseColun', imageResponse)
-                                                            const imageData = new Uint8Array(imageResponse.data)
-                                                            const imageMimeType = imageResponse.headers['content-type'] || 'image/jpeg'
-                                                            const imageFormat = imageMimeType.split('/')[1].toUpperCase()
-                                                            const imageBase64 = btoa(String.fromCharCode.apply(null, imageData))
+                                doc.setFontSize(6)
+                                doc.setFont('helvetica', 'normal')
 
-                                                            console.log('imageBase64', imageBase64)
-                                                            console.log('imageFormat', imageFormat)
-                                                            console.log('imageMimeType', imageMimeType)
+                                // Substitua doc.table() por um loop para desenhar cada célula individualmente.
+                                for (let i = 0; i < data.length; i++) {
+                                    if (i === 0) y += 20
+                                    let item = data[i]
+                                    let currentY = y + i * 50 // Ajuste a altura de cada linha para acomodar o novo tamanho das imagens
 
-                                                            doc.addImage(`data:${imageMimeType};base64,${imageBase64}`, imageFormat, x, y, 40, 40)
-                                                        } catch (error) {
-                                                            console.error('Error while adding image to PDF:', error)
-                                                        }
-                                                    }
-                                                })(),
-                                            )
+                                    // Desenhe o conteúdo de cada célula (exceto photoURL e signatureURL)
+                                    for (let j = 0; j < headers.length; j++) {
+                                        const header = headers[j]
+                                        let cellX = 5 + j * header.width
+
+                                        if (header.id !== 'photoURL' && header.id !== 'signatureURL') {
+                                            doc.text(String(item[header.id]), cellX, currentY)
                                         }
-                                    },
-                                })
-                                await Promise.all(renderImagePromises)
+                                    }
+
+                                    // Desenhe as imagens nas células correspondentes
+                                    let photoCellX =
+                                        12 +
+                                        headers
+                                            .slice(
+                                                0,
+                                                headers.findIndex(header => header.id === 'photoURL'),
+                                            )
+                                            .reduce((acc, header) => acc + header.width, 0)
+                                    let signatureCellX =
+                                        25 +
+                                        headers
+                                            .slice(
+                                                0,
+                                                headers.findIndex(header => header.id === 'signatureURL'),
+                                            )
+                                            .reduce((acc, header) => acc + header.width, 0)
+
+                                    drawImageInCell(doc, item.photoURL, photoCellX, currentY - 20, 45, 45) // Ajuste o tamanho da imagem conforme necessário
+                                    drawImageInCell(doc, item.signatureURL, signatureCellX, currentY - 20, 45, 45) // Ajuste o tamanho da imagem conforme necessário
+                                }
+
                                 y += 10
                             }
                         }

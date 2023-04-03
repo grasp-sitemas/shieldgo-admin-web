@@ -2,6 +2,8 @@
 import Common from '../../../common/Common.vue'
 import Services from '../../../common/Services.vue'
 import moment from 'moment'
+import Endpoints from '../../../common/Endpoints.vue'
+const domain = Endpoints.domain
 
 export default {
     init: async payload => {
@@ -26,12 +28,12 @@ export default {
                 payload.columns.splice(4, 1)
             }
 
-            payload.jsonFields = payload.JSON_FIELDS_CSV.sosAlert[payload.$i18n.locale].json_fields
-            payload.jsonData = [payload.JSON_FIELDS_CSV.sosAlert[payload.$i18n.locale].json_data]
-            payload.jsonMeta = [payload.JSON_FIELDS_CSV.sosAlert[payload.$i18n.locale].json_meta]
-            payload.filename = payload.JSON_FIELDS_CSV.sosAlert[payload.$i18n.locale].filename
-            payload.jsonTitle = payload.JSON_FIELDS_CSV.sosAlert[payload.$i18n.locale].title
-            payload.pdfTitle = payload.JSON_FIELDS_CSV.sosAlert[payload.$i18n.locale].pdfTitle
+            payload.jsonFields = payload.JSON_FIELDS_CSV.incident[payload.$i18n.locale].json_fields
+            payload.jsonData = [payload.JSON_FIELDS_CSV.incident[payload.$i18n.locale].json_data]
+            payload.jsonMeta = [payload.JSON_FIELDS_CSV.incident[payload.$i18n.locale].json_meta]
+            payload.filename = payload.JSON_FIELDS_CSV.incident[payload.$i18n.locale].filename
+            payload.jsonTitle = payload.JSON_FIELDS_CSV.incident[payload.$i18n.locale].title
+            payload.pdfTitle = payload.JSON_FIELDS_CSV.incident[payload.$i18n.locale].pdfTitle
             payload.pdfHeader = payload.PDF_HEADER[payload.$i18n.locale]
 
             payload.role = role
@@ -41,7 +43,7 @@ export default {
     methods: {
         async filter() {
             this.items = []
-            const results = await Services.sosAlerts(this, this.filters)
+            const results = await Services.incidents(this, this.filters)
 
             const { tableItems, reportItems } = results
 
@@ -61,9 +63,12 @@ export default {
                     const attendanceStatus = item?.attendance?.status ? this.$t(item.attendance.status) : ' '
                     const openedDate = item?.attendance?.openedDate && item?.attendance?.openedDate?.length > 0 ? moment(item.attendance.openedDate).format('DD/MM/YYYY HH:mm:ss') : ' '
                     const closedDate = item?.attendance?.closedDate && item?.attendance?.closedDate?.length > 0 ? moment(item.attendance.closedDate).format('DD/MM/YYYY HH:mm:ss') : ' '
+                    const photoURL = item?.photoURL ? domain + item.photoURL : ' '
+                    const signatureURL = item?.signatureURL ? domain + item.signatureURL : ' '
+
                     return {
-                        vigilant: item.vigilant,
                         date: item.date,
+                        vigilant: item.vigilant,
                         latitude: latitude,
                         longitude: longitude,
                         deviceInfoBrand: brand,
@@ -73,7 +78,8 @@ export default {
                         operator: item.attendance?.operator,
                         openedDate: openedDate,
                         closedDate: closedDate,
-                        account: item.account,
+                        photoURL: photoURL,
+                        signatureURL: signatureURL,
                         client: item.client,
                         site: item.site,
                     }
@@ -171,7 +177,7 @@ export default {
                 vigilant: '',
                 startDate: moment().utc(true),
                 endDate: moment().utc(true),
-                report: 'SOS_ALERTS',
+                report: 'INCIDENTS',
             }
             this.items = []
             this.initRangeDate()

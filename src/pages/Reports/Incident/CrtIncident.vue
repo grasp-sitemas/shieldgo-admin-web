@@ -66,7 +66,7 @@ export default {
                     const photoURL = item?.photoURL ? domain + item.photoURL : ' '
                     const signatureURL = item?.signatureURL ? domain + item.signatureURL : ' '
                     const event = item?.event ? item.event : ' '
-                    // const incidents = item?.incidents ? item.incidents.map(incident => incident.name).join(', ') : ' '
+                    const incidents = item?.incidents ? item.incidents.map(incident => incident.name).join(', ') : ' '
 
                     return {
                         date: item.date,
@@ -84,6 +84,7 @@ export default {
                         photoURL: photoURL,
                         signatureURL: signatureURL,
                         incidents: item?.incidents ? item.incidents : ' ',
+                        incidentsCsv: incidents,
                         client: item.client,
                         site: item.site,
                     }

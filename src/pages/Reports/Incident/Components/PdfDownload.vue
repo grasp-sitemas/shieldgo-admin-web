@@ -72,9 +72,10 @@ export default {
                 for (const item of items) {
                     const photoBase64 = item?.photoURL && item?.photoURL !== 'https://' ? await getBase64Image(domain + String(item.photoURL)) : null
                     const signatureBase64 = item?.signatureURL && item.signatureURL !== 'https://' ? await getBase64Image(domain + String(item.signatureURL)) : null
-
+                    // const incidents = item?.incidents?.length > 0 ? item?.incidents?.map(incident => state.$t(incident.name)).join(', ') : ' '
                     const newItem = {
                         _id: String(item._id),
+                        // incidents: incidents,
                         account: String(item.account),
                         client: String(item.client),
                         site: String(item.site),
@@ -149,7 +150,7 @@ export default {
 
                 doc.setTextColor('#161B22')
                 doc.setFont('helvetica', 'normal')
-                doc.setFontSize(8)
+                doc.setFontSize(7)
 
                 doc.text(this.$t('str.generated.on') + ': ' + moment().utc(true).format('DD/MM/YYYY HH:mm:ss'), 5, 15)
 

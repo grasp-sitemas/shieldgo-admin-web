@@ -1,5 +1,5 @@
 <template>
-    <download-excel class="btn btn-primary" :escapeCsv="true" :fetch="fetchData" :data="data" :fields="fields" :meta="meta" :name="name" :header="title" type="csv">
+    <download-excel class="btn btn-primary" :fetch="fetchData" :data="data" :fields="fields" :meta="meta" :name="name" :header="title" type="csv">
         <label style="cursor: pointer" class="download-csv">CSV</label>
     </download-excel>
 </template>

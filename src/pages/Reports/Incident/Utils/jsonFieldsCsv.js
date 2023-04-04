@@ -6,7 +6,7 @@ export const JSON_FIELDS_CSV = {
             json_fields: {
                 Vigilante: 'vigilant',
                 Data: 'date',
-                Incidentes: 'incidents',
+                Incidentes: 'incidentsCsv',
                 'Status de atendimento': 'attendanceStatus',
                 'Data de abertura': 'openedDate',
                 'Data de fechamento': 'closedDate',
@@ -25,7 +25,7 @@ export const JSON_FIELDS_CSV = {
                 {
                     vigilant: '',
                     date: '',
-                    incidents: '',
+                    incidentsCsv: '',
                     attendanceStatus: '',
                     openedDate: '',
                     closedDate: '',
@@ -57,7 +57,7 @@ export const JSON_FIELDS_CSV = {
             json_fields: {
                 Vigilant: 'vigilant',
                 Date: 'date',
-                Incidents: 'incidents',
+                Incidents: 'incidentsCsv',
                 'Attendance status': 'attendanceStatus',
                 'Opened date': 'openedDate',
                 'Closed date': 'closedDate',
@@ -76,7 +76,7 @@ export const JSON_FIELDS_CSV = {
                 {
                     vigilant: '',
                     date: '',
-                    incidents: '',
+                    incidentsCsv: '',
                     attendanceStatus: '',
                     openedDate: '',
                     closedDate: '',

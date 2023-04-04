@@ -350,7 +350,7 @@ export default {
                         date: item.date ? moment(item.date).utc(false).format('DD/MM/YYYY HH:mm:ss') : '',
                         vigilant: item.vigilant,
                         geolocation: item.geolocation,
-                        event: item.event,
+                        event: item?.event ? item.event.name : '',
                         incidents: item.incidents,
                         notes: item.notes,
                         soundURL: item.soundURL,

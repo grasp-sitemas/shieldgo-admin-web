@@ -1107,5 +1107,6 @@
     "str.table.reports.column.priority": "Priority",
     "str.client": "Client",
     "str.period": "Period",
-    "str.total.incidents": "Total incidents"
+    "str.total.incidents": "Total incidents",
+    "str.table.reports.column.incidents": "Incidents"
 }       

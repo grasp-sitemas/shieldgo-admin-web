@@ -25,7 +25,7 @@ export default {
             }
 
             if (!payload.isSuperAdminMaster) {
-                payload.columns.splice(4, 1)
+                payload.columns.splice(5, 1)
             }
 
             payload.jsonFields = payload.JSON_FIELDS_CSV.incident[payload.$i18n.locale].json_fields
@@ -65,10 +65,13 @@ export default {
                     const closedDate = item?.attendance?.closedDate && item?.attendance?.closedDate?.length > 0 ? moment(item.attendance.closedDate).format('DD/MM/YYYY HH:mm:ss') : ' '
                     const photoURL = item?.photoURL ? domain + item.photoURL : ' '
                     const signatureURL = item?.signatureURL ? domain + item.signatureURL : ' '
+                    const event = item?.event ? item.event : ' '
+                    // const incidents = item?.incidents ? item.incidents.map(incident => incident.name).join(', ') : ' '
 
                     return {
                         date: item.date,
                         vigilant: item.vigilant,
+                        event: event,
                         latitude: latitude,
                         longitude: longitude,
                         deviceInfoBrand: brand,
@@ -80,10 +83,12 @@ export default {
                         closedDate: closedDate,
                         photoURL: photoURL,
                         signatureURL: signatureURL,
+                        incidents: item?.incidents ? item.incidents : ' ',
                         client: item.client,
                         site: item.site,
                     }
                 })
+                console.log('csvItems', this.csvItems)
 
                 this.isSearchLoading = false
             }
@@ -95,6 +100,14 @@ export default {
                     field: 'date',
                     width: '10%',
                     sortable: true,
+                    thClass: 'text-nowrap',
+                    tdClass: 'text-nowrap',
+                },
+                {
+                    label: this.$t('str.table.reports.column.incidents'),
+                    field: 'incidents',
+                    width: '10%',
+                    sortable: false,
                     thClass: 'text-nowrap',
                     tdClass: 'text-nowrap',
                 },

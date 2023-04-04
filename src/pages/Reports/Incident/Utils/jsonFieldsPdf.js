@@ -8,6 +8,10 @@ export const PDF_HEADER = {
             _id: 'date',
             name: 'Data',
         },
+        // {
+        //     _id: 'incidents',
+        //     name: 'Incidentes',
+        // },
         {
             _id: 'vigilant',
             name: 'Vigilante',
@@ -59,6 +63,10 @@ export const PDF_HEADER = {
             _id: 'date',
             name: 'Date',
         },
+        // {
+        //     _id: 'incidents',
+        //     name: 'Incidents',
+        // },
         {
             _id: 'vigilant',
             name: 'Vigilant',

@@ -1,8 +1,10 @@
 <template>
-    <button type="submit" class="btn btn-primary is-loading" v-on:click="downloadPDF">
-        <i v-if="isLoading" class="fas fa-spinner fa-pulse" />
-        PDF
-    </button>
+    <div>
+        <button type="submit" class="btn btn-primary is-loading" v-on:click="viewPDF">
+            <i v-if="isLoading" class="fas fa-spinner fa-pulse" />
+            PDF
+        </button>
+    </div>
 </template>
 
 <script>
@@ -58,7 +60,6 @@ export default {
             let y = 25
 
             var doc = new jsPDF({ orientation: 'l', unit: 'mm', format: 'a4' })
-            let pdfName = String(this.name) + '.pdf'
 
             let headers = createHeaders(this.headers)
 
@@ -149,10 +150,43 @@ export default {
 
                 this.isLoading = false
 
-                doc.save(pdfName)
+                return new Promise(resolve => {
+                    const pdfData = doc.output('blob')
+                    resolve(pdfData)
+                })
             } catch (error) {
                 this.isLoading = false
                 console.log(error)
+            }
+        },
+        async viewPDF() {
+            try {
+                this.isLoading = true
+                const pdfData = await this.downloadPDF()
+                this.isLoading = false
+
+                // Crie uma URL a partir do Blob
+                const pdfURL = URL.createObjectURL(pdfData)
+
+                // Defina as propriedades da janela pop-up
+                const width = window.innerWidth * 0.8
+                const height = window.innerHeight * 0.8
+                const left = (window.innerWidth - width) / 2
+                const top = (window.innerHeight - height) / 2
+                const windowFeatures = `width=${width},height=${height},left=${left},top=${top},scrollbars=yes,toolbar=yes,menubar=no,location=no,status=yes`
+
+                // Abra uma nova janela pop-up com o PDF
+                const previewWindow = window.open(pdfURL, '_blank', windowFeatures)
+
+                // Adicione um listener para fechar a janela pop-up quando o documento for impresso ou o usuário cancelar
+                if (previewWindow) {
+                    previewWindow.print = function () {
+                        previewWindow.close()
+                    }
+                }
+            } catch (error) {
+                this.isLoading = false
+                console.error(error)
             }
         },
     },

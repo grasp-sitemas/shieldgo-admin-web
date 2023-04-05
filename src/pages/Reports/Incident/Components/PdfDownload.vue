@@ -1,10 +1,11 @@
 <template>
-    <button type="submit" class="btn btn-primary is-loading" v-on:click="downloadPDF">
-        <i v-if="isLoading" class="fas fa-spinner fa-pulse" />
-        PDF
-    </button>
+    <div>
+        <button type="submit" class="btn btn-primary is-loading" v-on:click="viewPDF">
+            <i v-if="isLoading" class="fas fa-spinner fa-pulse" />
+            PDF
+        </button>
+    </div>
 </template>
-
 <script>
 import moment from 'moment'
 import jsPDF from 'jspdf'
@@ -62,7 +63,7 @@ export default {
             let y = 25
 
             var doc = new jsPDF({ orientation: 'l', unit: 'mm', format: 'a4' })
-            let pdfName = String(this.name) + '.pdf'
+            // let pdfName = String(this.name) + '.pdf'
 
             let headers = createHeaders(this.headers)
 
@@ -72,10 +73,8 @@ export default {
                 for (const item of items) {
                     const photoBase64 = item?.photoURL && item?.photoURL !== 'https://' ? await getBase64Image(domain + String(item.photoURL)) : null
                     const signatureBase64 = item?.signatureURL && item.signatureURL !== 'https://' ? await getBase64Image(domain + String(item.signatureURL)) : null
-                    // const incidents = item?.incidents?.length > 0 ? item?.incidents?.map(incident => state.$t(incident.name)).join(', ') : ' '
                     const newItem = {
                         _id: String(item._id),
-                        // incidents: incidents,
                         account: String(item.account),
                         client: String(item.client),
                         site: String(item.site),
@@ -277,12 +276,92 @@ export default {
 
                 this.isLoading = false
 
-                doc.save(pdfName)
+                return new Promise(resolve => {
+                    const pdfData = doc.output('blob')
+                    resolve(pdfData)
+                })
             } catch (error) {
                 this.isLoading = false
                 console.log(error)
             }
         },
+        async viewPDF() {
+            try {
+                this.isLoading = true
+                const pdfData = await this.downloadPDF()
+                this.isLoading = false
+
+                // Crie uma URL a partir do Blob
+                const pdfURL = URL.createObjectURL(pdfData)
+
+                // Defina as propriedades da janela pop-up
+                const width = window.innerWidth * 0.8
+                const height = window.innerHeight * 0.8
+                const left = (window.innerWidth - width) / 2
+                const top = (window.innerHeight - height) / 2
+                const windowFeatures = `width=${width},height=${height},left=${left},top=${top},scrollbars=yes,toolbar=yes,menubar=no,location=no,status=yes`
+
+                // Abra uma nova janela pop-up com o PDF
+                const previewWindow = window.open(pdfURL, '_blank', windowFeatures)
+
+                // Adicione um listener para fechar a janela pop-up quando o documento for impresso ou o usuário cancelar
+                if (previewWindow) {
+                    previewWindow.print = function () {
+                        previewWindow.close()
+                    }
+                }
+            } catch (error) {
+                this.isLoading = false
+                console.error(error)
+            }
+        },
     },
 }
 </script>
+<style scoped>
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1;
+    left: 8%;
+    top: 5;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.4);
+}
+
+.modal-content {
+    margin: 8% auto;
+    padding: 0px;
+    border: 1px solid #888;
+    width: 80%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+x.iframe-container {
+    position: relative;
+    width: 100%;
+    height: 100%;
+}
+
+.close {
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    background-color: transparent;
+    border: none;
+    color: #aaa;
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.close:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}
+</style>

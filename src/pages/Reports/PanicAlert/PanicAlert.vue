@@ -85,7 +85,7 @@
             </div>
 
             <div class="row">
-                <div class="col-md-12 mb-3">
+                <div class="col-md-12 mb-3 d-inline-flex">
                     <CsvDownload class="me-2" v-show="csvItems?.length > 0" :jsonFields="jsonFields" :jsonData="csvItems" :jsonMeta="jsonMeta" :filename="filename" :jsonTitle="jsonTitle" />
                     <XlsDownload class="me-2" v-show="csvItems?.length > 0" :jsonFields="jsonFields" :jsonData="csvItems" :jsonMeta="jsonMeta" :filename="filename" :jsonTitle="jsonTitle" />
                     <PdfDownload v-show="items?.length > 0" :pdfHeader="pdfHeader" :jsonData="reportItems" :filename="filename" :jsonTitle="pdfTitle" />

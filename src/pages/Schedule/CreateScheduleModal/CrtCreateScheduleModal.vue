@@ -149,8 +149,11 @@ export default {
                     delete this.data.frequencyMonth
                 }
 
-                // this.data.beginDate = this.data.beginDate
-                // this.data.endDate = this.data.endDate
+                this.data.beginDate = this.data.beginDate + 'T' + this.data.beginHour + ':00.000Z'
+                this.data.endDate = this.data.endDate + 'T' + this.data.endHour + ':00.000Z'
+
+                console.log('begin data' + this.data.beginDate)
+                console.log('endhour' + this.data.endDate)
 
                 await this.save()
             }

@@ -62,10 +62,7 @@ export default {
             let items = this.data
             let y = 25
 
-            var doc = new jsPDF({ orientation: 'l', unit: 'mm', format: 'a4' })
-            // let pdfName = String(this.name) + '.pdf'
-
-            let headers = createHeaders(this.headers)
+            var doc = new jsPDF({ orientation: 'p', unit: 'mm', format: 'a4' })
 
             async function generateData(items, state) {
                 const results = []
@@ -88,6 +85,7 @@ export default {
                         operator: item?.attendance?.operator ? String(item?.attendance?.operator) : ' ',
                         openedDate: item?.attendance?.openedDate ? moment(item?.attendance?.openedDate).utc(false).format('DD/MM/YYYY HH:mm:ss') : ' ',
                         closedDate: item?.attendance?.closedDate ? moment(item?.attendance?.closedDate).utc(false).format('DD/MM/YYYY HH:mm:ss') : ' ',
+                        notes: item?.notes ? String(item?.notes) : ' ',
                         photoURL: photoBase64,
                         signatureURL: signatureBase64,
                     }
@@ -95,23 +93,6 @@ export default {
                     results.push(newItem)
                 }
                 return results
-            }
-
-            function createHeaders(keys) {
-                const result = []
-                for (let i = 0; i < keys.length; i += 1) {
-                    const baseWidth = 28
-                    result.push({
-                        id: keys[i]._id,
-                        name: keys[i]._id,
-                        prompt: keys[i].name,
-                        width: baseWidth,
-                        maxWidth: 32,
-                        align: 'left',
-                        padding: 0,
-                    })
-                }
-                return result
             }
 
             function arrayBufferToBase64(buffer) {
@@ -136,8 +117,7 @@ export default {
                     return null
                 }
             }
-
-            function drawImageInCell(doc, base64Image, x, y, width, height) {
+            async function drawImageInCell(doc, base64Image, x, y, width, height) {
                 if (base64Image) {
                     doc.addImage(base64Image, 'PNG', x, y, width, height)
                 }
@@ -145,21 +125,21 @@ export default {
 
             try {
                 doc.setFont('helvetica', 'bold')
-                doc.text(this.title.toUpperCase(), 5, 10)
+                doc.text(this.$t('str.incident.report').toUpperCase(), 5, 10)
 
                 doc.setTextColor('#161B22')
                 doc.setFont('helvetica', 'normal')
-                doc.setFontSize(7)
+                doc.setFontSize(8)
 
-                doc.text(this.$t('str.generated.on') + ': ' + moment().utc(true).format('DD/MM/YYYY HH:mm:ss'), 5, 15)
+                doc.text(this.$t('str.generated.on').toUpperCase() + ': ' + moment().utc(true).format('DD/MM/YYYY HH:mm:ss'), 5, 15)
 
                 for (let i = 0; i < items.length; i++) {
                     let item = items[i]
 
                     if (item?.clients?.length > 0) {
                         if (i > 0) {
-                            doc.addPage('a4', 'l')
-                            y = 25
+                            doc.addPage('a4', 'p')
+                            y = 20
                         }
 
                         try {
@@ -172,103 +152,128 @@ export default {
                             console.log('error', e)
                         }
 
-                        doc.setFontSize(12)
-                        doc.setFont('helvetica', 'bold')
-                        doc.text(String(item.account).toUpperCase(), 5, y)
-                        y += 4
-
                         doc.setFontSize(8)
                         doc.setFont('helvetica', 'normal')
-                        const address = item.address.address + ', ' + item.address.number + ', ' + item.address.neighborhood + ', ' + item.address.city + ' - ' + item.address.state
-                        doc.text(address, 5, y)
+
+                        const startDate = item?.startDate ? moment(item.startDate).utc(false).format('DD/MM/YYYY') : ' '
+                        const endDate = item?.endDate ? moment(item.endDate).utc(false).format('DD/MM/YYYY') : ' '
+                        doc.text(`${this.$t('str.period').toUpperCase()}: ${startDate} - ${endDate}`, 5, y)
+
                         y += 10
 
                         for (let j = 0; j < item.clients.length; j++) {
                             const client = item.clients[j]
 
-                            if (client?.items?.length > 0) {
-                                if (j > 0) {
-                                    doc.addPage('a4', 'l')
-                                    y = 25
-                                }
+                            if (j > 0) {
+                                doc.addPage('a4', 'p')
+                                y = 25
+                            }
 
-                                doc.setFontSize(12)
-                                doc.setFont('helvetica', 'bold')
-                                doc.text(`${this.$t('str.client').toUpperCase()}: ${client.name}`, 5, y)
-                                y += 4
+                            doc.setFontSize(12)
+                            doc.setFont('helvetica', 'bold')
+                            doc.text(`${this.$t('str.client').toUpperCase()}: ${client.name}`, 5, y)
+                            y += 10
 
-                                doc.setFontSize(8)
-                                doc.setFont('helvetica', 'normal')
+                            if (client?.sites?.length > 0) {
+                                for (let k = 0; k < client.sites.length; k++) {
+                                    const site = client.sites[k]
 
-                                const startDate = item?.startDate ? moment(item.startDate).utc(false).format('DD/MM/YYYY') : ' '
-                                const endDate = item?.endDate ? moment(item.endDate).utc(false).format('DD/MM/YYYY') : ' '
-                                doc.text(`${this.$t('str.period').toUpperCase()}: ${startDate} - ${endDate}`, 5, y)
+                                    doc.setFontSize(12)
+                                    doc.setFont('helvetica', 'bold')
+                                    doc.text(`${this.$t('str.site').toUpperCase()}: ${site.name}`, 5, y)
+                                    y += 4
 
-                                const totalAlerts = this.$t('str.total.incidents') + ': ' + client?.items?.length
-                                const textWidth = (doc.getStringUnitWidth(totalAlerts) * doc.internal.getFontSize()) / doc.internal.scaleFactor
-                                const textOffset = doc.internal.pageSize.width - textWidth
-                                doc.text(totalAlerts, textOffset - 15, y)
-                                y += 15
+                                    doc.setFontSize(8)
+                                    doc.setFont('helvetica', 'normal')
+                                    const address = site.address.address + ', ' + site.address.number + ', ' + site.address.neighborhood + ', ' + site.address.city + ' - ' + site.address.state
+                                    doc.text(address, 5, y)
+                                    y += 10
 
-                                doc.setFontSize(6)
+                                    const totalAlerts = this.$t('str.total.incidents') + ': ' + site?.items?.length
+                                    const textWidth = (doc.getStringUnitWidth(totalAlerts) * doc.internal.getFontSize()) / doc.internal.scaleFactor
+                                    const textOffset = doc.internal.pageSize.width - textWidth
+                                    doc.text(totalAlerts, textOffset - 15, y)
+                                    y += 5
 
-                                let data = await generateData(client.items, this)
+                                    doc.setFontSize(6)
 
-                                // Desenhar os cabeçalhos da tabela
-                                doc.setFont('helvetica', 'bold')
-                                doc.setFontSize(10)
-                                for (let j = 0; j < headers.length; j++) {
-                                    let header = headers[j]
-                                    if (header.id === 'photoURL' || header.id === 'signatureURL') {
-                                        doc.text(header.prompt, 5 + j * header.maxWidth, y)
-                                    } else {
-                                        doc.text(header.prompt, 5 + j * header.width, y)
-                                    }
-                                }
-                                y += 10
+                                    let data = await generateData(site.items, this)
 
-                                doc.setFontSize(6)
-                                doc.setFont('helvetica', 'normal')
+                                    // Substitua doc.table() por um loop para desenhar cada célula individualmente.
+                                    for (let i = 0; i < data.length; i++) {
+                                        const item = data[i]
 
-                                // Substitua doc.table() por um loop para desenhar cada célula individualmente.
-                                for (let i = 0; i < data.length; i++) {
-                                    if (i === 0) y += 20
-                                    let item = data[i]
-                                    let currentY = y + i * 50 // Ajuste a altura de cada linha para acomodar o novo tamanho das imagens
-
-                                    // Desenhe o conteúdo de cada célula (exceto photoURL e signatureURL)
-                                    for (let j = 0; j < headers.length; j++) {
-                                        const header = headers[j]
-                                        let cellX = 5 + j * header.width
-
-                                        if (header.id !== 'photoURL' && header.id !== 'signatureURL') {
-                                            doc.text(String(item[header.id]), cellX, currentY)
+                                        // Adicione este trecho para verificar se é necessário adicionar uma nova página
+                                        if (y + 5 >= doc.internal.pageSize.height - 20) {
+                                            doc.addPage('a4', 'p')
+                                            y = 20
                                         }
+
+                                        y += 5
+                                        doc.setFontSize(8)
+                                        doc.setFont('helvetica', 'bold')
+                                        doc.text(`${this.$t('str.incident.date')}`, 5, y)
+                                        doc.text(`${this.$t('str.incident.photo')}`, 110, y)
+                                        doc.text(`${this.$t('str.incident.signature')}`, 155, y)
+
+                                        doc.setFont('helvetica', 'normal')
+                                        doc.text(item.date, 40, y)
+
+                                        await drawImageInCell(doc, item.photoURL, 90, y + 5, 45, 45)
+                                        await drawImageInCell(doc, item.signatureURL, 145, y + 5, 45, 45)
+
+                                        y += 5
+
+                                        doc.setFont('helvetica', 'bold')
+                                        doc.text(`${this.$t('str.incident.vigilant')}`, 5, y)
+                                        doc.setFont('helvetica', 'normal')
+                                        doc.text(item.vigilant, 40, y)
+
+                                        y += 5
+
+                                        doc.setFont('helvetica', 'bold')
+                                        doc.text(`${this.$t('str.incident.attendance')}`, 5, y)
+                                        doc.setFont('helvetica', 'normal')
+                                        doc.text(item.isAttendance, 40, y)
+                                        y += 5
+
+                                        doc.setFont('helvetica', 'bold')
+                                        doc.text(`${this.$t('str.incident.status')}`, 5, y)
+                                        doc.setFont('helvetica', 'normal')
+                                        doc.text(item.attendanceStatus, 40, y)
+                                        y += 5
+
+                                        doc.setFont('helvetica', 'bold')
+                                        doc.text(`${this.$t('str.incident.operator')}`, 5, y)
+                                        doc.setFont('helvetica', 'normal')
+                                        doc.text(item.operator, 40, y)
+                                        y += 5
+
+                                        doc.setFont('helvetica', 'bold')
+                                        doc.text(`${this.$t('str.incident.opened.date')}`, 5, y)
+                                        doc.setFont('helvetica', 'normal')
+                                        doc.text(item.openedDate, 40, y)
+                                        y += 5
+
+                                        doc.setFont('helvetica', 'bold')
+                                        doc.text(`${this.$t('str.incident.closed.date')}`, 5, y)
+                                        doc.setFont('helvetica', 'normal')
+                                        doc.text(item.closedDate, 40, y)
+                                        y += 5
+
+                                        doc.setFont('helvetica', 'bold')
+                                        doc.text(`${this.$t('str.incident.notes')}`, 5, y)
+                                        doc.setFont('helvetica', 'normal')
+
+                                        // se o notes passar de 50 caracteres, quebra a linha
+                                        doc.text(item.notes, 40, y, {
+                                            maxWidth: 90,
+                                            align: 'justify',
+                                        })
+
+                                        y += 30
                                     }
-
-                                    // Desenhe as imagens nas células correspondentes
-                                    let photoCellX =
-                                        12 +
-                                        headers
-                                            .slice(
-                                                0,
-                                                headers.findIndex(header => header.id === 'photoURL'),
-                                            )
-                                            .reduce((acc, header) => acc + header.width, 0)
-                                    let signatureCellX =
-                                        25 +
-                                        headers
-                                            .slice(
-                                                0,
-                                                headers.findIndex(header => header.id === 'signatureURL'),
-                                            )
-                                            .reduce((acc, header) => acc + header.width, 0)
-
-                                    drawImageInCell(doc, item.photoURL, photoCellX, currentY - 20, 45, 45) // Ajuste o tamanho da imagem conforme necessário
-                                    drawImageInCell(doc, item.signatureURL, signatureCellX, currentY - 20, 45, 45) // Ajuste o tamanho da imagem conforme necessário
                                 }
-
-                                y += 10
                             }
                         }
                     }

@@ -345,27 +345,35 @@ export default {
 
         if (results?.length > 0) {
             const flattenedItems = results.reduce((acc, account) => {
-                const accountItems = account.clients.reduce((clientAcc, client) => {
-                    const items = client.items.map(item => ({
-                        date: item.date ? moment(item.date).utc(false).format('DD/MM/YYYY HH:mm:ss') : '',
-                        vigilant: item.vigilant,
-                        geolocation: item.geolocation,
-                        event: item?.event ? item.event.name : '',
-                        incidents: item.incidents,
-                        notes: item.notes,
-                        soundURL: item.soundURL,
-                        photoURL: item.photoURL,
-                        signatureURL: item.signatureURL,
-                        account: account.account,
-                        client: client.name,
-                        site: item.site,
-                        attendance: item.attendance,
-                        deviceInfo: item.deviceInfo,
-                        status: item.status,
-                    }))
-                    return [...clientAcc, ...items]
+                const items = account.clients.reduce((acc, client) => {
+                    console.log(client)
+                    return [
+                        ...acc,
+                        ...client?.sites.reduce((acc, site) => {
+                            return [
+                                ...acc,
+                                ...site?.items.map(item => ({
+                                    date: item.date ? moment(item.date).utc(false).format('DD/MM/YYYY HH:mm:ss') : '',
+                                    vigilant: item.vigilant,
+                                    geolocation: item.geolocation,
+                                    event: item?.event ? item.event.name : '',
+                                    incidents: item.incidents,
+                                    notes: item.notes,
+                                    soundURL: item.soundURL,
+                                    photoURL: item.photoURL,
+                                    signatureURL: item.signatureURL,
+                                    account: account.account,
+                                    client: client.name,
+                                    site: site.name,
+                                    attendance: item.attendance,
+                                    deviceInfo: item.deviceInfo,
+                                    status: item.status,
+                                })),
+                            ]
+                        }, []),
+                    ]
                 }, [])
-                return [...acc, ...accountItems]
+                return [...acc, ...items]
             }, [])
 
             return {
@@ -373,7 +381,6 @@ export default {
                 reportItems: results,
             }
         }
-        return []
     },
     sosAlerts: async function (state, filters) {
         const response = await Request.do(state, 'POST', Request.getDefaultHeader(state), filters, `${Endpoints.reports.filter}`)

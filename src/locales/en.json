@@ -1108,5 +1108,20 @@
     "str.client": "Client",
     "str.period": "Period",
     "str.total.incidents": "Total incidents",
-    "str.table.reports.column.incidents": "Incidents"
+    "str.table.reports.column.incidents": "Incidents",
+    "header.megaMenu.reports": "Relatórios",
+    "str.site": "Local",
+    "str.incident.report": "Incident report",
+    "str.incident.date": "Date",
+    "str.incident.vigilant": "Guard",
+    "str.incident.attendance": "Attendance",
+    "str.incident.status": "Status",
+    "str.incident.priority": "Priority",
+    "str.incident.operator": "Operator",
+    "str.incident.opened.date": "Abertura",
+    "str.incident.closed.date": "Fechamento",
+    "str.incident.notes": "Notes",
+    "str.incident.photo": "Photo",
+    "str.incident.signature": "Assinatura"
+
 }       

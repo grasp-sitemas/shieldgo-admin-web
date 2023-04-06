@@ -53,6 +53,10 @@ export const PDF_HEADER = {
             _id: 'signatureURL',
             name: 'Assinatura',
         },
+        {
+            _id: 'notes',
+            name: 'Notas',
+        },
     ],
     en: [
         // {
@@ -106,6 +110,10 @@ export const PDF_HEADER = {
         {
             _id: 'signatureURL',
             name: 'Signature',
+        },
+        {
+            _id: 'notes',
+            name: 'Notes',
         },
     ],
 }

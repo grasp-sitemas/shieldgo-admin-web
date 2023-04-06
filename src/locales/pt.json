@@ -1101,6 +1101,20 @@
     "str.client": "Cliente",
     "str.period": "Período",
     "str.total.incidents": "Total de incidentes",
-    "str.table.reports.column.incidents": "Incidentes"
+    "str.table.reports.column.incidents": "Incidentes",
+    "header.megaMenu.reports": "Relatórios",
+    "str.site": "Local",
+    "str.incident.report": "Relatório de incidentes",
+    "str.incident.date": "Data",
+    "str.incident.vigilant": "Vigilante",
+    "str.incident.attendance": "Atendimento",
+    "str.incident.status": "Status",
+    "str.incident.priority": "Prioridade",
+    "str.incident.operator": "Operador",
+    "str.incident.opened.date": "Abertura",
+    "str.incident.closed.date": "Fechamento",
+    "str.incident.notes": "Notas",
+    "str.incident.photo": "Foto",
+    "str.incident.signature": "Assinatura"
 
 }

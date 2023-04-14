@@ -1122,6 +1122,9 @@
     "str.incident.closed.date": "Fechamento",
     "str.incident.notes": "Notes",
     "str.incident.photo": "Photo",
-    "str.incident.signature": "Assinatura"
-
+    "str.incident.signature": "Assinatura",
+    "str.sidebar.menu.reports.missed.calls": "Events Missed calls",
+    "str.sidebar.menu.reports.missed.call.description": "Events Missed calls",
+    "str.total.missed.calls": "Total missed calls",
+    "str.table.reports.column.type": "Type"
 }       

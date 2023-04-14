@@ -59,7 +59,7 @@ export default {
             let items = this.data
             let y = 25
 
-            var doc = new jsPDF({ orientation: 'l', unit: 'mm', format: 'a4' })
+            var doc = new jsPDF({ orientation: 'p', unit: 'mm', format: 'a4' })
 
             let headers = createHeaders(this.headers)
 
@@ -69,18 +69,14 @@ export default {
                 items.forEach(item => {
                     const newItem = {
                         _id: String(item._id),
+                        date: String(item.date),
+                        vigilant: String(item.vigilant),
+                        type: item?.type ? state.$t(item.type) : ' ',
+                        event: item?.event ? String(item.event?.name) : ' ',
                         account: String(item.account),
                         client: String(item.client),
                         site: String(item.site),
-                        vigilant: String(item.vigilant),
-                        date: String(item.date),
-                        event: item?.event ? String(item.event?.name) : ' ',
-                        deviceInfo: item.deviceInfo ? String(item.deviceInfo?.brand) + ' - ' + String(item.deviceInfo?.model) : ' ',
-                        isAttendance: item?.attendance?.isAttendance ? state.$t('str.yes') : state.$t('str.no'),
-                        attendanceStatus: item?.attendance?.status ? state.$t(item.attendance.status) : ' ',
-                        operator: item?.attendance?.operator ? String(item?.attendance?.operator) : ' ',
-                        openedDate: item?.attendance?.openedDate ? moment(item?.attendance?.openedDate).utc(false).format('DD/MM/YYYY HH:mm:ss') : ' ',
-                        closedDate: item?.attendance?.closedDate ? moment(item?.attendance?.closedDate).utc(false).format('DD/MM/YYYY HH:mm:ss') : ' ',
+                        notes: item?.notes ? String(item.notes) : ' ',
                     }
 
                     results.push(newItem)
@@ -105,46 +101,75 @@ export default {
 
             try {
                 doc.setFont('helvetica', 'bold')
-                doc.text(this.title.toUpperCase(), 5, 10)
+                doc.text(this.report, 5, 10)
 
                 doc.setTextColor('#161B22')
                 doc.setFont('helvetica', 'normal')
                 doc.setFontSize(8)
 
-                doc.text(this.$t('str.generated.on') + ': ' + moment().utc(true).format('DD/MM/YYYY HH:mm:ss'), 5, 15)
+                doc.text(this.$t('str.generated.on').toUpperCase() + ': ' + moment().utc(true).format('DD/MM/YYYY HH:mm:ss'), 5, 15)
 
                 for (let i = 0; i < items.length; i++) {
                     let item = items[i]
 
-                    if (i > 0) {
-                        doc.addPage('a4', 'l')
-                        y = 25
+                    if (item?.clients?.length > 0) {
+                        if (i > 0) {
+                            doc.addPage('a4', 'p')
+                            y = 20
+                        }
+
+                        doc.setFontSize(8)
+                        doc.setFont('helvetica', 'normal')
+
+                        const startDate = item?.startDate ? moment(item.startDate).utc(false).format('DD/MM/YYYY') : ' '
+                        const endDate = item?.endDate ? moment(item.endDate).utc(false).format('DD/MM/YYYY') : ' '
+                        doc.text(`${this.$t('str.period').toUpperCase()}: ${startDate} - ${endDate}`, 5, y)
+
+                        y += 10
+
+                        for (let j = 0; j < item.clients.length; j++) {
+                            const client = item.clients[j]
+
+                            if (j > 0) {
+                                doc.addPage('a4', 'p')
+                                y = 25
+                            }
+
+                            doc.setFontSize(12)
+                            doc.setFont('helvetica', 'bold')
+                            doc.text(`${this.$t('str.client').toUpperCase()}: ${client.name}`, 5, y)
+                            y += 10
+
+                            if (client?.sites?.length > 0) {
+                                for (let k = 0; k < client.sites.length; k++) {
+                                    const site = client.sites[k]
+
+                                    doc.setFontSize(12)
+                                    doc.setFont('helvetica', 'bold')
+                                    doc.text(`${this.$t('str.site').toUpperCase()}: ${site.name}`, 5, y)
+                                    y += 4
+
+                                    doc.setFontSize(8)
+                                    doc.setFont('helvetica', 'normal')
+                                    const address = site.address.address + ', ' + site.address.number + ', ' + site.address.neighborhood + ', ' + site.address.city + ' - ' + site.address.state
+                                    doc.text(address, 5, y)
+                                    y += 10
+
+                                    const total = this.$t('str.total.missed.calls') + ': ' + site?.items?.length
+                                    const textWidth = (doc.getStringUnitWidth(total) * doc.internal.getFontSize()) / doc.internal.scaleFactor
+                                    const textOffset = doc.internal.pageSize.width - textWidth
+                                    doc.text(total, textOffset - 15, y)
+                                    y += 5
+
+                                    doc.setFontSize(6)
+
+                                    let data = await generateData(site.items, this)
+                                    doc.table(5, y, data, headers, { autoSize: true, fontSize: 6, printHeaders: true, margin: { top: 0, left: 0, right: 0, bottom: 0 } })
+                                    y += 10
+                                }
+                            }
+                        }
                     }
-
-                    doc.setFontSize(12)
-                    doc.setFont('helvetica', 'bold')
-                    doc.text(String(item.account).toUpperCase(), 5, y)
-                    y += 4
-
-                    doc.setFontSize(8)
-                    doc.setFont('helvetica', 'normal')
-
-                    const totalAlerts = this.$t('str.total.alerts') + ': ' + item?.items?.length
-                    const textWidth = (doc.getStringUnitWidth(totalAlerts) * doc.internal.getFontSize()) / doc.internal.scaleFactor
-                    const textOffset = doc.internal.pageSize.width - textWidth
-                    doc.text(totalAlerts, textOffset - 15, y)
-
-                    const address = item.address.address + ', ' + item.address.number + ', ' + item.address.neighborhood + ', ' + item.address.city + ' - ' + item.address.state
-                    doc.text(address, 5, y)
-
-                    y += 10
-
-                    doc.setFontSize(6)
-
-                    let data = await generateData(item.items, this)
-                    doc.table(5, y, data, headers, { autoSize: true, fontSize: 6, printHeaders: true, margin: { top: 0, left: 0, right: 0, bottom: 0 } })
-
-                    y += 10
                 }
 
                 this.isLoading = false

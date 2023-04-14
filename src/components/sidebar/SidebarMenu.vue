@@ -68,6 +68,11 @@ const sidebarMenu = [
                 roles: [ROLES.SUPER_ADMIN_MASTER, ROLES.ADMIN, ROLES.MANAGER],
             },
             {
+                path: '/reports/missing-call',
+                title: 'str.sidebar.menu.reports.missed.calls',
+                roles: [ROLES.SUPER_ADMIN_MASTER, ROLES.ADMIN, ROLES.MANAGER],
+            },
+            {
                 path: '/reports/sos-alert',
                 title: 'str.sidebar.menu.reports.sos.alert',
                 roles: [ROLES.SUPER_ADMIN_MASTER, ROLES.ADMIN, ROLES.MANAGER],

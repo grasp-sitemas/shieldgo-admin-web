@@ -382,6 +382,45 @@ export default {
             }
         }
     },
+    missedCall: async function (state, filters) {
+        const response = await Request.do(state, 'POST', Request.getDefaultHeader(state), filters, `${Endpoints.reports.filter}`)
+        const results = response?.data?.results
+
+        if (results?.length > 0) {
+            const flattenedItems = results.reduce((acc, account) => {
+                const items = account.clients.reduce((acc, client) => {
+                    console.log(client)
+                    return [
+                        ...acc,
+                        ...client?.sites.reduce((acc, site) => {
+                            return [
+                                ...acc,
+                                ...site?.items.map(item => ({
+                                    date: item.date ? moment(item.date).utc(false).format('DD/MM/YYYY HH:mm:ss') : '',
+                                    vigilant: item.vigilant,
+                                    type: item?.type ? state.$t(item.type) : '',
+                                    event: item?.event ? item.event.name : '',
+                                    incidents: item.incidents,
+                                    notes: item.notes,
+                                    account: account.account,
+                                    client: client.name,
+                                    site: site.name,
+                                    deviceInfo: item.deviceInfo,
+                                    status: item.status,
+                                })),
+                            ]
+                        }, []),
+                    ]
+                }, [])
+                return [...acc, ...items]
+            }, [])
+
+            return {
+                tableItems: flattenedItems,
+                reportItems: results,
+            }
+        }
+    },
     sosAlerts: async function (state, filters) {
         const response = await Request.do(state, 'POST', Request.getDefaultHeader(state), filters, `${Endpoints.reports.filter}`)
         const results = response?.data?.results

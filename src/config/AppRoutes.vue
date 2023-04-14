@@ -28,6 +28,7 @@ import User from '../pages/User/User/User.vue'
 import Vigilant from '../pages/User/Vigilant/Vigilant.vue'
 import sosAlert from '../pages/Reports/PanicAlert/PanicAlert.vue'
 import IncidentReport from '../pages/Reports/Incident/Incident.vue'
+import MisssingCallReport from '../pages/Reports//Event/MissedCall/MissedCall.vue'
 
 Vue.use(VueSession)
 
@@ -236,6 +237,14 @@ const routes = [
         path: '/reports/incident',
         name: 'incident',
         component: IncidentReport,
+        beforeEnter: (_to, _from, next) => {
+            next(checkSession())
+        },
+    },
+    {
+        path: '/reports/missing-call',
+        name: 'missing-call',
+        component: MisssingCallReport,
         beforeEnter: (_to, _from, next) => {
             next(checkSession())
         },

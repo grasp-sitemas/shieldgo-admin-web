@@ -17,10 +17,6 @@ export const PDF_HEADER = {
             name: 'Data',
         },
         {
-            _id: 'geolocation',
-            name: 'Geolocalização',
-        },
-        {
             _id: 'deviceInfo',
             name: 'Dispositivo',
         },
@@ -61,10 +57,6 @@ export const PDF_HEADER = {
         {
             _id: 'date',
             name: 'Date',
-        },
-        {
-            _id: 'geolocation',
-            name: 'Geolocation',
         },
         {
             _id: 'deviceInfo',

@@ -1115,6 +1115,9 @@
     "str.incident.closed.date": "Fechamento",
     "str.incident.notes": "Notas",
     "str.incident.photo": "Foto",
-    "str.incident.signature": "Assinatura"
-
+    "str.incident.signature": "Assinatura",
+    "str.sidebar.menu.reports.missed.calls": "Eventos não atendidos",
+    "str.sidebar.menu.reports.missed.call.description": "Eventos não atendidos",
+    "str.total.missed.calls": "Total de eventos",
+    "str.table.reports.column.type": "Tipo"
 }

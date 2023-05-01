@@ -4,7 +4,7 @@
             <div class="d-flex align-items-center mb-3">
                 <h1 class="page-header mb-0">{{ $t('str.form.title.monitor') }}</h1>
             </div>
-            <!-- <div class="row">
+            <div class="row">
                 <div class="col-md-12 mb-3 p-3">
                     <div id="accordion" class="accordion rounded overflow-hidden">
                         <b-card class="bg-gray-800 text-white border-0 rounded-0" no-body>
@@ -54,7 +54,7 @@
                         </b-card>
                     </div>
                 </div>
-            </div> -->
+            </div>
             <div class="row">
                 <div class="col-xl-4 col-lg-6">
                     <panel :title="$t('str.events.title')">

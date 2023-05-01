@@ -6,10 +6,6 @@
             </li>
         </ol>
 
-        <h1 class="page-header">
-            {{ $t('str.form.title.patrol.points') }}
-        </h1>
-
         <panel v-if="data._id" :title="$t('str.register.form.title')">
             <form>
                 <fieldset>

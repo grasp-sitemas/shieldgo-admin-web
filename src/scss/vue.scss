@@ -1631,3 +1631,10 @@ body .daterangepicker.show-ranges.ltr .ranges, body .daterangepicker.show-ranges
     background-repeat: no-repeat;
     background-size: cover;
 }
+
+
+.dark-mode .btn-default {
+    background: #6f7478 !important;
+    border-color: #6f7478 !important;
+    color: #FFFFFF !important;
+}

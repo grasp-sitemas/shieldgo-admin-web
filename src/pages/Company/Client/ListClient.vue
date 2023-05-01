@@ -1,7 +1,7 @@
 <template>
     <div>
         <panel :title="$t('str.table.list.clients')" bodyClass="p-0">
-            <div class="row ms-2 mb-1 mt-3">
+            <div class="row ms-2 mb-1 mt-3 me-1">
                 <div v-if="isSuperAdminMaster" class="col-md-4 mb-3">
                     <label class="form-label" for="accountField">{{ $t('str.register.client.account.field') }}</label>
                     <select v-model="filters.account" @change="filter" class="form-select" id="accountField">
@@ -18,6 +18,9 @@
                         <option value="ARCHIVED">{{ $t('str.register.status.archived') }}</option>
                     </select>
                 </div>
+                <div class="col-md-4 text-end mt-2">
+                    <button @click="selectItem()" type="submit" class="btn btn-default w-150px">{{ $t('str.btn.new.form') }}</button>
+                </div>
             </div>
 
             <vue-good-table
@@ -27,6 +30,7 @@
                 @on-row-click="selectItem"
                 :search-options="{ enabled: true, placeholder: $t('str.table.search.in.this.table') }"
                 :pagination-options="paginationOptions"
+                tableLayout="fixed"
             >
                 <div slot="emptystate" class="vgt-center-align vgt-text-disabled">
                     <i v-if="isLoading" class="fas fa-spinner fa-spin" />
@@ -61,16 +65,20 @@
                 </template>
             </vue-good-table>
         </panel>
+        <ClientModal :selectedData="data" />
     </div>
 </template>
 
 <script>
 import Controller from './CrtListClient.vue'
+import ClientModal from './Client.vue'
 import Vue from 'vue'
 Vue.prototype.$registerEvent = new Vue()
 
 export default {
-    components: {},
+    components: {
+        ClientModal,
+    },
     props: ['accounts'],
     data() {
         return {
@@ -83,6 +91,7 @@ export default {
                 status: 'ACTIVE',
                 name: '',
             },
+            data: {},
             columns: [],
             paginationOptions: {},
         }

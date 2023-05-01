@@ -265,6 +265,10 @@ export default {
                 },
             )
         },
+        async closeModal() {
+            this.clearForm()
+            this.$bvModal.hide('createSiteModal')
+        },
         selectItem: async function (item) {
             this.errors = []
             this.file = null

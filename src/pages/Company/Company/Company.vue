@@ -5,18 +5,6 @@
             <a class="btn-close cursor_pointer" @click="$bvModal.hide('createCompanyModal')"></a>
         </template>
 
-        <!-- <div :key="valuekey"> -->
-        <!-- <ol class="breadcrumb float-xl-end">
-            <li class="breadcrumb-item">
-                <a href="#/companies">{{ $t('str.breadcrumb.companies') }}</a>
-            </li>
-        </ol>
-
-        <h1 class="page-header">
-            {{ $t('str.form.title.companies') }}
-        </h1> -->
-
-        <!-- <panel :title="$t('str.register.form.title')"> -->
         <div>
             <div v-if="data._id" class="row">
                 <div class="col-md-4 mb-3">

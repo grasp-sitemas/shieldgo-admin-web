@@ -43,7 +43,7 @@ export default {
             )
         },
         selectItem(params) {
-            const data = JSON.parse(JSON.stringify(params.row))
+            const data = params && params?.row ? JSON.parse(JSON.stringify(params.row)) : {}
 
             data.account = data?.account?._id || ''
             data.client = data?.client?._id || ''
@@ -65,6 +65,8 @@ export default {
                     width: '25%',
                     thClass: 'text-nowrap',
                     tdClass: 'text-nowrap',
+                    sortable: true,
+                    filterable: true,
                 },
                 {
                     label: this.$t('str.table.site.column.account'),
@@ -72,6 +74,8 @@ export default {
                     width: '15%',
                     thClass: 'text-nowrap',
                     tdClass: 'text-nowrap',
+                    sortable: true,
+                    filterable: true,
                 },
                 {
                     label: this.$t('str.table.site.column.client'),
@@ -79,6 +83,8 @@ export default {
                     width: '15%',
                     thClass: 'text-nowrap',
                     tdClass: 'text-nowrap',
+                    sortable: true,
+                    filterable: true,
                 },
                 {
                     label: this.$t('str.table.site.column.address'),
@@ -87,6 +93,8 @@ export default {
                     width: '25%',
                     tdClass: 'text-nowrap',
                     thClass: 'text-nowrap',
+                    sortable: true,
+                    filterable: true,
                 },
                 {
                     label: this.$t('str.table.site.column.creat.at'),
@@ -94,6 +102,8 @@ export default {
                     width: '25%',
                     tdClass: 'text-nowrap',
                     thClass: 'text-nowrap',
+                    sortable: true,
+                    filterable: true,
                 },
                 {
                     label: this.$t('str.table.site.column.status'),
@@ -101,6 +111,8 @@ export default {
                     width: '25%',
                     tdClass: 'text-nowrap',
                     thClass: 'text-nowrap',
+                    sortable: true,
+                    filterable: true,
                 },
             ]
             this.paginationOptions = {

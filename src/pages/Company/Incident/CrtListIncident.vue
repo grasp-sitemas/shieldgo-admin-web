@@ -35,7 +35,7 @@ export default {
             )
         },
         selectItem(params) {
-            const data = JSON.parse(JSON.stringify(params.row))
+            const data = params && params?.row ? JSON.parse(JSON.stringify(params.row)) : {}
 
             delete data.vgt_id
             delete data.originalIndex
@@ -54,6 +54,8 @@ export default {
                     width: '30%',
                     thClass: 'text-nowrap',
                     tdClass: 'text-nowrap',
+                    sortable: true,
+                    filterable: true,
                 },
                 {
                     label: this.$t('str.table.incident.column.priority'),
@@ -61,6 +63,8 @@ export default {
                     width: '10%',
                     thClass: 'text-nowrap',
                     tdClass: 'text-nowrap',
+                    sortable: true,
+                    filterable: true,
                 },
                 {
                     label: this.$t('str.table.incident.column.account'),
@@ -68,6 +72,8 @@ export default {
                     width: '15%',
                     thClass: 'text-nowrap',
                     tdClass: 'text-nowrap',
+                    sortable: true,
+                    filterable: true,
                 },
                 {
                     label: this.$t('str.table.incident.column.client'),
@@ -75,6 +81,8 @@ export default {
                     width: '15%',
                     thClass: 'text-nowrap',
                     tdClass: 'text-nowrap',
+                    sortable: true,
+                    filterable: true,
                 },
                 {
                     label: this.$t('str.table.incident.column.site'),
@@ -82,6 +90,8 @@ export default {
                     width: '15%',
                     thClass: 'text-nowrap',
                     tdClass: 'text-nowrap',
+                    sortable: true,
+                    filterable: true,
                 },
                 {
                     label: this.$t('str.table.incident.column.creat.at'),
@@ -89,6 +99,8 @@ export default {
                     width: '15%',
                     tdClass: 'text-nowrap',
                     thClass: 'text-nowrap',
+                    sortable: true,
+                    filterable: true,
                 },
                 {
                     label: this.$t('str.table.incident.column.status'),
@@ -96,6 +108,8 @@ export default {
                     width: '10%',
                     tdClass: 'text-nowrap',
                     thClass: 'text-nowrap',
+                    sortable: true,
+                    filterable: true,
                 },
             ]
             this.paginationOptions = {

@@ -37,8 +37,7 @@ export default {
             )
         },
         selectItem(params) {
-            const data = JSON.parse(JSON.stringify(params.row))
-
+            const data = params && params?.row ? JSON.parse(JSON.stringify(params.row)) : {}
             delete data.vgt_id
             delete data.originalIndex
             delete data.password
@@ -62,6 +61,7 @@ export default {
                     thClass: 'text-nowrap',
                     tdClass: 'text-nowrap',
                     sortable: true,
+                    filterable: true,
                 },
                 {
                     label: this.$t('str.table.user.column.account'),
@@ -70,6 +70,7 @@ export default {
                     thClass: 'text-nowrap',
                     tdClass: 'text-nowrap',
                     sortable: true,
+                    filterable: true,
                 },
                 {
                     label: this.$t('str.table.user.column.client'),
@@ -85,6 +86,7 @@ export default {
                     thClass: 'text-nowrap',
                     tdClass: 'text-nowrap',
                     sortable: true,
+                    filterable: true,
                 },
                 {
                     label: this.$t('str.table.user.column.role'),
@@ -93,6 +95,7 @@ export default {
                     thClass: 'text-nowrap',
                     tdClass: 'text-nowrap',
                     sortable: true,
+                    filterable: true,
                 },
                 {
                     label: this.$t('str.table.user.column.email'),
@@ -101,6 +104,7 @@ export default {
                     tdClass: 'text-nowrap',
                     thClass: 'text-nowrap',
                     sortable: true,
+                    filterable: true,
                 },
                 {
                     label: this.$t('str.table.user.column.phone'),
@@ -110,6 +114,7 @@ export default {
                     tdClass: 'text-nowrap',
                     thClass: 'text-nowrap',
                     sortable: true,
+                    filterable: true,
                 },
                 // {
                 //     label: this.$t('str.table.user.column.address'),

@@ -347,6 +347,10 @@ export default {
                 }
             }
         },
+        async closeModal() {
+            this.clearForm()
+            this.$bvModal.hide('createUserModal')
+        },
         selectItem: async function (item) {
             this.errors = []
             this.file = null

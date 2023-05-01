@@ -307,6 +307,10 @@ export default {
             this.data.client = ''
             this.data.site = ''
         },
+        async closeModal() {
+            this.clearForm()
+            this.$bvModal.hide('createVigilantModal')
+        },
         selectItem: async function (item) {
             this.errors = []
             this.file = null

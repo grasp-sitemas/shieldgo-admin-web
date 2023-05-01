@@ -27,6 +27,7 @@ export default {
             this.data.account = Common.getAccountId(this)
             this.isLoading = false
         },
+
         async save() {
             if (this.isLoading) return
 
@@ -130,6 +131,10 @@ export default {
             if (!this.errors || this.errors.length === 0) {
                 await this.save()
             }
+        },
+        async closeModal() {
+            this.clearForm()
+            this.$bvModal.hide('createSiteGroupModal')
         },
         changeAccount: async function () {
             this.sites = []

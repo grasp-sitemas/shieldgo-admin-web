@@ -9,6 +9,11 @@ export default {
         payload.filters.account = Common.getAccountId(payload)
         payload.initTable()
         payload.filter()
+
+        // payload.domain = Endpoints.domain
+        // payload.isSuperAdminMaster = await Common.isSuperAdminMaster(payload)
+        // payload.accounts = await Services.getAccounts(payload)
+        // payload.data.account = await Common.getAccountId(payload)
     },
     methods: {
         filter: function () {
@@ -31,15 +36,18 @@ export default {
             )
         },
         selectItem(params) {
-            const data = JSON.parse(JSON.stringify(params.row))
+            const data = params && params?.row ? JSON.parse(JSON.stringify(params.row)) : {}
 
             data.account = data?.account?._id || ''
 
             delete data.vgt_id
             delete data.originalIndex
 
-            this.$emit('load-item', data)
+            this.data = data
+
+            this.$bvModal.show('createClientModal')
         },
+
         initTable() {
             this.columns = [
                 {
@@ -48,6 +56,8 @@ export default {
                     width: '15%',
                     thClass: 'text-nowrap',
                     tdClass: 'text-nowrap',
+                    sortable: true,
+                    filterable: true,
                 },
                 {
                     label: this.$t('str.table.client.column.account'),
@@ -55,6 +65,8 @@ export default {
                     width: '15%',
                     thClass: 'text-nowrap',
                     tdClass: 'text-nowrap',
+                    sortable: true,
+                    filterable: true,
                 },
                 {
                     label: this.$t('str.table.client.column.email'),
@@ -63,6 +75,8 @@ export default {
                     width: '15%',
                     tdClass: 'text-nowrap',
                     thClass: 'text-nowrap',
+                    sortable: true,
+                    filterable: true,
                 },
                 {
                     label: this.$t('str.table.client.column.phone'),
@@ -71,6 +85,8 @@ export default {
                     width: '15%',
                     tdClass: 'text-nowrap',
                     thClass: 'text-nowrap',
+                    sortable: true,
+                    filterable: true,
                 },
                 {
                     label: this.$t('str.table.client.column.owner'),
@@ -78,6 +94,8 @@ export default {
                     width: '15%',
                     thClass: 'text-nowrap',
                     tdClass: 'text-nowrap',
+                    sortable: true,
+                    filterable: true,
                 },
                 {
                     label: this.$t('str.table.client.column.creat.at'),
@@ -85,6 +103,8 @@ export default {
                     width: '15%',
                     tdClass: 'text-nowrap',
                     thClass: 'text-nowrap',
+                    sortable: true,
+                    filterable: true,
                 },
                 {
                     label: this.$t('str.table.client.column.status'),
@@ -92,6 +112,8 @@ export default {
                     width: '15%',
                     tdClass: 'text-nowrap',
                     thClass: 'text-nowrap',
+                    sortable: true,
+                    filterable: true,
                 },
             ]
             this.paginationOptions = {

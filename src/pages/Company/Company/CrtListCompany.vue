@@ -29,7 +29,7 @@ export default {
             )
         },
         selectItem(params) {
-            const data = JSON.parse(JSON.stringify(params.row))
+            const data = params && params?.row ? JSON.parse(JSON.stringify(params.row)) : {}
 
             delete data.vgt_id
             delete data.originalIndex
@@ -38,7 +38,9 @@ export default {
                 data.address = {}
             }
 
-            this.$emit('load-item', data)
+            this.data = data
+
+            this.$bvModal.show('createCompanyModal')
         },
         initTable() {
             this.columns = [
@@ -48,6 +50,8 @@ export default {
                     width: '30%',
                     thClass: 'text-nowrap',
                     tdClass: 'text-nowrap',
+                    sortable: true,
+                    filterable: true,
                 },
                 {
                     label: this.$t('str.table.company.column.document'),
@@ -55,6 +59,8 @@ export default {
                     width: '10%',
                     thClass: 'text-nowrap',
                     tdClass: 'text-nowrap',
+                    sortable: true,
+                    filterable: true,
                 },
                 {
                     label: this.$t('str.table.company.column.email'),
@@ -63,6 +69,8 @@ export default {
                     width: '10%',
                     tdClass: 'text-nowrap',
                     thClass: 'text-nowrap',
+                    sortable: true,
+                    filterable: true,
                 },
                 {
                     label: this.$t('str.table.company.column.phone'),
@@ -71,6 +79,8 @@ export default {
                     width: '10%',
                     thClass: 'text-nowrap',
                     tdClass: 'text-nowrap',
+                    sortable: true,
+                    filterable: true,
                 },
                 {
                     label: this.$t('str.table.company.column.address'),
@@ -79,6 +89,8 @@ export default {
                     width: '20%',
                     thClass: 'text-nowrap',
                     tdClass: 'text-nowrap',
+                    sortable: true,
+                    filterable: true,
                 },
                 {
                     label: this.$t('str.table.company.column.creat.at'),
@@ -86,6 +98,8 @@ export default {
                     width: '10%',
                     thClass: 'text-nowrap',
                     tdClass: 'text-nowrap',
+                    sortable: true,
+                    filterable: true,
                 },
                 {
                     label: this.$t('str.table.company.column.status'),
@@ -93,6 +107,8 @@ export default {
                     width: '10%',
                     thClass: 'text-nowrap',
                     tdClass: 'text-nowrap',
+                    sortable: true,
+                    filterable: true,
                 },
             ]
             this.paginationOptions = {

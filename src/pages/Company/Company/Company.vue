@@ -236,6 +236,11 @@ export default {
     watch: {
         selectedData: function () {
             this.data = this.selectedData
+
+            if (!this.data?._id) {
+                this.data = this.companyObj
+            }
+
             this.errors = []
             this.file = null
             this.$refs.file.value = null

@@ -1,16 +1,6 @@
 <template>
     <div v-if="!isLoading">
-        <ol class="breadcrumb float-xl-end">
-            <li class="breadcrumb-item">
-                <a href="#/register-data">{{ $t('str.breadcrumb.register.data') }}</a>
-            </li>
-        </ol>
-
-        <h1 class="page-header">
-            {{ $t('str.form.title.register.data') }}
-        </h1>
-
-        <panel :title="$t('str.form.title')">
+        <panel :title="$t('str.form.title.register.data')">
             <form>
                 <fieldset>
                     <div v-if="data._id" class="row">

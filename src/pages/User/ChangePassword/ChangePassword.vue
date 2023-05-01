@@ -1,16 +1,6 @@
 <template>
     <div>
-        <ol class="breadcrumb float-xl-end">
-            <li class="breadcrumb-item">
-                <a href="#/change-password">{{ $t('str.breadcrumb.change.password') }}</a>
-            </li>
-        </ol>
-
-        <h1 class="page-header">
-            {{ $t('str.form.title.change.password') }}
-        </h1>
-
-        <panel :title="$t('str.form.title')">
+        <panel :title="$t('str.form.title.change.password')">
             <form>
                 <fieldset>
                     <div class="row">

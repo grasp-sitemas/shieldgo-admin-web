@@ -21,6 +21,7 @@
                 :search-options="{ enabled: true, placeholder: $t('str.table.search.in.this.table') }"
                 :pagination-options="paginationOptions"
                 style="height: 500px"
+                tableLayout="fixed"
             >
                 <div slot="emptystate" class="vgt-center-align vgt-text-disabled">
                     <i v-if="isLoading" class="fas fa-spinner fa-spin" />

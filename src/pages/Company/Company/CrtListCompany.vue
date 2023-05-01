@@ -50,6 +50,8 @@ export default {
                     width: '30%',
                     thClass: 'text-nowrap',
                     tdClass: 'text-nowrap',
+                    sortable: true,
+                    filterable: true,
                 },
                 {
                     label: this.$t('str.table.company.column.document'),
@@ -57,6 +59,8 @@ export default {
                     width: '10%',
                     thClass: 'text-nowrap',
                     tdClass: 'text-nowrap',
+                    sortable: true,
+                    filterable: true,
                 },
                 {
                     label: this.$t('str.table.company.column.email'),
@@ -65,6 +69,8 @@ export default {
                     width: '10%',
                     tdClass: 'text-nowrap',
                     thClass: 'text-nowrap',
+                    sortable: true,
+                    filterable: true,
                 },
                 {
                     label: this.$t('str.table.company.column.phone'),
@@ -73,6 +79,8 @@ export default {
                     width: '10%',
                     thClass: 'text-nowrap',
                     tdClass: 'text-nowrap',
+                    sortable: true,
+                    filterable: true,
                 },
                 {
                     label: this.$t('str.table.company.column.address'),
@@ -81,6 +89,8 @@ export default {
                     width: '20%',
                     thClass: 'text-nowrap',
                     tdClass: 'text-nowrap',
+                    sortable: true,
+                    filterable: true,
                 },
                 {
                     label: this.$t('str.table.company.column.creat.at'),
@@ -88,6 +98,8 @@ export default {
                     width: '10%',
                     thClass: 'text-nowrap',
                     tdClass: 'text-nowrap',
+                    sortable: true,
+                    filterable: true,
                 },
                 {
                     label: this.$t('str.table.company.column.status'),
@@ -95,6 +107,8 @@ export default {
                     width: '10%',
                     thClass: 'text-nowrap',
                     tdClass: 'text-nowrap',
+                    sortable: true,
+                    filterable: true,
                 },
             ]
             this.paginationOptions = {

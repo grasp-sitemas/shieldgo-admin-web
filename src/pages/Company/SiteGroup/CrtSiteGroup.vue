@@ -157,21 +157,6 @@ export default {
 
             this.sites = await Services.getSitesByClient(this, client)
         },
-        selectItem: async function (item) {
-            this.errors = []
-
-            this.data = item
-
-            const client = this.data.client
-
-            this.selectedSites = []
-
-            this.clients = await Services.getClientsByAccount(this, this.data.account)
-            this.sites = await Services.getSitesByClient(this, client)
-
-            document.body.scrollTop = 0 // For Safari
-            document.documentElement.scrollTop = 0 // For Chrome, Firefox, IE and Opera
-        },
         selectAllSites() {
             this.selectedSites = this.sites
             if (this.clients.length > 0) {

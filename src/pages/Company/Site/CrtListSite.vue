@@ -6,8 +6,15 @@ import Services from '../../../common/Services.vue'
 
 export default {
     init: async payload => {
-        payload.isSuperAdminMaster = Common.isSuperAdminMaster(payload)
-        payload.filters.account = Common.getAccountId(payload)
+        payload.isSuperAdminMaster = await Common.isSuperAdminMaster(payload)
+        payload.accounts = await Services.getAccounts(payload)
+        const account = await Common.getAccountId(payload)
+
+        payload.filters.account = account
+        if (account) {
+            payload.clients = await Services.getClients(payload)
+        }
+
         payload.initTable()
         payload.filter()
     },
@@ -55,7 +62,9 @@ export default {
                 data.address = {}
             }
 
-            this.$emit('load-item', data)
+            this.data = data
+
+            this.$bvModal.show('createSiteModal')
         },
         initTable() {
             this.columns = [

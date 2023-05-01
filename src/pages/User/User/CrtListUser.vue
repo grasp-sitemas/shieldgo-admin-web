@@ -6,10 +6,18 @@ import Services from '../../../common/Services.vue'
 
 export default {
     init: async payload => {
-        payload.filters.account = await Common.getAccountId(payload)
-
+        payload.isSuperAdminMaster = await Common.isSuperAdminMaster(payload)
         setTimeout(async () => {
-            await payload.initTable()
+            payload.accounts = await Services.getAccounts(payload)
+            const account = await Common.getAccountId(payload)
+
+            payload.filters.account = account
+            if (account) {
+                payload.clients = await Services.getClients(payload)
+            }
+
+            payload.initTable()
+
             if (!payload.isSuperAdminMaster) {
                 payload.columns.splice(1, 1)
             }
@@ -50,7 +58,9 @@ export default {
                 data.address = {}
             }
 
-            this.$emit('load-item', data)
+            this.data = data
+
+            this.$bvModal.show('createUserModal')
         },
         initTable: async function () {
             this.columns = [
@@ -78,6 +88,8 @@ export default {
                     width: '10%',
                     thClass: 'text-nowrap',
                     tdClass: 'text-nowrap',
+                    sortable: true,
+                    filterable: true,
                 },
                 {
                     label: this.$t('str.table.user.column.site'),
@@ -116,14 +128,6 @@ export default {
                     sortable: true,
                     filterable: true,
                 },
-                // {
-                //     label: this.$t('str.table.user.column.address'),
-                //     field: 'address',
-                //     type: 'address',
-                //     width: '20%',
-                //     tdClass: 'text-nowrap',
-                //     thClass: 'text-nowrap',
-                // },
                 {
                     label: this.$t('str.table.user.column.creat.at'),
                     field: 'createDate',

@@ -5,13 +5,20 @@ import Common from '../../../common/Common.vue'
 import Services from '../../../common/Services.vue'
 export default {
     init: async payload => {
-        payload.filters.account = await Common.getAccountId(payload)
+        payload.isSuperAdminMaster = await Common.isSuperAdminMaster(payload)
+        payload.accounts = await Services.getAccounts(payload)
+        const account = await Common.getAccountId(payload)
 
-        await payload.initTable()
         if (!payload.isSuperAdminMaster) {
             payload.columns.splice(2, 1)
         }
 
+        payload.filters.account = account
+        if (account) {
+            payload.clients = await Services.getClients(payload)
+        }
+
+        payload.initTable()
         payload.filter()
     },
     methods: {
@@ -44,7 +51,9 @@ export default {
             data.client = data?.client?._id || ''
             data.site = data?.site?._id || ''
 
-            this.$emit('load-item', data)
+            this.data = data
+
+            this.$bvModal.show('createIncidentModal')
         },
         async initTable() {
             this.columns = [

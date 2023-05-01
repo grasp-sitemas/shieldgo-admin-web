@@ -61,19 +61,6 @@
                     <span v-if="!isLoading && items?.length === 0">{{ $t('str.table.subtitle.no.data') }}</span>
                 </div>
                 <template slot="table-row" slot-scope="props">
-                    <!-- <span v-if="props.column.field === 'address' && props.formattedRow[props.column.field].address">
-                        {{
-                            props.formattedRow[props.column.field].address +
-                            ' ' +
-                            props.formattedRow[props.column.field].number +
-                            ', ' +
-                            props.formattedRow[props.column.field].neighborhood +
-                            ', ' +
-                            props.formattedRow[props.column.field].city +
-                            '- ' +
-                            props.formattedRow[props.column.field].state
-                        }}
-                    </span> -->
                     <span v-if="props.column.field === 'customerUser.subtype'">
                         {{ $t(props.formattedRow[props.column.field]) }}
                     </span>
@@ -106,33 +93,12 @@ export default {
     components: {
         VigilantModal,
     },
-    props: {
-        isSuperAdminMaster: {
-            type: Boolean,
-            default: false,
-        },
-        accounts: {
-            type: Array,
-            default: () => [],
-        },
-        clients: {
-            type: Array,
-            default: () => [],
-        },
-    },
-    watch: {
-        accounts: function () {
-            this.listAccounts = this.accounts
-        },
-        clients: function () {
-            this.listClients = this.clients
-        },
-    },
     data() {
         return {
             items: [],
             isLoading: false,
             data: {},
+            isSuperAdminMaster: false,
             filters: {
                 account: '',
                 client: '',

@@ -1,7 +1,7 @@
 <template>
     <b-modal no-close-on-backdrop id="createGuardGroupModal" @hide="closeModal" :hide-footer="true" size="lg" class="modal-message">
         <template slot="modal-header">
-            <h4 class="modal-title">{{ $t('str.breadcrumb.client.groups') }}</h4>
+            <h4 class="modal-title">{{ $t('str.breadcrumb.guard.groups') }}</h4>
             <a class="btn-close cursor_pointer" @click="$bvModal.hide('createGuardGroupModal')"></a>
         </template>
 
@@ -128,15 +128,36 @@ export default {
     },
     watch: {
         selectedData: async function () {
-            this.data = this.selectedData
+            const data = this?.selectedData
 
-            if (!this.data?._id) {
-                this.data = this.guardGroupObj
+            if (!data?._id) {
+                data = this.guardGroupObj
             }
 
-            this.clients = await Services.getClientsByAccount(this, this.data?.account)
-            this.sites = await Services.getSitesByClient(this, this.data?.client)
+            if (data.account) {
+                this.clients = await Services.getClientsByAccount(this, data.account)
+            }
 
+            if (data.client) {
+                this.sites = await Services.getSitesByClient(this, data.client)
+            }
+
+            if (data.site) {
+                this.vigilants = await Services.getVigilantsBySite(this, data.site)
+
+                const mappedVigilants = data.vigilants.map(vigilant => {
+                    return {
+                        _id: vigilant._id,
+                        firstName: vigilant.firstName,
+                        lastName: vigilant.lastName,
+                        fullName: `${vigilant.firstName} ${vigilant.lastName}`,
+                    }
+                })
+
+                data.vigilants = mappedVigilants ? mappedVigilants : []
+            }
+
+            this.data = data
             this.errors = []
         },
     },

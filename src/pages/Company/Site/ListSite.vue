@@ -90,7 +90,6 @@ export default {
     components: {
         SiteModal,
     },
-    props: ['accounts', 'clients'],
     data() {
         return {
             items: [],
@@ -104,6 +103,9 @@ export default {
                 statusActive: false,
                 name: '',
             },
+            accounts: [],
+            clients: [],
+            sites: [],
             columns: [],
             paginationOptions: {},
             isSuperAdminMaster: false,

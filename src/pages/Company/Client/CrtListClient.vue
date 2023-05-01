@@ -2,18 +2,16 @@
 import Endpoints from '../../../common/Endpoints.vue'
 import Request from '../../../common/Request.vue'
 import Common from '../../../common/Common.vue'
-
+import Services from '../../../common/Services.vue'
 export default {
     init: async payload => {
-        payload.isSuperAdminMaster = Common.isSuperAdminMaster(payload)
-        payload.filters.account = Common.getAccountId(payload)
+        payload.isSuperAdminMaster = await Common.isSuperAdminMaster(payload)
+        payload.accounts = await Services.getAccounts(payload)
+        payload.filters.account = await Common.getAccountId(payload)
         payload.initTable()
         payload.filter()
 
-        // payload.domain = Endpoints.domain
-        // payload.isSuperAdminMaster = await Common.isSuperAdminMaster(payload)
-        // payload.accounts = await Services.getAccounts(payload)
-        // payload.data.account = await Common.getAccountId(payload)
+        payload.domain = Endpoints.domain
     },
     methods: {
         filter: function () {

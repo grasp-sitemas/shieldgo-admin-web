@@ -370,12 +370,14 @@
 import Controller from './CrtCreateScheduleModal.vue'
 import { FREQUENCIES, WEEKLY_DAYS, MONTHS } from '../../../utils/schedules.js'
 import { schedule } from '../../../types/schedule'
-import moment from 'moment'
-
+import { moment } from 'moment'
 export default {
     props: {
         selectedDate: {
             type: String,
+            default: () => {
+                return moment().format('YYYY-MM-DD')
+            },
         },
         selectedAppointment: {
             type: Object,
@@ -402,11 +404,11 @@ export default {
         selectedAppointment: function () {
             this.data = this?.selectedAppointment
             this.selectOptions.enabled = false
-            this.data.guardGroup = this.selectedAppointment?.guardGroup?._id
+            this.data.guardGroup = this.selectedAppointment?.guaårdGroup?._id
             this.initSelectedAppointment()
         },
         selectedDate: function () {
-            this.data.beginDate = moment(this.selectedDate).format('YYYY-DD-MM')
+            this.data.beginDate = String(this.selectedDate)
         },
         accounts: function () {
             this.accountList = this.accounts
@@ -446,7 +448,6 @@ export default {
     },
     created() {
         let state = this
-
         state.$registerEvent.$on('changeLanguage', function () {
             state.initTable()
         })

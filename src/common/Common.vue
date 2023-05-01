@@ -37,7 +37,7 @@ export default {
         return formattedDate + ' - ' + formattedTime
     },
     checkValidDate: function (date) {
-        const currentDate = moment().format('DD-MM-YYYY')
+        const currentDate = moment().format('DD/MM/YYYY')
         return moment(date).isSameOrAfter(currentDate)
     },
     compareDates: function (d1, d2) {

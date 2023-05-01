@@ -10,23 +10,13 @@
                 <div class="navbar-brand">
                     <img src="../../assets/images/logo.png" alt="ShieldGo" width="90" />
                 </div>
-                <button type="button" class="navbar-mobile-toggler" v-on:click="toggleTopMenuMobile" v-if="appOptions.appTopMenu && !appOptions.appSidebarNone">
-                    <span class="fa-stack fa-lg text-inverse">
-                        <i class="far fa-square fa-stack-2x"></i>
-                        <i class="fa fa-cog fa-stack-1x"></i>
-                    </span>
-                </button>
+
                 <button type="button" class="navbar-mobile-toggler" v-on:click="toggleTopMenuMobile" v-if="appOptions.appTopMenu && appOptions.appSidebarNone">
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <button type="button" class="navbar-mobile-toggler" v-on:click="toggleHeaderMegaMenuMobile" v-if="appOptions.appHeaderMegaMenu">
-                    <span class="fa-stack fa-lg text-inverse m-t-2">
-                        <i class="far fa-square fa-stack-2x"></i>
-                        <i class="fa fa-cog fa-stack-1x"></i>
-                    </span>
-                </button>
+
                 <button type="button" class="navbar-mobile-toggler" v-on:click="toggleSidebarMobile" v-if="!appOptions.appSidebarNone">
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>

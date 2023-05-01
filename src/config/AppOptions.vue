@@ -21,10 +21,10 @@ const appOptions = {
     appContentClass: false,
     appHeaderLanguageBar: true,
     appHeaderInverse: false,
-    appHeaderMegaMenu: false,
+    appHeaderMegaMenu: false, // HABILITAR
     appHeaderFixed: true,
-    appHeaderMegaMenuMobileToggled: false,
-    appTopMenu: false,
+    appHeaderMegaMenuMobileToggled: false, // HABILITAR PARA MOBILE
+    appTopMenu: true,
     appTopMenuMobileToggled: false,
     appEmpty: false,
     appBodyScrollTop: 0,

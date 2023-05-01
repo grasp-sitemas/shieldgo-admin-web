@@ -41,13 +41,13 @@
                                                 </option>
                                             </select>
                                         </div>
-                                        <div class="col-md-3 mb-3">
+                                        <!-- <div class="col-md-3 mb-3">
                                             <p class="form-label" for="typesField">{{ $t('str.filters.event.types') }}</p>
                                             <div class="form-check form-switch mb-2 ms-2" v-bind:key="item.id" v-for="item in this.eventTypes">
                                                 <input v-model="filters.types" @change="filter" :id="item.value" :value="item.value" :true-value="item.value" class="form-check-input" type="checkbox" />
                                                 <label class="form-check-label" :for="item.value">{{ $t(item.label) }}</label>
                                             </div>
-                                        </div>
+                                        </div> -->
                                     </div>
                                 </b-card-body>
                             </b-collapse>
@@ -203,6 +203,7 @@
 
                             <div v-if="(!selectedEvent?.attendance || !selectedEvent?.attendance?.isAttendance) && user?.companyUser?.subtype === 'OPERATOR'" class="result-price">
                                 <a @click="handleAttendanceEvent()" class="btn d-block w-100" v-bind:class="{ 'btn-yellow': selectedEvent?.type === 'INCIDENT', 'btn-red': selectedEvent?.type === 'SOS_ALERT' }">
+                                    <i v-if="isLoadingAttendanceEventButton" class="fas fa-spinner fa-spin" />
                                     {{ $t('str.monitor.answer.event') }}
                                 </a>
                             </div>
@@ -382,7 +383,9 @@ export default {
         if (siteIds && siteIds?.length > 0) {
             siteIds.forEach(site => {
                 onSnapshot(doc(db, 'notifications', site), async document => {
+                    console.log('notifications')
                     const type = document.data()?.type
+                    console.log(document.data())
                     if (type && type.length > 0) {
                         if (type === 'INCIDENT') {
                             Common.show(state, 'top-right', 'warn', state.$t('msg.new.incident.notification'))

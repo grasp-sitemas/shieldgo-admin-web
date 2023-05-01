@@ -1,13 +1,13 @@
 <template>
     <!-- menu with submenu -->
-    <div v-if="menu.children" class="menu-item has-sub" v-bind:class="{ active: subIsActive(menu.path) }">
-        <a href="#" class="menu-link" v-on:click.prevent.stop="expand()">
+    <div v-if="menu.children" class="menu-item has-sub">
+        <a href="#" class="menu-link">
             <div v-if="menu.icon" class="menu-icon"><i v-bind:class="menu.icon"></i></div>
             <div v-if="menu.img" class="menu-icon-img"><img v-bind:src="menu.img" alt="" /></div>
             <div class="menu-text">
                 {{ $t(menu.title) }}
                 <i v-if="menu.highlight" class="fa fa-paper-plane text-primary"></i>
-                <span v-if="menu.label" class="menu-label">{{ menu.label }}</span>
+                <span v-if="menu.label" class="menu-label">{{ $t(menu.label) }}</span>
             </div>
             <div v-if="menu.badge" class="menu-badge">{{ menu.badge }}</div>
             <div v-else class="menu-caret"></div>
@@ -31,7 +31,7 @@
             <div class="menu-text">
                 {{ $t(menu.title) }}
                 <i v-if="menu.highlight" class="fa fa-paper-plane text-theme"></i>
-                <span v-if="menu.label" class="menu-label">{{ menu.label }}</span>
+                <span v-if="menu.label" class="menu-label">{{ $t(menu.label) }}</span>
             </div>
             <div v-if="menu.badge" class="menu-badge">{{ menu.badge }}</div>
         </a>
@@ -72,8 +72,10 @@ export default {
             this.$emit('collapse-other', this.menu)
         },
         handleCollapseOther: function (menu) {
-            for (var i = 0; i < this.menu.children.length; i++) {
-                this.$refs.topMenuNavList[i].collapse(menu)
+            if (menu) {
+                for (var i = 0; i < this.menu.children.length; i++) {
+                    this.$refs.topMenuNavList[i].collapse(menu)
+                }
             }
         },
         subIsActive(path) {

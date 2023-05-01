@@ -25,6 +25,7 @@ export default {
         delete: `${domain}/api/company/events/delete/v1/`,
         attendances: {
             filter: `${domain}/api/users/attendances/filter/v1/`,
+
             attendance: `${domain}/api/users/attendances/v1/`,
         },
     },
@@ -50,6 +51,9 @@ export default {
         checkEmailExist: `${domain}/api/users/check/email/v1/`,
         checkUsernameExist: `${domain}/api/users/check/username/v1/`,
         count: `${domain}/api/generic/count/byfilter/v1/`,
+    },
+    reports: {
+        filter: `${domain}/api/users/reports/filter/v1/`,
     },
     companies: {
         company: `${domain}/api/company/v1/`,

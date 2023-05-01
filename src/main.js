@@ -32,8 +32,7 @@ import DateRangePicker from 'vue2-daterange-picker'
 import VueTheMask from 'vue-the-mask'
 import { LMap, LTileLayer, LMarker } from 'vue2-leaflet'
 import { LDrawToolbar } from 'vue2-leaflet-draw-toolbar'
-
-import 'leaflet/dist/leaflet.css'
+import JsonExcel from 'vue-json-excel'
 
 // plugins css
 import '@fortawesome/fontawesome-free/css/all.min.css'
@@ -52,7 +51,7 @@ import 'vue-slider-component/theme/antd.css'
 import 'vue2-daterange-picker/dist/vue2-daterange-picker.css'
 import 'sweetalert2/dist/sweetalert2.min.css'
 import 'vue-custom-scrollbar/dist/vueScrollbar.css'
-
+import 'leaflet/dist/leaflet.css'
 // color admin css
 import './scss/vue.scss'
 import 'bootstrap-social/bootstrap-social.css'
@@ -75,7 +74,6 @@ Vue.use(VueDateTimePicker)
 Vue.use(VueGoodTable)
 Vue.use(VueColorpicker)
 Vue.use(VueTheMask)
-
 Vue.use(VueGoogleMaps, {
     load: {
         key: MAPS.KEY,
@@ -87,6 +85,7 @@ Vue.use(VueInsProgressBar, {
     show: true,
     height: '3px',
 })
+
 Vue.component('v-select', VueSelect)
 Vue.component('datepicker', VueDatepicker)
 Vue.component('input-tag', VueInputTag)
@@ -99,6 +98,7 @@ Vue.component('l-map', LMap)
 Vue.component('l-tile-layer', LTileLayer)
 Vue.component('l-marker', LMarker)
 Vue.component('l-draw-toolbar', LDrawToolbar)
+Vue.component('downloadExcel', JsonExcel)
 
 const router = new VueRouter({
     routes,

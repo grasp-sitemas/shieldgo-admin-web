@@ -1600,3 +1600,34 @@ body .daterangepicker.show-ranges.ltr .ranges, body .daterangepicker.show-ranges
     margin-top: 22%;
 }
 
+@media (min-width: 768px){
+    .app-top-menu {
+        top: 60px !important;
+        position: fixed;
+        height: 40px;
+    }
+}
+
+@media (min-width: 768px) {
+    .app-top-menu .menu {
+        display: -webkit-box;
+        display: -ms-flexbox;
+        display: flex;
+        -ms-flex-wrap: nowrap;
+        flex-wrap: nowrap;
+        justify-content: center;
+
+    }
+}
+
+.app-sidebar .menu .menu-profile .menu-profile-cover 
+{
+    background-position: center;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-repeat: no-repeat;
+    background-size: cover;
+}

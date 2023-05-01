@@ -11,19 +11,19 @@ export default {
                 payload.domain = Endpoints.domain
 
                 setTimeout(async () => {
+                    payload.user = await payload.$session.get('user')
+
                     payload.isSuperAdminMaster = await Common.isSuperAdminMaster(payload)
                     payload.attendancesTypes = await Services.getAttendancesOptionsTypes(payload)
-                    await payload.selectAllTypes()
 
                     if (payload.isSuperAdminMaster) {
                         payload.accounts = await Services.getAccounts(payload)
                     } else {
                         payload.clients = await Services.getClients(payload)
-                        payload.filters.account = await payload.$session.get('user')?.account?._id
+                        payload.filters.account = await Common.getAccountId(payload)
                     }
 
-                    payload.user = await payload.$session.get('user')
-
+                    await payload.selectAllTypes()
                     await payload.filter()
 
                     if (payload?.events?.length > 0) {
@@ -79,6 +79,7 @@ export default {
             if (this.isLoadingAttendanceEventButton || this.attendanceEventEnabled) return
 
             this.attendanceEventEnabled = true
+            this.isLoadingAttendanceEventButton = true
 
             const patrolActionId = this.selectedEvent?._id
             const userId = await this.getOperatorId()
@@ -107,6 +108,9 @@ export default {
                 this.isLoadingAttendanceEventButton = false
                 this.clearForm()
             } catch (error) {
+                this.attendanceEventEnabled = false
+                this.isLoadingAttendanceEventButton = false
+                this.clearForm()
                 console.log(error)
             }
         },
@@ -114,11 +118,13 @@ export default {
             this.attendanceEventEnabled = true
 
             const patrolActionId = this.selectedEvent?._id
+            const openedDate = this.selectedEvent.attendance?.openedDate
             const userId = await this.getOperatorId()
             const siteGroup = this.$session.get('user')?.siteGroup?._id
 
             const attendance = {
                 isAttendance: true,
+                openedDate: openedDate,
                 closedDate: moment().utc(true).format(),
                 operator: userId,
                 status: 'CLOSED',
@@ -126,9 +132,7 @@ export default {
 
             try {
                 const result = await Services.attendanceEvent(this, patrolActionId, attendance, siteGroup)
-                console.log('result', result)
                 if (result && this.selectedEvent) {
-                    const openedDate = this?.selectedEvent.attendance?.openedDate
                     this.selectedEvent.attendance = {
                         isAttendance: result?.attendance?.isAttendance,
                         openedDate: openedDate,
@@ -142,6 +146,9 @@ export default {
                 this.isLoadingAttendanceEventButton = false
                 this.clearForm()
             } catch (error) {
+                this.attendanceEventEnabled = false
+                this.isLoadingAttendanceEventButton = false
+                this.clearForm()
                 console.log(error)
             }
         },
@@ -343,14 +350,21 @@ export default {
         changeAccount: async function () {
             const account = this.filters.account
 
-            this.filter()
-
-            if (account === '') {
-                this.filters.client = ''
-                this.filters.site = ''
-            }
-
+            this.filters.client = ''
+            this.filters.site = ''
+            this.selectedEvent = null
             this.clients = await Services.getClientsByAccount(this, account)
+
+            await this.filter()
+        },
+        changeClient: async function () {
+            const client = this.filters.client
+
+            this.filters.site = ''
+            this.selectedEvent = null
+            this.sites = await Services.getSitesByClient(this, client)
+
+            await this.filter()
         },
         checkForm: async function () {
             if (!this.attendance?.type || this.attendance?.type === '') {
@@ -360,17 +374,6 @@ export default {
             if (!this.errors || this.errors.length === 0) {
                 await this.sendAttendanceEvent()
             }
-        },
-        changeClient: async function () {
-            const client = this.filters.client
-
-            this.filter()
-
-            if (client === '') {
-                this.filters.site = ''
-            }
-
-            this.sites = await Services.getSitesByClient(this, client)
         },
         updateSelectedEvent: async function (patrolAction) {
             this.selectedEvent = await Services.getPatrolActionById(this, patrolAction)

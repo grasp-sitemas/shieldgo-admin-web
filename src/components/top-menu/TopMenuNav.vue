@@ -2,7 +2,7 @@
     <!-- begin top-menu nav -->
     <div class="menu" v-if="menus" v-bind:style="{ marginLeft: '-' + margin.left + 'px', marginRight: '-' + margin.right + 'px' }">
         <template v-for="menu in menus">
-            <top-menu-nav-list ref="topMenuNavList" v-bind:menu="menu" v-bind:key="menu.path" v-bind:status="menu.status" v-on:collapse-other="handleCollapseOther(menu)"></top-menu-nav-list>
+            <top-menu-nav-list ref="topMenuNavList" v-if="menu.topMenu" v-bind:menu="menu" v-bind:key="menu.path" v-bind:status="menu.status" v-on:collapse-other="handleCollapseOther(menu)"></top-menu-nav-list>
         </template>
         <div class="menu-item menu-control menu-control-start" v-bind:class="{ show: controls.left }" v-on:click="controlLeft">
             <a href="javascript:;" class="menu-link" data-toggle="app-top-menu-prev"><i class="fa fa-angle-left"></i></a>

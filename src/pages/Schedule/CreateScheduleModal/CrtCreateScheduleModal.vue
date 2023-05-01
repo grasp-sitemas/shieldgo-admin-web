@@ -3,12 +3,13 @@ import Common from '../../../common/Common.vue'
 import Services from '../../../common/Services.vue'
 import Endpoints from '../../../common/Endpoints.vue'
 import Request from '../../../common/Request.vue'
+import moment from 'moment'
 import Vue from 'vue'
 Vue.prototype.$registerEvent = new Vue()
 
 export default {
     init: async payload => {
-        payload.initTable()
+        await payload.initTable()
         if (!payload.isSuperAdminMaster) {
             payload.data.account = await Common.getAccountId(payload)
         }
@@ -57,7 +58,7 @@ export default {
                 this.data.vigilants = []
             }
         },
-        save() {
+        async save() {
             if (!this.isSaveLoading) {
                 this.isSaveLoading = true
 
@@ -68,11 +69,11 @@ export default {
                         Request.getDefaultHeader(this),
                         this.data,
                         `${Endpoints.schedules.schedule}`,
-                        response => {
+                        async response => {
                             if (response.status === 200) {
                                 this.isSaveLoading = false
                                 this.$registerEvent.$emit('refreshSchedule')
-                                this.$bvModal.hide('createScheduleModal')
+                                await this.closeModal()
                             }
                         },
                         error => {
@@ -90,7 +91,7 @@ export default {
                 }
             }
         },
-        checkForm() {
+        async checkForm() {
             if (!this.data.account || this.data.account === '') {
                 this.errors.push('account')
             }
@@ -148,10 +149,13 @@ export default {
                     delete this.data.frequencyMonth
                 }
 
-                this.data.beginDate = this.data.beginDate + 'T' + this.data?.beginHour + ':00.000Z'
-                this.data.endDate = this.data.endDate + 'T' + this.data?.endHour + ':00.000Z'
+                this.data.beginDate = this.data.beginDate + 'T' + this.data.beginHour + ':00.000Z'
+                this.data.endDate = this.data.endDate + 'T' + this.data.endHour + ':00.000Z'
 
-                this.save()
+                console.log('begin data' + this.data.beginDate)
+                console.log('endhour' + this.data.endDate)
+
+                await this.save()
             }
         },
         checkRangeDate: async function () {
@@ -253,14 +257,14 @@ export default {
                 points: [],
                 vigilants: [],
                 weeklyDays: [],
-                beginDate: null,
+                beginDate: moment().utc().format('YYYY-MM-DD'),
                 endDate: null,
                 beginHour: '',
                 endHour: '',
                 sendAlert: false,
-                notifyVigilants: false,
+                notifyVigilants: true,
                 timeSlot: 15,
-                type: 'FREE-P(ROGRAM',
+                type: 'FREE-PROGRAM',
                 status: 'ACTIVE',
             }
 
@@ -322,7 +326,7 @@ export default {
             this.isSaveLoading = false
             this.isLoading = false
         },
-        initTable() {
+        async initTable() {
             this.columns = [
                 {
                     label: this.$t('str.table.check.point.column.name'),

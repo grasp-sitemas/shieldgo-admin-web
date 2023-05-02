@@ -309,17 +309,17 @@ export default {
             )
         },
         changeAccount: async function () {
-            const account = this.data.account
+            const account = this?.data?.account
 
             this.sites = []
+            this.siteGroups = []
             this.data.client = ''
             this.data.site = ''
 
             this.clients = await Services.getClientsByAccount(this, account)
-            this.siteGroups = await Services.getSiteGroupsByAccount(this, account)
         },
         changeClient: async function () {
-            const client = this.data.client
+            const client = this?.data?.client
 
             if (client === '') {
                 this.data.site = ''
@@ -328,7 +328,7 @@ export default {
             this.sites = await Services.getSitesByClient(this, client)
         },
         changeRole: async function () {
-            const role = this.data.companyUser.subtype
+            const role = this?.data?.companyUser?.subtype
             if (role === 'ADMIN') {
                 this.data.client = ''
                 this.data.site = ''
@@ -339,7 +339,7 @@ export default {
                 this.removeRequiredField('site')
             }
 
-            if (this.data.account) {
+            if (this?.data?.account) {
                 if (role === 'MANAGER') {
                     this.clientGroups = await Services.getClientGroupsByAccount(this, this.data.account)
                 } else if (role === 'OPERATOR') {
@@ -347,47 +347,9 @@ export default {
                 }
             }
         },
-        selectItem: async function (item) {
-            this.errors = []
-            this.file = null
-            this.$refs.file.value = null
-
-            if (!item?.companyUser?.subtype) {
-                item.companyUser = {
-                    status: 'ACTIVE',
-                    subtype: '',
-                }
-            }
-
-            if (item?.siteGroup) {
-                item.siteGroup = item.siteGroup._id
-            }
-
-            if (item?.clientGroup) {
-                item.clientGroup = item.clientGroup._id
-            }
-
-            if (item.account) {
-                this.clients = await Services.getClientsByAccount(this, item.account)
-            }
-
-            if (item.client) {
-                this.sites = await Services.getSitesByClient(this, item.client)
-            }
-
-            if (item?.companyUser?.subtype === 'OPERATOR') {
-                this.siteGroups = await Services.getSiteGroupsByAccount(this, item?.account._id)
-            }
-
-            if (item?.companyUser?.subtype === 'MANAGER') {
-                this.clientGroups = await Services.getClientGroupsByAccount(this, item?.account._id)
-            }
-
-            this.data = item
-            this.data.oldEmail = item.email
-
-            document.body.scrollTop = 0 // For Safari
-            document.documentElement.scrollTop = 0 // For Chrome, Firefox, IE and Opera
+        async closeModal() {
+            this.clearForm()
+            this.$bvModal.hide('createUserModal')
         },
         handleFileUpload() {
             this.file = this.$refs.file.files[0]

@@ -1,7 +1,7 @@
 <template>
     <div>
         <panel :title="$t('str.table.list.site.groups')" bodyClass="p-0">
-            <div class="row panel-filter me-1 ms-1">
+            <div class="row ms-2 mb-1 mt-3 me-1">
                 <div v-if="isSuperAdminMaster" class="col-md-3 mb-3">
                     <label class="form-label" for="accountField">{{ $t('str.register.site.groups.account.field') }}</label>
                     <select v-model="filters.account" @change="changeAccount" class="form-select" id="accountField">
@@ -29,6 +29,9 @@
                         <option value="ARCHIVED">{{ $t('str.register.status.archived') }}</option>
                     </select>
                 </div>
+                <div class="col-md-3 text-end mt-2">
+                    <button @click="selectItem()" type="submit" class="btn btn-default w-150px">{{ $t('str.btn.new.form') }}</button>
+                </div>
             </div>
             <vue-good-table
                 :columns="columns"
@@ -37,6 +40,7 @@
                 @on-row-click="selectItem"
                 :search-options="{ enabled: true, placeholder: $t('str.table.search.in.this.table') }"
                 :pagination-options="paginationOptions"
+                tableLayout="fixed"
             >
                 <div slot="emptystate" class="vgt-center-align vgt-text-disabled">
                     <i v-if="isLoading" class="fas fa-spinner fa-spin" />
@@ -67,16 +71,20 @@
                 </template>
             </vue-good-table>
         </panel>
+        <SiteGroupModal :selectedData="data" />
     </div>
 </template>
 
 <script>
 import Controller from './CrtListSiteGroup.vue'
+import SiteGroupModal from './SiteGroup.vue'
 import Vue from 'vue'
 Vue.prototype.$registerEvent = new Vue()
 
 export default {
-    components: {},
+    components: {
+        SiteGroupModal,
+    },
     props: {
         isSuperAdminMaster: {
             type: Boolean,
@@ -109,6 +117,7 @@ export default {
                 status: 'ACTIVE',
                 name: '',
             },
+            data: {},
             listAccounts: [],
             listClients: [],
             columns: [],

@@ -98,14 +98,13 @@
                 :totalRows="items?.length"
                 :search-options="{ enabled: false, placeholder: $t('str.table.search.in.this.table') }"
                 :pagination-options="paginationOptions"
-                @on-row-click="selectItem"
             >
                 <div slot="emptystate" class="vgt-center-align vgt-text-disabled">
                     <i v-if="isLoading" class="fas fa-spinner fa-spin" />
                     <span v-if="!isLoading && items?.length === 0">{{ $t('str.table.subtitle.no.data') }}</span>
                 </div>
                 <template slot="table-row" slot-scope="props">
-                    <span v-if="props.column.field === 'geolocation'">
+                    <span v-if="props.column.field === 'geolocation'" class="d-flex justify-content-center">
                         <span
                             v-if="
                                 props.formattedRow[props.column.field]?.latitude &&
@@ -114,7 +113,7 @@
                                 props.formattedRow[props.column.field]?.longitude?.length > 0
                             "
                         >
-                            {{ 'Lat: ' + props.formattedRow[props.column.field]?.latitude + ' Lng: ' + props.formattedRow[props.column.field]?.longitude }}
+                            <i v-on:click="showMap(props.formattedRow[props.column.field])" class="fas fa-map-marker-alt cursor_pointer" />
                         </span>
                         <span v-else>
                             <i class="fas fa-ban"></i>
@@ -157,6 +156,7 @@
         <div v-else class="center-spinner">
             <i class="fas fa-spinner fa-spin" />
         </div>
+        <Map :data="selectedItem" />
     </div>
 </template>
 
@@ -167,6 +167,7 @@ import { DATE_RANGE_CONFIG } from '../../../utils/date'
 import CsvDownload from './Components/CsvDownload.vue'
 import XlsDownload from './Components/XlsDownload.vue'
 import PdfDownload from './Components/PdfDownload.vue'
+import Map from '../Components/Map.vue'
 import Vue from 'vue'
 import { JSON_FIELDS_CSV } from './Utils/jsonFieldsCsv'
 import { PDF_HEADER } from './Utils/jsonFieldsPdf'
@@ -177,6 +178,7 @@ export default {
         CsvDownload,
         XlsDownload,
         PdfDownload,
+        Map,
     },
     data() {
         return {
@@ -190,6 +192,7 @@ export default {
             csvItems: [],
             paginationOptions: {},
             fields: [],
+            selectedItem: {},
             isLoading: true,
             isSearchLoading: false,
             dateRange: DATE_RANGE_CONFIG,

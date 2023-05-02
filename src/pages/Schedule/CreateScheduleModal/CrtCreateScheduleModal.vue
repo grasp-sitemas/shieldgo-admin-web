@@ -180,13 +180,13 @@ export default {
         confirmArchive() {
             this.$swal({
                 title: this.$t('str.are.you.sure'),
-                text: this.$t('str.are.you.sure.cancel.schedule'),
+                text: this.$t('str.are.you.sure.delete.schedule'),
                 showCancelButton: true,
                 showDenyButton: true,
                 buttonsStyling: false,
-                confirmButtonText: this.$t('str.title.cancel.series'),
+                confirmButtonText: this.$t('str.title.delete.series'),
                 cancelButtonClass: 'btn btn-default min-btn-width',
-                denyButtonText: this.$t('str.title.cancel.occurrence'),
+                denyButtonText: this.$t('str.title.delete.occurrence'),
                 confirmButtonClass: 'btn me-5px btn-danger min-btn-width',
                 cancelButtonText: this.$t('str.btn.exit'),
                 denyButtonClass: 'btn me-5px btn-warning min-btn-width',
@@ -348,7 +348,7 @@ export default {
                 {
                     label: this.$t('str.table.check.point.column.geolocation'),
                     field: 'geolocation',
-                    width: '10%',
+                    width: '5%',
                     thClass: 'text-nowrap',
                     tdClass: 'text-nowrap',
                 },

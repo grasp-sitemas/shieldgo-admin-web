@@ -157,36 +157,9 @@ export default {
             this.data.client = ''
             this.data.site = ''
         },
-        selectItem: async function (item) {
-            this.errors = []
-            const data = item
-            if (data.site) {
-                this.vigilants = await Services.getVigilantsBySite(this, item.site)
-
-                const mappedVigilants = data.vigilants.map(vigilant => {
-                    return {
-                        _id: vigilant._id,
-                        firstName: vigilant.firstName,
-                        lastName: vigilant.lastName,
-                        fullName: `${vigilant.firstName} ${vigilant.lastName}`,
-                    }
-                })
-
-                data.vigilants = mappedVigilants ? mappedVigilants : []
-            }
-
-            if (data.account) {
-                this.clients = await Services.getClientsByAccount(this, item.account)
-            }
-
-            if (data.client) {
-                this.sites = await Services.getSitesByClient(this, item.client)
-            }
-
-            this.data = data
-
-            document.body.scrollTop = 0 // For Safari
-            document.documentElement.scrollTop = 0 // For Chrome, Firefox, IE and Opera
+        async closeModal() {
+            this.clearForm()
+            this.$bvModal.hide('createGuardGroupModal')
         },
         async selectAllVigilants() {
             this.data.vigilants = this.vigilants

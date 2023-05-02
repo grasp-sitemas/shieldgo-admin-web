@@ -2,13 +2,16 @@
 import Endpoints from '../../../common/Endpoints.vue'
 import Request from '../../../common/Request.vue'
 import Common from '../../../common/Common.vue'
-
+import Services from '../../../common/Services.vue'
 export default {
     init: async payload => {
-        payload.isSuperAdminMaster = Common.isSuperAdminMaster(payload)
-        payload.filters.account = Common.getAccountId(payload)
+        payload.isSuperAdminMaster = await Common.isSuperAdminMaster(payload)
+        payload.accounts = await Services.getAccounts(payload)
+        payload.filters.account = await Common.getAccountId(payload)
         payload.initTable()
         payload.filter()
+
+        payload.domain = Endpoints.domain
     },
     methods: {
         filter: function () {
@@ -31,15 +34,18 @@ export default {
             )
         },
         selectItem(params) {
-            const data = JSON.parse(JSON.stringify(params.row))
+            const data = params && params?.row ? JSON.parse(JSON.stringify(params.row)) : {}
 
             data.account = data?.account?._id || ''
 
             delete data.vgt_id
             delete data.originalIndex
 
-            this.$emit('load-item', data)
+            this.data = data
+
+            this.$bvModal.show('createClientModal')
         },
+
         initTable() {
             this.columns = [
                 {
@@ -48,6 +54,8 @@ export default {
                     width: '15%',
                     thClass: 'text-nowrap',
                     tdClass: 'text-nowrap',
+                    sortable: true,
+                    filterable: true,
                 },
                 {
                     label: this.$t('str.table.client.column.account'),
@@ -55,6 +63,8 @@ export default {
                     width: '15%',
                     thClass: 'text-nowrap',
                     tdClass: 'text-nowrap',
+                    sortable: true,
+                    filterable: true,
                 },
                 {
                     label: this.$t('str.table.client.column.email'),
@@ -63,6 +73,8 @@ export default {
                     width: '15%',
                     tdClass: 'text-nowrap',
                     thClass: 'text-nowrap',
+                    sortable: true,
+                    filterable: true,
                 },
                 {
                     label: this.$t('str.table.client.column.phone'),
@@ -71,6 +83,8 @@ export default {
                     width: '15%',
                     tdClass: 'text-nowrap',
                     thClass: 'text-nowrap',
+                    sortable: true,
+                    filterable: true,
                 },
                 {
                     label: this.$t('str.table.client.column.owner'),
@@ -78,6 +92,8 @@ export default {
                     width: '15%',
                     thClass: 'text-nowrap',
                     tdClass: 'text-nowrap',
+                    sortable: true,
+                    filterable: true,
                 },
                 {
                     label: this.$t('str.table.client.column.creat.at'),
@@ -85,6 +101,8 @@ export default {
                     width: '15%',
                     tdClass: 'text-nowrap',
                     thClass: 'text-nowrap',
+                    sortable: true,
+                    filterable: true,
                 },
                 {
                     label: this.$t('str.table.client.column.status'),
@@ -92,6 +110,8 @@ export default {
                     width: '15%',
                     tdClass: 'text-nowrap',
                     thClass: 'text-nowrap',
+                    sortable: true,
+                    filterable: true,
                 },
             ]
             this.paginationOptions = {

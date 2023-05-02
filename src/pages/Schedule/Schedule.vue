@@ -1,8 +1,5 @@
 <template>
     <div>
-        <ol class="breadcrumb float-xl-end">
-            <li class="breadcrumb-item">{{ $t('str.breadcrumb.schedules') }}</li>
-        </ol>
         <h1 class="page-header">{{ $t('str.form.title.schedules') }}</h1>
         <hr />
 

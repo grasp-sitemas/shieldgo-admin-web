@@ -1,7 +1,7 @@
 <template>
     <div>
         <panel :title="$t('str.table.list.vigilants')" bodyClass="p-0">
-            <div class="row panel-filter me-1 ms-1">
+            <div class="row ms-2 mb-1 mt-3 me-1">
                 <div v-if="isSuperAdminMaster" class="col-md-3 mb-3">
                     <label class="form-label" for="accountField">{{ $t('str.register.guard.groups.account.field') }}</label>
                     <select v-model="filters.account" @change="changeAccount" class="form-select" id="accountField">
@@ -39,6 +39,9 @@
                         <option value="ARCHIVED">{{ $t('str.register.status.archived') }}</option>
                     </select>
                 </div>
+                <div class="col-md-3 text-end mt-2">
+                    <button @click="selectItem()" type="submit" class="btn btn-default w-150px">{{ $t('str.btn.new.form') }}</button>
+                </div>
             </div>
             <vue-good-table
                 :columns="columns"
@@ -51,25 +54,13 @@
                     enabled: true,
                     multipleColumns: true,
                 }"
+                tableLayout="fixed"
             >
                 <div slot="emptystate" class="vgt-center-align vgt-text-disabled">
                     <i v-if="isLoading" class="fas fa-spinner fa-spin" />
                     <span v-if="!isLoading && items?.length === 0">{{ $t('str.table.subtitle.no.data') }}</span>
                 </div>
                 <template slot="table-row" slot-scope="props">
-                    <!-- <span v-if="props.column.field === 'address' && props.formattedRow[props.column.field].address">
-                        {{
-                            props.formattedRow[props.column.field].address +
-                            ' ' +
-                            props.formattedRow[props.column.field].number +
-                            ', ' +
-                            props.formattedRow[props.column.field].neighborhood +
-                            ', ' +
-                            props.formattedRow[props.column.field].city +
-                            '- ' +
-                            props.formattedRow[props.column.field].state
-                        }}
-                    </span> -->
                     <span v-if="props.column.field === 'customerUser.subtype'">
                         {{ $t(props.formattedRow[props.column.field]) }}
                     </span>
@@ -88,42 +79,26 @@
                 </template>
             </vue-good-table>
         </panel>
+        <VigilantModal :selectedData="data" />
     </div>
 </template>
 
 <script>
 import Controller from './CrtListVigilant.vue'
+import VigilantModal from './Vigilant.vue'
 import Vue from 'vue'
 Vue.prototype.$registerEvent = new Vue()
 
 export default {
-    components: {},
-    props: {
-        isSuperAdminMaster: {
-            type: Boolean,
-            default: false,
-        },
-        accounts: {
-            type: Array,
-            default: () => [],
-        },
-        clients: {
-            type: Array,
-            default: () => [],
-        },
-    },
-    watch: {
-        accounts: function () {
-            this.listAccounts = this.accounts
-        },
-        clients: function () {
-            this.listClients = this.clients
-        },
+    components: {
+        VigilantModal,
     },
     data() {
         return {
             items: [],
             isLoading: false,
+            data: {},
+            isSuperAdminMaster: false,
             filters: {
                 account: '',
                 client: '',

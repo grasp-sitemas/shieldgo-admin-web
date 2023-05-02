@@ -1,16 +1,6 @@
 <template>
     <div v-if="!isLoading">
-        <ol class="breadcrumb float-xl-end">
-            <li class="breadcrumb-item">
-                <a href="#/settings">{{ $t('str.breadcrumb.settings') }}</a>
-            </li>
-        </ol>
-
-        <h1 class="page-header">
-            {{ $t('str.form.title.settings') }}
-        </h1>
-
-        <panel :title="$t('str.page.settigs')">
+        <panel :title="$t('str.form.title.settings')">
             <form>
                 <fieldset>
                     <div class="row mt-10px">

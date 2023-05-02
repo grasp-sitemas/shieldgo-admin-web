@@ -2,7 +2,7 @@
     <div>
         <panel :title="$t('str.table.list.patrol.points')" bodyClass="p-0">
             <div class="row panel-filter me-1 ms-1">
-                <div class="col-md-4">
+                <div class="col-md-3">
                     <button v-b-modal.checkPointModal type="submit" class="btn btn-default w-200px">{{ $t('str.btn.new.form') }}</button>
                 </div>
             </div>

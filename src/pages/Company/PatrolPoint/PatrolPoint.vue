@@ -1,15 +1,5 @@
 <template>
     <div :key="valuekey">
-        <ol class="breadcrumb float-xl-end">
-            <li class="breadcrumb-item">
-                <a href="#/check.points">{{ $t('str.breadcrumb.patrol.points') }}</a>
-            </li>
-        </ol>
-
-        <h1 class="page-header">
-            {{ $t('str.form.title.patrol.points') }}
-        </h1>
-
         <panel v-if="data._id" :title="$t('str.register.form.title')">
             <form>
                 <fieldset>

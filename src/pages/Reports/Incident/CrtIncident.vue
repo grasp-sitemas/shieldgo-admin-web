@@ -25,7 +25,7 @@ export default {
             }
 
             if (!payload.isSuperAdminMaster) {
-                payload.columns.splice(5, 1)
+                payload.columns.splice(6, 1)
             }
 
             payload.jsonFields = payload.JSON_FIELDS_CSV.incident[payload.$i18n.locale].json_fields
@@ -65,6 +65,7 @@ export default {
                     const closedDate = item?.attendance?.closedDate && item?.attendance?.closedDate?.length > 0 ? moment(item.attendance.closedDate).format('DD/MM/YYYY HH:mm:ss') : ' '
                     const photoURL = item?.photoURL ? domain + item.photoURL : ' '
                     const signatureURL = item?.signatureURL ? domain + item.signatureURL : ' '
+                    const soundURL = item?.soundURL ? domain + item.soundURL : ' '
                     const event = item?.event ? item.event : ' '
                     const incidents = item?.incidents ? item.incidents.map(incident => incident.name).join(', ') : ' '
 
@@ -81,6 +82,7 @@ export default {
                         operator: item.attendance?.operator,
                         openedDate: openedDate,
                         closedDate: closedDate,
+                        soundURL: soundURL,
                         photoURL: photoURL,
                         signatureURL: signatureURL,
                         incidents: item?.incidents ? item.incidents : ' ',
@@ -89,7 +91,6 @@ export default {
                         site: item.site,
                     }
                 })
-                console.log('csvItems', this.csvItems)
 
                 this.isSearchLoading = false
             }
@@ -113,12 +114,19 @@ export default {
                     tdClass: 'text-nowrap',
                 },
                 {
-                    label: this.$t('str.table.reports.column.geolocation'),
+                    label: this.$t('str.table.reports.column.geo'),
                     field: 'geolocation',
-                    width: '10%',
+                    width: '5%',
                     sortable: true,
                     thClass: 'text-nowrap',
                     tdClass: 'text-nowrap',
+                },
+                {
+                    label: this.$t('str.timeline.item.patrol.actions.medias'),
+                    field: 'medias',
+                    tdClass: 'text-nowrap',
+                    thClass: 'text-nowrap',
+                    width: '5%',
                 },
                 {
                     label: this.$t('str.table.reports.column.event'),
@@ -252,14 +260,21 @@ export default {
                 },
             }
         },
-        selectItem(params) {
-            const data = JSON.parse(JSON.stringify(params.row))
-
-            delete data.vgt_id
-            delete data.originalIndex
-
+        showMap(data) {
             this.selectedItem = data
-            this.$bvModal.show('infoItemModal')
+            this.$bvModal.show('mapModal')
+        },
+        showPhoto(data) {
+            this.selectedItem = data
+            this.$bvModal.show('photoModal')
+        },
+        showSignature(data) {
+            this.selectedItem = data
+            this.$bvModal.show('signatureModal')
+        },
+        showSound(data) {
+            this.selectedItem = data
+            this.$bvModal.show('soundModal')
         },
         changeAccount: async function () {
             const account = this.filters.account

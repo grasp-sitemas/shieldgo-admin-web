@@ -128,14 +128,9 @@ export default {
 
             this.clients = await Services.getClientsByAccount(this, account)
         },
-        selectItem: async function (item) {
-            this.errors = []
-            const data = item
-
-            this.data = data
-
-            document.body.scrollTop = 0 // For Safari
-            document.documentElement.scrollTop = 0 // For Chrome, Firefox, IE and Opera
+        async closeModal() {
+            this.clearForm()
+            this.$bvModal.hide('createClientGroupModal')
         },
         selectAllClients() {
             this.data.clients = this.clients

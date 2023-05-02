@@ -27,6 +27,7 @@ export default {
             this.data.account = Common.getAccountId(this)
             this.isLoading = false
         },
+
         async save() {
             if (this.isLoading) return
 
@@ -131,6 +132,10 @@ export default {
                 await this.save()
             }
         },
+        async closeModal() {
+            this.clearForm()
+            this.$bvModal.hide('createSiteGroupModal')
+        },
         changeAccount: async function () {
             this.sites = []
             this.data.client = ''
@@ -151,21 +156,6 @@ export default {
             }
 
             this.sites = await Services.getSitesByClient(this, client)
-        },
-        selectItem: async function (item) {
-            this.errors = []
-
-            this.data = item
-
-            const client = this.data.client
-
-            this.selectedSites = []
-
-            this.clients = await Services.getClientsByAccount(this, this.data.account)
-            this.sites = await Services.getSitesByClient(this, client)
-
-            document.body.scrollTop = 0 // For Safari
-            document.documentElement.scrollTop = 0 // For Chrome, Firefox, IE and Opera
         },
         selectAllSites() {
             this.selectedSites = this.sites

@@ -34,7 +34,7 @@ export default {
             )
         },
         selectItem(params) {
-            const data = JSON.parse(JSON.stringify(params.row))
+            const data = params && params?.row ? JSON.parse(JSON.stringify(params.row)) : {}
 
             delete data.vgt_id
             delete data.originalIndex
@@ -48,7 +48,9 @@ export default {
                 data.address = {}
             }
 
-            this.$emit('load-item', data)
+            this.data = data
+
+            this.$bvModal.show('createGuardGroupModal')
         },
         async initTable() {
             this.columns = [
@@ -58,6 +60,8 @@ export default {
                     width: '20%',
                     thClass: 'text-nowrap',
                     tdClass: 'text-nowrap',
+                    sortable: true,
+                    filterable: true,
                 },
                 {
                     label: this.$t('str.table.guard.groups.column.assigned.guards'),
@@ -65,6 +69,8 @@ export default {
                     width: '15%',
                     thClass: 'text-nowrap',
                     tdClass: 'text-nowrap',
+                    sortable: true,
+                    filterable: true,
                 },
                 {
                     label: this.$t('str.table.guard.groups.column.account'),
@@ -72,6 +78,8 @@ export default {
                     width: '15%',
                     thClass: 'text-nowrap',
                     tdClass: 'text-nowrap',
+                    sortable: true,
+                    filterable: true,
                 },
                 {
                     label: this.$t('str.table.guard.groups.column.client'),
@@ -79,6 +87,8 @@ export default {
                     width: '15%',
                     thClass: 'text-nowrap',
                     tdClass: 'text-nowrap',
+                    sortable: true,
+                    filterable: true,
                 },
                 {
                     label: this.$t('str.table.guard.groups.column.site'),
@@ -86,6 +96,8 @@ export default {
                     width: '15%',
                     thClass: 'text-nowrap',
                     tdClass: 'text-nowrap',
+                    sortable: true,
+                    filterable: true,
                 },
                 {
                     label: this.$t('str.table.guard.groups.column.creat.at'),
@@ -93,6 +105,8 @@ export default {
                     width: '10%',
                     tdClass: 'text-nowrap',
                     thClass: 'text-nowrap',
+                    sortable: true,
+                    filterable: true,
                 },
                 {
                     label: this.$t('str.table.guard.groups.column.status'),
@@ -100,6 +114,8 @@ export default {
                     width: '10%',
                     tdClass: 'text-nowrap',
                     thClass: 'text-nowrap',
+                    sortable: true,
+                    filterable: true,
                 },
             ]
             this.paginationOptions = {

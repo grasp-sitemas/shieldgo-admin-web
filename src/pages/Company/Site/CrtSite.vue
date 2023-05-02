@@ -18,20 +18,31 @@ const instanceateAddress = (addressObj, geo) => {
 
 export default {
     init: async payload => {
+        // payload.data.account = Common.getAccountId(payload)
+
+        // payload.isSuperAdminMaster = await Common.isSuperAdminMaster(payload)
+        // const role = await Common.getSubtype(payload)
+        // if (role === 'SUPER_ADMIN_MASTER') {
+        //     payload.accounts = await Services.getAccounts(payload)
+        //     payload.clients = await Services.getClients(payload)
+        // } else if (role === 'ADMIN' || role === 'MANAGER') {
+        //     payload.clients = await Services.getClients(payload)
+        // } else if (role === 'OPERATOR') {
+        //     const client = await Common.getClientId(payload)
+        //     payload.data.client = client
+        //     payload.sites = await Services.getSites(payload)
+        // }
+        // payload.role = role
+
+        payload.domain = Endpoints.domain
         payload.data.account = Common.getAccountId(payload)
 
         payload.isSuperAdminMaster = await Common.isSuperAdminMaster(payload)
-        const role = await Common.getSubtype(payload)
-        if (role === 'SUPER_ADMIN_MASTER') {
+        if (payload.isSuperAdminMaster) {
             payload.accounts = await Services.getAccounts(payload)
-        } else if (role === 'ADMIN' || role === 'MANAGER') {
+        } else {
             payload.clients = await Services.getClients(payload)
-        } else if (role === 'OPERATOR') {
-            const client = await Common.getClientId(payload)
-            payload.data.client = client
-            payload.sites = await Services.getSites(payload)
         }
-        payload.role = role
     },
     methods: {
         inputCep() {
@@ -265,17 +276,9 @@ export default {
                 },
             )
         },
-        selectItem: async function (item) {
-            this.errors = []
-            this.file = null
-            this.data = item
-
-            if (item.account) {
-                this.clients = await Services.getClientsByAccount(this, item.account)
-            }
-
-            document.body.scrollTop = 0 // For Safari
-            document.documentElement.scrollTop = 0 // For Chrome, Firefox, IE and Opera
+        async closeModal() {
+            this.clearForm()
+            this.$bvModal.hide('createSiteModal')
         },
         changeAccount: async function () {
             const account = this.data.account

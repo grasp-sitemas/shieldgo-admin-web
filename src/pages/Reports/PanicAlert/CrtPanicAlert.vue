@@ -93,9 +93,9 @@ export default {
                     tdClass: 'text-nowrap',
                 },
                 {
-                    label: this.$t('str.table.reports.column.geolocation'),
+                    label: this.$t('str.table.reports.column.geo'),
                     field: 'geolocation',
-                    width: '10%',
+                    width: '5%',
                     sortable: true,
                     thClass: 'text-nowrap',
                     tdClass: 'text-nowrap',
@@ -160,6 +160,10 @@ export default {
                 pageLabel: this.$t('str.table.pagination.page'),
                 allLabel: this.$t('str.table.pagination.all.label'),
             }
+        },
+        showMap(data) {
+            this.selectedItem = data
+            this.$bvModal.show('mapModal')
         },
         clearFilters: async function () {
             this.errors = []
@@ -232,15 +236,7 @@ export default {
                 },
             }
         },
-        selectItem(params) {
-            const data = JSON.parse(JSON.stringify(params.row))
 
-            delete data.vgt_id
-            delete data.originalIndex
-
-            this.selectedItem = data
-            this.$bvModal.show('infoItemModal')
-        },
         changeAccount: async function () {
             const account = this.filters.account
 

@@ -55,6 +55,10 @@ export default {
                 console.log(error)
             }
         },
+        async closeModal() {
+            this.clearForm()
+            this.$bvModal.hide('createClientModal')
+        },
         async archive() {
             try {
                 Request.do(
@@ -114,13 +118,6 @@ export default {
             if (!this.errors || this.errors.length === 0) {
                 this.save(this.data)
             }
-        },
-        selectItem: function (item) {
-            this.errors = []
-            this.file = null
-            this.data = item
-            document.body.scrollTop = 0 // For Safari
-            document.documentElement.scrollTop = 0 // For Chrome, Firefox, IE and Opera
         },
     },
 }

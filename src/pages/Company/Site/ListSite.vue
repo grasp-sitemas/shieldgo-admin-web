@@ -1,8 +1,8 @@
 <template>
     <div>
         <panel :title="$t('str.table.list.sites')" bodyClass="p-0">
-            <div class="row ms-2 mb-1 mt-3 me-2">
-                <div v-if="isSuperAdminMaster" class="col-md-4 mb-3">
+            <div class="row ms-2 mb-1 mt-3 me-1">
+                <div v-if="isSuperAdminMaster" class="col-md-3 mb-3">
                     <label class="form-label" for="accountField">{{ $t('str.register.site.account.field') }}</label>
                     <select v-model="filters.account" @change="changeAccount" class="form-select" id="accountField">
                         <option value="">{{ $t('str.register.select.placeholder') }}</option>
@@ -11,7 +11,7 @@
                         </option>
                     </select>
                 </div>
-                <div class="col-md-4 mb-3">
+                <div class="col-md-3 mb-3">
                     <label class="form-label" for="clientField">{{ $t('str.register.site.client.field') }}</label>
                     <select v-model="filters.client" @change="filter" class="form-select" id="clientField">
                         <option value="">{{ $t('str.register.select.placeholder') }}</option>
@@ -20,12 +20,15 @@
                         </option>
                     </select>
                 </div>
-                <div class="col-md-4">
+                <div class="col-md-3">
                     <label class="form-label" for="statusField">{{ $t('str.register.status.field') }}</label>
                     <select v-model="filters.status" @change="filter" class="form-select" id="statusField">
                         <option value="ACTIVE">{{ $t('str.register.status.active') }}</option>
                         <option value="ARCHIVED">{{ $t('str.register.status.archived') }}</option>
                     </select>
+                </div>
+                <div class="col-md-3 text-end mt-2">
+                    <button @click="selectItem()" type="submit" class="btn btn-default w-150px">{{ $t('str.btn.new.form') }}</button>
                 </div>
             </div>
             <vue-good-table
@@ -35,6 +38,7 @@
                 @on-row-click="selectItem"
                 :search-options="{ enabled: true, placeholder: $t('str.table.search.in.this.table') }"
                 :pagination-options="paginationOptions"
+                tableLayout="fixed"
             >
                 <div slot="emptystate" class="vgt-center-align vgt-text-disabled">
                     <i v-if="isLoading" class="fas fa-spinner fa-spin" />
@@ -72,21 +76,25 @@
                 </template>
             </vue-good-table>
         </panel>
+        <SiteModal :selectedData="data" />
     </div>
 </template>
 
 <script>
 import Controller from './CrtListSite.vue'
+import SiteModal from './Site.vue'
 import Vue from 'vue'
 Vue.prototype.$registerEvent = new Vue()
 
 export default {
-    components: {},
-    props: ['accounts', 'clients'],
+    components: {
+        SiteModal,
+    },
     data() {
         return {
             items: [],
             isLoading: false,
+            data: {},
             filters: {
                 account: '',
                 client: '',
@@ -95,6 +103,9 @@ export default {
                 statusActive: false,
                 name: '',
             },
+            accounts: [],
+            clients: [],
+            sites: [],
             columns: [],
             paginationOptions: {},
             isSuperAdminMaster: false,

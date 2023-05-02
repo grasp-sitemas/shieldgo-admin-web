@@ -268,47 +268,45 @@ export default {
     },
     watch: {
         selectedData: async function () {
-            const data = this?.selectedData
+            this.data = this?.selectedData
 
-            if (!data?._id) {
-                data = this.userObj
+            if (this.data?._id) {
+                this.data = this.userObj
             }
 
-            if (!data?.companyUser?.subtype) {
-                data.companyUser = {
+            if (!this.data?.companyUser?.subtype) {
+                this.data.companyUser = {
                     status: 'ACTIVE',
                     subtype: '',
                 }
             }
 
-            if (data?.siteGroup) {
-                data.siteGroup = data.siteGroup._id
+            if (this.data?.siteGroup) {
+                this.data.siteGroup = this.data.siteGroup._id
             }
 
-            if (data?.clientGroup) {
-                data.clientGroup = data.clientGroup._id
+            if (this.data?.clientGroup) {
+                this.data.clientGroup = this.data.clientGroup._id
             }
 
-            if (data.account) {
-                this.clients = await Services.getClientsByAccount(this, data.account)
+            if (this.data.account) {
+                this.clients = await Services.getClientsByAccount(this, this.data.account)
             }
 
-            if (data.client) {
-                this.sites = await Services.getSitesByClient(this, data.client)
+            if (this.data.client) {
+                this.sites = await Services.getSitesByClient(this, this.data.client)
             }
 
-            if (data?.companyUser?.subtype === 'OPERATOR') {
-                this.siteGroups = await Services.getSiteGroupsByAccount(this, data?.account?._id)
+            if (this.data?.companyUser?.subtype === 'OPERATOR') {
+                this.siteGroups = await Services.getSiteGroupsByAccount(this, this.data?.account?._id)
             }
 
-            if (data?.companyUser?.subtype === 'MANAGER') {
-                this.clientGroups = await Services.getClientGroupsByAccount(this, data?.account?._id)
+            if (this.data?.companyUser?.subtype === 'MANAGER') {
+                this.clientGroups = await Services.getClientGroupsByAccount(this, this.data?.account?._id)
             }
 
-            data.oldEmail = data?.email
-            data.oldUsername = data?.username
-
-            this.data = data
+            this.data.oldEmail = this.data?.email
+            this.data.oldUsername = this.data?.username
 
             this.errors = []
         },

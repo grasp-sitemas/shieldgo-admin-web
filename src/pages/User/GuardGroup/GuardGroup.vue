@@ -128,24 +128,24 @@ export default {
     },
     watch: {
         selectedData: async function () {
-            const data = this?.selectedData
+            this.data = this?.selectedData
 
-            if (!data?._id) {
-                data = this.guardGroupObj
+            if (!this.data?._id) {
+                this.data = this.guardGroupObj
             }
 
-            if (data.account) {
-                this.clients = await Services.getClientsByAccount(this, data.account)
+            if (this.data.account) {
+                this.clients = await Services.getClientsByAccount(this, this.data.account)
             }
 
-            if (data.client) {
-                this.sites = await Services.getSitesByClient(this, data.client)
+            if (this.data.client) {
+                this.sites = await Services.getSitesByClient(this, this.data.client)
             }
 
-            if (data.site) {
-                this.vigilants = await Services.getVigilantsBySite(this, data.site)
+            if (this.data.site) {
+                this.vigilants = await Services.getVigilantsBySite(this, this.data.site)
 
-                const mappedVigilants = data.vigilants.map(vigilant => {
+                const mappedVigilants = this.data.vigilants.map(vigilant => {
                     return {
                         _id: vigilant._id,
                         firstName: vigilant.firstName,
@@ -154,10 +154,9 @@ export default {
                     }
                 })
 
-                data.vigilants = mappedVigilants ? mappedVigilants : []
+                this.data.vigilants = mappedVigilants ? mappedVigilants : []
             }
 
-            this.data = data
             this.errors = []
         },
     },

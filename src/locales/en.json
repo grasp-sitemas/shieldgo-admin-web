@@ -1100,7 +1100,7 @@
     "CLOSED": "Closed",
     "str.total.alerts": "Total alerts",
     "str.table.reports.column.date": "Date",
-    "str.table.reports.column.geolocation": "Geolocation",
+    "str.table.reports.column.geo": "Geolocation",
     "str.table.reports.column.attendance": "Attendance",
     "str.sidebar.menu.reports.incidents": "Incidents",
     "str.sidebar.menu.reports.incident.description": "Incidents",
@@ -1126,5 +1126,9 @@
     "str.sidebar.menu.reports.missed.calls": "Events Missed calls",
     "str.sidebar.menu.reports.missed.call.description": "Events Missed calls",
     "str.total.missed.calls": "Total missed calls",
-    "str.table.reports.column.type": "Type"
+    "str.table.reports.column.type": "Type",
+    "str.are.you.sure.delete.schedule": "Are you sure you want to delete this schedule?",
+    "str.title.delete.series": "Delete series",
+    "str.title.delete.occurrence": "Delete occurrence",
+    "str.table.reports.column.geo": "Geo"
 }       

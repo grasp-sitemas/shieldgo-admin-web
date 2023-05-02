@@ -1080,7 +1080,7 @@
     "str.table.reports.column.scanned.date": "Data da leitura",
     "str.sidebar.menu.reports.sos.alert": "Alertas de SOS",
     "str.sidebar.menu.reports.sos.alert.description": "Alertas de SOS",
-    "str.table.reports.column.geolocation": "Geolocalização",
+    "str.table.reports.column.geo": "Geolocalização",
     "str.table.reports.column.date": "Data",
     "str.table.reports.column.attendance": "Atendimento",
     "str.attendance.opened.at": "Aberto em",
@@ -1119,5 +1119,9 @@
     "str.sidebar.menu.reports.missed.calls": "Eventos não atendidos",
     "str.sidebar.menu.reports.missed.call.description": "Eventos não atendidos",
     "str.total.missed.calls": "Total de eventos",
-    "str.table.reports.column.type": "Tipo"
+    "str.table.reports.column.type": "Tipo",
+    "str.are.you.sure.delete.schedule": "Deseja excluir este agendamento?",
+    "str.title.delete.series": "Excluir série",
+    "str.title.delete.occurrence": "Excluir ocorrência",
+    "str.table.reports.column.geo": "Geo"
 }

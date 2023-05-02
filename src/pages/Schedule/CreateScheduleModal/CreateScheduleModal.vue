@@ -350,7 +350,7 @@
                             {{ $t('str.btn.save') }}
                         </button>
                         <button v-if="data._id && data.status === 'ACTIVE'" v-on:click="confirmArchive" type="submit" class="ms-10px btn btn-warning w-200px">
-                            {{ $t('str.btn.cancel') }}
+                            {{ $t('str.btn.delete') }}
                         </button>
                         <button @click="closeModal()" type="submit" class="ms-10px btn btn-secondary w-200px">
                             {{ $t('str.btn.close') }}

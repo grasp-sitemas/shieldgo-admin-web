@@ -97,14 +97,13 @@
                 :totalRows="items?.length"
                 :search-options="{ enabled: false, placeholder: $t('str.table.search.in.this.table') }"
                 :pagination-options="paginationOptions"
-                @on-row-click="selectItem"
             >
                 <div slot="emptystate" class="vgt-center-align vgt-text-disabled">
                     <i v-if="isLoading" class="fas fa-spinner fa-spin" />
                     <span v-if="!isLoading && items?.length === 0">{{ $t('str.table.subtitle.no.data') }}</span>
                 </div>
                 <template slot="table-row" slot-scope="props">
-                    <span v-if="props.column.field === 'geolocation'">
+                    <span v-if="props.column.field === 'geolocation'" class="d-flex justify-content-center">
                         <span
                             v-if="
                                 props.formattedRow[props.column.field]?.latitude &&
@@ -113,11 +112,21 @@
                                 props.formattedRow[props.column.field]?.longitude?.length > 0
                             "
                         >
-                            {{ 'Lat: ' + props.formattedRow[props.column.field]?.latitude + ' Lng: ' + props.formattedRow[props.column.field]?.longitude }}
+                            <i v-on:click="showMap(props.formattedRow[props.column.field])" class="fas fa-map-marker-alt cursor_pointer" />
                         </span>
                         <span v-else>
                             <i class="fas fa-ban"></i>
                         </span>
+                    </span>
+
+                    <span class="align-medias" v-else-if="props.column.field === 'medias'">
+                        <i v-on:click="showPhoto(props.formattedRow[props.column.field].photoURL)" v-show="props.formattedRow[props.column.field].photoURL" class="fas fa-image" />
+                        <i v-on:click="showSound(props.formattedRow[props.column.field].soundURL)" v-show="props.formattedRow[props.column.field].soundURL" class="fas fa-volume-up" />
+                        <i v-on:click="showSignature(props.formattedRow[props.column.field].signatureURL)" v-show="props.formattedRow[props.column.field].signatureURL" class="fas fa-pen" />
+                        <i
+                            v-show="!props.formattedRow[props.column.field].signatureURL && !props.formattedRow[props.column.field].soundURL && !props.formattedRow[props.column.field].photoURL"
+                            class="fas fa-minus"
+                        />
                     </span>
 
                     <span v-else-if="props.column.field === 'incidents'">
@@ -162,6 +171,10 @@
         <div v-else class="center-spinner">
             <i class="fas fa-spinner fa-spin" />
         </div>
+        <Map :data="selectedItem" />
+        <Photo :data="selectedItem" />
+        <Signature :data="selectedItem" />
+        <Sound :data="selectedItem" />
     </div>
 </template>
 
@@ -172,6 +185,10 @@ import { DATE_RANGE_CONFIG } from '../../../utils/date'
 import CsvDownload from './Components/CsvDownload.vue'
 import XlsDownload from './Components/XlsDownload.vue'
 import PdfDownload from './Components/PdfDownload.vue'
+import Map from '../Components/Map.vue'
+import Photo from '../Components/Photo.vue'
+import Signature from '../Components/Signature.vue'
+import Sound from '../Components/Sound.vue'
 import Vue from 'vue'
 import { JSON_FIELDS_CSV } from './Utils/jsonFieldsCsv'
 import { PDF_HEADER } from './Utils/jsonFieldsPdf'
@@ -182,6 +199,10 @@ export default {
         CsvDownload,
         XlsDownload,
         PdfDownload,
+        Map,
+        Photo,
+        Signature,
+        Sound,
     },
     data() {
         return {
@@ -195,6 +216,7 @@ export default {
             csvItems: [],
             paginationOptions: {},
             fields: [],
+            selectedItem: {},
             isLoading: true,
             isSearchLoading: false,
             dateRange: DATE_RANGE_CONFIG,
@@ -249,5 +271,10 @@ export default {
 }
 .caret {
     display: none !important;
+}
+
+.align-medias {
+    display: flex;
+    justify-content: space-around;
 }
 </style>

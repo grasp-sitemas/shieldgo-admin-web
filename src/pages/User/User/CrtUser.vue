@@ -203,19 +203,9 @@ export default {
             }
         },
         async checkForm() {
-            // const role = this.data.companyUser.subtype
-
             if (!this.data.account || this.data.account === '') {
                 this.errors.push('account')
             }
-
-            // if (role !== 'ADMIN' && (!this.data.client || this.data.client === '')) {
-            //     this.errors.push('client')
-            // }
-
-            // if (role === 'OPERATOR' && (!this.data.site || this.data.site === '')) {
-            //     this.errors.push('site')
-            // }
 
             if (!this.data.firstName || this.data.firstName === '') {
                 this.errors.push('firstName')
@@ -346,6 +336,15 @@ export default {
                     this.siteGroups = await Services.getSiteGroupsByAccount(this, this.data.account)
                 }
             }
+        },
+        async changeClientGroup() {
+            const clientGroup = this?.data?.clientGroup
+
+            if (clientGroup === '') {
+                this.data.site = ''
+            }
+
+            this.sites = await Services.getSitesByClientGroup(this, clientGroup)
         },
         async closeModal() {
             this.clearForm()

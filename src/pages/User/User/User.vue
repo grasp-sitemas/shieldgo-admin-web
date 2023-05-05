@@ -270,7 +270,7 @@ export default {
         selectedData: async function () {
             this.data = this?.selectedData
 
-            if (this.data?._id) {
+            if (!this.data?._id) {
                 this.data = this.userObj
             }
 

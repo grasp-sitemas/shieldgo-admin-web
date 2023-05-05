@@ -244,7 +244,7 @@ export default {
     },
     watch: {
         selectedData: async function () {
-            this.data = this?.selectedData
+            this.data = this.selectedData
 
             if (!this.data?._id) {
                 this.data = this.vigilantObj

@@ -6,7 +6,7 @@
                     <label class="form-label" for="accountField">{{ $t('str.register.client.groups.account.field') }}</label>
                     <select v-model="filters.account" @change="changeAccount" class="form-select" id="accountField">
                         <option value="">{{ $t('str.register.select.placeholder') }}</option>
-                        <option v-for="account in listAccounts" :value="account._id" :key="account._id">
+                        <option v-for="account in accounts" :value="account._id" :key="account._id">
                             {{ account.name }}
                         </option>
                     </select>
@@ -77,16 +77,8 @@ export default {
             type: Boolean,
             default: false,
         },
-        accounts: {
-            type: Array,
-            default: () => [],
-        },
     },
-    watch: {
-        accounts: function () {
-            this.listAccounts = this.accounts
-        },
-    },
+
     data() {
         return {
             items: [],
@@ -97,7 +89,7 @@ export default {
                 name: '',
             },
             data: {},
-            listAccounts: [],
+            accounts: [],
             columns: [],
             paginationOptions: {},
         }

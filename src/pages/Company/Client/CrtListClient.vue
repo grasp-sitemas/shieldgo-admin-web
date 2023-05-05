@@ -10,7 +10,6 @@ export default {
         payload.filters.account = await Common.getAccountId(payload)
         payload.initTable()
         payload.filter()
-
         payload.domain = Endpoints.domain
     },
     methods: {

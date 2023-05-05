@@ -174,7 +174,7 @@ export default {
 
             this.filter()
 
-            this.listClients = await Services.getClientsByAccount(this, account)
+            this.clients = await Services.getClientsByAccount(this, account)
         },
         changeClient: async function () {
             const client = this.filters.client
@@ -185,7 +185,7 @@ export default {
 
             this.filter()
 
-            this.listSites = await Services.getSitesByClient(this, client)
+            this.sites = await Services.getSitesByClient(this, client)
         },
         changeSite: function () {
             this.filter()

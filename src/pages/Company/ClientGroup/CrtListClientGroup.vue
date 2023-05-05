@@ -122,12 +122,10 @@ export default {
         changeAccount: async function () {
             const account = this.filters.account
 
-            this.sites = []
             this.filters.client = ''
-
             this.filter()
 
-            this.listClients = await Services.getClientsByAccount(this, account)
+            this.clients = await Services.getClientsByAccount(this, account)
         },
         formatDate: Common.formatDateAndTime,
     },

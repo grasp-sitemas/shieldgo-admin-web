@@ -32,8 +32,12 @@ export default {
                 },
             )
         },
+        openCheckPointModal() {
+            this.clearForm()
+            this.$bvModal.show('checkPointModal')
+        },
         selectItem(params) {
-            const data = JSON.parse(JSON.stringify(params.row))
+            const data = params && params?.row ? JSON.parse(JSON.stringify(params.row)) : this.patrolPointObj
 
             delete data.vgt_id
             delete data.originalIndex
@@ -48,6 +52,8 @@ export default {
                     longitude: '',
                 }
             }
+
+            this.data = data
 
             this.$emit('load-item', data)
         },

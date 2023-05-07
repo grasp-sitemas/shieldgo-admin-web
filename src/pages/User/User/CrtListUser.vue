@@ -7,6 +7,7 @@ import Services from '../../../common/Services.vue'
 export default {
     init: async payload => {
         payload.isSuperAdminMaster = await Common.isSuperAdminMaster(payload)
+
         setTimeout(async () => {
             payload.accounts = await Services.getAccounts(payload)
             const account = await Common.getAccountId(payload)
@@ -45,7 +46,7 @@ export default {
             )
         },
         selectItem(params) {
-            const data = params && params?.row ? JSON.parse(JSON.stringify(params.row)) : {}
+            const data = params && params?.row ? JSON.parse(JSON.stringify(params.row)) : this.userObj
             delete data.vgt_id
             delete data.originalIndex
             delete data.password

@@ -225,10 +225,6 @@ export default {
         selectedData: function () {
             this.data = this.selectedData
 
-            if (!this.data?._id) {
-                this.data = this.companyObj
-            }
-
             this.errors = []
             this.file = null
             this.$refs.file.value = null
@@ -242,8 +238,8 @@ export default {
             isLoading: false,
             errors: [],
             valuekey: 0,
-            companyObj: company,
-            data: company,
+            companyObj: JSON.parse(JSON.stringify(company)),
+            data: JSON.parse(JSON.stringify(company)),
         }
     },
     mounted() {

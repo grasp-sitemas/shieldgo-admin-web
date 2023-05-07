@@ -33,14 +33,14 @@ export default {
             )
         },
         selectItem(params) {
-            const data = params && params?.row ? JSON.parse(JSON.stringify(params.row)) : {}
+            const item = params && params?.row ? JSON.parse(JSON.stringify(params.row)) : this.clientObj
 
-            data.account = data?.account?._id || ''
+            item.account = item?.account?._id || ''
 
-            delete data.vgt_id
-            delete data.originalIndex
+            delete item.vgt_id
+            delete item.originalIndex
 
-            this.data = data
+            this.data = item
 
             this.$bvModal.show('createClientModal')
         },

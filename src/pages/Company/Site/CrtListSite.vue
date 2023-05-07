@@ -50,7 +50,7 @@ export default {
             )
         },
         selectItem(params) {
-            const data = params && params?.row ? JSON.parse(JSON.stringify(params.row)) : {}
+            const data = params && params?.row ? JSON.parse(JSON.stringify(params.row)) : this.siteObj
 
             data.account = data?.account?._id || ''
             data.client = data?.client?._id || ''

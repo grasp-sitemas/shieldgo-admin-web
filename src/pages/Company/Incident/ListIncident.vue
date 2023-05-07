@@ -103,12 +103,14 @@
             </vue-good-table>
         </panel>
         <IncidentModal :selectedData="data" />
+        <notifications group="bottom-right" position="bottom right" :speed="500" />
     </div>
 </template>
 
 <script>
 import Controller from './CrtListIncident.vue'
 import IncidentModal from './Incident.vue'
+import { incident } from '../../../types/incident'
 import Vue from 'vue'
 Vue.prototype.$registerEvent = new Vue()
 
@@ -125,6 +127,7 @@ export default {
             isLoading: false,
             data: {},
             isSuperAdminMaster: false,
+            incidentObj: JSON.parse(JSON.stringify(incident)),
             filters: {
                 account: '',
                 client: '',

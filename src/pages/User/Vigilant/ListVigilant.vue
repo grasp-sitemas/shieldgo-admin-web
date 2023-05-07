@@ -81,12 +81,14 @@
             </vue-good-table>
         </panel>
         <VigilantModal :selectedData="data" />
+        <notifications group="bottom-right" position="bottom right" :speed="500" />
     </div>
 </template>
 
 <script>
 import Controller from './CrtListVigilant.vue'
 import VigilantModal from './Vigilant.vue'
+import { vigilant } from '../../../types/vigilant'
 import Vue from 'vue'
 Vue.prototype.$registerEvent = new Vue()
 
@@ -108,6 +110,7 @@ export default {
                 name: '',
                 isSortByName: true,
             },
+            vigilantObj: JSON.parse(JSON.stringify(vigilant)),
             columns: [],
             accounts: [],
             clients: [],

@@ -21,14 +21,8 @@ export default {
     methods: {
         clearForm() {
             this.errors = []
-            this.data = {
-                name: '',
-                clients: [],
-                account: '',
-            }
+            this.data = JSON.parse(JSON.stringify(this.clientGroupObj))
             this.clients = []
-
-            this.data.account = Common.getAccountId(this)
             this.isLoading = false
         },
         save() {
@@ -46,7 +40,7 @@ export default {
                             this.data.status = response?.result?.status
                             this.data._id = response?.result?._id
                             this.$registerEvent.$emit('refreshList')
-                            this.isLoading = false
+                            this.closeModal()
                         }
                     },
                     error => {

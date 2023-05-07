@@ -81,6 +81,7 @@
             </vue-good-table>
         </panel>
         <UserModal :selectedData="data" />
+        <notifications group="bottom-right" position="bottom right" :speed="500" />
     </div>
 </template>
 
@@ -89,7 +90,7 @@ import Controller from './CrtListUser.vue'
 import UserModal from './User.vue'
 import Vue from 'vue'
 Vue.prototype.$registerEvent = new Vue()
-
+import { user } from '../../../types/user'
 export default {
     components: {
         UserModal,
@@ -108,6 +109,7 @@ export default {
                 name: '',
                 isSortByName: true,
             },
+            userObj: JSON.parse(JSON.stringify(user)),
             accounts: [],
             clients: [],
             sites: [],

@@ -66,12 +66,14 @@
             </vue-good-table>
         </panel>
         <ClientModal :selectedData="data" />
+        <notifications group="bottom-right" position="bottom right" :speed="500" />
     </div>
 </template>
 
 <script>
 import Controller from './CrtListClient.vue'
 import ClientModal from './Client.vue'
+import { client } from '../../../types/client'
 import Vue from 'vue'
 Vue.prototype.$registerEvent = new Vue()
 
@@ -79,7 +81,6 @@ export default {
     components: {
         ClientModal,
     },
-    props: ['accounts'],
     data() {
         return {
             items: [],
@@ -92,6 +93,7 @@ export default {
                 name: '',
             },
             data: {},
+            clientObj: JSON.parse(JSON.stringify(client)),
             columns: [],
             paginationOptions: {},
         }

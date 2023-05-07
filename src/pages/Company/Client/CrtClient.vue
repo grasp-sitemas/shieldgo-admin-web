@@ -6,20 +6,16 @@ import Services from '../../../common/Services.vue'
 
 export default {
     init: async payload => {
-        payload.domain = Endpoints.domain
         payload.isSuperAdminMaster = await Common.isSuperAdminMaster(payload)
         payload.accounts = await Services.getAccounts(payload)
-        payload.data.account = await Common.getAccountId(payload)
     },
     methods: {
-        async clearForm() {
+        clearForm() {
             this.errors = []
-            this.data = this.clientObj
-            this.data.account = await Common.getAccountId(this)
+            this.data = JSON.parse(JSON.stringify(this.clientObj))
             this.isLoading = false
         },
-        save() {
-            this.isLoading = true
+        async save() {
             let formData = new FormData()
 
             formData.append('file', this.file)
@@ -34,13 +30,9 @@ export default {
                     `${Endpoints.companies.formData}${this.data._id ? this.data._id : ''}`,
                     response => {
                         if (response.status === 200) {
-                            this.isLoading = false
-                            Common.show(this, 'bottom-right', 'success', this.data._id ? this.$t('str.form.update.success') : this.$t('str.form.create.success'))
-                            const { _id, status } = response?.result
-                            this.data._id = _id
-                            this.data.status = status
                             this.$registerEvent.$emit('refreshList')
-                            // this.valuekey += 1
+                            Common.show(this, 'bottom-right', 'success', this.data._id ? this.$t('str.form.update.success') : this.$t('str.form.create.success'))
+                            this.closeModal()
                         }
                     },
                     error => {
@@ -70,8 +62,8 @@ export default {
                     response => {
                         if (response.status === 200) {
                             Common.show(this, 'bottom-right', 'success', this.$t('str.form.archive.success'))
-                            this.clearForm()
                             this.$registerEvent.$emit('refreshList')
+                            this.closeModal()
                         }
                     },
                     error => {
@@ -106,17 +98,23 @@ export default {
         removeRequiredField(field) {
             this.errors = this.errors.filter(item => item !== field)
         },
-        checkForm() {
-            if (!this.data.name || this.data.name === '') {
-                this.errors.push('name')
-            }
+        async checkForm() {
+            if (!this.isLoading) {
+                this.isLoading = true
 
-            if (!this.data.account || this.data.account === '') {
-                this.errors.push('account')
-            }
+                if (!this.data.name || this.data.name === '') {
+                    this.errors.push('name')
+                }
 
-            if (!this.errors || this.errors.length === 0) {
-                this.save(this.data)
+                if (!this.data.account || this.data.account === '') {
+                    this.errors.push('account')
+                }
+
+                if (!this.errors || this.errors.length === 0) {
+                    await this.save()
+                } else {
+                    this.isLoading = false
+                }
             }
         },
     },

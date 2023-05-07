@@ -59,24 +59,20 @@
             </vue-good-table>
         </panel>
         <ClientGroupModal :selectedData="data" />
+        <notifications group="bottom-right" position="bottom right" :speed="500" />
     </div>
 </template>
 
 <script>
 import Controller from './CrtListClientGroup.vue'
 import ClientGroupModal from './ClientGroup.vue'
+import { clientGroup } from '../../../types/clientGroup'
 import Vue from 'vue'
 Vue.prototype.$registerEvent = new Vue()
 
 export default {
     components: {
         ClientGroupModal,
-    },
-    props: {
-        isSuperAdminMaster: {
-            type: Boolean,
-            default: false,
-        },
     },
 
     data() {
@@ -88,6 +84,8 @@ export default {
                 status: 'ACTIVE',
                 name: '',
             },
+            isSuperAdminMaster: false,
+            clientGroupObj: JSON.parse(JSON.stringify(clientGroup)),
             data: {},
             accounts: [],
             columns: [],

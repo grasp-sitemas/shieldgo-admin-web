@@ -88,7 +88,7 @@ export default {
         },
         clearForm() {
             this.errors = []
-            this.data = this.companyObj
+            this.data = JSON.parse(JSON.stringify(this.companyObj))
             this.file = null
             this.$refs.file.value = null
             this.isLoading = false
@@ -114,7 +114,6 @@ export default {
                             this.data.status = status
                             this.data.logoURL = logoURL
                             this.$registerEvent.$emit('refreshList')
-
                             this.closeModal()
                         }
                     },
@@ -141,7 +140,6 @@ export default {
                     response => {
                         if (response.status === 200) {
                             Common.show(this, 'bottom-right', 'success', this.$t('str.form.archive.success'))
-                            this.clearForm()
                             this.$registerEvent.$emit('refreshList')
                             this.closeModal()
                         }

@@ -114,6 +114,8 @@ export default {
                             this.data.status = status
                             this.data.logoURL = logoURL
                             this.$registerEvent.$emit('refreshList')
+
+                            this.closeModal()
                         }
                     },
                     error => {
@@ -141,6 +143,7 @@ export default {
                             Common.show(this, 'bottom-right', 'success', this.$t('str.form.archive.success'))
                             this.clearForm()
                             this.$registerEvent.$emit('refreshList')
+                            this.closeModal()
                         }
                     },
                     error => {
@@ -181,10 +184,11 @@ export default {
         },
         async closeModal() {
             this.clearForm()
-
             this.$bvModal.hide('createCompanyModal')
         },
         checkForm() {
+            this.isLoading = true
+
             if (!this.data.name || this.data.name === '') {
                 this.errors.push('name')
             }
@@ -212,8 +216,6 @@ export default {
             }
 
             if (!this.errors || this.errors.length === 0) {
-                this.isLoading = true
-
                 this.loadGeolocation(
                     async data => {
                         await this.save(data)
@@ -225,6 +227,8 @@ export default {
                         this.isLoading = false
                     },
                 )
+            } else {
+                this.isLoading = false
             }
         },
         loadGeolocation: function (callbackSuccess, callbackError) {

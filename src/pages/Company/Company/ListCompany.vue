@@ -54,6 +54,7 @@
             </vue-good-table>
         </panel>
         <CompanyModal :selectedData="data" />
+        <notifications group="bottom-right" position="bottom right" :speed="500" />
     </div>
 </template>
 

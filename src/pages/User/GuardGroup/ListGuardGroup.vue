@@ -87,12 +87,14 @@
             </vue-good-table>
         </panel>
         <GuardGroupModal :selectedData="data" />
+        <notifications group="bottom-right" position="bottom right" :speed="500" />
     </div>
 </template>
 
 <script>
 import Controller from './CrtListGuardGroup.vue'
 import GuardGroupModal from './GuardGroup.vue'
+import { guardGroup } from '../../../types/guardGroup'
 import Vue from 'vue'
 Vue.prototype.$registerEvent = new Vue()
 
@@ -114,6 +116,7 @@ export default {
                 name: '',
             },
             isSuperAdminMaster: false,
+            guardGroupObj: JSON.parse(JSON.stringify(guardGroup)),
             accounts: [],
             clients: [],
             sites: [],

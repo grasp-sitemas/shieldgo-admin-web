@@ -113,7 +113,6 @@ export default {
             this.errors = []
             this.file = null
             this.data = this.siteObj
-            this.data.account = await Common.getAccountId(this)
             this.isLoading = false
         },
         async save() {
@@ -138,7 +137,7 @@ export default {
                             this.data = data
                             Common.show(this, 'bottom-right', 'success', data._id ? this.$t('str.form.update.success') : this.$t('str.form.create.success'))
                             this.$registerEvent.$emit('refreshList')
-                            this.isLoading = false
+                            this.closeModal()
                         }
                     },
                     error => {
@@ -164,8 +163,8 @@ export default {
                     response => {
                         if (response.status === 200) {
                             Common.show(this, 'bottom-right', 'success', this.$t('str.form.archive.success'))
-                            this.clearForm()
                             this.$registerEvent.$emit('refreshList')
+                            this.closeModal()
                         }
                     },
                     error => {

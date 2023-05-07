@@ -107,12 +107,9 @@ export default {
             this.file = null
             this.$refs.file.value = null
             this.data = this.userObj
-            this.data.account = Common.getAccountId(this)
             this.isLoading = false
         },
         async save() {
-            this.isLoading = true
-
             let formData = new FormData()
 
             formData.append('file', this.file)
@@ -127,7 +124,6 @@ export default {
                     `${Endpoints.systemUsers.formData}${this.data._id ? this.data._id : ''}`,
                     response => {
                         if (response.status === 200) {
-                            this.isLoading = false
                             Common.show(this, 'bottom-right', 'success', this.data._id ? this.$t('str.form.update.success') : this.$t('str.form.create.success'))
                             const { _id, status, photoURL, email } = response?.result
                             this.data._id = _id
@@ -137,6 +133,7 @@ export default {
                             this.data.oldEmail = email
                             this.data.password = ''
                             this.$registerEvent.$emit('refreshList')
+                            this.closeModal()
                         }
                     },
                     error => {
@@ -162,8 +159,8 @@ export default {
                     response => {
                         if (response.status === 200) {
                             Common.show(this, 'bottom-right', 'success', this.$t('str.form.archive.success'))
-                            this.clearForm()
                             this.$registerEvent.$emit('refreshList')
+                            this.closeModal()
                         }
                     },
                     error => {
@@ -203,47 +200,63 @@ export default {
             }
         },
         async checkForm() {
-            if (!this.data.account || this.data.account === '') {
-                this.errors.push('account')
-            }
+            if (!this.isLoading) {
+                this.isLoading = true
 
-            if (!this.data.firstName || this.data.firstName === '') {
-                this.errors.push('firstName')
-            }
-            if (!this.data.lastName || this.data.lastName === '') {
-                this.errors.push('lastName')
-            }
-            if (!this.data.email || this.data.email === '') {
-                this.errors.push(this.$t('email'))
-            }
-            if (!this.data._id && (!this.data.password || this.data.password === '')) {
-                this.errors.push(this.$t('password'))
-            }
+                if (!this.data.account || this.data.account === '') {
+                    this.errors.push('account')
+                }
 
-            if (!this.data.password || this.data.password === '') {
-                delete this.data.password
-            }
+                if (!this.data.firstName || this.data.firstName === '') {
+                    this.errors.push('firstName')
+                }
+                if (!this.data.lastName || this.data.lastName === '') {
+                    this.errors.push('lastName')
+                }
+                if (!this.data.email || this.data.email === '') {
+                    this.errors.push(this.$t('email'))
+                }
+                if (!this.data._id && (!this.data.password || this.data.password === '')) {
+                    this.errors.push(this.$t('password'))
+                }
 
-            if (!this.data.client || this.data.client === '') {
-                delete this.data.client
-            }
-            if (!this.data.site || this.data.site === '') {
-                delete this.data.site
-            }
+                if (!this.data.password || this.data.password === '') {
+                    delete this.data.password
+                }
 
-            if (!this.data.clientGroup || this.data.clientGroup === '') {
-                delete this.data.clientGroup
-            }
+                if (!this.data.client || this.data.client === '') {
+                    delete this.data.client
+                }
+                if (!this.data.site || this.data.site === '') {
+                    delete this.data.site
+                }
 
-            if (!this.data.siteGroup || this.data.siteGroup === '') {
-                delete this.data.siteGroup
-            }
+                if (!this.data.clientGroup || this.data.clientGroup === '') {
+                    delete this.data.clientGroup
+                }
 
-            if (!this.errors || this.errors.length === 0) {
-                if (this.data.email !== this.data.oldEmail) {
-                    const res = await Services.emailAlreadyExists(this, this.data.email)
+                if (!this.data.siteGroup || this.data.siteGroup === '') {
+                    delete this.data.siteGroup
+                }
 
-                    if (res.alreadyExist === false) {
+                if (!this.errors || this.errors.length === 0) {
+                    if (this.data.email !== this.data.oldEmail) {
+                        const res = await Services.emailAlreadyExists(this, this.data.email)
+
+                        if (res.alreadyExist === false) {
+                            this.loadGeolocation(
+                                async data => {
+                                    await this.save(data)
+                                },
+                                async error => {
+                                    this.data.address.name = 'MAIN'
+                                    await this.save(error)
+                                },
+                            )
+                        } else {
+                            Common.show(this, 'bottom-right', 'warn', this.$t('str.email.already.in.use'))
+                        }
+                    } else {
                         this.loadGeolocation(
                             async data => {
                                 await this.save(data)
@@ -253,19 +266,9 @@ export default {
                                 await this.save(error)
                             },
                         )
-                    } else {
-                        Common.show(this, 'bottom-right', 'warn', this.$t('str.email.already.in.use'))
                     }
                 } else {
-                    this.loadGeolocation(
-                        async data => {
-                            await this.save(data)
-                        },
-                        async error => {
-                            this.data.address.name = 'MAIN'
-                            await this.save(error)
-                        },
-                    )
+                    this.isLoading = false
                 }
             }
         },

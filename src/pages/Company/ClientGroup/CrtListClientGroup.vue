@@ -6,6 +6,7 @@ import Services from '../../../common/Services.vue'
 export default {
     init: async payload => {
         payload.filters.account = await Common.getAccountId(payload)
+        payload.isSuperAdminMaster = await Common.isSuperAdminMaster(payload)
 
         await payload.initTable()
         if (!payload.isSuperAdminMaster) {
@@ -36,7 +37,7 @@ export default {
             )
         },
         selectItem(params) {
-            const data = params && params?.row ? JSON.parse(JSON.stringify(params.row)) : {}
+            const data = params && params?.row ? JSON.parse(JSON.stringify(params.row)) : this.clientGroupObj
 
             delete data.vgt_id
             delete data.originalIndex

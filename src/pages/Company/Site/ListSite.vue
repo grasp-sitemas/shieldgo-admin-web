@@ -77,12 +77,14 @@
             </vue-good-table>
         </panel>
         <SiteModal :selectedData="data" />
+        <notifications group="bottom-right" position="bottom right" :speed="500" />
     </div>
 </template>
 
 <script>
 import Controller from './CrtListSite.vue'
 import SiteModal from './Site.vue'
+import { site } from '../../../types/site'
 import Vue from 'vue'
 Vue.prototype.$registerEvent = new Vue()
 
@@ -103,6 +105,7 @@ export default {
                 statusActive: false,
                 name: '',
             },
+            siteObj: JSON.parse(JSON.stringify(site)),
             accounts: [],
             clients: [],
             sites: [],

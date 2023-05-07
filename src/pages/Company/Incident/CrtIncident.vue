@@ -21,9 +21,7 @@ export default {
         //     payload.sites = await Services.getSites(payload)
         // }
 
-        payload.domain = Endpoints.domain
         payload.data.account = Common.getAccountId(payload)
-
         payload.isSuperAdminMaster = await Common.isSuperAdminMaster(payload)
         if (payload.isSuperAdminMaster) {
             payload.accounts = await Services.getAccounts(payload)
@@ -37,40 +35,35 @@ export default {
     methods: {
         clearForm() {
             this.errors = []
-            this.data = this.incidentObj
-            this.data.account = Common.getAccountId(this)
+            this.data = JSON.parse(JSON.stringify(this.incidentObj))
             this.isLoading = false
         },
         async save() {
-            if (!this.isLoading) {
-                this.isLoading = true
-
-                try {
-                    Request.do(
-                        this,
-                        this.data._id ? 'put' : 'post',
-                        Request.getDefaultHeader(this),
-                        this.data,
-                        `${Endpoints.incidents.incident}${this.data._id ? this.data._id : ''}`,
-                        response => {
-                            if (response.status === 200) {
-                                Common.show(this, 'bottom-right', 'success', this.data._id ? this.$t('str.form.update.success') : this.$t('str.form.create.success'))
-                                this.data = response?.result
-                                this.$registerEvent.$emit('refreshList')
-                                this.isLoading = false
-                            }
-                        },
-                        error => {
-                            this.isLoading = false
-                            Common.show(this, 'bottom-right', 'warn', this.$t('str.form.update.generic.error'))
-                            console.log(error)
-                        },
-                    )
-                } catch (error) {
-                    this.isLoading = false
-                    Common.show(this, 'bottom-right', 'warn', this.$t('str.form.update.generic.error'))
-                    console.log(error)
-                }
+            try {
+                Request.do(
+                    this,
+                    this.data._id ? 'put' : 'post',
+                    Request.getDefaultHeader(this),
+                    this.data,
+                    `${Endpoints.incidents.incident}${this.data._id ? this.data._id : ''}`,
+                    response => {
+                        if (response.status === 200) {
+                            Common.show(this, 'bottom-right', 'success', this.data._id ? this.$t('str.form.update.success') : this.$t('str.form.create.success'))
+                            this.data = response?.result
+                            this.$registerEvent.$emit('refreshList')
+                            this.closeModal()
+                        }
+                    },
+                    error => {
+                        this.isLoading = false
+                        Common.show(this, 'bottom-right', 'warn', this.$t('str.form.update.generic.error'))
+                        console.log(error)
+                    },
+                )
+            } catch (error) {
+                this.isLoading = false
+                Common.show(this, 'bottom-right', 'warn', this.$t('str.form.update.generic.error'))
+                console.log(error)
             }
         },
         archive() {
@@ -84,8 +77,8 @@ export default {
                     response => {
                         if (response.status === 200) {
                             Common.show(this, 'bottom-right', 'success', this.$t('str.form.archive.success'))
-                            this.clearForm()
                             this.$registerEvent.$emit('refreshList')
+                            this.closeModal()
                         }
                     },
                     error => {
@@ -121,28 +114,33 @@ export default {
             this.errors = this.errors.filter(item => item !== field)
         },
         async checkForm() {
-            if (!this.data.account || this.data.account === '') {
-                this.errors.push('account')
-            }
+            if (!this.isLoading) {
+                this.isLoading = true
+                if (!this.data.account || this.data.account === '') {
+                    this.errors.push('account')
+                }
 
-            if (!this.data.client || this.data.client === '') {
-                this.errors.push('client')
-            }
+                if (!this.data.client || this.data.client === '') {
+                    this.errors.push('client')
+                }
 
-            if (!this.data.site || this.data.site === '') {
-                this.errors.push(this.$t('site'))
-            }
+                if (!this.data.site || this.data.site === '') {
+                    this.errors.push(this.$t('site'))
+                }
 
-            if (!this.data.name || this.data.name === '') {
-                this.errors.push(this.$t('name'))
-            }
+                if (!this.data.name || this.data.name === '') {
+                    this.errors.push(this.$t('name'))
+                }
 
-            if (this.data.priority === null || this.data.priority === '') {
-                this.errors.push(this.$t('priority'))
-            }
+                if (this.data.priority === null || this.data.priority === '') {
+                    this.errors.push(this.$t('priority'))
+                }
 
-            if (!this.errors || this.errors.length === 0) {
-                await this.save()
+                if (!this.errors || this.errors.length === 0) {
+                    await this.save()
+                } else {
+                    this.isLoading = false
+                }
             }
         },
         checkCompanyFields() {

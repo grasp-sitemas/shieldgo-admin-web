@@ -19,6 +19,7 @@ const instanceateAddress = (addressObj, geo) => {
 export default {
     init: async payload => {
         payload.domain = Endpoints.domain
+        payload.isSuperAdminMaster = await Common.isSuperAdminMaster(payload)
 
         const role = await Common.getSubtype(payload)
         if (role === 'SUPER_ADMIN_MASTER') {
@@ -103,10 +104,9 @@ export default {
             this.file = null
             this.$refs.file.value = null
             this.data = this.vigilantObj
-            this.data.account = Common.getAccountId(this)
             this.isLoading = false
         },
-        save() {
+        async save() {
             let formData = new FormData()
 
             formData.append('file', this.file)
@@ -122,17 +122,8 @@ export default {
                     response => {
                         if (response.status === 200) {
                             Common.show(this, 'bottom-right', 'success', this.data._id ? this.$t('str.form.update.success') : this.$t('str.form.create.success'))
-                            const { _id, status, photoURL, email, username } = response?.result
-                            this.data._id = _id
-                            this.data.status = status
-                            this.data.photoURL = photoURL
-                            this.data.email = email
-                            this.data.oldEmail = email
-                            this.data.username = username
-                            this.data.oldUsername = username
-                            this.data.password = ''
-                            this.isLoading = false
                             this.$registerEvent.$emit('refreshList')
+                            this.closeModal()
                         }
                     },
                     error => {
@@ -158,8 +149,8 @@ export default {
                     response => {
                         if (response.status === 200) {
                             Common.show(this, 'bottom-right', 'success', this.$t('str.form.archive.success'))
-                            this.clearForm()
                             this.$registerEvent.$emit('refreshList')
+                            this.closeModal()
                         }
                     },
                     error => {

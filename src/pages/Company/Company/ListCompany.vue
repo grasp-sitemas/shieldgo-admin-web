@@ -54,12 +54,14 @@
             </vue-good-table>
         </panel>
         <CompanyModal :selectedData="data" />
+        <notifications group="bottom-right" position="bottom right" :speed="500" />
     </div>
 </template>
 
 <script>
 import CompanyModal from './Company.vue'
 import Controller from './CrtListCompany.vue'
+import { company } from '../../../types/company'
 import Vue from 'vue'
 Vue.prototype.$registerEvent = new Vue()
 
@@ -77,6 +79,7 @@ export default {
                 status: 'ACTIVE',
                 name: '',
             },
+            companyObj: JSON.parse(JSON.stringify(company)),
             columns: [],
             paginationOptions: {},
         }

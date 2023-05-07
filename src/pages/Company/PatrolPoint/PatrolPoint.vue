@@ -1,9 +1,14 @@
 <template>
-    <div :key="valuekey">
-        <panel v-if="data._id" :title="$t('str.register.form.title')">
-            <form>
-                <fieldset>
-                    <div v-if="data._id" class="row">
+    <div>
+        <template>
+            <b-modal no-close-on-backdrop id="createPatrolPointModal" @hide="closeModal" :hide-footer="true" size="lg" class="modal-message">
+                <template slot="modal-header">
+                    <h4 class="modal-title">{{ $t('str.breadcrumb.incidents') }}</h4>
+                    <a class="btn-close cursor_pointer" @click="$bvModal.hide('createPatrolPointModal')"></a>
+                </template>
+
+                <div>
+                    <div class="row">
                         <div class="col-md-3 mb-3">
                             <label class="form-label" for="statusField">{{ $t('str.register.status.field') }}</label>
                             <select v-model="data.status" class="form-select" id="statusField">
@@ -11,6 +16,7 @@
                                 <option value="ARCHIVED">{{ $t('str.register.status.archived') }}</option>
                             </select>
                         </div>
+
                         <div v-if="isSuperAdminMaster" class="col-md-3 mb-3">
                             <label class="form-label" for="accountField">{{ $t('str.register.check.point.account.field') }}</label>
                             <select
@@ -121,29 +127,26 @@
                             </div>
                         </div>
                     </div>
-                    <div class="row">
-                        <div class="btn-center mt-4 mb-2">
-                            <button @click="checkForm" type="submit" class="btn btn-primary w-200px me-10px is-loading">
-                                <i v-if="isLoading === true" class="fas fa-spinner fa-pulse"></i>
-                                {{ $t('str.btn.save') }}
-                            </button>
-                            <button v-b-modal.checkPointModal v-on:click="openCheckPointModal" type="submit" class="btn btn-default w-200px">{{ $t('str.btn.new.form') }}</button>
-                            <button v-if="data.status === 'ACTIVE'" v-on:click="confirmArchive" type="submit" class="ms-10px btn btn-warning w-200px">
-                                {{ $t('str.btn.archive') }}
-                            </button>
 
-                            <button v-b-modal.qrCodeModal v-if="data._id && data.status === 'ACTIVE'" type="submit" class="ms-10px btn btn-success w-200px">
-                                {{ $t('str.btn.qrcode') }}
-                            </button>
-                        </div>
+                    <div class="btn-center mt-4 mb-2">
+                        <button @click="checkForm" type="submit" class="btn btn-primary is-loading w-25 m-2">
+                            <i v-if="isLoading === true" class="fas fa-spinner fa-pulse"></i>
+                            {{ $t('str.btn.save') }}
+                        </button>
+                        <button v-if="data._id && data.status === 'ACTIVE'" v-on:click="confirmArchive" type="submit" class="btn btn-warning w-25 m-2">
+                            {{ $t('str.btn.archive') }}
+                        </button>
+                        <button v-b-modal.qrCodeModal v-if="data._id && data.status === 'ACTIVE'" type="submit" class="ms-10px btn btn-success w-200px">
+                            {{ $t('str.btn.qrcode') }}
+                        </button>
+                        <button @click="closeModal" type="submit" class="btn btn-default w-25 m-2">{{ $t('str.btn.close') }}</button>
                     </div>
-                </fieldset>
-            </form>
-        </panel>
-
-        <notifications group="bottom-right" position="bottom right" :speed="500" />
+                </div>
+            </b-modal>
+        </template>
         <QrCodeModal :qrcodeId="data._id" :data="data" />
         <ListPatrolPoint v-on:load-item="selectItem" :isSuperAdminMaster="isSuperAdminMaster" :accounts="accounts" :clients="clients" :role="role" />
+        <notifications group="bottom-right" position="bottom right" :speed="500" />
     </div>
 </template>
 
@@ -177,8 +180,8 @@ export default {
             user: {},
             valuekey: 0,
             isSuperAdminMaster: false,
-            data: patrolPoint,
-            patrolPointObj: patrolPoint,
+            data: JSON.parse(JSON.stringify(patrolPoint)),
+            patrolPointObj: JSON.parse(JSON.stringify(patrolPoint)),
         }
     },
     mounted() {

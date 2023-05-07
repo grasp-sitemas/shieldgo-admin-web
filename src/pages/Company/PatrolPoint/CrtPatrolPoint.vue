@@ -41,14 +41,13 @@ export default {
                 },
             )
         },
-        clearForm() {
+        async clearForm() {
             this.errors = []
             this.data = this.patrolPointObj
-            this.data.account = Common.getAccountId(this)
+            this.data.account = await Common.getAccountId(this)
             this.isLoading = false
         },
         save() {
-            this.isLoading = true
             this.data.geolocation.latitude = this.data?.geolocation?.latitude.toString()
             this.data.geolocation.longitude = this.data?.geolocation?.longitude.toString()
 
@@ -65,8 +64,8 @@ export default {
                         if (response.status === 200) {
                             Common.show(this, 'bottom-right', 'success', this.data._id ? this.$t('str.form.update.success') : this.$t('str.form.create.success'))
                             this.data = response?.result
-                            this.isLoading = false
                             this.$registerEvent.$emit('refreshList')
+                            this.closeModal()
                         }
                     },
                     error => {
@@ -122,6 +121,10 @@ export default {
                 }
             })
         },
+        async closeModal() {
+            this.clearForm()
+            this.$bvModal.hide('createPatrolPointModal')
+        },
         checkRequiredField(field) {
             return this.errors.includes(field)
         },
@@ -129,24 +132,30 @@ export default {
             this.errors = this.errors.filter(item => item !== field)
         },
         async checkForm() {
-            if (!this.data.account || this.data.account === '') {
-                this.errors.push('account')
-            }
-            if (!this.data.client || this.data.client === '') {
-                this.errors.push('client')
-            }
-            if (!this.data.site || this.data.site === '') {
-                this.errors.push(this.$t('site'))
-            }
-            if (!this.data.name || this.data.name === '') {
-                this.errors.push(this.$t('name'))
-            }
-            if (this.data.priority === null || this.data.priority === '') {
-                this.errors.push(this.$t('priority'))
-            }
+            if (!this.isLoading) {
+                this.isLoading = true
 
-            if (!this.errors || this.errors.length === 0) {
-                await this.save()
+                if (!this.data.account || this.data.account === '') {
+                    this.errors.push('account')
+                }
+                if (!this.data.client || this.data.client === '') {
+                    this.errors.push('client')
+                }
+                if (!this.data.site || this.data.site === '') {
+                    this.errors.push(this.$t('site'))
+                }
+                if (!this.data.name || this.data.name === '') {
+                    this.errors.push(this.$t('name'))
+                }
+                if (this.data.priority === null || this.data.priority === '') {
+                    this.errors.push(this.$t('priority'))
+                }
+
+                if (!this.errors || this.errors.length === 0) {
+                    await this.save()
+                } else {
+                    this.isLoading = false
+                }
             }
         },
         changeAccount: async function () {
@@ -181,7 +190,7 @@ export default {
         },
         selectItem: async function (item) {
             this.errors = []
-            this.data = item
+            this.data = item ? item : this.patrolPointObj
 
             if (item.account) {
                 this.clients = await Services.getClientsByAccount(this, item.account)
@@ -191,13 +200,7 @@ export default {
                 this.sites = await Services.getSitesByClient(this, item.client)
             }
 
-            document.body.scrollTop = 0 // For Safari
-            document.documentElement.scrollTop = 0 // For Chrome, Firefox, IE and Opera
-        },
-
-        openCheckPointModal() {
-            this.clearForm()
-            this.$bvModal.show('checkPointModal')
+            this.$bvModal.show('createPatrolPointModal')
         },
     },
 }

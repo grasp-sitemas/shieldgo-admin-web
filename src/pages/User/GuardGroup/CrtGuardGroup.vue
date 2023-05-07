@@ -27,7 +27,6 @@ export default {
                 this.sites = []
             }
 
-            this.data.account = Common.getAccountId(this)
             this.isLoading = false
         },
         save() {
@@ -45,7 +44,7 @@ export default {
                             this.data.status = response?.result?.status
                             this.data._id = response?.result?._id
                             this.$registerEvent.$emit('refreshList')
-                            this.isLoading = false
+                            this.closeModal()
                         }
                     },
                     error => {
@@ -71,8 +70,8 @@ export default {
                     response => {
                         if (response.status === 200) {
                             Common.show(this, 'bottom-right', 'success', this.$t('str.form.archive.success'))
-                            this.clearForm()
                             this.$registerEvent.$emit('refreshList')
+                            this.closeModal()
                         }
                     },
                     error => {

@@ -211,15 +211,16 @@
                     </div>
                 </div>
             </div>
+
             <div class="btn-center mt-4 mb-2">
-                <button @click="checkForm" type="submit" class="btn btn-primary w-200px me-10px is-loading">
+                <button @click="checkForm" type="submit" class="btn btn-primary is-loading w-25 m-2">
                     <i v-if="isLoading === true" class="fas fa-spinner fa-pulse"></i>
                     {{ $t('str.btn.save') }}
                 </button>
-                <button @click="clearForm" type="submit" class="btn btn-default w-200px">{{ $t('str.btn.new.form') }}</button>
-                <button v-if="data?._id && data?.status === 'ACTIVE'" v-on:click="confirmArchive" type="submit" class="ms-10px btn btn-warning w-200px">
+                <button v-if="data._id && data.status === 'ACTIVE'" v-on:click="confirmArchive" type="submit" class="btn btn-warning w-25 m-2">
                     {{ $t('str.btn.archive') }}
                 </button>
+                <button @click="closeModal" type="submit" class="btn btn-default w-25 m-2">{{ $t('str.btn.close') }}</button>
             </div>
         </div>
 
@@ -235,6 +236,7 @@ import { STATES } from '../../../utils/states.js'
 import { ROLES } from '../../../utils/roles.js'
 import { vigilant } from '../../../types/vigilant'
 import Services from '../../../common/Services.vue'
+import Common from '../../../common/Common.vue'
 export default {
     props: {
         selectedData: {
@@ -246,8 +248,8 @@ export default {
         selectedData: async function () {
             this.data = this.selectedData
 
-            if (!this.data?._id) {
-                this.data = this.vigilantObj
+            if (!this.data?.account) {
+                this.data.account = await Common.getAccountId(this)
             }
 
             this.clients = await Services.getClientsByAccount(this, this.data?.account)
@@ -273,8 +275,8 @@ export default {
             valuekey: 0,
             showPassword: false,
             isSuperAdminMaster: false,
-            data: vigilant,
-            vigilantObj: vigilant,
+            data: JSON.parse(JSON.stringify(vigilant)),
+            vigilantObj: JSON.parse(JSON.stringify(vigilant)),
         }
     },
     mounted() {

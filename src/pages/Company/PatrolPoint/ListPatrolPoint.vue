@@ -1,49 +1,46 @@
 <template>
     <div>
         <panel :title="$t('str.table.list.patrol.points')" bodyClass="p-0">
-            <div class="row panel-filter me-1 ms-1">
-                <div class="col-md-3">
-                    <button v-b-modal.checkPointModal type="submit" class="btn btn-default w-200px">{{ $t('str.btn.new.form') }}</button>
-                </div>
-            </div>
-
-            <div class="row panel-filter me-1 ms-1">
-                <div v-if="isSuperAdminMaster" class="col-md-3 mb-3">
+            <div class="row ms-2 mb-1 mt-3 me-1">
+                <div v-if="isSuperAdminMaster" class="col-md-4 mb-3">
                     <label class="form-label" for="accountField">{{ $t('str.register.guard.groups.account.field') }}</label>
                     <select v-model="filters.account" @change="changeAccount" class="form-select" id="accountField">
                         <option value="">{{ $t('str.register.select.placeholder') }}</option>
-                        <option v-for="account in listAccounts" :value="account._id" :key="account._id">
+                        <option v-for="(account, index) in listAccounts" :value="account._id" :key="index">
                             {{ account.name }}
                         </option>
                     </select>
                     <div class="invalid-feedback">{{ $t('str.register.guard.groups.account.required') }}</div>
                 </div>
-                <div v-if="role === 'SUPER_ADMIN_MASTER' || role === 'ADMIN' || role === 'MANAGER'" class="col-md-3 mb-3">
+                <div class="col-md-4 mb-3">
                     <label class="form-label" for="clientField">{{ $t('str.register.guard.groups.client.field') }}</label>
                     <select v-model="filters.client" @change="changeClient" class="form-select" id="clientField">
                         <option value="">{{ $t('str.register.select.placeholder') }}</option>
-                        <option v-for="client in listClients" :value="client._id" :key="client._id">
+                        <option v-for="(client, index) in listClients" :value="client._id" :key="index">
                             {{ client.name }}
                         </option>
                     </select>
                     <div class="invalid-feedback">{{ $t('str.register.guard.groups.client.required') }}</div>
                 </div>
-                <div class="col-md-3 mb-3">
+                <div class="col-md-4 mb-3">
                     <label class="form-label" for="siteField">{{ $t('str.register.guard.groups.site.field') }}</label>
                     <select v-model="filters.site" @change="changeSite" class="form-select" id="siteField">
                         <option value="">{{ $t('str.register.select.placeholder') }}</option>
-                        <option v-for="site in listSites" :value="site._id" :key="site._id">
+                        <option v-for="(site, index) in listSites" :value="site._id" :key="index">
                             {{ site.name }}
                         </option>
                     </select>
                     <div class="invalid-feedback">{{ $t('str.register.guard.groups.site.required') }}</div>
                 </div>
-                <div class="col-md-3">
+                <div class="col-md-4">
                     <label class="form-label" for="statusField">{{ $t('str.register.status.field') }}</label>
                     <select v-model="filters.status" @change="filter" class="form-select" id="statusField">
                         <option value="ACTIVE">{{ $t('str.register.status.active') }}</option>
                         <option value="ARCHIVED">{{ $t('str.register.status.archived') }}</option>
                     </select>
+                </div>
+                <div class="col-md-3" :class="{ 'mt-4': isSuperAdminMaster }">
+                    <button v-b-modal.checkPointModal v-on:click="openCheckPointModal" type="submit" class="btn btn-default w-50">{{ $t('str.btn.new.form') }}</button>
                 </div>
             </div>
 
@@ -54,6 +51,7 @@
                 @on-row-click="selectItem"
                 :search-options="{ enabled: true, placeholder: $t('str.table.search.in.this.table') }"
                 :pagination-options="paginationOptions"
+                tableLayout="fixed"
             >
                 <div slot="emptystate" class="vgt-center-align vgt-text-disabled">
                     <i v-if="isLoading" class="fas fa-spinner fa-spin" />
@@ -94,6 +92,7 @@
 import Controller from './CrtListPatrolPoint.vue'
 import CheckPointModal from './CheckPointModal/CheckPointModal.vue'
 import Services from '../../../common/Services.vue'
+import { patrolPoint } from '../../../types/patrolPoint'
 import Vue from 'vue'
 Vue.prototype.$registerEvent = new Vue()
 
@@ -148,6 +147,7 @@ export default {
             listClients: [],
             listSites: [],
             columns: [],
+            patrolPointObj: JSON.parse(JSON.stringify(patrolPoint)),
             paginationOptions: {},
         }
     },

@@ -20,23 +20,13 @@ export default {
     methods: {
         clearForm() {
             this.errors = []
-            this.data = this.siteGroupObj
             this.selectedSites = []
             this.clients = []
-
-            this.data.account = Common.getAccountId(this)
             this.isLoading = false
         },
 
         async save() {
-            if (this.isLoading) return
-
-            this.isLoading = true
-
             const formData = this.data
-            const sites = this.data.sites
-
-            formData.sites = formData.sites.map(site => site._id)
 
             try {
                 Request.do(
@@ -48,11 +38,8 @@ export default {
                     response => {
                         if (response.status === 200) {
                             Common.show(this, 'bottom-right', 'success', formData._id ? this.$t('str.form.update.success') : this.$t('str.form.create.success'))
-                            this.data.sites = sites
-                            this.data.status = response?.result?.status
-                            this.data._id = response?.result?._id
                             this.$registerEvent.$emit('refreshList')
-                            this.isLoading = false
+                            this.closeModal()
                         }
                     },
                     error => {
@@ -78,8 +65,8 @@ export default {
                     response => {
                         if (response.status === 200) {
                             Common.show(this, 'bottom-right', 'success', this.$t('str.form.archive.success'))
-                            this.clearForm()
                             this.$registerEvent.$emit('refreshList')
+                            this.closeModal()
                         }
                     },
                     error => {
@@ -115,25 +102,32 @@ export default {
             this.errors = this.errors.filter(item => item !== field)
         },
         async checkForm() {
-            if (!this.data.name || this.data.name === '') {
-                this.errors.push('name')
-            }
-            if (!this.data.account || this.data.account === '') {
-                this.errors.push('account')
-            }
-            if (!this.data.client || this.data.client === '') {
-                this.errors.push('client')
-            }
-            if (!this.data.sites || this.data.sites.length === 0) {
-                this.errors.push('sites')
-            }
+            if (!this.isLoading) {
+                this.isLoading = true
 
-            if (!this.errors || this.errors.length === 0) {
-                await this.save()
+                if (!this.data.name || this.data.name === '') {
+                    this.errors.push('name')
+                }
+                if (!this.data.account || this.data.account === '') {
+                    this.errors.push('account')
+                }
+                if (!this.data.client || this.data.client === '') {
+                    this.errors.push('client')
+                }
+                if (!this.data.sites || this.data.sites.length === 0) {
+                    this.errors.push('sites')
+                }
+
+                if (!this.errors || this.errors.length === 0) {
+                    await this.save()
+                } else {
+                    this.isLoading = false
+                }
             }
         },
         async closeModal() {
             this.clearForm()
+
             this.$bvModal.hide('createSiteGroupModal')
         },
         changeAccount: async function () {

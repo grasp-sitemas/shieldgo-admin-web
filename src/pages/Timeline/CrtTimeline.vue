@@ -154,9 +154,10 @@ export default {
                 timePicker: false,
                 timePicker24Hour: false,
                 showWeekNumbers: false,
-                showDropdowns: false,
-                autoApply: false,
-                linkedCalendars: false,
+                showDropdowns: true,
+                autoApply: true,
+                linkedCalendars: true,
+                closeOnEsc: true,
                 range: {
                     startDate: startDate,
                     endDate: endDate,

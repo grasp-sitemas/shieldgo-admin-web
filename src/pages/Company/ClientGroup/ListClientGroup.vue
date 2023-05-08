@@ -47,7 +47,7 @@
                         </p>
                     </span>
                     <span v-else-if="props.column.field === 'createDate'">
-                        {{ formatDate(props.formattedRow[props.column.field]) }}
+                        {{ formatDate(props.formattedRow[props.column.field], true) }}
                     </span>
                     <span v-else-if="props.column.field === 'status'">
                         <span class="badge" v-bind:class="props.formattedRow[props.column.field] === 'ACTIVE' ? 'bg-success' : 'bg-danger'"> {{ $t(props.formattedRow[props.column.field]) }} </span>

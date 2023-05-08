@@ -113,8 +113,8 @@ export default {
                 return ''
         }
     },
-    formatDateAndTime(date) {
-        return moment(date).utc(false).format('DD/MM/YYYY HH:mm:ss')
+    formatDateAndTime(date, utc = false) {
+        return moment(date).utc(utc).format('DD/MM/YYYY HH:mm:ss')
     },
     checkCPF: str => {
         /* eslint-disable */

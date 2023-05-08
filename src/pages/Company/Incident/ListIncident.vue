@@ -71,7 +71,7 @@
                         }}
                     </span>
                     <span v-else-if="props.column.field === 'createDate'">
-                        {{ formatDate(props.formattedRow[props.column.field]) }}
+                        {{ formatDate(props.formattedRow[props.column.field], true) }}
                     </span>
                     <span v-else-if="props.column.field === 'priority'">
                         <span v-if="props.formattedRow[props.column.field] === 0">

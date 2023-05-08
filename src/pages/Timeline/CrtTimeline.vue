@@ -5,7 +5,7 @@ import moment from 'moment'
 
 export default {
     init: async payload => {
-        payload.initRangeDate()
+        await payload.initRangeDate()
 
         payload.isSuperAdminMaster = await Common.isSuperAdminMaster(payload)
 
@@ -147,6 +147,10 @@ export default {
             const endDate = moment()
             const prevStartDate = moment().subtract(15, 'days').format('D MMMM YYYY')
             const prevEndDate = moment().subtract(8, 'days').format('D MMMM YYYY')
+            const today = moment()
+            const yesterday = moment().subtract(1, 'days')
+            const thisMonthStart = moment().startOf('month')
+            const thisMonthEnd = moment().endOf('month')
 
             this.dateRange = {
                 opens: 'right',
@@ -171,6 +175,13 @@ export default {
                     applyLabel: this.$t('str.apply'),
                     cancelLabel: this.$t('str.cancel'),
                     weekLabel: 'W',
+                    ranges: {
+                        [this.$t('str.today')]: [today, today],
+                        [this.$t('str.yesterday')]: [yesterday, yesterday],
+                        [this.$t('str.this_month')]: [thisMonthStart, thisMonthEnd],
+                        [this.$t('str.this_year')]: [moment().startOf('year'), moment().endOf('year')],
+                        [this.$t('str.last_month')]: [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')],
+                    },
                     daysOfWeek: [
                         this.$t('str.abbreviation.sunday'),
                         this.$t('str.abbreviation.monday'),
@@ -198,7 +209,6 @@ export default {
                 },
             }
         },
-
         selectItem(params) {
             const data = JSON.parse(JSON.stringify(params.row))
 

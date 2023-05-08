@@ -86,10 +86,6 @@ export default {
                 {
                     label: this.$t('str.timeline.item.patrol.actions.notes'),
                     field: 'notes',
-                },
-                {
-                    label: this.$t('str.timeline.item.patrol.actions.notes'),
-                    field: 'notes',
                     tdClass: 'text-nowrap',
                     thClass: 'text-nowrap',
                     width: '30%',
@@ -127,10 +123,6 @@ export default {
             this.columns = columns
             this.paginationOptions = paginationOptions
             this.selectOptions = selectOptions
-
-            if (!this.isSuperAdminMaster) {
-                this.columns.splice(5, 1)
-            }
         },
         getDeviceInfo(obj) {
             if (obj) {

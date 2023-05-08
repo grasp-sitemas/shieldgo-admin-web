@@ -12,7 +12,7 @@
                     </select>
                     <div class="invalid-feedback">{{ $t('str.register.guard.groups.account.required') }}</div>
                 </div>
-                <div class="col-md-4 mb-3">
+                <div v-if="role && role !== 'OPERATOR'" class="col-md-4 mb-3">
                     <label class="form-label" for="clientField">{{ $t('str.register.guard.groups.client.field') }}</label>
                     <select v-model="filters.client" @change="changeClient" class="form-select" id="clientField">
                         <option value="">{{ $t('str.register.select.placeholder') }}</option>
@@ -39,7 +39,7 @@
                         <option value="ARCHIVED">{{ $t('str.register.status.archived') }}</option>
                     </select>
                 </div>
-                <div class="col-md-3" :class="{ 'mt-4': isSuperAdminMaster }">
+                <div class="col-md-3" :class="{ 'mt-4': isSuperAdminMaster, 'mt-3': !isSuperAdminMaster }">
                     <button v-b-modal.checkPointModal v-on:click="openCheckPointModal" type="submit" class="btn btn-default w-50">{{ $t('str.btn.new.form') }}</button>
                 </div>
             </div>

@@ -76,7 +76,6 @@ export default {
         }
     },
     methods: Controller.methods,
-    mounted() {},
     created() {
         Controller.init(this)
         const state = this

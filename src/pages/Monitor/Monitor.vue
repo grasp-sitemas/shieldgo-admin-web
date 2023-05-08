@@ -4,6 +4,7 @@
             <div class="d-flex align-items-center mb-3">
                 <h1 class="page-header mb-0">{{ $t('str.form.title.monitor') }}</h1>
             </div>
+
             <div class="row">
                 <div class="col-md-12 mb-3 p-3">
                     <div id="accordion" class="accordion rounded overflow-hidden">
@@ -55,6 +56,7 @@
                     </div>
                 </div>
             </div>
+
             <div class="row">
                 <div class="col-xl-4 col-lg-6">
                     <panel :title="$t('str.events.title')">
@@ -65,12 +67,14 @@
                                         <i v-bind:class="event?.icon" />
                                     </div>
                                     <div class="flex-fill">
-                                        <div class="fs-14px lh-12 mb-2px fw-bold">{{ $t(event?.type) }}</div>
+                                        <div class="fs-14px lh-12 mb-2px fw-bold">
+                                            {{ event?.failureText }}
+                                        </div>
                                         <div class="mb-1 fs-12px">
                                             <div class="flex-1">{{ event?.description }}</div>
                                         </div>
                                         <div class="mb-1">
-                                            <span v-bind:class="event?.tag">{{ $t(event?.type) }}</span>
+                                            <span v-bind:class="event?.tag">{{ event?.failurePatrolType ? $t('str.msg.failure.patrol') : $t(event?.type) }}</span>
                                         </div>
                                     </div>
                                     <div v-if="!event?.attendance || !event?.attendance?.isAttendance" class="dot animated-dot">
@@ -139,7 +143,6 @@
                                     {{ $t('str.monitor.details.attendance.opened.date') }}:
                                     <label class="info-result">{{ formatDate(selectedEvent?.attendance?.openedDate) }}</label>
                                 </div>
-                                <!-- //close date -->
                                 <div v-if="selectedEvent?.attendance?.closedDate" class="text-opacity-50 small fw-bold">
                                     {{ $t('str.monitor.details.attendance.closed.date') }}:
                                     <label class="info-result">{{ formatDate(selectedEvent?.attendance?.closedDate) }}</label>
@@ -148,7 +151,7 @@
                                 <hr class="bg-gray-500" />
                             </div>
 
-                            <div class="btn-row mb-4">
+                            <div class="btn-row mb-4" v-if="selectedEvent.type !== 'FAILURE_PATROL'">
                                 <a v-if="selectedEvent?.geolocation" v-on:click="showMap" data-toggle="tooltip" data-container="body" data-title="Map" class="cursor-mouse">
                                     <i class="fa fa-fw fa-map-marker-alt"></i>
                                 </a>
@@ -201,8 +204,23 @@
                                 </div>
                             </div>
 
-                            <div v-if="(!selectedEvent?.attendance || !selectedEvent?.attendance?.isAttendance) && user?.companyUser?.subtype === 'OPERATOR'" class="result-price">
-                                <a @click="handleAttendanceEvent()" class="btn d-block w-100" v-bind:class="{ 'btn-yellow': selectedEvent?.type === 'INCIDENT', 'btn-red': selectedEvent?.type === 'SOS_ALERT' }">
+                            <div
+                                v-if="
+                                    (!selectedEvent?.attendance || !selectedEvent?.attendance?.isAttendance) &&
+                                    user?.companyUser?.subtype === 'OPERATOR' &&
+                                    (selectedEvent?.type === 'SOS_ALERT' || selectedEvent?.type === 'FAILURE_PATROL' || selectedEvent?.type === 'INCIDENT')
+                                "
+                                class="result-price"
+                            >
+                                <a
+                                    @click="handleAttendanceEvent()"
+                                    class="btn d-block w-100"
+                                    v-bind:class="{
+                                        'btn-yellow': selectedEvent?.type === 'INCIDENT',
+                                        'btn-red': selectedEvent?.type === 'SOS_ALERT',
+                                        'btn-dark-orange': selectedEvent?.type === 'FAILURE_PATROL',
+                                    }"
+                                >
                                     <i v-if="isLoadingAttendanceEventButton" class="fas fa-spinner fa-spin" />
                                     {{ $t('str.monitor.answer.event') }}
                                 </a>
@@ -235,7 +253,15 @@
                                 <textarea v-model="attendance.notes" class="form-control" id="attendancesNotesField" rows="3"></textarea>
                             </div>
                             <div class="result-price d-flex justify-content-between align-items-center mb-3">
-                                <a v-on:click="checkForm()" class="btn d-block w-50 m-2" v-bind:class="{ 'btn-yellow': selectedEvent?.type === 'INCIDENT', 'btn-red': selectedEvent?.type === 'SOS_ALERT' }">
+                                <a
+                                    v-on:click="checkForm()"
+                                    class="btn d-block w-50 m-2"
+                                    v-bind:class="{
+                                        'btn-yellow': selectedEvent?.type === 'INCIDENT',
+                                        'btn-red': selectedEvent?.type === 'SOS_ALERT',
+                                        'btn-dark-orange': selectedEvent?.type === 'FAILURE_PATROL',
+                                    }"
+                                >
                                     <i v-if="isLoadingSendAttendanceButton" class="fas fa-spinner fa-spin" />
                                     {{ $t('str.btn.attendance.register') }}
                                 </a>
@@ -281,7 +307,7 @@
             </div>
         </div>
         <notifications group="top-right" position="top right" :speed="1000" />
-        <notifications group="bottom-right" position="bottom right" :speed="1000" />
+
         <Photo :photoURL="selectedEvent?.photoURL" />
         <Signature :signatureURL="selectedEvent?.signatureURL" />
         <Sound :soundURL="selectedEvent?.soundURL" />
@@ -305,10 +331,9 @@ import Sound from './Components/Sound/Sound.vue'
 import DeviceInfo from './Components/DeviceInfo/DeviceInfo.vue'
 import db from '../../firebaseInit.js'
 import { doc, onSnapshot, deleteDoc } from 'firebase/firestore'
-import Vue from 'vue'
 import moment from 'moment'
+import Vue from 'vue'
 Vue.prototype.$registerEvent = new Vue()
-
 export default {
     components: {
         Map,
@@ -362,18 +387,15 @@ export default {
             isSuperAdminMaster: false,
         }
     },
-    async mounted() {
-        await Controller.init(this)
-    },
+    methods: Controller.methods,
     async created() {
+        Controller.init(this)
         const state = this
-
-        state.$registerEvent.$on('refreshList', function () {
-            state.filter()
+        state.$registerEvent.$on('changeLanguage', async function () {
+            state.events = await state.formatPatrolActions(state.items)
         })
-
-        state.$registerEvent.$on('changeLanguage', function () {
-            state.initTable()
+        state.$registerEvent.$on('refreshSchedule', function () {
+            state.filter()
         })
 
         const siteIds = await state.$session.get('user')?.siteGroup?.sites
@@ -461,7 +483,6 @@ export default {
             })
         }
     },
-    methods: Controller.methods,
 }
 </script>
 <style lang="scss" scoped>

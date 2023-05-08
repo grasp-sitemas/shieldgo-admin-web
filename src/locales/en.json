@@ -1100,7 +1100,6 @@
     "CLOSED": "Closed",
     "str.total.alerts": "Total alerts",
     "str.table.reports.column.date": "Date",
-    "str.table.reports.column.geo": "Geolocation",
     "str.table.reports.column.attendance": "Attendance",
     "str.sidebar.menu.reports.incidents": "Incidents",
     "str.sidebar.menu.reports.incident.description": "Incidents",
@@ -1130,5 +1129,15 @@
     "str.are.you.sure.delete.schedule": "Are you sure you want to delete this schedule?",
     "str.title.delete.series": "Delete series",
     "str.title.delete.occurrence": "Delete occurrence",
-    "str.table.reports.column.geo": "Geo"
+    "str.table.reports.column.geo": "Geo",
+    "str.event.filter.failure_patrol": "Failure patrol",
+    "FAILURE_PATROL": "Failure patrol",
+    "str.event.failure_patrol": "did not perform the patrol",
+    "NOT_STARTED": "Not started",
+    "INCOMPLETE": "Incomplete",
+    "str.msg.patrol": "Patrol",
+    "str.msg.not.started.patrol": "Not started patrol",
+    "str.msg.incomplete.patrol": "Incomplete patrol",
+    "str.msg.expired.patrol": "Expired patrol",
+    "str.msg.failure.patrol": "Failure patrol"
 }       

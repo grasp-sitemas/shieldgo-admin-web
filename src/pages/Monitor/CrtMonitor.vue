@@ -6,49 +6,46 @@ import Endpoints from '../../common/Endpoints.vue'
 
 export default {
     init: async payload => {
-        const initState = async function () {
-            try {
+        try {
+            setTimeout(async () => {
                 payload.domain = Endpoints.domain
 
-                setTimeout(async () => {
-                    payload.user = await payload.$session.get('user')
+                payload.user = await payload.$session.get('user')
 
-                    payload.isSuperAdminMaster = await Common.isSuperAdminMaster(payload)
-                    payload.attendancesTypes = await Services.getAttendancesOptionsTypes(payload)
+                payload.isSuperAdminMaster = await Common.isSuperAdminMaster(payload)
+                payload.attendancesTypes = await Services.getAttendancesOptionsTypes(payload)
 
-                    if (payload.isSuperAdminMaster) {
-                        payload.accounts = await Services.getAccounts(payload)
-                    } else {
-                        payload.clients = await Services.getClients(payload)
-                        payload.filters.account = await Common.getAccountId(payload)
+                if (payload.isSuperAdminMaster) {
+                    payload.accounts = await Services.getAccounts(payload)
+                } else {
+                    payload.clients = await Services.getClients(payload)
+                    payload.filters.account = await Common.getAccountId(payload)
+                }
+
+                await payload.selectAllTypes()
+                await payload.filter()
+
+                if (payload?.events?.length > 0) {
+                    const event = JSON.parse(JSON.stringify(payload.events[0]))
+                    payload.selectedEvent = event
+
+                    const filters = {
+                        patrolAction: payload.selectedEvent?._id,
+                        status: 'ACTIVE',
                     }
 
-                    await payload.selectAllTypes()
-                    await payload.filter()
+                    payload.isLoadingAttendanceList = true
+                    payload.attendances = await Services.getEventAttendances(payload, filters)
+                    payload.isLoadingAttendanceList = false
+                }
 
-                    if (payload?.events?.length > 0) {
-                        const event = JSON.parse(JSON.stringify(payload.events[0]))
-                        payload.selectedEvent = event
-
-                        const filters = {
-                            patrolAction: payload.selectedEvent?._id,
-                            status: 'ACTIVE',
-                        }
-
-                        payload.isLoadingAttendanceList = true
-                        payload.attendances = await Services.getEventAttendances(payload, filters)
-                        payload.isLoadingAttendanceList = false
-                    }
-                }, 1000)
-            } catch (error) {
-                console.log(error)
                 payload.isLoading = false
-                payload.isLoadingAttendanceList = false
-            }
+            }, 700)
+        } catch (error) {
+            console.log(error)
+            payload.isLoading = false
+            payload.isLoadingAttendanceList = false
         }
-
-        await initState()
-        payload.isLoading = false
     },
     methods: {
         getOperatorId: async function () {
@@ -220,7 +217,8 @@ export default {
         },
         formatPatrolActions: async function (list) {
             const data = list.map(item => {
-                const { _id, status, account, client, site, event, type, date, vigilant, patrol, soundURL, photoURL, signatureURL, incidents, deviceInfo, geolocation, notes, attendance } = item
+                const { _id, status, account, client, site, event, type, date, vigilant, patrol, soundURL, photoURL, signatureURL, failurePatrolType, incidents, deviceInfo, geolocation, notes, attendance } =
+                    item
 
                 return {
                     _id: _id,
@@ -235,6 +233,7 @@ export default {
                     account,
                     client,
                     site,
+                    failurePatrolType,
                     incidents: incidents || [],
                     deviceInfo: deviceInfo || {},
                     geolocation: geolocation || {},
@@ -288,8 +287,33 @@ export default {
                             dataItem.icon = 'fa fa-qrcode'
                         }
                         break
+                    case 'FAILURE_PATROL':
+                        {
+                            dataItem.description += this.$t('str.event.failure_patrol')
+                            dataItem.tag = 'badge dark-orange me-1'
+                            dataItem.icon = 'fa fa-exclamation-triangle'
+                        }
+                        break
                     default:
                         break
+                }
+
+                if (dataItem?.failurePatrolType) {
+                    switch (dataItem?.failurePatrolType) {
+                        case 'NOT_STARTED':
+                            dataItem.failureText = `${this.$t('str.msg.not.started.patrol')} `
+                            break
+                        case 'INCOMPLETE':
+                            dataItem.failureText = `${this.$t('str.msg.incomplete.patrol')} `
+                            break
+                        case 'EXPIRED':
+                            dataItem.failureText = `${this.$t('str.msg.expired.patrol')} `
+                            break
+                        default:
+                            break
+                    }
+                } else {
+                    dataItem.failureText = this.$t(dataItem.type)
                 }
 
                 const event = dataItem?.event ? dataItem?.event : null

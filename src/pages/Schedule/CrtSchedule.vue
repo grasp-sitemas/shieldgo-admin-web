@@ -87,7 +87,6 @@ export default {
                 },
             }
         },
-
         changeLanguage: function () {
             const language = this.$session.get('user')?.language
             const locale = language === 'pt' ? 'pt-br' : 'en-gb'

@@ -40,7 +40,7 @@ export default {
                 }
 
                 payload.isLoading = false
-            }, 700)
+            }, 300)
         } catch (error) {
             console.log(error)
             payload.isLoading = false

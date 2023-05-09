@@ -87,7 +87,7 @@
                 </div>
 
                 <div v-if="selectedEvent" class="col-xl-4 col-lg-6">
-                    <panel :title="$t(selectedEvent?.type) + ' ' + $t('str.on') + ' ' + selectedEvent?.formattedDate + ' ' + $t('str.at') + ' ' + selectedEvent?.formattedTime">
+                    <panel :title="$t(selectedEvent?.failureText) + ' ' + $t('str.on') + ' ' + selectedEvent?.formattedDate + ' ' + $t('str.at') + ' ' + selectedEvent?.formattedTime">
                         <div class="result-info">
                             <div class="flex-1 mb-3">
                                 <div class="text-opacity-50 small fw-bold">

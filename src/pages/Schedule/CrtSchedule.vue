@@ -55,7 +55,7 @@ export default {
             const locale = language === 'pt' ? 'pt-br' : 'en-gb'
 
             this.calendarOptions = {
-                timeZone: 'UTC',
+                timeZone: 'America/Sao_Paulo',
                 plugins: [dayGridPlugin, timeGridPlugin, interactionPlugin, listPlugin, bootstrapPlugin],
                 locales: [ptBrLocale, enGbLocale],
                 locale: locale,

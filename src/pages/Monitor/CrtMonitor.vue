@@ -299,6 +299,7 @@ export default {
                 }
 
                 if (dataItem?.failurePatrolType) {
+                    console.log(dataItem?.failurePatrolType)
                     switch (dataItem?.failurePatrolType) {
                         case 'NOT_STARTED':
                             dataItem.failureText = `${this.$t('str.msg.not.started.patrol')} `

@@ -1139,5 +1139,10 @@
     "str.msg.not.started.patrol": "Not started patrol",
     "str.msg.incomplete.patrol": "Incomplete patrol",
     "str.msg.expired.patrol": "Expired patrol",
-    "str.msg.failure.patrol": "Failure patrol"
+    "str.msg.failure.patrol": "Failure patrol",
+    "str.this_month": "This month",
+    "str.this_year": "This year",
+    "str.last_month": "Last month",
+    "str.last_year": "Last year",
+    "str.last_7_days": "Last 7 days"
 }       

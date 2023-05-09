@@ -42,6 +42,7 @@
 </template>
 
 <script>
+import moment from 'moment'
 import Common from '../../common/Common.vue'
 import Controller from './CrtSchedule.vue'
 import FullCalendar from '@fullcalendar/vue'
@@ -68,7 +69,7 @@ export default {
                 client: '',
                 site: '',
                 status: 'ACTIVE',
-                startDate: new Date(),
+                startDate: moment().utc(true),
                 isSortByStartDate: true,
             },
             isSuperAdminMaster: false,

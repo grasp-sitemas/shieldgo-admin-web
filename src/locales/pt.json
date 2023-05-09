@@ -1132,5 +1132,10 @@
     "str.msg.not.started.patrol": "Ronda não iniciada",
     "str.msg.incomplete.patrol": "Ronda incompleta",
     "str.msg.expired.patrol": "Ronda expirada",
-    "str.msg.failure.patrol": "Falha de ronda"
+    "str.msg.failure.patrol": "Falha de ronda",
+    "str.this_month": "Este mês",
+    "str.this_year": "Este ano",
+    "str.last_month": "Mês passado",
+    "str.last_year": "Ano passado",
+    "str.last_7_days": "Últimos 7 dias"
 }

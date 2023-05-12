@@ -290,6 +290,10 @@ export default {
                 this.data.clientGroup = this.data.clientGroup._id
             }
 
+            if (this.data?.site) {
+                this.data.site = this.data.site._id
+            }
+
             if (this.data.account) {
                 this.clients = await Services.getClientsByAccount(this, this.data.account)
             }

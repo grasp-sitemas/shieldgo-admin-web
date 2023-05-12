@@ -1,7 +1,7 @@
 <template>
     <b-modal no-close-on-backdrop id="createScheduleModal" @hide="closeModal" :hide-footer="true" size="lg" class="modal-message">
         <template slot="modal-header">
-            <h4 class="modal-title">{{ $t('str.modal.create.schedule.title') }}</h4>
+            <h4 class="modal-title">{{ data?._id ? $t('str.modal.schedule.title.information') : $t('str.modal.create.schedule.title.create') }}</h4>
             <a class="btn-close cursor_pointer" @click="$bvModal.hide('createScheduleModal')"></a>
         </template>
         <div v-if="!isLoading">
@@ -404,7 +404,7 @@ export default {
         selectedAppointment: function () {
             this.data = this?.selectedAppointment
             this.selectOptions.enabled = false
-            this.data.guardGroup = this.selectedAppointment?.guaårdGroup?._id
+            this.data.guardGroup = this.selectedAppointment?.guardGroup?._id
             this.initSelectedAppointment()
         },
         selectedDate: function () {

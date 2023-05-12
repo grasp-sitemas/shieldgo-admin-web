@@ -86,7 +86,7 @@
             </div>
 
             <div v-if="selectedEvent" class="col-xl-4 col-lg-6">
-                <panel :title="$t(selectedEvent?.failureText) + ' ' + $t('str.on') + ' ' + selectedEvent?.formattedDate + ' ' + $t('str.at') + ' ' + selectedEvent?.formattedTime">
+                <panel :title="selectedEvent?.failureText + ' ' + $t('str.on') + ' ' + selectedEvent?.formattedDate + ' ' + $t('str.at') + ' ' + selectedEvent?.formattedTime">
                     <div class="result-info">
                         <div class="flex-1 mb-3">
                             <div class="text-opacity-50 small fw-bold">
@@ -374,29 +374,46 @@ export default {
     methods: Controller.methods,
     async created() {
         Controller.init(this)
+
         const state = this
+
         state.$registerEvent.$on('changeLanguage', async function () {
             state.events = await state.formatPatrolActions(state.items)
         })
+
         state.$registerEvent.$on('refreshSchedule', function () {
             state.filter()
         })
 
         const siteIds = await state.$session.get('user')?.siteGroup?.sites
         const siteGroupId = await state.$session.get('user')?.siteGroup?._id
-        // subscribe notifications snapshot in array of sites ids
 
+        console.log('siteIds', siteIds)
+
+        // subscribe notifications snapshot in array of sites ids
         if (siteIds && siteIds?.length > 0) {
             siteIds.forEach(site => {
                 onSnapshot(doc(db, 'notifications', site), async document => {
-                    console.log('notifications')
                     const type = document.data()?.type
-                    console.log(document.data())
                     if (type && type.length > 0) {
                         if (type === 'INCIDENT') {
                             Common.show(state, 'top-right', 'warn', state.$t('msg.new.incident.notification'))
                         } else if (type === 'SOS_ALERT') {
                             state.$registerEvent.$emit('soundAlert')
+                        } else if (type === 'FAILURE_PATROL') {
+                            console.log('FAILURE_PATROL')
+                            const subtype = document.data()?.subtype
+                            switch (subtype) {
+                                case 'EXPIRED':
+                                    Common.show(state, 'top-right', 'warn', state.$t('msg.expired.patrol.notification'))
+                                    break
+                                case 'NOT_STARTED':
+                                    Common.show(state, 'top-right', 'warn', state.$t('msg.not.started.patrol.notification'))
+                                    break
+                                case 'INCOMPLETE':
+                                    Common.show(state, 'top-right', 'warn', state.$t('msg.incomplete.patrol.notification'))
+                                    break
+                            }
                         }
                         await deleteDoc(doc(db, 'notifications', site))
                         await state.filter()
@@ -404,7 +421,6 @@ export default {
                 })
 
                 onSnapshot(doc(db, 'updatedMedias', site), async document => {
-                    console.log('updatedMedias')
                     const patrolAction = document.data()?.patrolAction
                     const type = document.data()?.type
 
@@ -451,11 +467,8 @@ export default {
 
             onSnapshot(doc(db, 'updateAttendanceEvent', siteGroupId), async document => {
                 if (document?.data()?.attendance) {
-                    console.log('updateAttendanceEvent')
                     const attendance = JSON.parse(document.data()?.attendance)
                     const operator = JSON.parse(document.data()?.operator)
-                    console.log('attendance', attendance)
-                    console.log('patrolActionId' + document.data()?.patrolActionId)
                     const patrolActionId = document.data()?.patrolActionId
                     await state.filter()
                     if (patrolActionId === state.selectedEvent?._id) {

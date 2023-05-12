@@ -135,7 +135,9 @@ export default {
             }
 
             const resultPatrolAction = await Services.getPatrolActionsByEvent(this, filters)
-            const formattedPatrolActions = resultPatrolAction?.map(patrolAction => {
+            const patrolActions = resultPatrolAction?.filter(patrolAction => patrolAction?.type !== 'FAILURE_PATROL') // remove as actions failure_patrol
+
+            const formattedPatrolActions = patrolActions?.map(patrolAction => {
                 patrolAction.medias = {
                     photo: patrolAction?.photoURL ? patrolAction?.photoURL : null,
                     signature: patrolAction?.signatureURL ? patrolAction?.signatureURL : null,

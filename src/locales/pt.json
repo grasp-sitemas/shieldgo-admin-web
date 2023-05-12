@@ -1142,5 +1142,6 @@
     "str.modal.create.schedule.title.create": "Novo agendamento",
     "msg.expired.patrol.notification": "Ronda expirada",
     "msg.not.started.patrol.notification": "Ronda não iniciada",
-    "msg.incomplete.patrol.notification": "Ronda incompleta"
+    "msg.incomplete.patrol.notification": "Ronda incompleta",
+    "str.monitor.details.incidents": "Incidentes reportados"
 }

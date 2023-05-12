@@ -152,7 +152,7 @@ export default {
                 account: '',
                 client: '',
                 site: '',
-                status: 'ACTIVE',
+                status: 'IN_PROGRESS',
                 startDate: moment().utc(true),
                 endDate: moment().utc(true),
                 isDescSortByStartDate: false,

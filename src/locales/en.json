@@ -1149,5 +1149,6 @@
     "str.modal.create.schedule.title.create": "Create schedule",
     "msg.expired.patrol.notification": "Expired patrol",
     "msg.not.started.patrol.notification": "Not started patrol",
-    "msg.incomplete.patrol.notification": "Incomplete patrol"
+    "msg.incomplete.patrol.notification": "Incomplete patrol",
+    "str.monitor.details.incidents": "Incidents"
 }       

@@ -299,16 +299,15 @@ export default {
                 }
 
                 if (dataItem?.failurePatrolType) {
-                    console.log(dataItem?.failurePatrolType)
-                    switch (dataItem?.failurePatrolType) {
+                    switch (dataItem.failurePatrolType) {
                         case 'NOT_STARTED':
-                            dataItem.failureText = `${this.$t('str.msg.not.started.patrol')} `
+                            dataItem.failureText = this.$t('str.msg.not.started.patrol')
                             break
                         case 'INCOMPLETE':
-                            dataItem.failureText = `${this.$t('str.msg.incomplete.patrol')} `
+                            dataItem.failureText = this.$t('str.msg.incomplete.patrol')
                             break
                         case 'EXPIRED':
-                            dataItem.failureText = `${this.$t('str.msg.expired.patrol')} `
+                            dataItem.failureText = this.$t('str.msg.expired.patrol')
                             break
                         default:
                             break

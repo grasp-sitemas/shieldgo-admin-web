@@ -1137,5 +1137,11 @@
     "str.this_year": "Este ano",
     "str.last_month": "Mês passado",
     "str.last_year": "Ano passado",
-    "str.last_7_days": "Últimos 7 dias"
+    "str.last_7_days": "Últimos 7 dias",
+    "str.modal.schedule.title.information": "Informações do agendamento",
+    "str.modal.create.schedule.title.create": "Novo agendamento",
+    "msg.expired.patrol.notification": "Ronda expirada",
+    "msg.not.started.patrol.notification": "Ronda não iniciada",
+    "msg.incomplete.patrol.notification": "Ronda incompleta",
+    "str.monitor.details.incidents": "Incidentes reportados"
 }

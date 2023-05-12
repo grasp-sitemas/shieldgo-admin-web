@@ -1144,5 +1144,11 @@
     "str.this_year": "This year",
     "str.last_month": "Last month",
     "str.last_year": "Last year",
-    "str.last_7_days": "Last 7 days"
+    "str.last_7_days": "Last 7 days",
+    "str.modal.schedule.title.information": "Schedule information",
+    "str.modal.create.schedule.title.create": "Create schedule",
+    "msg.expired.patrol.notification": "Expired patrol",
+    "msg.not.started.patrol.notification": "Not started patrol",
+    "msg.incomplete.patrol.notification": "Incomplete patrol",
+    "str.monitor.details.incidents": "Incidents"
 }       

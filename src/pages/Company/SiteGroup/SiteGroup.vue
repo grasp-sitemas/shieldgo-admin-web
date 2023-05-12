@@ -93,14 +93,14 @@
                 </div>
             </div>
 
-            <div class="row">
-                <label class="form-label" for="sitesField">{{ $t('str.register.site.groups.sites.table.title') }}</label>
+            <div class="row mt-1">
+                <h5 class="" for="sitesField">{{ $t('str.register.site.groups.sites.table.title') }}</h5>
                 <div class="col-md-12 mb-3">
                     <table class="table table-bordered">
                         <thead class="thead-dark dark">
                             <tr>
-                                <th>{{ $t('str.register.site.groups.sites.table.name') }}</th>
-                                <th>{{ $t('str.register.site.groups.sites.table.client') }}</th>
+                                <th class="upperCase">{{ $t('str.register.site.groups.sites.table.name') }}</th>
+                                <th class="upperCase">{{ $t('str.register.site.groups.sites.table.client') }}</th>
                                 <th></th>
                             </tr>
                         </thead>
@@ -186,5 +186,8 @@ export default {
 <style lang="scss" scoped>
 .dark-shadow {
     background-color: inset 0 0 0 9999px var(--bs-table-accent-bg) !important;
+}
+table {
+    border: outset !important;
 }
 </style>

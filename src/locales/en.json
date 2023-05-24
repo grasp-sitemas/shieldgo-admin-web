@@ -1150,5 +1150,8 @@
     "msg.expired.patrol.notification": "Expired patrol",
     "msg.not.started.patrol.notification": "Not started patrol",
     "msg.incomplete.patrol.notification": "Incomplete patrol",
-    "str.monitor.details.incidents": "Incidents"
+    "str.monitor.details.incidents": "Incidents",
+    "str.dashboard.events.by.type": "Events by type",
+    "str.column.type": "Type",
+    "str.column.total": "Total"
 }       

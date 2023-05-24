@@ -25,9 +25,12 @@ export default {
         delete: `${domain}/api/company/events/delete/v1/`,
         attendances: {
             filter: `${domain}/api/users/attendances/filter/v1/`,
-
             attendance: `${domain}/api/users/attendances/v1/`,
         },
+    },
+    charts: {
+        patrols: `${domain}/api/users/charts/patrols/v1/`,
+        eventsByType: `${domain}/api/users/charts/events/bytype/v1/`,
     },
     systemUsers: {
         changeLanguage: `${domain}/api/users/system/change/language/v1/`,

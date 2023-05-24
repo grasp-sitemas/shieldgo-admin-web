@@ -1143,5 +1143,15 @@
     "msg.expired.patrol.notification": "Ronda expirada",
     "msg.not.started.patrol.notification": "Ronda não iniciada",
     "msg.incomplete.patrol.notification": "Ronda incompleta",
-    "str.monitor.details.incidents": "Incidentes reportados"
+    "str.monitor.details.incidents": "Incidentes reportados",
+    "str.form.title.dashboard": "Dashboard",
+    "str.compare.to": "Período",
+    "str.dashboard.patrol.total": "Total de rondas",
+    "str.dashboard.finish.patrol.percent": "Rondas finalizadas",
+    "str.dashboard.attendence.patrol": "Rondas com atendimento",
+    "str.dashboard.average.patrol.time": "Tempo médio de ronda",
+    "str.dashboard.events.by.type": "Eventos por tipo",
+    "str.column.type": "Tipo",
+    "str.column.total": "Total"
 }
+

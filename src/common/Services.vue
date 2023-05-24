@@ -235,6 +235,14 @@ export default {
         const response = await Request.do(state, 'POST', Request.getDefaultHeader(state), filters, `${Endpoints.events.filter}`)
         return response?.data?.results || []
     },
+    getPatrolsChart: async function (state, filters) {
+        const response = await Request.do(state, 'POST', Request.getDefaultHeader(state), filters, `${Endpoints.charts.patrols}`)
+        return response?.data?.result || {}
+    },
+    getEventsByType: async function (state, filters) {
+        const response = await Request.do(state, 'POST', Request.getDefaultHeader(state), filters, `${Endpoints.charts.eventsByType}`)
+        return response?.data?.result || {}
+    },
     getFormattedEventsByDate: async function (state, filters) {
         const response = await Request.do(state, 'POST', Request.getDefaultHeader(state), filters, `${Endpoints.events.filter}`)
         const results = response?.data?.results

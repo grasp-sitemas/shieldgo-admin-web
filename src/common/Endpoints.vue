@@ -31,6 +31,9 @@ export default {
     charts: {
         patrols: `${domain}/api/users/charts/patrols/v1/`,
         eventsByType: `${domain}/api/users/charts/events/bytype/v1/`,
+        eventsPerformance: `${domain}/api/users/charts/events/performance/v1/`,
+        avaregeTimeAttendanceEvent: `${domain}/api/users/charts/events/average/attendances/v1/`,
+        eventsAttendance: `${domain}/api/users/charts/events/attendances/v1/`,
     },
     systemUsers: {
         changeLanguage: `${domain}/api/users/system/change/language/v1/`,

@@ -1,26 +1,30 @@
 <template>
-    <div class="col-xl-4">
-        <!-- <panel :title="`${title} - ${total ? total : 0}`"> -->
-        <!-- painel sem icone de maximizar -->
-        <panel :title="`${title}`" :maximize="false">
-            <div class="table-responsive mb-0">
-                <table class="table table-panel align-middle mb-0">
-                    <thead>
-                        <tr>
-                            <th v-for="header in headers" :key="header">{{ header }}</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr v-for="item in items" :key="item.type">
-                            <td nowrap>
-                                <label :class="`badge bg-${getColorForEventType(item.type)}`">{{ $t(item?.type) }}</label>
-                            </td>
-                            <td>{{ item?.count }}</td>
-                        </tr>
-                    </tbody>
-                </table>
+    <div class="col-md-12">
+        <div class="card border-0 text-truncate mb-3 bg-gray-800 text-white">
+            <div class="card-body">
+                <div class="mb-3 text-gray-500">
+                    <b class="mb-3">{{ title.toUpperCase() }}</b>
+                </div>
+
+                <div class="table-responsive mb-0">
+                    <table class="table table-panel align-middle mb-0">
+                        <thead>
+                            <tr>
+                                <th v-for="header in headers" :key="header">{{ header }}</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr v-for="item in items" :key="item.type">
+                                <td nowrap>
+                                    <label :class="`badge bg-${getColorForEventType(item.type)}`">{{ $t(item?.type) }}</label>
+                                </td>
+                                <td>{{ item?.count }}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
             </div>
-        </panel>
+        </div>
     </div>
 </template>
 

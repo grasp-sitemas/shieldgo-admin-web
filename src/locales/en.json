@@ -1153,5 +1153,21 @@
     "str.monitor.details.incidents": "Incidents",
     "str.dashboard.events.by.type": "Events by type",
     "str.column.type": "Type",
-    "str.column.total": "Total"
+    "str.column.total": "Total",
+    "str.msg.performance.patrol": "Performance patrol",
+    "COMPLETE": "Complete",
+    "str.compare.to": "Compare to",
+    "str.dashboard.patrol.total": "Total Patrol",
+    "str.dashboard.finish.patrol.percent": "Finish Patrol",
+    "str.dashboard.attendence.patrol": "Attendance Patrol",
+    "str.dashboard.average.patrol.time": "Average Patrol Time",
+    "str.form.title.dashboard": "Dashboard",
+    "str.chart.average.time.attendance.events.title": "Attendance",
+    "str.msg.performance.avg": "Avg",
+    "str.msg.performance.min": "Min",
+    "str.msg.performance.max": "Max",
+    "str.event.attended": "Attended",
+    "str.event.not.attended": "Not attended",
+    "str.chart.attendance.events.title": "Events",
+    "str.register.period": "Period"
 }       

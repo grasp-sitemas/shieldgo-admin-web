@@ -7,28 +7,37 @@ export default {
     init: async payload => {
         await payload.initRangeDate()
 
+        payload.filters.account = Common.getAccountId(payload)
         payload.isSuperAdminMaster = await Common.isSuperAdminMaster(payload)
+        if (payload.isSuperAdminMaster) {
+            payload.accounts = await Services.getAccounts(payload)
+        } else {
+            payload.clients = await Services.getClients(payload)
+        }
 
         const role = await Common.getSubtype(payload)
         payload.role = role
 
-        payload.filter()
+        await payload.filter()
     },
     methods: {
         async filter() {
             this.isLoading = true
-
             this.patrolsChart = await Services.getPatrolsChart(this, this.filters)
             this.eventsByType = await Services.getEventsByType(this, this.filters)
+            this.eventsPerformance = await Services.eventsPerformance(this, this.filters)
+
+            this.avaregeAttendanceEvent = await Services.getAvaregeTimeAttendanceEvent(this, this.filters)
+            this.eventsAttendance = await Services.getEventsAttendance(this, this.filters)
 
             this.isLoading = false
         },
-
-        updateValues(d) {
+        async updateValues(d) {
             this.filters.startDate = moment(d.startDate).utc(true)
             this.filters.endDate = moment(d.endDate).utc(true)
-            this.filter()
+            await this.filter()
         },
+
         initRangeDate: async function () {
             const startDate = moment().subtract(0, 'days')
             const endDate = moment()
@@ -99,19 +108,16 @@ export default {
         changeAccount: async function () {
             const account = this.filters.account
 
-            if (account === '') {
-                this.filters.client = ''
-                this.filters.site = ''
-            }
+            this.filters.client = ''
+            this.filters.site = ''
+
             this.filter()
             this.clients = await Services.getClientsByAccount(this, account)
         },
         changeClient: async function () {
             const client = this.filters.client
 
-            if (client === '') {
-                this.filters.site = ''
-            }
+            this.filters.site = ''
 
             this.filter()
             this.sites = await Services.getSitesByClient(this, client)

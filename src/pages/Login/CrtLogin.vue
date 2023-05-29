@@ -55,6 +55,7 @@ export default {
 
                                 if (routeToNavigate) {
                                     const language = userResponse?.result?.language
+                                    this.$session.set('locale', language)
                                     this.$i18n.locale = language
                                     this.$router.push({ path: routeToNavigate })
                                 } else {

@@ -29,6 +29,9 @@ export default {
     formatDate: text => {
         return new Date(text).toLocaleDateString()
     },
+    getLocale: () => {
+        return localStorage.getItem('locale') || 'pt-br'
+    },
     formatDateTime: text => {
         const dateTimezone = moment(text).utc(true)
         const formattedDate = dateTimezone.format('DD/MM/YYYY')

@@ -2,7 +2,7 @@
 import Endpoints from './Endpoints.vue'
 import Request from './Request.vue'
 import moment from 'moment'
-
+import { EVENT_CHART_TYPES } from '../utils/events'
 export default {
     getMe: async function (state) {
         const response = await Request.do(state, 'GET', Request.getDefaultHeader(state), {}, `${Endpoints.systemUsers.getMe}`)
@@ -239,6 +239,16 @@ export default {
         const response = await Request.do(state, 'POST', Request.getDefaultHeader(state), filters, `${Endpoints.charts.patrols}`)
         return response?.data?.result || {}
     },
+    getEventsAttendance: async function (state, filters) {
+        filters.types = EVENT_CHART_TYPES
+        const response = await Request.do(state, 'POST', Request.getDefaultHeader(state), filters, `${Endpoints.charts.eventsAttendance}`)
+        return response?.data?.result || {}
+    },
+    getAvaregeTimeAttendanceEvent: async function (state, filters) {
+        filters.types = EVENT_CHART_TYPES
+        const response = await Request.do(state, 'POST', Request.getDefaultHeader(state), filters, `${Endpoints.charts.avaregeTimeAttendanceEvent}`)
+        return response?.data?.result || {}
+    },
     getEventsByType: async function (state, filters) {
         const response = await Request.do(state, 'POST', Request.getDefaultHeader(state), filters, `${Endpoints.charts.eventsByType}`)
         return response?.data?.result || {}
@@ -278,6 +288,11 @@ export default {
     createAttendance: async function (state, attendance) {
         const response = await Request.do(state, 'POST', Request.getDefaultHeader(state), attendance, `${Endpoints.events.attendances.attendance}`)
         return response?.data?.result || null
+    },
+
+    eventsPerformance: async function (state, filters) {
+        const response = await Request.do(state, 'POST', Request.getDefaultHeader(state), filters, `${Endpoints.charts.eventsPerformance}`)
+        return response?.data?.result || {}
     },
     attendanceEvent: async function (state, patrolActionId, attendance, siteGroup) {
         const body = {

@@ -6,7 +6,8 @@ import Companies from '../pages/Company/Company/ListCompany.vue'
 import ChangePassword from '../pages/User/ChangePassword/ChangePassword.vue'
 import ClientGroup from '../pages/Company/ClientGroup/ListClientGroup.vue'
 import Clients from '../pages/Company/Client/ListClient.vue'
-import Dashboard from '../pages/Dashboard/Dashboard.vue'
+import Analysis from '../pages/Dashboard/Analysis/Analysis.vue'
+import Performance from '../pages/Dashboard/Performance/Performance.vue'
 import GuardGroup from '../pages/User/GuardGroup/ListGuardGroup.vue'
 import Incident from '../pages/Company/Incident/ListIncident.vue'
 import Log from '../pages/Log/Log.vue'
@@ -90,9 +91,17 @@ const routes = [
         },
     },
     {
-        path: '/dashboard',
-        name: 'dashboard',
-        component: Dashboard,
+        path: '/dashboard/analysis',
+        name: 'dashboard-analysis',
+        component: Analysis,
+        beforeEnter: (_to, _from, next) => {
+            next(checkSession())
+        },
+    },
+    {
+        path: '/dashboard/performance',
+        name: 'dashboard-performance',
+        component: Performance,
         beforeEnter: (_to, _from, next) => {
             next(checkSession())
         },

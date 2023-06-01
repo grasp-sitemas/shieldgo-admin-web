@@ -8,7 +8,8 @@
                     <span class="icon-bar"></span>
                 </button>
                 <div class="navbar-brand">
-                    <img src="../../assets/images/logo.png" alt="ShieldGo" width="90" />
+                    <img v-if="darkMode" src="../../assets/images/logo.png" alt="ShieldGo" width="90" />
+                    <img v-else src="../../assets/images/logo.png" alt="ShieldGo" width="90" />
                 </div>
 
                 <button type="button" class="navbar-mobile-toggler" v-on:click="toggleTopMenuMobile" v-if="appOptions.appTopMenu && appOptions.appSidebarNone">
@@ -27,14 +28,7 @@
                 <header-mega-menu v-if="appOptions.appHeaderMegaMenu"></header-mega-menu>
 
                 <b-nav-item-dropdown class="navbar-item" menu-class="dropdown-menu media-list" right toggle-class="navbar-link dropdown-toggle icon" no-caret>
-                    <!-- <template slot="button-content">
-                        <i class="fa fa-bell"></i>
-                        <span class="badge">0</span>
-                    </template>
-                    <div class="dropdown-header">NOTIFICATIONS (0)</div>
-                    <div class="text-center w-300px py-3">No notification found</div> -->
                     <template slot="button-content">
-                        <!-- speaker (sound) icon control sound on and off -->
                         <i @click="handleEnableSound" class="fa fa-volume-up p-3" v-if="soundEnabled"></i>
                         <i @click="handleEnableSound" class="fa fa-volume-mute p-3" v-else></i>
                     </template>
@@ -68,12 +62,6 @@
                         <b class="caret"></b>
                     </template>
                     <a href="#/profile" class="dropdown-item">{{ $t('str.header.menu.edit.profile') }}</a>
-                    <!-- <a href="javascript:;" class="dropdown-item d-flex align-items-center">
-                        Inbox
-                        <span class="badge bg-danger rounded-pill ms-auto pb-4px">2</span>
-                    </a>
-                    <a href="javascript:;" class="dropdown-item">Calendar</a> -->
-                    <!-- <a href="#/settings" class="dropdown-item">{{ $t('str.header.menu.settings') }}</a> -->
                     <a href="#/change-password" class="dropdown-item">{{ $t('str.header.menu.change.password') }}</a>
                     <div class="dropdown-divider"></div>
                     <a class="dropdown-item" v-on:click="logout">{{ $t('str.header.menu.signout') }} </a>
@@ -86,7 +74,6 @@
                 </div>
             </div>
         </div>
-        <!-- <notifications group="top-right" position="top right" :speed="1000" /> -->
     </div>
 </template>
 
@@ -110,6 +97,7 @@ export default {
             valuekey: 0,
             domain: null,
             soundEnabled: true,
+            darkMode: false,
         }
     },
     methods: Controller.methods,
@@ -118,6 +106,10 @@ export default {
 
         state.$registerEvent.$on('updateHeader', function () {
             state.refreshUser(state)
+        })
+
+        state.$registerEvent.$on('setDarkMode', function (value) {
+            state.darkMode = value
         })
 
         state.$registerEvent.$on('soundAlert', function () {

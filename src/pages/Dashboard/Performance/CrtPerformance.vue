@@ -1,6 +1,6 @@
 <script>
-import Common from '../../common/Common.vue'
-import Services from '../../common/Services.vue'
+import Common from '../../../common/Common.vue'
+import Services from '../../../common/Services.vue'
 import moment from 'moment'
 
 export default {
@@ -23,12 +23,6 @@ export default {
     methods: {
         async filter() {
             this.isLoading = true
-            this.patrolsChart = await Services.getPatrolsChart(this, this.filters)
-            this.eventsByType = await Services.getEventsByType(this, this.filters)
-            this.eventsPerformance = await Services.eventsPerformance(this, this.filters)
-
-            this.avaregeAttendanceEvent = await Services.getAvaregeTimeAttendanceEvent(this, this.filters)
-            this.eventsAttendance = await Services.getEventsAttendance(this, this.filters)
             this.patrolPointsPerformance = await Services.patrolPointsPerformance(this, this.filters)
             this.guardsPerformance = await Services.guardsPerformance(this, this.filters)
 

@@ -1169,5 +1169,10 @@
     "str.event.attended": "Attended",
     "str.event.not.attended": "Not attended",
     "str.chart.attendance.events.title": "Events",
-    "str.register.period": "Period"
+    "str.register.period": "Period",
+    "str.chart.patrol.points.performance.title": "Performance patrol points",
+    "str.chart.guards.performance.title": "Performance guards",
+    "str.chart.patrol.points.performance.read": "Read",
+    "str.chart.patrol.points.performance.unread": "Unread",
+    "str.total": "Total"
 }       

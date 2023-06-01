@@ -1,6 +1,6 @@
 <template>
     <div class="col-md-12">
-        <div class="card border-0 text-truncate mb-3 bg-gray-800 text-white">
+        <div class="card border-0 text-truncate mb-3 bg-gray-800 text-white" style="min-height: 20.8rem">
             <div class="card-body">
                 <div class="mb-3 text-gray-500">
                     <b class="mb-3">{{ title.toUpperCase() }}</b>
@@ -69,3 +69,12 @@ export default {
     },
 }
 </script>
+<style scoped>
+.apexcharts-legend .apexcharts-align-right .apx-legend-position-top {
+    right: 0px;
+    position: absolute;
+    left: 520px;
+    top: 0px !important;
+    max-height: 105px;
+}
+</style>

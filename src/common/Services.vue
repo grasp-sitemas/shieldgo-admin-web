@@ -289,7 +289,14 @@ export default {
         const response = await Request.do(state, 'POST', Request.getDefaultHeader(state), attendance, `${Endpoints.events.attendances.attendance}`)
         return response?.data?.result || null
     },
-
+    patrolPointsPerformance: async function (state, filters) {
+        const response = await Request.do(state, 'POST', Request.getDefaultHeader(state), filters, `${Endpoints.charts.patrolPointsPerformance}`)
+        return response?.data?.result || []
+    },
+    guardsPerformance: async function (state, filters) {
+        const response = await Request.do(state, 'POST', Request.getDefaultHeader(state), filters, `${Endpoints.charts.guardsPerformance}`)
+        return response?.data?.result || []
+    },
     eventsPerformance: async function (state, filters) {
         const response = await Request.do(state, 'POST', Request.getDefaultHeader(state), filters, `${Endpoints.charts.eventsPerformance}`)
         return response?.data?.result || {}

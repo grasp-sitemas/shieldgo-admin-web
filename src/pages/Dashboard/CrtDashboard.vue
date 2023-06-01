@@ -29,6 +29,8 @@ export default {
 
             this.avaregeAttendanceEvent = await Services.getAvaregeTimeAttendanceEvent(this, this.filters)
             this.eventsAttendance = await Services.getEventsAttendance(this, this.filters)
+            this.patrolPointsPerformance = await Services.patrolPointsPerformance(this, this.filters)
+            this.guardsPerformance = await Services.guardsPerformance(this, this.filters)
 
             this.isLoading = false
         },

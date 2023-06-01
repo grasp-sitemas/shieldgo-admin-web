@@ -1162,6 +1162,10 @@
     "str.chart.attendance.events.title": "Eventos",
     "str.event.attended": "Atendido(s)",
     "str.event.not.attended": "Não atendido",
-    "str.register.period": "Período"
+    "str.register.period": "Período",
+    "str.chart.patrol.points.performance.title": "Performance de pontos de ronda",
+    "str.chart.guards.performance.title": "Performance de vigilantes",
+    "str.chart.patrol.points.performance.read": "Lidos",
+    "str.chart.patrol.points.performance.unread": "Não lidos",
+    "str.total": "Total"
 }
-

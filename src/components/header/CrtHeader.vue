@@ -7,6 +7,8 @@ export default {
         payload.user = payload.$session.get('user')
         payload.domain = Endpoints.domain
 
+        payload.darkMode = payload.user?.darkMode
+
         if (payload.getSoundStore() === false) {
             payload.soundEnabled = false
         } else {

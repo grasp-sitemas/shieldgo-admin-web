@@ -1,6 +1,6 @@
 <script>
-import Common from '../../common/Common.vue'
-import Services from '../../common/Services.vue'
+import Common from '../../../common/Common.vue'
+import Services from '../../../common/Services.vue'
 import moment from 'moment'
 
 export default {
@@ -23,13 +23,7 @@ export default {
     methods: {
         async filter() {
             this.isLoading = true
-            this.patrolsChart = await Services.getPatrolsChart(this, this.filters)
-            this.eventsByType = await Services.getEventsByType(this, this.filters)
-            this.eventsPerformance = await Services.eventsPerformance(this, this.filters)
-
-            this.avaregeAttendanceEvent = await Services.getAvaregeTimeAttendanceEvent(this, this.filters)
-            this.eventsAttendance = await Services.getEventsAttendance(this, this.filters)
-            this.patrolPointsPerformance = await Services.patrolPointsPerformance(this, this.filters)
+            this.localsPerformance = await Services.localsPerformance(this, this.filters)
             this.guardsPerformance = await Services.guardsPerformance(this, this.filters)
 
             this.isLoading = false
@@ -48,7 +42,6 @@ export default {
             const today = moment()
             const yesterday = moment().subtract(1, 'days')
             const thisMonthStart = moment().startOf('month')
-            const thisMonthEnd = moment().endOf('month')
 
             this.dateRange = {
                 opens: 'right',
@@ -66,6 +59,7 @@ export default {
                     prevStartDate: prevStartDate,
                     prevEndDate: prevEndDate,
                 },
+                maxDate: moment().utc(true),
                 sampleLocaleData: {
                     direction: 'ltr',
                     format: 'dd/mm/yyyy',
@@ -76,9 +70,14 @@ export default {
                     ranges: {
                         [this.$t('str.today')]: [today, today],
                         [this.$t('str.yesterday')]: [yesterday, yesterday],
-                        [this.$t('str.this_month')]: [thisMonthStart, thisMonthEnd],
-                        [this.$t('str.this_year')]: [moment().startOf('year'), moment().endOf('year')],
+                        [this.$t('str.this_month')]: [thisMonthStart, today], // alterado para hoje
+                        [this.$t('str.this_year')]: [moment().startOf('year'), today], // alterado para hoje
                         [this.$t('str.last_month')]: [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')],
+                        // [this.$t('str.today')]: [today, today],
+                        // [this.$t('str.yesterday')]: [yesterday, yesterday],
+                        // [this.$t('str.this_month')]: [thisMonthStart, thisMonthEnd],
+                        // [this.$t('str.this_year')]: [moment().startOf('year'), moment().endOf('year')],
+                        // [this.$t('str.last_month')]: [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')],
                     },
                     daysOfWeek: [
                         this.$t('str.abbreviation.sunday'),

@@ -54,6 +54,7 @@ export default {
                     response => {
                         if (response.status === 200) {
                             this.$session.set('user', response.result)
+                            this.$registerEvent.$emit('setDarkMode', response.result?.darkMode)
                             Common.show(this, 'bottom-right', 'success', this.$t('str.form.update.success'))
                         }
                     },

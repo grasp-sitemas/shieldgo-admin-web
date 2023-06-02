@@ -1167,5 +1167,11 @@
     "str.chart.guards.performance.title": "Performance de vigilantes",
     "str.chart.patrol.points.performance.read": "Lidos",
     "str.chart.patrol.points.performance.unread": "Não lidos",
-    "str.total": "Total"
+    "str.total": "Total",
+    "str.sidebar.menu.analysis": "Análises",
+    "str.sidebar.menu.performance": "Performance",
+    "str.msg.analysis.patrol": "Análise de rondas",
+    "str.msg.dashboard.analysis.title": "Dashboard - Análises",
+    "str.msg.dashboard.performance.title": "Dashboard - Performance",
+    "str.chart.locals.performance.title": "Performance de locais"
 }

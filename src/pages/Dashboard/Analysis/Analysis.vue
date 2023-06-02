@@ -1,6 +1,6 @@
 <template>
     <div>
-        <h1 class="page-header">{{ $t('str.form.title.dashboard') }}</h1>
+        <h1 class="page-header">{{ $t('str.msg.dashboard.analysis.title') }}</h1>
         <hr />
 
         <div class="row">
@@ -18,6 +18,7 @@
                     :showDropdowns="dateRange.showDropdowns"
                     :autoApply="dateRange.autoApply"
                     v-model="dateRange.range"
+                    :max-date="dateRange.maxDate"
                     @update="updateValues"
                     :linkedCalendars="dateRange.linkedCalendars"
                     :date-range="dateRange"
@@ -80,28 +81,18 @@
                 <ChartTable :title="tableTitle" :total="eventsByType?.totalCount || 0" :items="eventsByType?.countByType || []" :headers="tableHeaders" />
             </div>
         </div>
-        <div class="row">
-            <div class="col-md-6">
-                <PatrolPointsPerformance :title="$t('str.chart.patrol.points.performance.title')" :data="patrolPointsPerformance" :locale="userLocale" />
-            </div>
-            <div class="col-md-6">
-                <GuardsPerformance :title="$t('str.chart.guards.performance.title')" :data="guardsPerformance" :locale="userLocale" />
-            </div>
-        </div>
     </div>
 </template>
 
 <script>
 import moment from 'moment'
-import Controller from './CrtDashboard.vue'
+import Controller from './CrtAnalysis.vue'
 import Vue from 'vue'
 import Card from './Components/Card.vue'
 import ChartTable from './Components/ChartTable.vue'
 import EventsPerformance from './Components/PerformanceEvent.vue'
 import AverageTimeAttendanceEvent from './Components/AverageTimeAttendanceEvent.vue'
 import AttendanceEvents from './Components/AttendanceEvents.vue'
-import PatrolPointsPerformance from './Components/PatrolPointsPerformance.vue'
-import GuardsPerformance from './Components/GuardsPerformance.vue'
 
 Vue.prototype.$registerEvent = new Vue()
 
@@ -112,8 +103,6 @@ export default {
         EventsPerformance,
         AverageTimeAttendanceEvent,
         AttendanceEvents,
-        PatrolPointsPerformance,
-        GuardsPerformance,
     },
     data() {
         return {
@@ -127,6 +116,7 @@ export default {
                 endDate: moment().utc(true),
             },
             userLocale: 'pt-br',
+            maxDate: moment().utc(true),
             accounts: [],
             clients: [],
             sites: [],
@@ -136,8 +126,6 @@ export default {
             avaregeAttendanceEvent: {},
             eventsAttendance: {},
             isSuperAdminMaster: false,
-            patrolPointsPerformance: [],
-            guardsPerformance: [],
             tableTitle: this.$t('str.dashboard.events.by.type'),
             tableHeaders: [this.$t('str.column.type'), this.$t('str.column.total')],
         }

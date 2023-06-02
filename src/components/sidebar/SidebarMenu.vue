@@ -8,7 +8,24 @@ const ROLES = {
 }
 
 const sidebarMenu = [
-    { path: '/dashboard', icon: 'fa fa-tachometer-alt', title: 'str.sidebar.menu.dashboard', roles: [ROLES.SUPER_ADMIN_MASTER, ROLES.ADMIN, ROLES.MANAGER] },
+    {
+        path: '/dashboard',
+        icon: 'fa fa-tachometer-alt',
+        title: 'str.sidebar.menu.dashboard',
+        roles: [ROLES.SUPER_ADMIN_MASTER, ROLES.ADMIN, ROLES.MANAGER],
+        children: [
+            {
+                path: '/dashboard/analysis',
+                title: 'str.sidebar.menu.analysis',
+                roles: [ROLES.SUPER_ADMIN_MASTER, ROLES.ADMIN, ROLES.MANAGER],
+            },
+            {
+                path: '/dashboard/performance',
+                title: 'str.sidebar.menu.performance',
+                roles: [ROLES.SUPER_ADMIN_MASTER, ROLES.ADMIN, ROLES.MANAGER],
+            },
+        ],
+    },
     { path: '/monitor', icon: 'fa fa-crosshairs', title: 'str.sidebar.menu.monitor', roles: [ROLES.SUPER_ADMIN_MASTER, ROLES.ADMIN, ROLES.MANAGER, ROLES.OPERATOR] },
     { path: '/companies', icon: 'fa fa-building', title: 'str.sidebar.menu.companies', roles: [ROLES.SUPER_ADMIN_MASTER] },
     { path: '/clients', active: false, icon: 'fa fa-user-tie', title: 'str.sidebar.menu.clients', roles: [ROLES.SUPER_ADMIN_MASTER, ROLES.ADMIN] },
@@ -48,8 +65,7 @@ const sidebarMenu = [
         icon: 'fa-solid fa-file-contract',
         title: 'str.sidebar.menu.reports',
         roles: [ROLES.SUPER_ADMIN_MASTER, ROLES.ADMIN, ROLES.MANAGER],
-        topMenu: true,
-        label: 'str.sidebar.menu.new',
+        topMenu: false,
         children: [
             {
                 path: '/reports/patrols/completed',

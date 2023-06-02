@@ -4,7 +4,9 @@
             <div class="mb-1 text-gray-500">
                 <b>{{ title?.toUpperCase() }}</b>
             </div>
-            <apexchart type="bar" :options="chartOptions" :series="series"></apexchart>
+            <div class="chart-container">
+                <apexchart type="bar" :options="chartOptions" :series="series"></apexchart>
+            </div>
         </div>
     </div>
 </template>
@@ -46,6 +48,7 @@ export default {
                     type: 'bar',
                     stacked: true,
                     stackType: '100%',
+                    height: 30 * this.preparedData.length,
                 },
                 plotOptions: {
                     bar: {
@@ -57,21 +60,20 @@ export default {
                     width: 0,
                     colors: ['#fff'],
                 },
-                xaxis: {
-                    categories: this.preparedData.map(item => item.name),
-                    labels: {
-                        formatter: function (val) {
-                            return val.length > 15 ? val.substring(0, 15) + '...' : val
-                        },
-                        style: {
-                            colors: ['#fff'],
-                        },
-                    },
-                },
                 yaxis: {
                     labels: {
                         style: {
-                            colors: ['#fff'],
+                            colors: '#fff',
+                        },
+                    },
+                },
+                xaxis: {
+                    categories: this.preparedData.map(item => item.name),
+                    labels: {
+                        trim: true,
+                        hideOverlappingLabels: true,
+                        style: {
+                            colors: '#fff',
                         },
                     },
                 },
@@ -125,5 +127,10 @@ export default {
 
 text {
     fill: #fff !important;
+}
+
+.chart-container {
+    max-height: 450px; /* Ajuste essa altura de acordo com suas necessidades */
+    overflow-y: auto;
 }
 </style>

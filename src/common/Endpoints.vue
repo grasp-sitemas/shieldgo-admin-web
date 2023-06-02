@@ -36,6 +36,7 @@ export default {
         eventsAttendance: `${domain}/api/users/charts/events/attendances/v1/`,
         patrolPointsPerformance: `${domain}/api/users/charts/checkpoints/performance/v1/`,
         guardsPerformance: `${domain}/api/users/charts/guards/performance/v1/`,
+        localsPerformance: `${domain}/api/users/charts/locals/performance/v1/`,
     },
     systemUsers: {
         changeLanguage: `${domain}/api/users/system/change/language/v1/`,

@@ -28,7 +28,7 @@ export default {
             return true
         },
         navigateByRole: async function (subtype) {
-            return subtype === 'SUPER_ADMIN_MASTER' || subtype === 'ADMIN' || subtype === 'MANAGER' ? '/dashboard' : subtype === 'OPERATOR' ? '/monitor' : null
+            return subtype === 'SUPER_ADMIN_MASTER' || subtype === 'ADMIN' || subtype === 'MANAGER' ? '/dashboard/analysis' : subtype === 'OPERATOR' ? '/monitor' : null
         },
         signIn: function () {
             if (this.checkForm()) {

@@ -293,6 +293,10 @@ export default {
         const response = await Request.do(state, 'POST', Request.getDefaultHeader(state), filters, `${Endpoints.charts.patrolPointsPerformance}`)
         return response?.data?.result || []
     },
+    localsPerformance: async function (state, filters) {
+        const response = await Request.do(state, 'POST', Request.getDefaultHeader(state), filters, `${Endpoints.charts.localsPerformance}`)
+        return response?.data?.result || []
+    },
     guardsPerformance: async function (state, filters) {
         const response = await Request.do(state, 'POST', Request.getDefaultHeader(state), filters, `${Endpoints.charts.guardsPerformance}`)
         return response?.data?.result || []

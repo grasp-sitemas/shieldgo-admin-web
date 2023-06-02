@@ -3,7 +3,7 @@
         <div class="card border-0 mb-3 bg-gray-800 text-white">
             <div class="card-body">
                 <div class="mb-3 text-gray-500">
-                    <b>{{ $t('str.msg.performance.patrol').toUpperCase() }}</b>
+                    <b>{{ $t('str.msg.analysis.patrol').toUpperCase() }}</b>
                 </div>
                 <div class="row">
                     <div class="col-xl-3 col-4" v-for="(item, index) in chart?.series" :key="index">

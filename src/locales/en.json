@@ -1174,5 +1174,11 @@
     "str.chart.guards.performance.title": "Performance guards",
     "str.chart.patrol.points.performance.read": "Read",
     "str.chart.patrol.points.performance.unread": "Unread",
-    "str.total": "Total"
+    "str.total": "Total",
+    "str.sidebar.menu.analysis": "Analysis",
+    "str.sidebar.menu.performance": "Performance",
+    "str.msg.analysis.patrol": "Analysis patrol",
+    "str.msg.dashboard.analysis.title": "Dashboard - Analysis",
+    "str.msg.dashboard.performance.title": "Dashboard - Performance",
+    "str.chart.locals.performance.title": "Performance locals"
 }       

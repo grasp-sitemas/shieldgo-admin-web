@@ -18,6 +18,7 @@
                     :showDropdowns="dateRange.showDropdowns"
                     :autoApply="dateRange.autoApply"
                     v-model="dateRange.range"
+                    :max-date="dateRange.maxDate"
                     @update="updateValues"
                     :linkedCalendars="dateRange.linkedCalendars"
                     :date-range="dateRange"
@@ -115,6 +116,7 @@ export default {
                 endDate: moment().utc(true),
             },
             userLocale: 'pt-br',
+            maxDate: moment().utc(true),
             accounts: [],
             clients: [],
             sites: [],

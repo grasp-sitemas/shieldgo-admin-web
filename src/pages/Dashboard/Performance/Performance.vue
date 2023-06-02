@@ -17,6 +17,7 @@
                     :showWeekNumbers="dateRange.showWeekNumbers"
                     :showDropdowns="dateRange.showDropdowns"
                     :autoApply="dateRange.autoApply"
+                    :max-date="dateRange.maxDate"
                     v-model="dateRange.range"
                     @update="updateValues"
                     :linkedCalendars="dateRange.linkedCalendars"
@@ -61,7 +62,7 @@
 
         <div class="row">
             <div class="col-md-6">
-                <PatrolPointsPerformance :title="$t('str.chart.patrol.points.performance.title')" :data="patrolPointsPerformance" :locale="userLocale" />
+                <LocalsPerformance :title="$t('str.chart.locals.performance.title')" :data="localsPerformance" :locale="userLocale" />
             </div>
             <div class="col-md-6">
                 <GuardsPerformance :title="$t('str.chart.guards.performance.title')" :data="guardsPerformance" :locale="userLocale" />
@@ -74,15 +75,14 @@
 import moment from 'moment'
 import Controller from './CrtPerformance.vue'
 import Vue from 'vue'
-import PatrolPointsPerformance from './Components/PatrolPointsPerformance.vue'
 import GuardsPerformance from './Components/GuardsPerformance.vue'
-
+import LocalsPerformance from './Components/LocalsPerformance.vue'
 Vue.prototype.$registerEvent = new Vue()
 
 export default {
     components: {
-        PatrolPointsPerformance,
         GuardsPerformance,
+        LocalsPerformance,
     },
     data() {
         return {
@@ -100,7 +100,7 @@ export default {
             clients: [],
             sites: [],
             isSuperAdminMaster: false,
-            patrolPointsPerformance: [],
+            localsPerformance: [],
             guardsPerformance: [],
             tableTitle: this.$t('str.dashboard.events.by.type'),
             tableHeaders: [this.$t('str.column.type'), this.$t('str.column.total')],

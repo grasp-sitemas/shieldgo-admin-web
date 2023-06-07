@@ -111,6 +111,8 @@ export default {
                 return 'str.event.status.pendent'
             case 'IN_PROGRESS':
                 return 'str.event.status.in_progress'
+            case 'CLOSED_BY_SYSTEM':
+                return 'str.event.status.closed_by_system'
 
             default:
                 return ''

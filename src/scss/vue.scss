@@ -1670,3 +1670,12 @@ body .daterangepicker.show-ranges.ltr .ranges, body .daterangepicker.show-ranges
 .upperCase {
     text-transform: uppercase !important
 }
+
+.timeline-closed-by-system-position {
+    position: absolute;
+    top: 45px !important;
+    right: 0px !important;
+    font-size: 0.6rem;
+    font-weight: 500;
+    color: #fff;
+}

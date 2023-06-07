@@ -81,18 +81,6 @@
 
             <div class="row">
                 <div class="col-md-12 mb-3">
-                    <label class="form-label" for="guardGroupField">{{ $t('str.register.schedule.guardgroup.field') }}</label>
-                    <select v-model="data.guardGroup" :disabled="data._id ? true : false" v-on:change="changeGuardGroup" class="form-select" id="guardGroupField">
-                        <option value="">{{ $t('str.register.select.placeholder') }}</option>
-                        <option v-for="guardGroup in guardGroups" :value="guardGroup._id" :key="guardGroup._id">
-                            {{ guardGroup.name }}
-                        </option>
-                    </select>
-                </div>
-            </div>
-
-            <div class="row">
-                <div class="col-md-12 mb-3">
                     <label class="form-label" for="vigilantsField">{{ $t('str.register.schedule.invited.vigilants.field') }}</label>
                     <span v-show="!data._id" @click="removeAllVigilants()" disabled class="badge bg-dark rounded-5 cursor_pointer f-right badge-ml-5">{{
                         $t('str.register.schedule.remove.all.vigilants.label')
@@ -401,10 +389,11 @@ export default {
         },
     },
     watch: {
-        selectedAppointment: function () {
+        selectedAppointment: async function () {
             this.data = this?.selectedAppointment
-            this.selectOptions.enabled = false
-            this.data.guardGroup = this.selectedAppointment?.guardGroup?._id
+            if (this.data) {
+                this.selectOptions.enabled = false
+            }
             this.initSelectedAppointment()
         },
         selectedDate: function () {
@@ -428,7 +417,6 @@ export default {
             accountList: [],
             clientList: [],
             siteList: [],
-            guardGroups: [],
             patrolPoints: [],
             vigilants: [],
             frequencies: FREQUENCIES,
@@ -439,7 +427,9 @@ export default {
             scheduleObj: schedule,
             columns: [],
             paginationOptions: {},
-            selectOptions: {},
+            selectOptions: {
+                enabled: true,
+            },
         }
     },
     methods: Controller.methods,

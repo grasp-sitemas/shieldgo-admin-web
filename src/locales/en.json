@@ -1180,5 +1180,13 @@
     "str.msg.analysis.patrol": "Analysis patrol",
     "str.msg.dashboard.analysis.title": "Dashboard - Analysis",
     "str.msg.dashboard.performance.title": "Dashboard - Performance",
-    "str.chart.locals.performance.title": "Performance locals"
+    "str.chart.locals.performance.title": "Performance locals",
+    "str.register.select.all.placeholder": "All",
+    "str.register.select.all": "All",
+    "str.status.closed.by.system": "Not finished",
+    "CLOSED_BY_SYSTEM": "Not finished",
+    "str.event.status.closed_by_system": "Not finished",
+    "str.closed.by.system.date.label": "Finished by system at"
 }       
+
+

@@ -67,10 +67,12 @@
             <div class="col-md-4 mb-3">
                 <label class="form-label" for="statusField">{{ $t('str.register.status.field') }}</label>
                 <select v-model="filters.status" @change="filter" class="form-select" id="statusField">
+                    <option value="">{{ $t('str.register.select.all.placeholder') }}</option>
                     <option value="IN_PROGRESS">{{ $t('str.status.in.progress') }}</option>
                     <option value="ACTIVE">{{ $t('str.status.pending') }}</option>
                     <option value="FINISHED">{{ $t('str.status.done') }}</option>
                     <option value="EXPIRED">{{ $t('str.status.expired') }}</option>
+                    <option value="CLOSED_BY_SYSTEM">{{ $t('str.status.closed.by.system') }}</option>
                 </select>
             </div>
         </div>
@@ -108,7 +110,9 @@
                                     ? 'bg-info'
                                     : props.formattedRow[props.column.field] === 'EXPIRED'
                                     ? 'bg-danger'
-                                    : 'bg-danger'
+                                    : props.formattedRow[props.column.field] === 'CLOSED_BY_SYSTEM'
+                                    ? 'bg-warning'
+                                    : 'bg-dark'
                             "
                         >
                             {{ $t(getStatusName(props.formattedRow[props.column.field])) }}

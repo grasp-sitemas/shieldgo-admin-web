@@ -1173,5 +1173,11 @@
     "str.msg.analysis.patrol": "Análise de rondas",
     "str.msg.dashboard.analysis.title": "Dashboard - Análises",
     "str.msg.dashboard.performance.title": "Dashboard - Performance",
-    "str.chart.locals.performance.title": "Performance de locais"
+    "str.chart.locals.performance.title": "Performance de locais",
+    "str.register.select.all.placeholder": "Todos",
+    "str.register.select.all": "Todos",
+    "str.status.closed.by.system": "Não finalizada",
+    "CLOSED_BY_SYSTEM": "Não finalizada",
+    "str.event.status.closed_by_system": "Não finalizada",
+    "str.closed.by.system.date.label": "Finalizada pelo sistema em"
 }

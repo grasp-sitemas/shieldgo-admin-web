@@ -43,7 +43,6 @@ export default {
             this.siteList = await Services.getSitesByClient(this, client)
         },
         changeSite: async function () {
-            this.guardGroups = await Services.getGuardGroupsBySite(this, this.data.site)
             this.vigilants = await Services.getVigilantsBySite(this, this.data.site)
             this.patrolPoints = await Services.getPatrolPointsBySite(this, this.data.site)
             this.data.vigilants = []
@@ -268,7 +267,8 @@ export default {
                 status: 'ACTIVE',
             }
 
-            this.guardGroups = []
+            this.selectOptions.enabled = true
+
             this.patrolPoints = []
             this.vigilants = []
 
@@ -286,7 +286,7 @@ export default {
         clearFields() {
             this.data.vigilants = []
             this.data.points = []
-            this.guardGroups = []
+
             this.patrolPoints = []
             this.vigilants = []
         },
@@ -314,7 +314,6 @@ export default {
 
             this.patrolPoints = []
             this.vigilants = []
-            this.guardGroups = []
 
             this.data = this.scheduleObj
 
@@ -421,7 +420,6 @@ export default {
 
                 this.clientList = await Services.getClientsByAccount(this, this.data.account)
                 this.siteList = await Services.getSitesByClient(this, this.data.client)
-                this.guardGroups = await Services.getGuardGroupsBySite(this, this.data.site)
 
                 if (!this.data._id) {
                     this.patrolPoints = await Services.getPatrolPointsBySite(this, this.data.site)

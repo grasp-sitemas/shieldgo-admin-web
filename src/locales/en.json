@@ -1187,7 +1187,8 @@
     "CLOSED_BY_SYSTEM": "Not finished",
     "str.event.status.closed_by_system": "Not finished",
     "str.closed.by.system.date.label": "Finished by system at",
-    "str.table.reports.column.gps": "GPS"
+    "str.table.reports.column.gps": "GPS",
+    "str.reports.priority.field": "Priority"
 }       
 
 

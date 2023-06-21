@@ -156,16 +156,16 @@ export default {
             data: JSON.parse(JSON.stringify(incident)),
             priorities: [
                 {
-                    value: 2,
+                    value: 1,
                     name: 'LOW',
                 },
                 {
-                    value: 1,
+                    value: 2,
                     name: 'MEDIUM',
                 },
 
                 {
-                    value: 0,
+                    value: 3,
                     name: 'HIGH',
                 },
             ],

@@ -197,6 +197,7 @@ export default {
                 client: '',
                 site: '',
                 vigilant: '',
+                incidentPriority: '',
                 startDate: moment().utc(true),
                 endDate: moment().utc(true),
                 report: 'INCIDENTS',

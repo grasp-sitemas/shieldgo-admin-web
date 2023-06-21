@@ -48,7 +48,8 @@ export default {
                     type: 'bar',
                     stacked: true,
                     stackType: '100%',
-                    height: 30 * this.preparedData.length,
+                    minH: 100,
+                    minW: 100,
                 },
                 plotOptions: {
                     bar: {
@@ -130,7 +131,7 @@ text {
 }
 
 .chart-container {
-    max-height: 450px; /* Ajuste essa altura de acordo com suas necessidades */
+    max-height: 450 !important; /* Ajuste essa altura de acordo com suas necessidades */
     overflow-y: auto;
 }
 </style>

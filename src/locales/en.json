@@ -1129,7 +1129,7 @@
     "str.are.you.sure.delete.schedule": "Are you sure you want to delete this schedule?",
     "str.title.delete.series": "Delete series",
     "str.title.delete.occurrence": "Delete occurrence",
-    "str.table.reports.column.geo": "Geo",
+    "str.table.reports.column.geo": "GPS",
     "str.event.filter.failure_patrol": "Failure patrol",
     "FAILURE_PATROL": "Failure patrol",
     "str.event.failure_patrol": "did not perform the patrol",
@@ -1186,7 +1186,8 @@
     "str.status.closed.by.system": "Not finished",
     "CLOSED_BY_SYSTEM": "Not finished",
     "str.event.status.closed_by_system": "Not finished",
-    "str.closed.by.system.date.label": "Finished by system at"
+    "str.closed.by.system.date.label": "Finished by system at",
+    "str.table.reports.column.gps": "GPS"
 }       
 
 

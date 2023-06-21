@@ -1,12 +1,9 @@
 <template>
     <b-modal no-close-on-backdrop id="infoItemModal" :hide-footer="true" size="xl" class="modal-message">
         <template slot="modal-header">
-            <h4 class="modal-title">
-                {{ $t('str.modal.create.timeline.item.info.title') }}
-                <h5 class="same-line">
-                    {{ data?.name }}
-                </h5>
-            </h4>
+            <h5 class="modal-title">
+                {{ `${$t('str.modal.create.timeline.item.info.title')}: ${data?.name}` }}
+            </h5>
 
             <span
                 class="badge align-badge"
@@ -72,7 +69,7 @@
                             {{ formatDate(props.formattedRow[props.column.field]) }}
                         </span>
                         <span v-else-if="props.column.field === 'deviceInfo'">
-                            <i v-on:click="showDeviceInfo()" class="fas fa-info-circle cursor_pointer" />
+                            <i v-on:click="showDeviceInfo()" class="fas fa-mobile-alt cursor_pointer" />
                         </span>
                         <span class="align-medias" v-else-if="props.column.field === 'medias'">
                             <i v-on:click="showPhoto()" v-show="props.formattedRow[props.column.field].photo" class="fas fa-image" />

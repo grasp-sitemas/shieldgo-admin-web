@@ -174,7 +174,7 @@
                                 <i v-if="selectedEvent?.signatureURL === 'https://'" class="fa fa-fw fa-clock small-icon"> </i>
                             </a>
                             <a v-if="selectedEvent?.deviceInfo" v-on:click="showDeviceInfo()" data-toggle="tooltip" data-container="body" data-title="Device Info" class="cursor-mouse">
-                                <i class="fa fa-fw fa-info-circle"></i>
+                                <i class="fa fa-fw fa-mobile-alt"></i>
                             </a>
                         </div>
 

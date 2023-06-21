@@ -51,7 +51,7 @@
             </div>
             <div class="col-md-3">
                 <label class="form-label" for="siteField">{{ $t('str.register.incident.site.field') }}</label>
-                <select v-model="filters.site" class="form-select" id="siteField">
+                <select v-model="filters.site" @change="changeSite" class="form-select" id="siteField">
                     <option value="">{{ $t('str.register.select.placeholder') }}</option>
                     <option v-for="site in sites" :value="site._id" :key="site._id">
                         {{ site.name }}

@@ -114,7 +114,7 @@ export default {
                     tdClass: 'text-nowrap',
                 },
                 {
-                    label: this.$t('str.table.reports.column.geo'),
+                    label: this.$t('str.table.reports.column.gps'),
                     field: 'geolocation',
                     width: '5%',
                     sortable: true,

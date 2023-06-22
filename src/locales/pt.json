@@ -1182,5 +1182,6 @@
     "str.closed.by.system.date.label": "Finalizada pelo sistema em",
     "str.table.reports.column.gps": "GPS",
     "str.reports.priority.field": "Prioridade",
-    "str.timeline.item.patrol.points.view":"Visualizar performance"
+    "str.timeline.item.patrol.points.view":"Visualizar performance",
+    "str.dashboard.view.details": "Ver detalhes"
 }

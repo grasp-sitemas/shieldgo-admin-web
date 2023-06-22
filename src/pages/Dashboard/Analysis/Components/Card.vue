@@ -9,7 +9,7 @@
                 <p>{{ value }}</p>
             </div>
             <div class="stats-link">
-                <a v-if="subtitle && subtitle?.length > 0" href="javascript:void(0)">{{ subtitle }} <i class="fa fa-arrow-alt-circle-right"></i></a>
+                <a v-if="subtitle && subtitle?.length > 0" href="javascript:void(0)" @click="navigate">{{ subtitle }} <i class="fa fa-arrow-alt-circle-right"></i></a>
             </div>
         </div>
     </div>
@@ -31,18 +31,44 @@ export default {
             type: String,
             required: true,
         },
+        redirect: {
+            type: Object,
+            default: () => ({}),
+        },
         background: {
             type: String,
-            default: '#007bff', // Um valor default caso não seja informada uma cor
+            default: '#007bff',
         },
         icon: {
             type: String,
-            default: 'fa fa-desktop', // Um valor default caso não seja informado um ícone
+            default: 'fa fa-desktop',
+        },
+    },
+    methods: {
+        navigate() {
+            if (this.redirect.name) {
+                const params = this.redirect.params
+                if (!params?.account) delete params.account
+
+                if (!params?.client) delete params.client
+
+                if (!params?.site) delete params.site
+
+                this.$router.push({ path: this.redirect.name + JSON.stringify(params) })
+            }
         },
     },
 }
 </script>
 
 <style scoped>
-/* Coloque aqui qualquer estilo específico para o componente Card */
+.widget {
+    display: flex;
+    flex-direction: column;
+    height: 85% !important;
+}
+
+.stats-link {
+    margin-top: auto;
+}
 </style>

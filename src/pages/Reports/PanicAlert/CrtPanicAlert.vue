@@ -40,44 +40,51 @@ export default {
     },
     methods: {
         async filter() {
-            this.items = []
-            const results = await Services.sosAlerts(this, this.filters)
-
-            const { tableItems, reportItems } = results
-
-            if (tableItems && tableItems.length > 0 && reportItems && reportItems.length > 0) {
+            if (!this.isSearchLoading) {
                 this.isSearchLoading = true
 
-                const items = tableItems
-                this.items = items
-                this.reportItems = reportItems
+                this.items = []
 
-                this.csvItems = items.map(item => {
-                    const latitude = item.geolocation?.latitude ? String(item.geolocation.latitude) : ' '
-                    const longitude = item.geolocation?.longitude ? String(item.geolocation.longitude) : ' '
-                    const brand = item.deviceInfo?.brand ? String(item.deviceInfo.brand) : ' '
-                    const model = item.deviceInfo?.model ? String(item.deviceInfo.model) : ' '
-                    const isAttendance = item?.attendance?.isAttendance ? this.$t('str.yes') : this.$t('str.no')
-                    const attendanceStatus = item?.attendance?.status ? this.$t(item.attendance.status) : ' '
-                    const openedDate = item?.attendance?.openedDate && item?.attendance?.openedDate?.length > 0 ? moment(item.attendance.openedDate).format('DD/MM/YYYY HH:mm:ss') : ' '
-                    const closedDate = item?.attendance?.closedDate && item?.attendance?.closedDate?.length > 0 ? moment(item.attendance.closedDate).format('DD/MM/YYYY HH:mm:ss') : ' '
-                    return {
-                        vigilant: item.vigilant,
-                        date: item.date,
-                        latitude: latitude,
-                        longitude: longitude,
-                        deviceInfoBrand: brand,
-                        deviceInfoModel: model,
-                        isAttendance: isAttendance,
-                        attendanceStatus: attendanceStatus,
-                        operator: item.attendance?.operator,
-                        openedDate: openedDate,
-                        closedDate: closedDate,
-                        account: item.account,
-                        client: item.client,
-                        site: item.site,
-                    }
-                })
+                const results = await Services.sosAlerts(this, this.filters)
+
+                const { tableItems, reportItems } = results
+
+                if (tableItems && tableItems.length > 0 && reportItems && reportItems.length > 0) {
+                    this.isSearchLoading = true
+
+                    const items = tableItems
+                    this.items = items
+                    this.reportItems = reportItems
+
+                    this.csvItems = items.map(item => {
+                        const latitude = item.geolocation?.latitude ? String(item.geolocation.latitude) : ' '
+                        const longitude = item.geolocation?.longitude ? String(item.geolocation.longitude) : ' '
+                        const brand = item.deviceInfo?.brand ? String(item.deviceInfo.brand) : ' '
+                        const model = item.deviceInfo?.model ? String(item.deviceInfo.model) : ' '
+                        const isAttendance = item?.attendance?.isAttendance ? this.$t('str.yes') : this.$t('str.no')
+                        const attendanceStatus = item?.attendance?.status ? this.$t(item.attendance.status) : ' '
+                        const openedDate = item?.attendance?.openedDate && item?.attendance?.openedDate?.length > 0 ? moment(item.attendance.openedDate).format('DD/MM/YYYY HH:mm:ss') : ' '
+                        const closedDate = item?.attendance?.closedDate && item?.attendance?.closedDate?.length > 0 ? moment(item.attendance.closedDate).format('DD/MM/YYYY HH:mm:ss') : ' '
+                        return {
+                            vigilant: item.vigilant,
+                            date: item.date,
+                            latitude: latitude,
+                            longitude: longitude,
+                            deviceInfoBrand: brand,
+                            deviceInfoModel: model,
+                            isAttendance: isAttendance,
+                            attendanceStatus: attendanceStatus,
+                            operator: item.attendance?.operator,
+                            openedDate: openedDate,
+                            closedDate: closedDate,
+                            account: item.account,
+                            client: item.client,
+                            site: item.site,
+                        }
+                    })
+
+                    this.isSearchLoading = false
+                }
 
                 this.isSearchLoading = false
             }
@@ -178,6 +185,7 @@ export default {
                 report: 'SOS_ALERTS',
             }
             this.items = []
+            this.csvItems = []
             this.initRangeDate()
             this.filters.account = Common.getAccountId(this)
         },

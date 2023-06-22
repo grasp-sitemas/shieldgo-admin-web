@@ -98,7 +98,6 @@
                 :totalRows="items?.length"
                 :search-options="{ enabled: false, placeholder: $t('str.table.search.in.this.table') }"
                 :pagination-options="paginationOptions"
-                @on-row-click="selectItem"
             >
                 <div slot="emptystate" class="vgt-center-align vgt-text-disabled">
                     <i v-if="isLoading" class="fas fa-spinner fa-spin" />

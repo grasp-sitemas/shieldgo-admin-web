@@ -30,22 +30,29 @@
         </template>
 
         <div class="row">
-            <div class="col-md-3">
+            <div class="col-md-4">
                 <dt class="text-dark">{{ $t('str.timeline.item.vigilant') }}</dt>
                 <dd>{{ data.vigilant?.firstName }} {{ data.vigilant?.lastName }}</dd>
             </div>
-            <div class="col-md-3">
+            <div class="col-md-2">
                 <dt class="text-dark">{{ $t('str.timeline.item.starts.in') }}</dt>
                 <dd>{{ data.startDate }}</dd>
             </div>
-            <div class="col-md-3">
+            <div class="col-md-2">
                 <dt class="text-dark">{{ $t('str.timeline.item.ends.in') }}</dt>
                 <dd>{{ data.endDate }}</dd>
             </div>
-            <div class="col-md-3 cursor_pointer" v-on:click="showPatrolPoints()">
+
+            <div class="col-md-2">
                 <dt class="text-dark">{{ $t('str.timeline.item.patrol.points') }}</dt>
-                <i v-show="data?.patrolPoints?.length > 0" class="fas fa-qrcode cursor_pointer" />
-                {{ data?.patrolPoints?.length }} {{ $t('str.timeline.item.points.name') }}
+                {{ data?.patrolPoints?.length }} {{ $t('str.timeline.item.points.name') }} <br />
+            </div>
+
+            <div class="col-md-2">
+                <a v-on:click="showPatrolPoints()" class="btn btn-xs btn-gray fs-10px ps-2 pe-2 mt-1">
+                    <i class="fas fa-qrcode" />
+                    {{ $t('str.timeline.item.patrol.points.view') }}
+                </a>
             </div>
         </div>
 
@@ -70,6 +77,10 @@
                         </span>
                         <span v-else-if="props.column.field === 'deviceInfo'">
                             <i v-on:click="showDeviceInfo()" class="fas fa-mobile-alt cursor_pointer" />
+                        </span>
+                        <span v-else-if="props.column.field === 'notes'">
+                            <span v-if="props.row.type === 'SCAN'">{{ props.row.patrolPoint.name }}</span>
+                            <span v-else>{{ props.formattedRow[props.column.field] }}</span>
                         </span>
                         <span class="align-medias" v-else-if="props.column.field === 'medias'">
                             <i v-on:click="showPhoto()" v-show="props.formattedRow[props.column.field].photo" class="fas fa-image" />
@@ -144,7 +155,7 @@ export default {
             }
 
             const resultPatrolAction = await Services.getPatrolActionsByEvent(this, filters)
-            const patrolActions = resultPatrolAction?.filter(patrolAction => patrolAction?.type !== 'FAILURE_PATROL') // remove as actions failure_patrol
+            const patrolActions = resultPatrolAction?.filter(patrolAction => patrolAction?.type !== 'FAILURE_PATROL') // remove actions failure_patrol
 
             const formattedPatrolActions = patrolActions?.map(patrolAction => {
                 patrolAction.medias = {

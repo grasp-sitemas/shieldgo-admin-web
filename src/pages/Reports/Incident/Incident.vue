@@ -34,9 +34,6 @@
                     </select>
                     <div class="invalid-feedback">{{ $t('str.register.guard.groups.site.required') }}</div>
                 </div>
-            </div>
-
-            <div class="row">
                 <div class="col-md-4 mb-3">
                     <label class="form-label" for="vigilantField">{{ $t('str.reports.vigilant.field') }}</label>
                     <select v-model="filters.vigilant" class="form-select" id="vigilantField">
@@ -72,8 +69,20 @@
                         </template>
                     </date-range-picker>
                 </div>
+                <div class="col-md-4 mb-3">
+                    <label class="form-label" for="priorityField">{{ $t('str.reports.priority.field') }}</label>
+                    <select v-model="filters.incidentPriority" class="form-select" id="priorityField">
+                        <option value="">{{ $t('str.register.select.placeholder') }}</option>
+                        <option v-for="priority in priorities" :value="priority._id" :key="priority._id">
+                            {{ $t(priority.name) }}
+                        </option>
+                    </select>
+                    <div class="invalid-feedback">{{ $t('str.register.guard.groups.site.required') }}</div>
+                </div>
+            </div>
 
-                <div class="col-md-4 mt-3 mb-2 text-center">
+            <div class="row">
+                <div class="col-md-12 mt-3 mb-2 text-center">
                     <button @click="filter" type="submit" class="btn btn-primary w-200px me-10px is-loading mb-1">
                         <i v-if="isSearchLoading" class="fas fa-spinner fa-pulse"></i>
                         {{ $t('str.generate.report') }}
@@ -120,9 +129,17 @@
                     </span>
 
                     <span class="align-medias" v-else-if="props.column.field === 'medias'">
-                        <i v-on:click="showPhoto(props.formattedRow[props.column.field].photoURL)" v-show="props.formattedRow[props.column.field].photoURL" class="fas fa-image" />
-                        <i v-on:click="showSound(props.formattedRow[props.column.field].soundURL)" v-show="props.formattedRow[props.column.field].soundURL" class="fas fa-volume-up" />
-                        <i v-on:click="showSignature(props.formattedRow[props.column.field].signatureURL)" v-show="props.formattedRow[props.column.field].signatureURL" class="fas fa-pen" />
+                        <i v-on:click="showPhoto(`${domain}${props.formattedRow[props.column.field].photoURL}`)" v-show="props.formattedRow[props.column.field].photoURL" class="fas fa-image cursor-pointer" />
+                        <i
+                            v-on:click="showSound(`${domain}${props.formattedRow[props.column.field].soundURL}`)"
+                            v-show="props.formattedRow[props.column.field].soundURL"
+                            class="fas fa-volume-up cursor-pointer"
+                        />
+                        <i
+                            v-on:click="showSignature(`${domain}${props.formattedRow[props.column.field].signatureURL}`)"
+                            v-show="props.formattedRow[props.column.field].signatureURL"
+                            class="fas fa-pen cursor-pointer"
+                        />
                         <i
                             v-show="!props.formattedRow[props.column.field].signatureURL && !props.formattedRow[props.column.field].soundURL && !props.formattedRow[props.column.field].photoURL"
                             class="fas fa-minus"
@@ -136,7 +153,7 @@
                     </span>
 
                     <span v-else-if="props.column.field === 'event'">
-                        {{ props.formattedRow[props.column.field].name }}
+                        {{ props.formattedRow[props.column.field] }}
                     </span>
 
                     <span v-else-if="props.column.field === 'attendance'">
@@ -192,6 +209,7 @@ import Sound from '../Components/Sound.vue'
 import Vue from 'vue'
 import { JSON_FIELDS_CSV } from './Utils/jsonFieldsCsv'
 import { PDF_HEADER } from './Utils/jsonFieldsPdf'
+import { PRIORITY_INCIDENTS_FILTER_TYPES } from '../../../utils/incidents'
 Vue.prototype.$registerEvent = new Vue()
 
 export default {
@@ -214,6 +232,7 @@ export default {
             items: [],
             reportItems: [],
             csvItems: [],
+            priorities: PRIORITY_INCIDENTS_FILTER_TYPES,
             paginationOptions: {},
             fields: [],
             selectedItem: {},
@@ -226,6 +245,7 @@ export default {
                 client: '',
                 site: '',
                 vigilant: '',
+                incidentPriority: '',
                 startDate: moment().utc(true),
                 endDate: moment().utc(true),
                 report: 'INCIDENTS',

@@ -136,8 +136,6 @@
                             {{ $t('str.btn.save') }}
                         </button>
                     </div>
-
-                    <Spinner v-show="isLoading" />
                 </fieldset>
             </form>
         </panel>

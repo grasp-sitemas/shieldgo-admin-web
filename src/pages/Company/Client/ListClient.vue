@@ -93,6 +93,7 @@ export default {
                 name: '',
             },
             data: {},
+            accounts: [],
             clientObj: JSON.parse(JSON.stringify(client)),
             columns: [],
             paginationOptions: {},

@@ -59,7 +59,7 @@ export default {
                     prevStartDate: prevStartDate,
                     prevEndDate: prevEndDate,
                 },
-                maxDate: moment().utc(true),
+                maxDate: moment().utc(true).format(),
                 sampleLocaleData: {
                     direction: 'ltr',
                     format: 'dd/mm/yyyy',

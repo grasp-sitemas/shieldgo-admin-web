@@ -28,6 +28,9 @@ export default {
     name: 'PerformanceEvent',
     watch: {
         data(newData) {
+            // sort newData.substatus by name
+            newData.substatus.sort((a, b) => a.name.localeCompare(b.name))
+
             if (newData?.substatus && newData?.substatus?.length > 0) {
                 this.chart.total = newData.total
                 this.chart.series = newData.substatus.map(item => {
@@ -71,9 +74,8 @@ export default {
                 total: 0,
                 series: [],
                 options: {
-                    colors: ['#3474b1', '#4390a9', '#4ea7a0'],
+                    colors: ['#32a932', '#e3990b', '#fd5a57'],
                     fill: {
-                        opacity: 0.75,
                         type: 'solid',
                     },
                     legend: {

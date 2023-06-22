@@ -40,39 +40,46 @@ export default {
     },
     methods: {
         async filter() {
-            this.items = []
-            const results = await Services.missedCall(this, this.filters)
+            if (!this.isSearchLoading) {
+                this.items = []
 
-            const { tableItems, reportItems } = results
-
-            if (tableItems && tableItems.length > 0 && reportItems && reportItems.length > 0) {
                 this.isSearchLoading = true
 
-                const items = tableItems
-                this.items = items
-                this.reportItems = reportItems
+                const results = await Services.missedCall(this, this.filters)
 
-                this.csvItems = items.map(item => {
-                    const latitude = item.geolocation?.latitude ? String(item.geolocation.latitude) : ' '
-                    const longitude = item.geolocation?.longitude ? String(item.geolocation.longitude) : ' '
-                    const brand = item.deviceInfo?.brand ? String(item.deviceInfo.brand) : ' '
-                    const model = item.deviceInfo?.model ? String(item.deviceInfo.model) : ' '
-                    const event = item?.event ? item.event : ' '
+                const { tableItems, reportItems } = results
 
-                    return {
-                        date: item.date,
-                        type: item.type,
-                        vigilant: item.vigilant,
-                        event: event,
-                        latitude: latitude,
-                        longitude: longitude,
-                        deviceInfoBrand: brand,
-                        deviceInfoModel: model,
-                        client: item.client,
-                        site: item.site,
-                    }
-                })
-                console.log('csvItems', this.csvItems)
+                if (tableItems && tableItems.length > 0 && reportItems && reportItems.length > 0) {
+                    this.isSearchLoading = true
+
+                    const items = tableItems
+                    this.items = items
+                    this.reportItems = reportItems
+
+                    this.csvItems = items.map(item => {
+                        const latitude = item.geolocation?.latitude ? String(item.geolocation.latitude) : ' '
+                        const longitude = item.geolocation?.longitude ? String(item.geolocation.longitude) : ' '
+                        const brand = item.deviceInfo?.brand ? String(item.deviceInfo.brand) : ' '
+                        const model = item.deviceInfo?.model ? String(item.deviceInfo.model) : ' '
+                        const event = item?.event ? item.event : ' '
+
+                        return {
+                            date: item.date,
+                            type: item.type,
+                            vigilant: item.vigilant,
+                            event: event,
+                            latitude: latitude,
+                            longitude: longitude,
+                            deviceInfoBrand: brand,
+                            deviceInfoModel: model,
+                            client: item.client,
+                            site: item.site,
+                        }
+                    })
+                    console.log('csvItems', this.csvItems)
+
+                    this.isSearchLoading = false
+                }
 
                 this.isSearchLoading = false
             }
@@ -182,6 +189,7 @@ export default {
                 report: 'MISSED_EVENT',
             }
             this.items = []
+            this.csvItems = []
             this.initRangeDate()
             this.filters.account = Common.getAccountId(this)
         },

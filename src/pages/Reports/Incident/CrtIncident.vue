@@ -42,56 +42,58 @@ export default {
     },
     methods: {
         async filter() {
-            this.items = []
-            const results = await Services.incidents(this, this.filters)
+            if (!this.isSearchLoading) {
+                this.items = []
 
-            const { tableItems, reportItems } = results
-
-            if (tableItems && tableItems.length > 0 && reportItems && reportItems.length > 0) {
                 this.isSearchLoading = true
 
-                const items = tableItems
-                this.items = items
-                this.reportItems = reportItems
+                const results = await Services.incidents(this, this.filters)
 
-                this.csvItems = items.map(item => {
-                    const latitude = item.geolocation?.latitude ? String(item.geolocation.latitude) : ' '
-                    const longitude = item.geolocation?.longitude ? String(item.geolocation.longitude) : ' '
-                    const brand = item.deviceInfo?.brand ? String(item.deviceInfo.brand) : ' '
-                    const model = item.deviceInfo?.model ? String(item.deviceInfo.model) : ' '
-                    const isAttendance = item?.attendance?.isAttendance ? this.$t('str.yes') : this.$t('str.no')
-                    const attendanceStatus = item?.attendance?.status ? this.$t(item.attendance.status) : ' '
-                    const openedDate = item?.attendance?.openedDate && item?.attendance?.openedDate?.length > 0 ? moment(item.attendance.openedDate).format('DD/MM/YYYY HH:mm:ss') : ' '
-                    const closedDate = item?.attendance?.closedDate && item?.attendance?.closedDate?.length > 0 ? moment(item.attendance.closedDate).format('DD/MM/YYYY HH:mm:ss') : ' '
-                    const photoURL = item?.photoURL ? domain + item.photoURL : ' '
-                    const signatureURL = item?.signatureURL ? domain + item.signatureURL : ' '
-                    const soundURL = item?.soundURL ? domain + item.soundURL : ' '
-                    const event = item?.event ? item.event : ' '
-                    const incidents = item?.incidents ? item.incidents.map(incident => incident.name).join(', ') : ' '
+                const { tableItems, reportItems } = results
 
-                    return {
-                        date: item.date,
-                        vigilant: item.vigilant,
-                        event: event,
-                        latitude: latitude,
-                        longitude: longitude,
-                        deviceInfoBrand: brand,
-                        deviceInfoModel: model,
-                        isAttendance: isAttendance,
-                        attendanceStatus: attendanceStatus,
-                        operator: item.attendance?.operator,
-                        openedDate: openedDate,
-                        closedDate: closedDate,
-                        soundURL: soundURL,
-                        photoURL: photoURL,
-                        signatureURL: signatureURL,
-                        incidents: item?.incidents ? item.incidents : ' ',
-                        incidentsCsv: incidents,
-                        client: item.client,
-                        site: item.site,
-                    }
-                })
+                if (tableItems && tableItems.length > 0 && reportItems && reportItems.length > 0) {
+                    const items = tableItems
+                    this.items = items
+                    this.reportItems = reportItems
 
+                    this.csvItems = items.map(item => {
+                        const latitude = item.geolocation?.latitude ? String(item.geolocation.latitude) : ' '
+                        const longitude = item.geolocation?.longitude ? String(item.geolocation.longitude) : ' '
+                        const brand = item.deviceInfo?.brand ? String(item.deviceInfo.brand) : ' '
+                        const model = item.deviceInfo?.model ? String(item.deviceInfo.model) : ' '
+                        const isAttendance = item?.attendance?.isAttendance ? this.$t('str.yes') : this.$t('str.no')
+                        const attendanceStatus = item?.attendance?.status ? this.$t(item.attendance.status) : ' '
+                        const openedDate = item?.attendance?.openedDate && item?.attendance?.openedDate?.length > 0 ? moment(item.attendance.openedDate).format('DD/MM/YYYY HH:mm:ss') : ' '
+                        const closedDate = item?.attendance?.closedDate && item?.attendance?.closedDate?.length > 0 ? moment(item.attendance.closedDate).format('DD/MM/YYYY HH:mm:ss') : ' '
+                        const photoURL = item?.medias?.photoURL ? `${domain}${item.medias?.photoURL}` : ' '
+                        const signatureURL = item?.medias?.signatureURL ? `${domain}${item.medias?.signatureURL}` : ' '
+                        const soundURL = item?.medias?.soundURL ? `${domain}${item.medias?.soundURL}` : ' '
+                        const event = item?.event ? item.event : ' '
+                        const incidents = item?.incidents ? item.incidents.map(incident => incident.name).join(', ') : ' '
+
+                        return {
+                            date: item.date,
+                            vigilant: item.vigilant,
+                            event: event,
+                            latitude: latitude,
+                            longitude: longitude,
+                            deviceInfoBrand: brand,
+                            deviceInfoModel: model,
+                            isAttendance: isAttendance,
+                            attendanceStatus: attendanceStatus,
+                            operator: item.attendance?.operator,
+                            openedDate: openedDate,
+                            closedDate: closedDate,
+                            soundURL: soundURL,
+                            photoURL: photoURL,
+                            signatureURL: signatureURL,
+                            incidents: item?.incidents ? item.incidents : ' ',
+                            incidentsCsv: incidents,
+                            client: item.client,
+                            site: item.site,
+                        }
+                    })
+                }
                 this.isSearchLoading = false
             }
         },
@@ -203,6 +205,7 @@ export default {
                 report: 'INCIDENTS',
             }
             this.items = []
+            this.csvItems = []
             this.initRangeDate()
             this.filters.account = Common.getAccountId(this)
         },

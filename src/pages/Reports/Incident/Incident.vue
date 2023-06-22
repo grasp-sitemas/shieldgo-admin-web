@@ -129,9 +129,17 @@
                     </span>
 
                     <span class="align-medias" v-else-if="props.column.field === 'medias'">
-                        <i v-on:click="showPhoto(props.formattedRow[props.column.field].photoURL)" v-show="props.formattedRow[props.column.field].photoURL" class="fas fa-image" />
-                        <i v-on:click="showSound(props.formattedRow[props.column.field].soundURL)" v-show="props.formattedRow[props.column.field].soundURL" class="fas fa-volume-up" />
-                        <i v-on:click="showSignature(props.formattedRow[props.column.field].signatureURL)" v-show="props.formattedRow[props.column.field].signatureURL" class="fas fa-pen" />
+                        <i v-on:click="showPhoto(`${domain}${props.formattedRow[props.column.field].photoURL}`)" v-show="props.formattedRow[props.column.field].photoURL" class="fas fa-image cursor-pointer" />
+                        <i
+                            v-on:click="showSound(`${domain}${props.formattedRow[props.column.field].soundURL}`)"
+                            v-show="props.formattedRow[props.column.field].soundURL"
+                            class="fas fa-volume-up cursor-pointer"
+                        />
+                        <i
+                            v-on:click="showSignature(`${domain}${props.formattedRow[props.column.field].signatureURL}`)"
+                            v-show="props.formattedRow[props.column.field].signatureURL"
+                            class="fas fa-pen cursor-pointer"
+                        />
                         <i
                             v-show="!props.formattedRow[props.column.field].signatureURL && !props.formattedRow[props.column.field].soundURL && !props.formattedRow[props.column.field].photoURL"
                             class="fas fa-minus"
@@ -145,7 +153,7 @@
                     </span>
 
                     <span v-else-if="props.column.field === 'event'">
-                        {{ props.formattedRow[props.column.field].name }}
+                        {{ props.formattedRow[props.column.field] }}
                     </span>
 
                     <span v-else-if="props.column.field === 'attendance'">

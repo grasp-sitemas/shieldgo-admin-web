@@ -116,7 +116,7 @@ export default {
                 endDate: moment().utc(true),
             },
             userLocale: 'pt-br',
-            maxDate: moment().utc(true),
+            maxDate: moment().utc(true).format(),
             accounts: [],
             clients: [],
             sites: [],

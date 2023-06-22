@@ -1181,5 +1181,6 @@
     "str.event.status.closed_by_system": "Não finalizada",
     "str.closed.by.system.date.label": "Finalizada pelo sistema em",
     "str.table.reports.column.gps": "GPS",
-    "str.reports.priority.field": "Prioridade"
+    "str.reports.priority.field": "Prioridade",
+    "str.timeline.item.patrol.points.view":"Visualizar performance"
 }

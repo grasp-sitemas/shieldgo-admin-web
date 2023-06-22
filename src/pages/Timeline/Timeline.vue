@@ -51,6 +51,7 @@
                     :showDropdowns="dateRange.showDropdowns"
                     :autoApply="dateRange.autoApply"
                     v-model="dateRange.range"
+                    :max-date="dateRange.maxDate"
                     @update="updateValues"
                     :linkedCalendars="dateRange.linkedCalendars"
                     :date-range="dateRange"
@@ -140,6 +141,7 @@ export default {
     components: {
         InfoItemModal,
     },
+    props: ['filterParams'],
     data() {
         return {
             accounts: [],
@@ -166,8 +168,32 @@ export default {
             isSuperAdminMaster: false,
         }
     },
+    mounted() {
+        const routeParams = this.filterParams ? JSON.parse(this.filterParams) : null
+        if (routeParams) {
+            const filters = routeParams
+            filters.isDescSortByStartDate = false
+            filters.isSortByStartDate = true
+            filters.startDate = moment(filters.startDate).utc(false)
+            filters.endDate = moment(filters.endDate).utc(false)
+            filters.account = filters.account ? filters.account : ''
+            filters.client = filters.client ? filters.client : ''
+            filters.site = filters.site ? filters.site : ''
+
+            this.updateRangeDate(filters.startDate, filters.endDate)
+            const startDate = moment(filters.startDate).utc(false).isBefore(moment(filters.endDate).utc(false)) ? moment(filters.startDate).utc(false).add(1, 'days') : moment(filters.startDate).utc(false)
+            const endDate = moment(filters.endDate).utc(false)
+
+            moment(filters.startDate).utc(false).add(1, 'days')
+            this.dateRange.range = {
+                startDate: startDate,
+                endDate: endDate,
+            }
+
+            this.filters = filters
+        }
+    },
     methods: Controller.methods,
-    mounted() {},
     created() {
         Controller.init(this)
 

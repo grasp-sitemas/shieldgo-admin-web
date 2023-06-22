@@ -2,7 +2,6 @@
     <div>
         <h1 class="page-header">{{ $t('str.msg.dashboard.analysis.title') }}</h1>
         <hr />
-
         <div class="row">
             <div class="col-md-3">
                 <label class="form-label" for="accountField">{{ $t('str.register.period') }}</label>
@@ -61,8 +60,42 @@
         </div>
 
         <div class="row mt-4">
-            <Card :title="$t('str.dashboard.patrol.total').toUpperCase()" :value="patrolsChart?.total || 0" subtitle="" background="#338fe2" icon="fa fa-person-military-pointing" />
-            <Card :title="$t('str.dashboard.finish.patrol.percent').toUpperCase()" :value="patrolsChart?.totalFinished || 0" subtitle="" background="#49b6d5" icon="fa fa-check-circle" />
+            <Card
+                :title="$t('str.dashboard.patrol.total').toUpperCase()"
+                :value="patrolsChart?.total || 0"
+                :subtitle="$t('str.dashboard.view.details')"
+                background="#338fe2"
+                :redirect="{
+                    name: '/timeline/',
+                    params: {
+                        startDate: filters.startDate,
+                        endDate: filters.endDate,
+                        account: filters.account,
+                        client: filters.client,
+                        site: filters.site,
+                        status: '',
+                    },
+                }"
+                icon="fa fa-person-military-pointing"
+            />
+            <Card
+                :title="$t('str.dashboard.finish.patrol.percent').toUpperCase()"
+                :value="patrolsChart?.totalFinished || 0"
+                :subtitle="$t('str.dashboard.view.details')"
+                background="#49b6d5"
+                :redirect="{
+                    name: '/timeline/',
+                    params: {
+                        startDate: filters.startDate,
+                        endDate: filters.endDate,
+                        account: filters.account,
+                        client: filters.client,
+                        site: filters.site,
+                        status: 'FINISHED',
+                    },
+                }"
+                icon="fa fa-check-circle"
+            />
             <Card :title="$t('str.dashboard.average.patrol.time').toUpperCase()" :value="patrolsChart?.averagePatrol || '00:00:00'" subtitle="" background="#fe5b57" icon="fa fa-clock" />
             <Card :title="$t('str.dashboard.attendence.patrol').toUpperCase()" :value="patrolsChart?.attendencePatrol || 0" subtitle="" background="#f49c1b" icon="fa fa-headset" />
         </div>

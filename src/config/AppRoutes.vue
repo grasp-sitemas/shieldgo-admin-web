@@ -195,6 +195,15 @@ const routes = [
         },
     },
     {
+        path: '/timeline/:filterParams',
+        name: 'timeline',
+        props: true,
+        component: Timeline,
+        beforeEnter: (_to, _from, next) => {
+            next(checkSession())
+        },
+    },
+    {
         path: '/users',
         name: 'users',
         component: User,

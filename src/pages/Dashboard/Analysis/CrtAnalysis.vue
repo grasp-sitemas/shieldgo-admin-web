@@ -38,13 +38,11 @@ export default {
             await this.filter()
         },
         initRangeDate: async function () {
-            const startDate = moment().subtract(0, 'days')
-            const endDate = moment()
-            const prevStartDate = moment().subtract(15, 'days').format('D MMMM YYYY')
-            const prevEndDate = moment().subtract(8, 'days').format('D MMMM YYYY')
-            const today = moment()
-            const yesterday = moment().subtract(1, 'days')
-            const thisMonthStart = moment().startOf('month')
+            const startDate = moment().utc(true).subtract(0, 'days')
+            const endDate = moment().utc(true)
+            const today = moment().utc(true)
+            const yesterday = moment().utc(true).subtract(1, 'days')
+            const thisMonthStart = moment().utc(true).startOf('month')
 
             this.dateRange = {
                 opens: 'right',
@@ -59,8 +57,6 @@ export default {
                 range: {
                     startDate: startDate,
                     endDate: endDate,
-                    prevStartDate: prevStartDate,
-                    prevEndDate: prevEndDate,
                 },
                 maxDate: moment().utc(true).format(),
                 sampleLocaleData: {
@@ -74,13 +70,8 @@ export default {
                         [this.$t('str.today')]: [today, today],
                         [this.$t('str.yesterday')]: [yesterday, yesterday],
                         [this.$t('str.this_month')]: [thisMonthStart, today], // alterado para hoje
-                        [this.$t('str.this_year')]: [moment().startOf('year'), today], // alterado para hoje
-                        [this.$t('str.last_month')]: [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')],
-                        // [this.$t('str.today')]: [today, today],
-                        // [this.$t('str.yesterday')]: [yesterday, yesterday],
-                        // [this.$t('str.this_month')]: [thisMonthStart, thisMonthEnd],
-                        // [this.$t('str.this_year')]: [moment().startOf('year'), moment().endOf('year')],
-                        // [this.$t('str.last_month')]: [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')],
+                        [this.$t('str.this_year')]: [moment().utc(true).startOf('year'), today], // alterado para hoje
+                        [this.$t('str.last_month')]: [moment().utc(true).subtract(1, 'month').startOf('month'), moment().utc(true).subtract(1, 'month').endOf('month')],
                     },
                     daysOfWeek: [
                         this.$t('str.abbreviation.sunday'),

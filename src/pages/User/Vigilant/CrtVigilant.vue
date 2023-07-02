@@ -228,16 +228,21 @@ export default {
             if (!this.errors || this.errors.length === 0) {
                 this.isLoading = true
                 const resEmail = await Services.emailAlreadyExists(this, this.data.email)
-                if (resEmail.alreadyExist && this.data.email !== this.data.oldEmail) {
+                if ((resEmail.alreadyExist && !this.data._id) || (resEmail.alreadyExist && this.data._id && resEmail._id !== this.data._id)) {
                     Common.show(this, 'bottom-right', 'warn', this.$t('str.email.already.in.use'))
                     this.isLoading = false
+                    this.errors.push(this.$t('email'))
+
                     return
                 }
 
                 const resUsername = await Services.usernameAlreadyExists(this, this.data.username)
-                if (resUsername.alreadyExist && this.data.username !== this.data.oldUsername) {
+
+                if ((resUsername.alreadyExist && !this.data._id) || (resUsername.alreadyExist && this.data._id && resUsername._id !== this.data._id)) {
                     Common.show(this, 'bottom-right', 'warn', this.$t('str.username.already.in.use'))
                     this.isLoading = false
+                    this.errors.push(this.$t('username'))
+
                     return
                 }
 

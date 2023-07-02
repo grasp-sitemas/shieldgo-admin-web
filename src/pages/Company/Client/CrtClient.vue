@@ -8,12 +8,22 @@ export default {
     init: async payload => {
         payload.isSuperAdminMaster = await Common.isSuperAdminMaster(payload)
         payload.accounts = await Services.getAccounts(payload)
+
+        payload.data.account = Common.getAccountId(payload)
     },
     methods: {
-        clearForm() {
+        closeModal() {
+            this.clearFields()
+            this.$bvModal.hide('createClientModal')
+        },
+        clearFields() {
             this.errors = []
-            this.data = JSON.parse(JSON.stringify(this.clientObj))
             this.isLoading = false
+            this.data = JSON.parse(JSON.stringify(this.clientObj))
+
+            if (!this.isSuperAdminMaster) {
+                this.data.account = Common.getAccountId(this)
+            }
         },
         async save() {
             let formData = new FormData()
@@ -46,10 +56,6 @@ export default {
                 Common.show(this, 'bottom-right', 'warn', this.$t('str.form.update.generic.error'))
                 console.log(error)
             }
-        },
-        async closeModal() {
-            this.clearForm()
-            this.$bvModal.hide('createClientModal')
         },
         async archive() {
             try {

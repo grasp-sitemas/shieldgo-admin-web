@@ -20,10 +20,12 @@ export default {
     },
     methods: {
         clearForm() {
-            this.errors = []
-            this.data = JSON.parse(JSON.stringify(this.clientGroupObj))
-            this.clients = []
-            this.isLoading = false
+            const state = this
+            state.errors = []
+            state.data = {
+                ...state.clientGroupObj,
+            }
+            state.isLoading = false
         },
         save() {
             this.isLoading = true
@@ -65,8 +67,8 @@ export default {
                     `${Endpoints.clientGroups.clientGroup}${this.data._id}`,
                     response => {
                         if (response.status === 200) {
-                            Common.show(this, 'bottom-right', 'success', this.$t('str.form.archive.success'))
                             this.clearForm()
+                            Common.show(this, 'bottom-right', 'success', this.$t('str.form.archive.success'))
                             this.$registerEvent.$emit('refreshList')
                         }
                     },
@@ -122,7 +124,7 @@ export default {
 
             this.clients = await Services.getClientsByAccount(this, account)
         },
-        async closeModal() {
+        closeModal: function () {
             this.clearForm()
             this.$bvModal.hide('createClientGroupModal')
         },

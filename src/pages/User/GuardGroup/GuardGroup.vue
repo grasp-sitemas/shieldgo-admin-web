@@ -1,8 +1,8 @@
 <template>
-    <b-modal no-close-on-backdrop id="createGuardGroupModal" @hide="closeModal" :hide-footer="true" size="lg" class="modal-message">
+    <b-modal no-close-on-backdrop id="createGuardGroupModal" @hide="closeModal()" :hide-footer="true" size="lg" class="modal-message">
         <template slot="modal-header">
             <h4 class="modal-title">{{ $t('str.breadcrumb.guard.groups') }}</h4>
-            <a class="btn-close cursor_pointer" @click="$bvModal.hide('createGuardGroupModal')"></a>
+            <a class="btn-close cursor_pointer" @click="closeModal()"></a>
         </template>
 
         <div>
@@ -102,7 +102,7 @@
                 <button v-if="data._id && data.status === 'ACTIVE'" v-on:click="confirmArchive" type="submit" class="btn btn-warning w-25 m-2">
                     {{ $t('str.btn.archive') }}
                 </button>
-                <button @click="closeModal" type="submit" class="btn btn-default w-25 m-2">{{ $t('str.btn.close') }}</button>
+                <button @click="closeModal()" type="submit" class="btn btn-default w-25 m-2">{{ $t('str.btn.close') }}</button>
             </div>
         </div>
 
@@ -178,9 +178,10 @@ export default {
             guardGroupObj: JSON.parse(JSON.stringify(guardGroup)),
         }
     },
-    mounted() {
+    created() {
         Controller.init(this)
     },
+
     methods: Controller.methods,
 }
 </script>

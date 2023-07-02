@@ -1183,5 +1183,6 @@
     "str.table.reports.column.gps": "GPS",
     "str.reports.priority.field": "Prioridade",
     "str.timeline.item.patrol.points.view":"Visualizar performance",
-    "str.dashboard.view.details": "Ver detalhes"
+    "str.dashboard.view.details": "Ver detalhes",
+    "str.table.site.column.owner": "Responsável"
 }

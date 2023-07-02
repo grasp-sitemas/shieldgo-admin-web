@@ -2,7 +2,7 @@
     <b-modal no-close-on-backdrop id="createSiteGroupModal" @hide="closeModal" :hide-footer="true" size="lg" class="modal-message">
         <template slot="modal-header">
             <h4 class="modal-title">{{ $t('str.breadcrumb.site.groups') }}</h4>
-            <a class="btn-close cursor_pointer" @click="$bvModal.hide('createSiteGroupModal')"></a>
+            <a class="btn-close cursor_pointer" @click="closeModal"></a>
         </template>
 
         <div>
@@ -29,9 +29,6 @@
                     />
                     <div class="invalid-feedback">{{ $t('str.register.site.groups.name.required') }}</div>
                 </div>
-            </div>
-
-            <div class="row">
                 <div v-if="isSuperAdminMaster" class="col-md-4 mb-3">
                     <label class="form-label" for="accountField">{{ $t('str.register.site.groups.account.field') }}</label>
                     <select
@@ -66,7 +63,10 @@
                     </select>
                     <div class="invalid-feedback">{{ $t('str.register.site.groups.client.required') }}</div>
                 </div>
-                <div class="col-md-4 mb-3">
+            </div>
+
+            <div class="row mt-4">
+                <div class="col-md-8 mb-3">
                     <label class="form-label" for="sitesField">{{ $t('str.register.site.groups.sites.field') }}</label>
                     <span v-show="data.client" @click="removeAllSites()" disabled class="badge bg-dark rounded-5 cursor_pointer f-right badge-ml-5">{{
                         $t('str.register.site.group.remove.all.sites.label')
@@ -83,18 +83,15 @@
                         :placeholder="$t('str.register.select.placeholder')"
                     />
                 </div>
-            </div>
-            <div v-if="selectedSites?.length > 0" class="row">
-                <!-- button for add  -->
-                <div class="col-md-4 mb-3">
-                    <button @click="addSiteGroup()" class="btn btn-warning w-50" type="button">
+                <div class="col-md-4 mt-4">
+                    <button @click="addSiteGroup()" class="btn btn-warning w-50" type="button" :disabled="selectedSites?.length > 0 ? false : true">
                         {{ $t('str.register.site.groups.add.button') }}
                     </button>
                 </div>
             </div>
 
-            <div class="row mt-1">
-                <h5 class="" for="sitesField">{{ $t('str.register.site.groups.sites.table.title') }}</h5>
+            <div class="row mt-2">
+                <h6 class="" for="sitesField">{{ $t('str.register.site.groups.sites.table.title') }}</h6>
                 <div class="col-md-12 mb-3">
                     <table class="table table-bordered">
                         <thead class="thead-dark dark">
@@ -189,5 +186,20 @@ export default {
 }
 table {
     border: outset !important;
+
+    th {
+        border: outset !important;
+        font-size: 11px;
+    }
+    td {
+        border: outset !important;
+        font-size: 11px;
+        font-weight: 400;
+        line-height: 1.2;
+    }
+
+    thead {
+        background-color: var(--bs-table-accent-bg) !important;
+    }
 }
 </style>

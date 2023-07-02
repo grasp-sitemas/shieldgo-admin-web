@@ -102,12 +102,20 @@ export default {
                 },
             )
         },
-        clearForm() {
+        closeModal() {
+            this.clearFields()
+            this.$bvModal.hide('createUserModal')
+        },
+        clearFields() {
             this.errors = []
             this.file = null
             this.$refs.file.value = null
-            this.data = this.userObj
             this.isLoading = false
+            this.data = this.userObj
+
+            if (!this.isSuperAdminMaster) {
+                this.data.account = Common.getAccountId(this)
+            }
         },
         async save() {
             let formData = new FormData()
@@ -200,33 +208,51 @@ export default {
             }
         },
         async checkForm() {
-            if (!this.isLoading) {
+            if (this.isLoading) return
+
+            if (!this.data?.companyUser?.subtype || this.data?.companyUser?.subtype === '') {
+                this.errors.push('role')
+            }
+
+            if (!this.data.account || this.data.account === '') {
+                this.errors.push('account')
+            }
+
+            if (!this.data.firstName || this.data.firstName === '') {
+                this.errors.push('firstName')
+            }
+
+            if (!this.data.lastName || this.data.lastName === '') {
+                this.errors.push('lastName')
+            }
+
+            if (!this.data.email || this.data.email === '') {
+                this.errors.push(this.$t('email'))
+            }
+
+            if (!this.data._id && (!this.data.password || this.data.password === '')) {
+                this.errors.push(this.$t('password'))
+            }
+
+            if (!this.data.password || this.data.password === '') {
+                delete this.data.password
+            }
+
+            if (!this.errors || this.errors.length === 0) {
                 this.isLoading = true
-
-                if (!this.data.account || this.data.account === '') {
-                    this.errors.push('account')
-                }
-
-                if (!this.data.firstName || this.data.firstName === '') {
-                    this.errors.push('firstName')
-                }
-                if (!this.data.lastName || this.data.lastName === '') {
-                    this.errors.push('lastName')
-                }
-                if (!this.data.email || this.data.email === '') {
+                const resEmail = await Services.emailAlreadyExists(this, this.data.email)
+                if ((resEmail.alreadyExist && !this.data._id) || (resEmail.alreadyExist && this.data._id && resEmail._id !== this.data._id)) {
+                    Common.show(this, 'bottom-right', 'warn', this.$t('str.email.already.in.use'))
                     this.errors.push(this.$t('email'))
-                }
-                if (!this.data._id && (!this.data.password || this.data.password === '')) {
-                    this.errors.push(this.$t('password'))
-                }
+                    this.isLoading = false
 
-                if (!this.data.password || this.data.password === '') {
-                    delete this.data.password
+                    return
                 }
 
                 if (!this.data.client || this.data.client === '') {
                     delete this.data.client
                 }
+
                 if (!this.data.site || this.data.site === '') {
                     delete this.data.site
                 }
@@ -239,37 +265,15 @@ export default {
                     delete this.data.siteGroup
                 }
 
-                if (!this.errors || this.errors.length === 0) {
-                    if (this.data.email !== this.data.oldEmail) {
-                        const res = await Services.emailAlreadyExists(this, this.data.email)
-
-                        if (res.alreadyExist === false) {
-                            this.loadGeolocation(
-                                async data => {
-                                    await this.save(data)
-                                },
-                                async error => {
-                                    this.data.address.name = 'MAIN'
-                                    await this.save(error)
-                                },
-                            )
-                        } else {
-                            Common.show(this, 'bottom-right', 'warn', this.$t('str.email.already.in.use'))
-                        }
-                    } else {
-                        this.loadGeolocation(
-                            async data => {
-                                await this.save(data)
-                            },
-                            async error => {
-                                this.data.address.name = 'MAIN'
-                                await this.save(error)
-                            },
-                        )
-                    }
-                } else {
-                    this.isLoading = false
-                }
+                this.loadGeolocation(
+                    async data => {
+                        await this.save(data)
+                    },
+                    async error => {
+                        this.data.address.name = 'MAIN'
+                        await this.save(error)
+                    },
+                )
             }
         },
         loadGeolocation: function (callbackSuccess, callbackError) {
@@ -306,6 +310,7 @@ export default {
 
             this.sites = []
             this.siteGroups = []
+            this.clientGroup
             this.data.client = ''
             this.data.site = ''
 
@@ -313,12 +318,16 @@ export default {
         },
         changeClient: async function () {
             const client = this?.data?.client
+            this.data.site = ''
+            this.data.siteGroup = ''
 
-            if (client === '') {
-                this.data.site = ''
+            if (!client === '') {
+                this.sites = []
+                this.siteGroups = []
+            } else {
+                this.sites = await Services.getSitesByClient(this, client)
+                this.siteGroups = await Services.getSiteGroupsByClient(this, client)
             }
-
-            this.sites = await Services.getSitesByClient(this, client)
         },
         changeRole: async function () {
             const role = this?.data?.companyUser?.subtype
@@ -349,10 +358,7 @@ export default {
 
             this.sites = await Services.getSitesByClientGroup(this, clientGroup)
         },
-        async closeModal() {
-            this.clearForm()
-            this.$bvModal.hide('createUserModal')
-        },
+
         handleFileUpload() {
             this.file = this.$refs.file.files[0]
         },

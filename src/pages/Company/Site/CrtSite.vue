@@ -18,22 +18,6 @@ const instanceateAddress = (addressObj, geo) => {
 
 export default {
     init: async payload => {
-        // payload.data.account = Common.getAccountId(payload)
-
-        // payload.isSuperAdminMaster = await Common.isSuperAdminMaster(payload)
-        // const role = await Common.getSubtype(payload)
-        // if (role === 'SUPER_ADMIN_MASTER') {
-        //     payload.accounts = await Services.getAccounts(payload)
-        //     payload.clients = await Services.getClients(payload)
-        // } else if (role === 'ADMIN' || role === 'MANAGER') {
-        //     payload.clients = await Services.getClients(payload)
-        // } else if (role === 'OPERATOR') {
-        //     const client = await Common.getClientId(payload)
-        //     payload.data.client = client
-        //     payload.sites = await Services.getSites(payload)
-        // }
-        // payload.role = role
-
         payload.domain = Endpoints.domain
         payload.data.account = Common.getAccountId(payload)
 
@@ -109,11 +93,18 @@ export default {
                 },
             )
         },
-        async clearForm() {
-            this.errors = []
-            this.file = null
-            this.data = this.siteObj
-            this.isLoading = false
+        closeModal: function () {
+            const state = this
+            state.errors = []
+            state.file = null
+            state.isLoading = false
+            state.data = state.siteObj
+
+            if (!state.isSuperAdminMaster) {
+                state.data.account = Common.getAccountId(state)
+            }
+
+            this.$bvModal.hide('createSiteModal')
         },
         async save() {
             let formData = new FormData()
@@ -132,12 +123,9 @@ export default {
                     `${Endpoints.companies.formData}${data._id ? data._id : ''}`,
                     response => {
                         if (response.status === 200) {
-                            data._id = response?.result?._id
-                            data.status = response?.result?.status
-                            this.data = data
+                            this.closeModal()
                             Common.show(this, 'bottom-right', 'success', data._id ? this.$t('str.form.update.success') : this.$t('str.form.create.success'))
                             this.$registerEvent.$emit('refreshList')
-                            this.closeModal()
                         }
                     },
                     error => {
@@ -274,10 +262,6 @@ export default {
                     console.log(error)
                 },
             )
-        },
-        async closeModal() {
-            this.clearForm()
-            this.$bvModal.hide('createSiteModal')
         },
         changeAccount: async function () {
             const account = this.data.account

@@ -4,6 +4,7 @@ export const site = {
     account: '',
     client: '',
     primaryPhone: '',
+    owner: '',
     address: {
         cep: '',
         address: '',

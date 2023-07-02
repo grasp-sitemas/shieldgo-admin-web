@@ -7,20 +7,6 @@ import { INCIDENT_TEMPLATES_PT, INCIDENT_TEMPLATES_EN } from './utils/incidents.
 
 export default {
     init: async payload => {
-        // payload.data.account = await Common.getAccountId(payload)
-
-        // payload.isSuperAdminMaster = await Common.isSuperAdminMaster(payload)
-        // const role = await Common.getSubtype(payload)
-        // if (role === 'SUPER_ADMIN_MASTER') {
-        //     payload.accounts = await Services.getAccounts(payload)
-        // } else if (role === 'ADMIN' || role === 'MANAGER') {
-        //     payload.clients = await Services.getClients(payload)
-        // } else if (role === 'OPERATOR') {
-        //     const client = await Common.getClientId(payload)
-        //     payload.data.client = client
-        //     payload.sites = await Services.getSites(payload)
-        // }
-
         payload.data.account = Common.getAccountId(payload)
         payload.isSuperAdminMaster = await Common.isSuperAdminMaster(payload)
         if (payload.isSuperAdminMaster) {

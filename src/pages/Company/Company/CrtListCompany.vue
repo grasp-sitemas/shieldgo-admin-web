@@ -29,7 +29,7 @@ export default {
             )
         },
         selectItem(params) {
-            const data = params && params?.row ? JSON.parse(JSON.stringify(params.row)) : this.companyObj
+            const data = params && params?.row ? JSON.parse(JSON.stringify(params.row)) : { ...this.companyObj }
 
             delete data.vgt_id
             delete data.originalIndex

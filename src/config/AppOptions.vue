@@ -21,9 +21,9 @@ const appOptions = {
     appContentClass: false,
     appHeaderLanguageBar: true,
     appHeaderInverse: false,
-    appHeaderMegaMenu: false, // HABILITAR
+    appHeaderMegaMenu: false,
     appHeaderFixed: true,
-    appHeaderMegaMenuMobileToggled: false, // HABILITAR PARA MOBILE
+    appHeaderMegaMenuMobileToggled: false,
     appTopMenu: false,
     appTopMenuMobileToggled: false,
     appEmpty: false,

@@ -31,9 +31,8 @@
             <vue-ins-progress-bar></vue-ins-progress-bar>
         </div>
         <SidebarRight v-if="appOptions.appSidebarTwo" />
-        <ThemePanel v-on:change-theme="handleChangeTheme" />
+        <!-- <ThemePanel v-on:change-theme="handleChangeTheme" /> -->
         <ScrollTopBtn />
-        <!-- <Pivot ref="pivot" v-bind:report="'https://cdn.flexmonster.com/reports/report.json'" /> -->
     </div>
     <div class="h-100" v-else>
         <router-view></router-view>
@@ -46,7 +45,7 @@ import Sidebar from './components/sidebar/Sidebar.vue'
 import SidebarRight from './components/sidebar-right/SidebarRight.vue'
 import Header from './components/header/Header.vue'
 import TopMenu from './components/top-menu/TopMenu.vue'
-import ThemePanel from './components/theme-panel/ThemePanel.vue'
+// import ThemePanel from './components/theme-panel/ThemePanel.vue'
 import ScrollTopBtn from './components/scroll-top-btn/ScrollTopBtn.vue'
 import AppOptions from './config/AppOptions.vue'
 
@@ -57,7 +56,7 @@ export default {
         SidebarRight,
         Header,
         TopMenu,
-        ThemePanel,
+        // ThemePanel,
         ScrollTopBtn,
     },
     data() {

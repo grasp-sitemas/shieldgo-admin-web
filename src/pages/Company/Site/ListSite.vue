@@ -28,7 +28,7 @@
                     </select>
                 </div>
                 <div class="col-md-3 mt-4">
-                    <button @click="selectItem()" type="submit" class="btn btn-default w-50">{{ $t('str.btn.new.form') }}</button>
+                    <button @click="selectItem" type="submit" class="btn btn-default w-50">{{ $t('str.btn.new.form') }}</button>
                 </div>
             </div>
             <vue-good-table

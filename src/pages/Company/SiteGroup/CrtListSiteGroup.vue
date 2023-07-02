@@ -41,15 +41,26 @@ export default {
                 },
             )
         },
-        selectItem(params) {
-            const data = params && params?.row ? JSON.parse(JSON.stringify(params.row)) : this.siteGroupObj
+        async selectItem(params) {
+            const data =
+                params && params?.row
+                    ? JSON.parse(JSON.stringify(params.row))
+                    : {
+                          ...this.siteGroupObj,
+                      }
 
             delete data.vgt_id
             delete data.originalIndex
-            delete data.password
 
-            data.account = data?.account?._id || ''
-            data.client = data?.client?._id || ''
+            if (!data.account && !this.isSuperAdminMaster) {
+                data.account = await Common.getAccountId(this)
+            } else {
+                data.account = data.account._id
+            }
+
+            if (data.client) {
+                data.client = data.client._id
+            }
 
             this.data = data
 

@@ -48,8 +48,6 @@ export default {
     },
     created() {
         AppOptions.appEmpty = true
-        this.data.email = 'dev@grasp.com.br'
-        this.data.password = '12345678'
     },
     mounted() {
         Controller.init(this)

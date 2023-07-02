@@ -2,7 +2,7 @@
     <b-modal no-close-on-backdrop id="createClientModal" @hide="closeModal" :hide-footer="true" size="lg" class="modal-message">
         <template slot="modal-header">
             <h4 class="modal-title">{{ $t('str.breadcrumb.clients') }}</h4>
-            <a class="btn-close cursor_pointer" @click="$bvModal.hide('createClientModal')"></a>
+            <a class="btn-close cursor_pointer" @click="closeModal"></a>
         </template>
 
         <div>
@@ -97,14 +97,12 @@ export default {
     },
     watch: {
         selectedData: async function () {
-            this.errors = []
-            let updatedData = this.selectedData
-
-            if (!updatedData?.account) {
-                updatedData.account = await Common.getAccountId(this)
+            this.data = this.selectedData
+            if (!this.data?.account || this.data?.account === '') {
+                this.data.account = await Common.getAccountId(this)
             }
 
-            this.data = updatedData
+            this.errors = []
         },
     },
     data() {
@@ -123,6 +121,7 @@ export default {
     mounted() {
         Controller.init(this)
     },
+
     methods: Controller.methods,
 }
 </script>

@@ -42,7 +42,7 @@ export default {
             )
         },
         selectItem(params) {
-            const data = params && params?.row ? JSON.parse(JSON.stringify(params.row)) : this.guardGroupObj
+            const data = params && params?.row ? JSON.parse(JSON.stringify(params.row)) : { ...this.guardGroupObj }
 
             delete data.vgt_id
             delete data.originalIndex

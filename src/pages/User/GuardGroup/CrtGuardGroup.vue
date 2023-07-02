@@ -17,18 +17,6 @@ export default {
         }
     },
     methods: {
-        clearForm() {
-            this.errors = []
-            this.data = this.guardGroupObj
-            this.vigilants = []
-            this.clients = []
-
-            if (!this.isSuperAdminMaster) {
-                this.sites = []
-            }
-
-            this.isLoading = false
-        },
         save() {
             this.isLoading = true
             try {
@@ -40,11 +28,11 @@ export default {
                     `${Endpoints.guardGroups.guardGroup}${this.data._id ? this.data._id : ''}`,
                     response => {
                         if (response.status === 200) {
-                            Common.show(this, 'bottom-right', 'success', this.data._id ? this.$t('str.form.update.success') : this.$t('str.form.create.success'))
                             this.data.status = response?.result?.status
                             this.data._id = response?.result?._id
-                            this.$registerEvent.$emit('refreshList')
                             this.closeModal()
+                            Common.show(this, 'bottom-right', 'success', this.data._id ? this.$t('str.form.update.success') : this.$t('str.form.create.success'))
+                            this.$registerEvent.$emit('refreshList')
                         }
                     },
                     error => {
@@ -156,9 +144,16 @@ export default {
             this.data.client = ''
             this.data.site = ''
         },
-        async closeModal() {
-            this.clearForm()
-            this.$bvModal.hide('createGuardGroupModal')
+        closeModal: function () {
+            const state = this
+
+            Promise.all([(state.errors = []), (state.data = state.guardGroupObj), (state.vigilants = []), (state.isLoading = false)])
+
+            if (!state.isSuperAdminMaster) {
+                state.sites = []
+            }
+
+            state.$bvModal.hide('createGuardGroupModal')
         },
         async selectAllVigilants() {
             this.data.vigilants = this.vigilants

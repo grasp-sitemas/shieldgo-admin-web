@@ -4,7 +4,7 @@
             <b-modal no-close-on-backdrop id="createPatrolPointModal" @hide="closeModal" :hide-footer="true" size="lg" class="modal-message">
                 <template slot="modal-header">
                     <h4 class="modal-title">{{ $t('str.breadcrumb.incidents') }}</h4>
-                    <a class="btn-close cursor_pointer" @click="$bvModal.hide('createPatrolPointModal')"></a>
+                    <a class="btn-close cursor_pointer" @click="closeModal"></a>
                 </template>
 
                 <div>

@@ -37,7 +37,7 @@ export default {
             this.$bvModal.show('checkPointModal')
         },
         selectItem(params) {
-            const data = params && params?.row ? JSON.parse(JSON.stringify(params.row)) : this.patrolPointObj
+            const data = params && params?.row ? JSON.parse(JSON.stringify(params.row)) : { ...this.patrolPointObj }
 
             delete data.vgt_id
             delete data.originalIndex

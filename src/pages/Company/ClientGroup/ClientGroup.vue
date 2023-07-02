@@ -2,7 +2,7 @@
     <b-modal no-close-on-backdrop id="createClientGroupModal" @hide="closeModal" :hide-footer="true" size="lg" class="modal-message">
         <template slot="modal-header">
             <h4 class="modal-title">{{ $t('str.breadcrumb.client.groups') }}</h4>
-            <a class="btn-close cursor_pointer" @click="$bvModal.hide('createClientGroupModal')"></a>
+            <a class="btn-close cursor_pointer" @click="closeModal"></a>
         </template>
 
         <div>

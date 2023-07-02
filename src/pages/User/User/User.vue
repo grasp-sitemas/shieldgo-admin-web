@@ -2,7 +2,7 @@
     <b-modal no-close-on-backdrop id="createUserModal" @hide="closeModal" :hide-footer="true" size="lg" class="modal-message">
         <template slot="modal-header">
             <h4 class="modal-title">{{ $t('str.breadcrumb.users') }}</h4>
-            <a class="btn-close cursor_pointer" @click="$bvModal.hide('createUserModal')"></a>
+            <a class="btn-close cursor_pointer" @click="closeModal"></a>
         </template>
 
         <div>
@@ -88,8 +88,19 @@
                 </div>
 
                 <div v-if="data.companyUser.subtype === 'OPERATOR' && data.account" class="col-md-4 mb-3">
+                    <label class="form-label" for="siteField">{{ $t('str.register.user.site.field') }}</label>
+                    <select v-model="data.site" class="form-select" v-bind:class="checkRequiredField('site') ? 'is-invalid' : ''" @focus="removeRequiredField('site')" id="siteField">
+                        <option value="">{{ $t('str.register.select.placeholder') }}</option>
+                        <option v-for="site in sites" :value="site._id" :key="site._id">
+                            {{ site.name }}
+                        </option>
+                    </select>
+                    <div class="invalid-feedback">{{ $t('str.register.user.siteGroup.required') }}</div>
+                </div>
+
+                <div v-if="data.companyUser.subtype === 'OPERATOR' && data.account" class="col-md-4 mb-3">
                     <label class="form-label" for="siteGroupField">{{ $t('str.register.user.siteGroup.field') }}</label>
-                    <select v-model="data.siteGroup" class="form-select" v-bind:class="checkRequiredField('siteGroup') ? 'is-invalid' : ''" @focus="removeRequiredField('site')" id="siteField">
+                    <select v-model="data.siteGroup" class="form-select" v-bind:class="checkRequiredField('siteGroup') ? 'is-invalid' : ''" @focus="removeRequiredField('siteGroup')" id="siteGroupField">
                         <option value="">{{ $t('str.register.select.placeholder') }}</option>
                         <option v-for="siteGroup in siteGroups" :value="siteGroup._id" :key="siteGroup._id">
                             {{ siteGroup.name }}
@@ -284,14 +295,20 @@ export default {
 
             if (this.data?.siteGroup) {
                 this.data.siteGroup = this.data.siteGroup._id
+            } else {
+                this.data.siteGroup = ''
             }
 
             if (this.data?.clientGroup) {
                 this.data.clientGroup = this.data.clientGroup._id
+            } else {
+                this.data.clientGroup = ''
             }
 
             if (this.data?.site) {
                 this.data.site = this.data.site._id
+            } else {
+                this.data.site = ''
             }
 
             if (this.data.account) {

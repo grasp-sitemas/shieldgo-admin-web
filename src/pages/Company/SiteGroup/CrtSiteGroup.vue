@@ -18,13 +18,6 @@ export default {
         payload.role = role
     },
     methods: {
-        clearForm() {
-            this.errors = []
-            this.selectedSites = []
-            this.clients = []
-            this.isLoading = false
-        },
-
         async save() {
             const formData = this.data
 
@@ -37,9 +30,10 @@ export default {
                     `${Endpoints.siteGroups.siteGroup}${formData._id ? formData._id : ''}`,
                     response => {
                         if (response.status === 200) {
+                            this.closeModal()
+
                             Common.show(this, 'bottom-right', 'success', formData._id ? this.$t('str.form.update.success') : this.$t('str.form.create.success'))
                             this.$registerEvent.$emit('refreshList')
-                            this.closeModal()
                         }
                     },
                     error => {
@@ -125,10 +119,14 @@ export default {
                 }
             }
         },
-        async closeModal() {
-            this.clearForm()
+        closeModal: function () {
+            const state = this
+            state.errors = []
+            state.selectedSites = []
+            state.isLoading = false
+            state.data = state.siteGroupObj
 
-            this.$bvModal.hide('createSiteGroupModal')
+            state.$bvModal.hide('createSiteGroupModal')
         },
         changeAccount: async function () {
             this.sites = []

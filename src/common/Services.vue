@@ -324,6 +324,15 @@ export default {
         const response = await Request.do(state, 'POST', Request.getDefaultHeader(state), filters, `${Endpoints.siteGroups.filter}`)
         return response?.data?.results || []
     },
+    getSiteGroupsByClient: async function (state, client) {
+        const filters = {
+            client: client,
+            status: 'ACTIVE',
+        }
+
+        const response = await Request.do(state, 'POST', Request.getDefaultHeader(state), filters, `${Endpoints.siteGroups.filter}`)
+        return response?.data?.results || []
+    },
     getClientGroupsByAccount: async function (state, account) {
         const filters = {
             account: account,

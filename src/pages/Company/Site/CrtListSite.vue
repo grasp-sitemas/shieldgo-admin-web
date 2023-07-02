@@ -49,18 +49,26 @@ export default {
                 },
             )
         },
-        selectItem(params) {
-            const data = params && params?.row ? JSON.parse(JSON.stringify(params.row)) : this.siteObj
+        async selectItem(params) {
+            const data = params && params?.row ? JSON.parse(JSON.stringify(params.row)) : { ...this.siteObj }
+            if (!data.account) {
+                data.account = await Common.getAccountId(this)
+            } else {
+                data.account = data.account._id
+            }
 
-            data.account = data?.account?._id || ''
-            data.client = data?.client?._id || ''
-
-            delete data.vgt_id
-            delete data.originalIndex
+            if (!data.client) {
+                data.client = await Common.getClientId(this)
+            } else {
+                data.client = data.client._id
+            }
 
             if (!data?.address?._id) {
                 data.address = {}
             }
+
+            delete data.vgt_id
+            delete data.originalIndex
 
             this.data = data
 
@@ -102,6 +110,15 @@ export default {
                     width: '25%',
                     tdClass: 'text-nowrap',
                     thClass: 'text-nowrap',
+                    sortable: true,
+                    filterable: true,
+                },
+                {
+                    label: this.$t('str.table.site.column.owner'),
+                    field: 'owner',
+                    width: '10%',
+                    thClass: 'text-nowrap',
+                    tdClass: 'text-nowrap',
                     sortable: true,
                     filterable: true,
                 },

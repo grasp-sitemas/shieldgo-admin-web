@@ -1,8 +1,8 @@
 <template>
-    <b-modal no-close-on-backdrop id="createSiteModal" @hide="closeModal" :hide-footer="true" size="lg" class="modal-message">
+    <b-modal no-close-on-backdrop id="createSiteModal" @hide="closeModal()" :hide-footer="true" size="lg" class="modal-message">
         <template slot="modal-header">
             <h4 class="modal-title">{{ $t('str.breadcrumb.sites') }}</h4>
-            <a class="btn-close cursor_pointer" @click="$bvModal.hide('createSiteModal')"></a>
+            <a class="btn-close cursor_pointer" @click="closeModal()"></a>
         </template>
 
         <div>
@@ -70,6 +70,10 @@
                         class="form-control"
                         :placeholder="$t('str.register.company.primaryPhone.placeholder')"
                     />
+                </div>
+                <div class="col-md-4 mb-3">
+                    <label class="form-label">{{ $t('str.register.client.owner.field') }}</label>
+                    <input class="form-control" v-model="data.owner" type="text" :placeholder="$t('str.register.client.owner.placeholder')" />
                 </div>
             </div>
 
@@ -220,6 +224,7 @@ export default {
     mounted() {
         Controller.init(this)
     },
+
     methods: Controller.methods,
 }
 </script>

@@ -32,10 +32,14 @@ export default {
                 },
             )
         },
-        selectItem(params) {
+        async selectItem(params) {
             const item = params && params?.row ? JSON.parse(JSON.stringify(params.row)) : this.clientObj
 
-            item.account = item?.account?._id || ''
+            if (!item.account) {
+                item.account = await Common.getAccountId(this)
+            } else {
+                item.account = item.account._id
+            }
 
             delete item.vgt_id
             delete item.originalIndex
@@ -44,7 +48,11 @@ export default {
 
             this.$bvModal.show('createClientModal')
         },
-
+        clearForm() {
+            this.errors = []
+            this.$refs.clientModal.clearFields()
+            this.isLoading = false
+        },
         initTable() {
             this.columns = [
                 {

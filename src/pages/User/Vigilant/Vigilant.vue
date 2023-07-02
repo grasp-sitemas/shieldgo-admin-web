@@ -2,7 +2,7 @@
     <b-modal no-close-on-backdrop id="createGuardModal" @hide="closeModal" :hide-footer="true" size="lg" class="modal-message">
         <template slot="modal-header">
             <h4 class="modal-title">{{ $t('str.breadcrumb.vigilants') }}</h4>
-            <a class="btn-close cursor_pointer" @click="$bvModal.hide('createGuardModal')"></a>
+            <a class="btn-close cursor_pointer" @click="closeModal"></a>
         </template>
 
         <div>

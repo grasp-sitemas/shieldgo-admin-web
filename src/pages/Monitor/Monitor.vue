@@ -367,6 +367,8 @@ export default {
                 account: '',
                 client: '',
                 site: '',
+                startDate: moment().utc(true).subtract(1, 'days').format(),
+                endDate: moment().utc(true).format(),
             },
             isSuperAdminMaster: false,
         }

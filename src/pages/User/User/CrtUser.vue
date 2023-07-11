@@ -336,7 +336,7 @@ export default {
                 this.data.site = ''
                 this.removeRequiredField('client')
                 this.removeRequiredField('site')
-            } else if (role === 'MANAGER' || role === 'OPERATOR') {
+            } else if (role === 'MANAGER' || role === 'OPERATOR' || role === 'AUDITOR') {
                 this.data.site = ''
                 this.removeRequiredField('site')
             }
@@ -344,7 +344,7 @@ export default {
             if (this?.data?.account) {
                 if (role === 'MANAGER') {
                     this.clientGroups = await Services.getClientGroupsByAccount(this, this.data.account)
-                } else if (role === 'OPERATOR') {
+                } else if (role === 'OPERATOR' || role === 'AUDITOR') {
                     this.siteGroups = await Services.getSiteGroupsByAccount(this, this.data.account)
                 }
             }

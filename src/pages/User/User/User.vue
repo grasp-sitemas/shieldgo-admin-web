@@ -52,7 +52,7 @@
                     </select>
                     <div class="invalid-feedback">{{ $t('str.register.user.account.required') }}</div>
                 </div>
-                <div v-if="data.companyUser.subtype === 'OPERATOR' || data.companyUser.subtype === 'MANAGER'" class="col-md-4 mb-3">
+                <div v-if="data.companyUser.subtype === 'OPERATOR' || data.companyUser.subtype === 'AUDITOR' || data.companyUser.subtype === 'MANAGER'" class="col-md-4 mb-3">
                     <label class="form-label" for="clientField">{{ $t('str.register.user.client.field') }}</label>
                     <select
                         v-model="data.client"
@@ -87,7 +87,7 @@
                     <div class="invalid-feedback">{{ $t('str.register.user.client.required') }}</div>
                 </div>
 
-                <div v-if="data.companyUser.subtype === 'OPERATOR' && data.account" class="col-md-4 mb-3">
+                <div v-if="data.companyUser.subtype === 'OPERATOR' || (data.companyUser.subtype === 'AUDITOR' && data.account)" class="col-md-4 mb-3">
                     <label class="form-label" for="siteField">{{ $t('str.register.user.site.field') }}</label>
                     <select v-model="data.site" class="form-select" v-bind:class="checkRequiredField('site') ? 'is-invalid' : ''" @focus="removeRequiredField('site')" id="siteField">
                         <option value="">{{ $t('str.register.select.placeholder') }}</option>
@@ -98,7 +98,7 @@
                     <div class="invalid-feedback">{{ $t('str.register.user.siteGroup.required') }}</div>
                 </div>
 
-                <div v-if="data.companyUser.subtype === 'OPERATOR' && data.account" class="col-md-4 mb-3">
+                <div v-if="data.companyUser.subtype === 'OPERATOR' || (data.companyUser.subtype === 'AUDITOR' && data.account)" class="col-md-4 mb-3">
                     <label class="form-label" for="siteGroupField">{{ $t('str.register.user.siteGroup.field') }}</label>
                     <select v-model="data.siteGroup" class="form-select" v-bind:class="checkRequiredField('siteGroup') ? 'is-invalid' : ''" @focus="removeRequiredField('siteGroup')" id="siteGroupField">
                         <option value="">{{ $t('str.register.select.placeholder') }}</option>
@@ -305,12 +305,6 @@ export default {
                 this.data.clientGroup = ''
             }
 
-            if (this.data?.site) {
-                this.data.site = this.data.site._id
-            } else {
-                this.data.site = ''
-            }
-
             if (this.data.account) {
                 this.clients = await Services.getClientsByAccount(this, this.data.account)
             }
@@ -319,7 +313,7 @@ export default {
                 this.sites = await Services.getSitesByClient(this, this.data.client)
             }
 
-            if (this.data?.companyUser?.subtype === 'OPERATOR') {
+            if (this.data?.companyUser?.subtype === 'OPERATOR' || this.data?.companyUser?.subtype === 'AUDITOR') {
                 this.siteGroups = await Services.getSiteGroupsByAccount(this, this.data?.account?._id)
             }
 

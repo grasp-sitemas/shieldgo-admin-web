@@ -18,7 +18,7 @@ export default {
                 payload.accounts = await Services.getAccounts(payload)
             } else if (role === 'ADMIN' || role === 'MANAGER') {
                 payload.clients = await Services.getClients(payload)
-            } else if (role === 'MANAGER' || role === 'OPERATOR') {
+            } else if (role === 'MANAGER' || role === 'OPERATOR' || role === 'AUDITOR') {
                 const client = await Common.getClientId(payload)
                 payload.filters.client = client
                 payload.sites = await Services.getSites(payload)

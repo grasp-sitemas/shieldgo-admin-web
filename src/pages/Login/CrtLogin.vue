@@ -28,7 +28,7 @@ export default {
             return true
         },
         navigateByRole: async function (subtype) {
-            return subtype === 'SUPER_ADMIN_MASTER' || subtype === 'ADMIN' || subtype === 'MANAGER' ? '/dashboard/analysis' : subtype === 'OPERATOR' ? '/monitor' : null
+            return subtype === 'SUPER_ADMIN_MASTER' || subtype === 'ADMIN' || subtype === 'MANAGER' || subtype === 'AUDITOR' ? '/dashboard/analysis' : subtype === 'OPERATOR' ? '/monitor' : null
         },
         signIn: function () {
             if (this.checkForm()) {
@@ -93,9 +93,6 @@ export default {
         },
         isUserActive: function (item) {
             return item?.status === 'ACTIVE' && item?.companyUser?.status === 'ACTIVE' ? true : false
-        },
-        checkRole: function (role) {
-            return role === 'SUPER_ADMIN_MASTER' || role === 'ADMIN_MASTER' || role === 'ADMIN' || role === 'MANAGER' || role === 'OPERATOR' ? true : false
         },
         hasType: function (type) {
             if (this.user) {

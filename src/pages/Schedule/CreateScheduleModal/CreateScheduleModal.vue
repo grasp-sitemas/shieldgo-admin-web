@@ -330,7 +330,7 @@
                 </div>
             </div>
 
-            <div class="row">
+            <div class="row" v-if="role !== 'AUDITOR'">
                 <div class="col-md-12 mb-3">
                     <div class="btn-center mt-4 mb-2">
                         <button v-if="!data._id" @click="checkForm" type="submit" class="btn btn-primary w-200px me-10px is-loading">
@@ -386,6 +386,10 @@ export default {
         isSuperAdminMaster: {
             type: Boolean,
             default: false,
+        },
+        role: {
+            type: String,
+            default: '',
         },
     },
     watch: {

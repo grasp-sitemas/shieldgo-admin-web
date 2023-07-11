@@ -46,6 +46,8 @@ export default {
             )
         },
         async selectItem(params) {
+            if (this.role === 'AUDITOR') return
+
             const data = params && params?.row ? JSON.parse(JSON.stringify(params.row)) : { ...this.userObj }
             delete data.vgt_id
             delete data.originalIndex

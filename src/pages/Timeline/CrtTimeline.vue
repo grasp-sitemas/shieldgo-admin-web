@@ -16,16 +16,17 @@ export default {
         }
 
         const role = await Common.getSubtype(payload)
+        payload.role = role
+
         if (role === 'SUPER_ADMIN_MASTER') {
             payload.accounts = await Services.getAccounts(payload)
         } else if (role === 'ADMIN' || role === 'MANAGER') {
             payload.clients = await Services.getClients(payload)
-        } else if (role === 'MANAGER' || role === 'OPERATOR') {
+        } else if (role === 'MANAGER' || role === 'OPERATOR' || role === 'AUDITOR') {
             const client = await Common.getClientId(payload)
             payload.filters.client = client
             payload.sites = await Services.getSites(payload)
         }
-        payload.role = role
         payload.filter()
     },
     methods: {

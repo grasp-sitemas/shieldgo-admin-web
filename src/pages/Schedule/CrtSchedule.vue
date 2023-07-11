@@ -17,13 +17,15 @@ export default {
 
         payload.isSuperAdminMaster = await Common.isSuperAdminMaster(payload)
         const role = await Common.getSubtype(payload)
+        payload.role = role
+
         if (role === 'SUPER_ADMIN_MASTER') {
             payload.accounts = await Services.getAccounts(payload)
         } else {
             payload.clients = await Services.getClients(payload)
             payload.filters.account = await Common.getAccountId(payload)
 
-            if (role === 'MANAGER') {
+            if (role === 'MANAGER' || role === 'AUDITOR') {
                 payload.filters.client = await Common.getClientId(payload)
             }
         }
@@ -94,6 +96,7 @@ export default {
             this.calendarOptions.locale = locale
         },
         handleDateClick: function (arg) {
+            if (this.role === 'AUDITOR') return
             this.selectedDate = moment(arg.dateStr).utc(false).format('YYYY-MM-DD')
             this.$bvModal.show('createScheduleModal')
         },

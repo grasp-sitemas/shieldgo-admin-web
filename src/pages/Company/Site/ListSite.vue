@@ -11,7 +11,7 @@
                         </option>
                     </select>
                 </div>
-                <div class="col-md-3 mb-3">
+                <div v-if="role === 'SUPER_ADMIN_MASTER' || role === 'ADMIN' || role === 'MANAGER'" class="col-md-3 mb-3">
                     <label class="form-label" for="clientField">{{ $t('str.register.site.client.field') }}</label>
                     <select v-model="filters.client" @change="filter" class="form-select" id="clientField">
                         <option value="">{{ $t('str.register.select.placeholder') }}</option>
@@ -28,7 +28,7 @@
                     </select>
                 </div>
                 <div class="col-md-3 mt-4">
-                    <button @click="selectItem" type="submit" class="btn btn-default w-50">{{ $t('str.btn.new.form') }}</button>
+                    <button v-if="role !== 'AUDITOR'" @click="selectItem" type="submit" class="btn btn-default w-50">{{ $t('str.btn.new.form') }}</button>
                 </div>
             </div>
             <vue-good-table
@@ -110,6 +110,7 @@ export default {
             clients: [],
             sites: [],
             columns: [],
+            role: '',
             paginationOptions: {},
             isSuperAdminMaster: false,
         }

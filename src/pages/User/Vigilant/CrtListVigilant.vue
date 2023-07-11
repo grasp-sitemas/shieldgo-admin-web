@@ -17,6 +17,9 @@ export default {
                 payload.clients = await Services.getClients(payload)
             }
 
+            const role = await Common.getSubtype(payload)
+            payload.role = role
+
             payload.initTable()
 
             if (!payload.isSuperAdminMaster) {
@@ -46,6 +49,7 @@ export default {
             )
         },
         selectItem(params) {
+            if (this.role === 'AUDITOR') return
             const data = params && params?.row ? JSON.parse(JSON.stringify(params.row)) : { ...this.vigilantObj }
 
             delete data.vgt_id

@@ -39,7 +39,7 @@
                     </option>
                 </select>
             </div>
-            <div class="col-md-3">
+            <div v-if="role === 'SUPER_ADMIN_MASTER' || role === 'ADMIN' || role === 'MANAGER'" class="col-md-3">
                 <label class="form-label" for="clientField">{{ $t('str.register.incident.client.field') }}</label>
                 <select v-model="filters.client" @change="changeClient" class="form-select" id="clientField">
                     <option value="">{{ $t('str.register.select.placeholder') }}</option>

@@ -8,8 +8,12 @@ export default {
         payload.filters.account = await Common.getAccountId(payload)
         await payload.initTable()
         if (!payload.isSuperAdminMaster) {
-            payload.columns.splice(4, 1)
+            payload.columns.splice(5, 1)
         }
+
+        const role = await Common.getSubtype(payload)
+        payload.role = role
+
         payload.filter()
     },
     methods: {
@@ -37,6 +41,8 @@ export default {
             this.$bvModal.show('checkPointModal')
         },
         selectItem(params) {
+            if (this.role === 'AUDITOR') return
+
             const data = params && params?.row ? JSON.parse(JSON.stringify(params.row)) : { ...this.patrolPointObj }
 
             delete data.vgt_id
@@ -60,9 +66,18 @@ export default {
         async initTable() {
             this.columns = [
                 {
+                    label: this.$t('str.table.check.point.column.code'),
+                    field: 'code',
+                    width: '5%',
+                    sortable: true,
+                    firstSortType: 'desc',
+                    thClass: 'text-nowrap',
+                    tdClass: 'text-nowrap',
+                },
+                {
                     label: this.$t('str.table.check.point.column.name'),
                     field: 'name',
-                    width: '20%',
+                    width: '25%',
                     sortable: true,
                     firstSortType: 'desc',
                     thClass: 'text-nowrap',

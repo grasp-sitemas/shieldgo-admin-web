@@ -14,7 +14,7 @@
                 </select>
                 <div class="invalid-feedback">{{ $t('str.register.guard.groups.account.required') }}</div>
             </div>
-            <div class="col-md-4 mb-3">
+            <div v-if="role === 'SUPER_ADMIN_MASTER' || role === 'ADMIN' || role === 'MANAGER'" class="col-md-4 mb-3">
                 <label class="form-label" for="clientField">{{ $t('str.register.guard.groups.client.field') }}</label>
                 <select v-model="filters.client" @change="changeClient" class="form-select" id="clientField">
                     <option value="">{{ $t('str.register.select.placeholder') }}</option>
@@ -36,7 +36,7 @@
             </div>
         </div>
 
-        <CreateScheduleModal :selectedAppointment="selectedAppointment" :selectedDate="selectedDate" :accounts="accounts" :clients="clients" :isSuperAdminMaster="isSuperAdminMaster" />
+        <CreateScheduleModal :role="role" :selectedAppointment="selectedAppointment" :selectedDate="selectedDate" :accounts="accounts" :clients="clients" :isSuperAdminMaster="isSuperAdminMaster" />
         <FullCalendar :events="appointments" :options="calendarOptions"></FullCalendar>
     </div>
 </template>
@@ -72,6 +72,7 @@ export default {
                 startDate: moment().utc(true),
                 isSortByStartDate: true,
             },
+            role: '',
             isSuperAdminMaster: false,
             selectedDate: '',
         }

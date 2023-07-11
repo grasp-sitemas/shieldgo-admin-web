@@ -15,6 +15,9 @@ export default {
             payload.clients = await Services.getClients(payload)
         }
 
+        const role = await Common.getSubtype(payload)
+        payload.role = role
+
         payload.initTable()
         payload.filter()
     },
@@ -50,6 +53,8 @@ export default {
             )
         },
         async selectItem(params) {
+            if (this.role === 'AUDITOR') return
+
             const data = params && params?.row ? JSON.parse(JSON.stringify(params.row)) : { ...this.siteObj }
             if (!data.account) {
                 data.account = await Common.getAccountId(this)

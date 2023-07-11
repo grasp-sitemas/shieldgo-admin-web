@@ -1191,7 +1191,10 @@
     "str.reports.priority.field": "Priority",
     "str.timeline.item.patrol.points.view":"View performance",
     "str.dashboard.view.details": "View details",
-    "str.table.site.column.owner": "Owner"
+    "str.table.site.column.owner": "Owner",
+    "str.user.role.auditor": "Auditor",
+    "AUDITOR": "Auditor",
+    "str.table.check.point.column.code": "ID"
 }       
 
 

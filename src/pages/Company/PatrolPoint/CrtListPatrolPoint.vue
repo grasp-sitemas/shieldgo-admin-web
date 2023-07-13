@@ -5,14 +5,18 @@ import Common from '../../../common/Common.vue'
 import Services from '../../../common/Services.vue'
 export default {
     init: async payload => {
+        const role = await Common.getSubtype(payload)
+        payload.role = role
+
         payload.filters.account = await Common.getAccountId(payload)
         await payload.initTable()
         if (!payload.isSuperAdminMaster) {
             payload.columns.splice(5, 1)
         }
 
-        const role = await Common.getSubtype(payload)
-        payload.role = role
+        if (role === 'AUDITOR') {
+            payload.columns.splice(5, 1)
+        }
 
         payload.filter()
     },
@@ -67,7 +71,7 @@ export default {
             this.columns = [
                 {
                     label: this.$t('str.table.check.point.column.code'),
-                    field: 'code',
+                    field: 'patrolPointCode',
                     width: '5%',
                     sortable: true,
                     firstSortType: 'desc',

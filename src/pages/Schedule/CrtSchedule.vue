@@ -26,7 +26,9 @@ export default {
             payload.filters.account = await Common.getAccountId(payload)
 
             if (role === 'MANAGER' || role === 'AUDITOR') {
-                payload.filters.client = await Common.getClientId(payload)
+                const client = await Common.getClientId(payload)
+                payload.filters.client = client
+                payload.sites = await Services.getSites(payload)
             }
         }
 

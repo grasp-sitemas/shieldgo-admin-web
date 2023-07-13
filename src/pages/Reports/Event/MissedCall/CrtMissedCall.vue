@@ -7,11 +7,11 @@ export default {
     init: async payload => {
         setTimeout(async () => {
             payload.isSuperAdminMaster = await Common.isSuperAdminMaster(payload)
+            const role = await Common.getSubtype(payload)
 
             await payload.initTable()
             await payload.initRangeDate()
 
-            const role = await Common.getSubtype(payload)
             if (role === 'SUPER_ADMIN_MASTER') {
                 payload.accounts = await Services.getAccounts(payload)
             } else if (role === 'ADMIN' || role === 'MANAGER') {
@@ -23,6 +23,10 @@ export default {
             }
 
             if (!payload.isSuperAdminMaster) {
+                payload.columns.splice(5, 1)
+            }
+
+            if (role === 'AUDITOR') {
                 payload.columns.splice(5, 1)
             }
 

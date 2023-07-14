@@ -7,10 +7,12 @@
                 </div>
                 <div class="row">
                     <div class="col-xl-3 col-4" v-for="(item, index) in chart?.series" :key="index">
-                        <h3 class="mb-1">
-                            <span data-animation="number">{{ item.total }}</span>
-                        </h3>
-                        <div>{{ $t(item.name) }}</div>
+                        <div class="cursor-pointer" @click="handleClick(item)">
+                            <h3 class="mb-1">
+                                <span data-animation="number">{{ item.total }}</span>
+                            </h3>
+                            <div>{{ $t(item.name) }}</div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -62,6 +64,10 @@ export default {
         data: {
             type: Object,
             default: () => {},
+        },
+        redirect: {
+            type: Object,
+            default: () => ({}),
         },
         locale: {
             type: String,
@@ -141,6 +147,32 @@ export default {
             },
         }
     },
-    methods: {},
+    methods: {
+        handleClick(item) {
+            const params = this.redirect.params
+
+            if (params) {
+                if (!params?.account) delete params.account
+
+                if (!params?.client) delete params.client
+
+                if (!params?.site) delete params.site
+
+                switch (item.name) {
+                    case 'Completa(s)':
+                        this.$router.push({ path: '/reports/patrols/completed/' + JSON.stringify(params) })
+                        break
+                    case 'Incompleta(s)':
+                        this.$router.push({ path: '/reports/patrols/incompleted/' + JSON.stringify(params) })
+                        break
+                    case 'Não iniciada(s)':
+                        this.$router.push({ path: '/reports/patrols/not-visited/' + JSON.stringify(params) })
+                        break
+                    default:
+                        break
+                }
+            }
+        },
+    },
 }
 </script>

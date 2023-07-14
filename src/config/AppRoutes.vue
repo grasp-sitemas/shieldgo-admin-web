@@ -228,6 +228,15 @@ const routes = [
         },
     },
     {
+        path: '/reports/patrols/completed/:filterParams',
+        name: 'patrols-completed',
+        props: true,
+        component: PatrolCompleted,
+        beforeEnter: (_to, _from, next) => {
+            next(checkSession())
+        },
+    },
+    {
         path: '/reports/patrols/not-visited',
         name: 'patrols-not-visited',
         component: PatrolNotVisited,
@@ -236,8 +245,26 @@ const routes = [
         },
     },
     {
+        path: '/reports/patrols/not-visited/:filterParams',
+        name: 'patrols-not-visited',
+        props: true,
+        component: PatrolNotVisited,
+        beforeEnter: (_to, _from, next) => {
+            next(checkSession())
+        },
+    },
+    {
         path: '/reports/patrols/incompleted',
         name: 'patrols-incompleted',
+        component: PatrolIncompleted,
+        beforeEnter: (_to, _from, next) => {
+            next(checkSession())
+        },
+    },
+    {
+        path: '/reports/patrols/incompleted/:filterParams',
+        name: 'patrols-incompleted',
+        props: true,
         component: PatrolIncompleted,
         beforeEnter: (_to, _from, next) => {
             next(checkSession())

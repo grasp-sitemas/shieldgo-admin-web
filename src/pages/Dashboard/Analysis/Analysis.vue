@@ -102,7 +102,19 @@
 
         <div class="row">
             <div class="col-md-7">
-                <EventsPerformance :data="eventsPerformance" :locale="userLocale" />
+                <EventsPerformance
+                    :data="eventsPerformance"
+                    :locale="userLocale"
+                    :redirect="{
+                        params: {
+                            startDate: filters.startDate,
+                            endDate: filters.endDate,
+                            account: filters.account,
+                            client: filters.client,
+                            site: filters.site,
+                        },
+                    }"
+                />
             </div>
 
             <div class="col-md-2">
@@ -153,6 +165,7 @@ export default {
             accounts: [],
             clients: [],
             sites: [],
+            role: '',
             patrolsChart: {},
             eventsByType: {},
             eventsPerformance: {},

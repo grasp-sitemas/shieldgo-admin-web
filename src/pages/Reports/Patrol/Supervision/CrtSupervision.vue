@@ -22,19 +22,11 @@ export default {
                 payload.sites = await Services.getSites(payload)
             }
 
-            if (!payload.isSuperAdminMaster) {
-                payload.columns.splice(6, 1)
-            }
-
-            if (role === 'AUDITOR') {
-                payload.columns.splice(6, 1)
-            }
-
-            payload.jsonFields = payload.JSON_FIELDS_CSV.incompletedPatrolPoints[payload.$i18n.locale].json_fields
-            payload.jsonData = [payload.JSON_FIELDS_CSV.incompletedPatrolPoints[payload.$i18n.locale].json_data]
-            payload.jsonMeta = [payload.JSON_FIELDS_CSV.incompletedPatrolPoints[payload.$i18n.locale].json_meta]
-            payload.filename = payload.JSON_FIELDS_CSV.incompletedPatrolPoints[payload.$i18n.locale].filename
-            payload.jsonTitle = payload.JSON_FIELDS_CSV.incompletedPatrolPoints[payload.$i18n.locale].title
+            payload.jsonFields = payload.JSON_FIELDS_CSV.supervizionPatrol[payload.$i18n.locale].json_fields
+            payload.jsonData = [payload.JSON_FIELDS_CSV.supervizionPatrol[payload.$i18n.locale].json_data]
+            payload.jsonMeta = [payload.JSON_FIELDS_CSV.supervizionPatrol[payload.$i18n.locale].json_meta]
+            payload.filename = payload.JSON_FIELDS_CSV.supervizionPatrol[payload.$i18n.locale].filename
+            payload.jsonTitle = payload.JSON_FIELDS_CSV.supervizionPatrol[payload.$i18n.locale].title
             payload.pdfHeader = payload.PDF_HEADER[payload.$i18n.locale]
 
             payload.role = role
@@ -48,89 +40,62 @@ export default {
 
             const results = await Services.SupervisorPatrol(this, this.filters)
 
-            this.items = results?.tableItems
-            this.reportItems = results?.reportItems
+            this.items = results?.patrolPoints
+            this.reportItems = results?.patrolPoints
+            this.jsonInfo = {
+                account: results?.account,
+                accountAddress: results?.accountAddress,
+                client: results?.client,
+                site: results?.site,
+                vigilant: results?.vigilant,
+            }
 
             this.isSearchLoading = false
         },
         async initTable() {
             this.columns = [
                 {
-                    label: this.$t('str.table.reports.column.patrolPoint'),
-                    field: 'patrolPoint',
-                    width: '10%',
+                    label: this.$t('str.table.reports.column.status'),
+                    field: 'read',
+                    width: '15%',
                     sortable: true,
                     firstSortType: 'desc',
                     thClass: 'text-nowrap',
                     tdClass: 'text-nowrap',
                 },
                 {
-                    label: this.$t('str.table.reports.column.event'),
-                    field: 'event',
-                    width: '10%',
+                    label: this.$t('str.table.reports.column.patrol.point'),
+                    field: 'name',
+                    width: '85%',
                     sortable: true,
                     firstSortType: 'desc',
                     thClass: 'text-nowrap',
                     tdClass: 'text-nowrap',
                 },
-                {
-                    label: this.$t('str.table.reports.column.vigilant'),
-                    field: 'vigilant',
-                    width: '10%',
-                    sortable: true,
-                    firstSortType: 'desc',
-                    thClass: 'text-nowrap',
-                    tdClass: 'text-nowrap',
-                },
-                {
-                    label: this.$t('str.table.reports.column.starts.in'),
-                    field: 'startDate',
-                    width: '10%',
-                    sortable: true,
-                    tdClass: 'text-nowrap',
-                    thClass: 'text-nowrap',
-                },
-                {
-                    label: this.$t('str.table.reports.column.ends.in'),
-                    field: 'endDate',
-                    width: '10%',
-                    sortable: true,
-                    tdClass: 'text-nowrap',
-                    thClass: 'text-nowrap',
-                },
-                {
-                    label: this.$t('str.table.reports.column.scanned.date'),
-                    field: 'scannedDate',
-                    width: '10%',
-                    sortable: true,
-                    tdClass: 'text-nowrap',
-                    thClass: 'text-nowrap',
-                },
-
-                {
-                    label: this.$t('str.table.reports.column.account'),
-                    field: 'account',
-                    width: '10%',
-                    sortable: true,
-                    thClass: 'text-nowrap',
-                    tdClass: 'text-nowrap',
-                },
-                {
-                    label: this.$t('str.table.reports.column.client'),
-                    field: 'client',
-                    width: '10%',
-                    sortable: true,
-                    thClass: 'text-nowrap',
-                    tdClass: 'text-nowrap',
-                },
-                {
-                    label: this.$t('str.table.reports.column.site'),
-                    field: 'site',
-                    width: '10%',
-                    sortable: true,
-                    thClass: 'text-nowrap',
-                    tdClass: 'text-nowrap',
-                },
+                // {
+                //     label: this.$t('str.table.reports.column.account'),
+                //     field: 'account',
+                //     width: '15%',
+                //     sortable: true,
+                //     thClass: 'text-nowrap',
+                //     tdClass: 'text-nowrap',
+                // },
+                // {
+                //     label: this.$t('str.table.reports.column.client'),
+                //     field: 'client',
+                //     width: '15%',
+                //     sortable: true,
+                //     thClass: 'text-nowrap',
+                //     tdClass: 'text-nowrap',
+                // },
+                // {
+                //     label: this.$t('str.table.reports.column.site'),
+                //     field: 'site',
+                //     width: '15%',
+                //     sortable: true,
+                //     thClass: 'text-nowrap',
+                //     tdClass: 'text-nowrap',
+                // },
             ]
 
             this.paginationOptions = {
@@ -171,7 +136,7 @@ export default {
                 vigilant: '',
                 startDate: moment().utc(true),
                 endDate: moment().utc(true),
-                report: 'PATROL_POINTS_INCOMPLETED',
+                report: 'SUPERVISION_PATROL',
             }
             this.items = []
             this.initRangeDate()

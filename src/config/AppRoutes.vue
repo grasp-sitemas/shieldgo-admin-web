@@ -29,8 +29,8 @@ import User from '../pages/User/User/ListUser.vue'
 import Vigilant from '../pages/User/Vigilant/ListVigilant.vue'
 import sosAlert from '../pages/Reports/PanicAlert/PanicAlert.vue'
 import IncidentReport from '../pages/Reports/Incident/Incident.vue'
-import MisssingCallReport from '../pages/Reports//Event/MissedCall/MissedCall.vue'
-
+import MisssingCallReport from '../pages/Reports/Event/MissedCall/MissedCall.vue'
+import SupervisionPatrolReport from '../pages/Reports/Patrol/Supervision/Supervision.vue'
 Vue.use(VueSession)
 
 const session = Vue.prototype.$session
@@ -294,6 +294,22 @@ const routes = [
             next(checkSession())
         },
     },
+    {
+        path: '/reports/supervision-patrol',
+        name: 'supervision-patrol',
+        component: SupervisionPatrolReport,
+        beforeEnter: (_to, _from, next) => {
+            next(checkSession())
+        },
+    },
+    // {
+    //     path: '/reports/patrol-points',
+    //     name: 'patrol-points',
+    //     component: MisssingCallReport,
+    //     beforeEnter: (_to, _from, next) => {
+    //         next(checkSession())
+    //     },
+    // },
 ]
 
 export default routes

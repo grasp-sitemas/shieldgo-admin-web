@@ -466,6 +466,42 @@ export default {
             }
         }
     },
+    SupervisorPatrol: async function (state, filters) {
+        const response = await Request.do(state, 'POST', Request.getDefaultHeader(state), filters, `${Endpoints.reports.filter}`)
+        const results = response?.data?.results
+
+        if (results?.length > 0) {
+            const formattedResults = results.map(result => {
+                return {
+                    account: result.account?.name,
+                    accountAddress: result.account?.address,
+                    client: result.client?.name,
+                    site: result.site?.name,
+                    vigilant: result?.vigilant?.fullName,
+                    patrolPoints: result?.patrolPoints,
+                }
+            })
+
+            // Juntando todos os patrolPoints em um único array
+            const allPatrolPoints = [].concat(...formattedResults.map(result => result.patrolPoints))
+
+            const finalResult = {
+                account: formattedResults[0].account,
+                accountAddress: formattedResults[0].accountAddress,
+                client: formattedResults[0].client,
+                site: formattedResults[0].site,
+                vigilant: formattedResults[0].vigilant,
+                patrolPoints: allPatrolPoints,
+            }
+
+            console.log(finalResult)
+
+            return finalResult
+        }
+
+        return null // Ou algum outro valor padrão em caso de não haver resultados
+    },
+
     sosAlerts: async function (state, filters) {
         const response = await Request.do(state, 'POST', Request.getDefaultHeader(state), filters, `${Endpoints.reports.filter}`)
         const results = response?.data?.results

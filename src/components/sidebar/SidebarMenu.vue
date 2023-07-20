@@ -99,6 +99,16 @@ const sidebarMenu = [
                 title: 'str.sidebar.menu.reports.incidents',
                 roles: [ROLES.SUPER_ADMIN_MASTER, ROLES.ADMIN, ROLES.MANAGER, ROLES.AUDITOR],
             },
+            {
+                path: '/reports/supervision-patrol',
+                title: 'str.sidebar.menu.reports.supervision.patrol',
+                roles: [ROLES.SUPER_ADMIN_MASTER, ROLES.ADMIN],
+            },
+            {
+                path: '/reports/patrol-points',
+                title: 'str.sidebar.menu.reports.patrol.points',
+                roles: [ROLES.SUPER_ADMIN_MASTER, ROLES.ADMIN],
+            },
         ],
     },
 ]

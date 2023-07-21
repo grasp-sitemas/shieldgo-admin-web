@@ -127,6 +127,8 @@ import PdfDownload from '../Components/PdfDownload.vue'
 import Vue from 'vue'
 import { JSON_FIELDS_CSV } from './Utils/jsonFieldsCsv'
 import { PDF_HEADER } from './Utils/jsonFieldsPdf'
+import Services from '../../../../common/Services.vue'
+
 Vue.prototype.$registerEvent = new Vue()
 
 export default {
@@ -135,6 +137,7 @@ export default {
         XlsDownload,
         PdfDownload,
     },
+    props: ['filterParams'],
     data() {
         return {
             accounts: [],
@@ -173,9 +176,46 @@ export default {
     },
     methods: Controller.methods,
     async mounted() {
-        await Controller.init(this)
+        const routeParams = this.filterParams ? JSON.parse(this.filterParams) : null
+        if (routeParams) {
+            const filters = routeParams
+
+            setTimeout(async () => {
+                filters.startDate = moment(filters.startDate).utc(false)
+                filters.endDate = moment(filters.endDate).utc(false)
+                filters.account = filters.account ? filters.account : ''
+                filters.client = filters.client ? filters.client : ''
+                filters.site = filters.site ? filters.site : ''
+
+                if (filters.account && filters.account.length > 0) {
+                    this.clients = await Services.getClientsByAccount(this, filters.account)
+                }
+
+                if (filters.client && filters.client.length > 0) {
+                    this.sites = await Services.getSitesByClient(this, filters.client)
+                }
+
+                this.updateRangeDate(filters.startDate, filters.endDate)
+                const startDate = moment(filters.startDate).utc(false).isBefore(moment(filters.endDate).utc(false)) ? moment(filters.startDate).utc(false).add(1, 'days') : moment(filters.startDate).utc(false)
+                const endDate = moment(filters.endDate).utc(false)
+
+                moment(filters.startDate).utc(false).add(1, 'days')
+                this.dateRange.range = {
+                    startDate: startDate,
+                    endDate: endDate,
+                }
+
+                this.filters = {
+                    ...filters,
+                    vigilant: '',
+                    report: 'PATROL_POINTS_COMPLETED',
+                }
+            }, 300)
+        }
     },
     async created() {
+        await Controller.init(this)
+
         const state = this
         state.$registerEvent.$on('changeLanguage', function () {
             state.initTable()

@@ -1194,7 +1194,13 @@
     "str.table.site.column.owner": "Owner",
     "str.user.role.auditor": "Auditor",
     "AUDITOR": "Auditor",
-    "str.table.check.point.column.code": "ID"
+    "str.table.check.point.column.code": "ID",
+    "str.sidebar.menu.reports.patrol.points": "Patrol points",
+    "str.sidebar.menu.reports.supervision.patrol": "Supervision patrol",
+    "str.table.reports.column.patrol.point": "Check point",
+    "str.table.reports.column.status": "Status",
+    "str.not.visited": "Not visited",
+    "str.visited": "Visited",
+    "str.supervisor": "Supervisor",
+    "str.total.visits": "Total visits"
 }       
-
-

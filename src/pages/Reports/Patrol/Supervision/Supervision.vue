@@ -1,6 +1,6 @@
 <template>
     <div>
-        <h1 class="page-header">{{ $t('str.sidebar.menu.reports.patrols.incompleted') }}</h1>
+        <h1 class="page-header">{{ $t('str.sidebar.menu.reports.supervision.patrol') }}</h1>
         <hr />
 
         <div v-if="!isLoading">
@@ -86,9 +86,46 @@
 
             <div class="row">
                 <div class="col-md-12 mb-3 d-inline-flex">
-                    <CsvDownload class="me-2" v-show="items?.length > 0" :jsonFields="jsonFields" :jsonData="items" :jsonMeta="jsonMeta" :filename="filename" :jsonTitle="jsonTitle" />
-                    <XlsDownload class="me-2" v-show="items?.length > 0" :jsonFields="jsonFields" :jsonData="items" :jsonMeta="jsonMeta" :filename="filename" :jsonTitle="jsonTitle" />
-                    <PdfDownload v-show="items?.length > 0" :pdfHeader="pdfHeader" :jsonData="reportItems" :filename="filename" :jsonTitle="jsonTitle" />
+                    <CsvDownload
+                        class="me-2"
+                        v-show="items?.length > 0"
+                        :jsonFields="jsonFields"
+                        :jsonData="items"
+                        :jsonMeta="jsonMeta"
+                        :filename="filename"
+                        :jsonTitle="jsonTitle"
+                        :period-end="moment(filters.endDate).format('DD/MM/YYYY')"
+                        :period-start="moment(filters.startDate).format('DD/MM/YYYY')"
+                        :supervisor="jsonInfo?.vigilant"
+                        :totalVisits="totalVisits"
+                        :jsonInfo="jsonInfo"
+                    />
+                    <XlsDownload
+                        class="me-2"
+                        v-show="items?.length > 0"
+                        :jsonFields="jsonFields"
+                        :jsonData="items"
+                        :jsonMeta="jsonMeta"
+                        :period-end="moment(filters.endDate).format('DD/MM/YYYY')"
+                        :period-start="moment(filters.startDate).format('DD/MM/YYYY')"
+                        :filename="filename"
+                        :jsonTitle="jsonTitle"
+                        :supervisor="jsonInfo?.vigilant"
+                        :totalVisits="totalVisits"
+                        :jsonInfo="jsonInfo"
+                    />
+                    <PdfDownload
+                        v-show="items?.length > 0"
+                        :pdfHeader="pdfHeader"
+                        :period-end="moment(filters.endDate).format('DD/MM/YYYY')"
+                        :period-start="moment(filters.startDate).format('DD/MM/YYYY')"
+                        :jsonData="reportItems"
+                        :supervisor="jsonInfo?.vigilant"
+                        :totalVisits="totalVisits"
+                        :filename="filename"
+                        :jsonInfo="jsonInfo"
+                        :jsonTitle="jsonTitle"
+                    />
                 </div>
             </div>
 
@@ -105,9 +142,11 @@
                     <span v-if="!isLoading && items?.length === 0">{{ $t('str.table.subtitle.no.data') }}</span>
                 </div>
                 <template slot="table-row" slot-scope="props">
-                    <span>
-                        {{ props.formattedRow[props.column.field] }}
+                    <span v-if="props.column.field === 'read'">
+                        <span v-if="props.formattedRow[props.column.field] === true"> <i class="fas fa-check-circle text-success" /> {{ $t('str.visited') }} </span>
+                        <span v-else> <i class="fas fa-times-circle text-danger" /> {{ $t('str.not.visited') }} </span>
                     </span>
+                    <span v-else> {{ props.formattedRow[props.column.field] }} </span>
                 </template>
             </vue-good-table>
         </div>
@@ -119,11 +158,11 @@
 
 <script>
 import moment from 'moment'
-import Controller from './CrtIncompleted.vue'
+import Controller from './CrtSupervision.vue'
 import { DATE_RANGE_CONFIG } from '../../../../utils/date'
-import CsvDownload from '../Components/CsvDownload.vue'
-import XlsDownload from '../Components/XlsDownload.vue'
-import PdfDownload from '../Components/PdfDownload.vue'
+import CsvDownload from './Components/CsvDownload.vue'
+import XlsDownload from './Components/XlsDownload.vue'
+import PdfDownload from './Components/PdfDownload.vue'
 import Vue from 'vue'
 import { JSON_FIELDS_CSV } from './Utils/jsonFieldsCsv'
 import { PDF_HEADER } from './Utils/jsonFieldsPdf'
@@ -148,11 +187,13 @@ export default {
             items: [],
             reportItems: [],
             paginationOptions: {},
+            totalVisits: 0,
             fields: [],
             isLoading: true,
             isSearchLoading: false,
             dateRange: DATE_RANGE_CONFIG,
             role: '',
+            moment: moment,
             filters: {
                 account: '',
                 client: '',
@@ -160,17 +201,18 @@ export default {
                 vigilant: '',
                 startDate: moment().utc(true),
                 endDate: moment().utc(true),
-                report: 'PATROL_POINTS_INCOMPLETED',
+                report: 'SUPERVISION_PATROL',
             },
             selectedItem: null,
             isSuperAdminMaster: false,
             JSON_FIELDS_CSV: JSON_FIELDS_CSV,
             PDF_HEADER: PDF_HEADER,
-            jsonFields: JSON_FIELDS_CSV.incompletedPatrolPoints.pt.json_fields,
-            jsonData: [JSON_FIELDS_CSV.incompletedPatrolPoints.pt.json_data],
-            jsonMeta: [JSON_FIELDS_CSV.incompletedPatrolPoints.pt.json_meta],
-            filename: JSON_FIELDS_CSV.incompletedPatrolPoints.pt.filename,
-            jsonTitle: JSON_FIELDS_CSV.incompletedPatrolPoints.pt.title,
+            jsonFields: JSON_FIELDS_CSV.supervizionPatrol.pt.json_fields,
+            jsonData: [JSON_FIELDS_CSV.supervizionPatrol.pt.json_data],
+            jsonMeta: [JSON_FIELDS_CSV.supervizionPatrol.pt.json_meta],
+            jsonInfo: {},
+            filename: JSON_FIELDS_CSV.supervizionPatrol.pt.filename,
+            jsonTitle: JSON_FIELDS_CSV.supervizionPatrol.pt.title,
             pdfHeader: PDF_HEADER.pt,
         }
     },
@@ -208,7 +250,7 @@ export default {
                 this.filters = {
                     ...filters,
                     vigilant: '',
-                    report: 'PATROL_POINTS_COMPLETED',
+                    report: 'SUPERVISION_PATROL',
                 }
             }, 300)
         }
@@ -220,11 +262,11 @@ export default {
         state.$registerEvent.$on('changeLanguage', function () {
             state.initTable()
             state.initRangeDate()
-            state.jsonFields = JSON_FIELDS_CSV.incompletedPatrolPoints[state.$i18n.locale].json_fields
-            state.jsonData = [JSON_FIELDS_CSV.incompletedPatrolPoints[state.$i18n.locale].json_data]
-            state.jsonMeta = [JSON_FIELDS_CSV.incompletedPatrolPoints[state.$i18n.locale].json_meta]
-            state.filename = JSON_FIELDS_CSV.incompletedPatrolPoints[state.$i18n.locale].filename
-            state.jsonTitle = JSON_FIELDS_CSV.incompletedPatrolPoints[state.$i18n.locale].title
+            state.jsonFields = JSON_FIELDS_CSV.supervizionPatrol[state.$i18n.locale].json_fields
+            state.jsonData = [JSON_FIELDS_CSV.supervizionPatrol[state.$i18n.locale].json_data]
+            state.jsonMeta = [JSON_FIELDS_CSV.supervizionPatrol[state.$i18n.locale].json_meta]
+            state.filename = JSON_FIELDS_CSV.supervizionPatrol[state.$i18n.locale].filename
+            state.jsonTitle = JSON_FIELDS_CSV.supervizionPatrol[state.$i18n.locale].title
             state.pdfHeader = PDF_HEADER[state.$i18n.locale]
         })
     },

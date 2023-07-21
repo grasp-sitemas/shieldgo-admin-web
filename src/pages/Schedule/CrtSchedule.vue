@@ -26,7 +26,9 @@ export default {
             payload.filters.account = await Common.getAccountId(payload)
 
             if (role === 'MANAGER' || role === 'AUDITOR') {
-                payload.filters.client = await Common.getClientId(payload)
+                const client = await Common.getClientId(payload)
+                payload.filters.client = client
+                payload.sites = await Services.getSites(payload)
             }
         }
 
@@ -74,6 +76,15 @@ export default {
                 },
                 dateClick: this.handleDateClick,
                 eventClick: this.handleEventClick,
+                datesSet: ({ startStr, endStr }) => {
+                    const currentMonth = moment(startStr).month()
+                    if (this.lastFetchedMonth !== currentMonth) {
+                        this.filters.startDate = moment(startStr).utc(true).format()
+                        this.filters.endDate = moment(endStr).utc(true).format()
+                        this.getAppointments()
+                        this.lastFetchedMonth = currentMonth
+                    }
+                },
                 initialView: 'dayGridMonth',
                 droppable: false,
                 editable: false,

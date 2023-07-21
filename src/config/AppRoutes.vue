@@ -29,8 +29,8 @@ import User from '../pages/User/User/ListUser.vue'
 import Vigilant from '../pages/User/Vigilant/ListVigilant.vue'
 import sosAlert from '../pages/Reports/PanicAlert/PanicAlert.vue'
 import IncidentReport from '../pages/Reports/Incident/Incident.vue'
-import MisssingCallReport from '../pages/Reports//Event/MissedCall/MissedCall.vue'
-
+import MisssingCallReport from '../pages/Reports/Event/MissedCall/MissedCall.vue'
+import SupervisionPatrolReport from '../pages/Reports/Patrol/Supervision/Supervision.vue'
 Vue.use(VueSession)
 
 const session = Vue.prototype.$session
@@ -228,6 +228,15 @@ const routes = [
         },
     },
     {
+        path: '/reports/patrols/completed/:filterParams',
+        name: 'patrols-completed',
+        props: true,
+        component: PatrolCompleted,
+        beforeEnter: (_to, _from, next) => {
+            next(checkSession())
+        },
+    },
+    {
         path: '/reports/patrols/not-visited',
         name: 'patrols-not-visited',
         component: PatrolNotVisited,
@@ -236,8 +245,26 @@ const routes = [
         },
     },
     {
+        path: '/reports/patrols/not-visited/:filterParams',
+        name: 'patrols-not-visited',
+        props: true,
+        component: PatrolNotVisited,
+        beforeEnter: (_to, _from, next) => {
+            next(checkSession())
+        },
+    },
+    {
         path: '/reports/patrols/incompleted',
         name: 'patrols-incompleted',
+        component: PatrolIncompleted,
+        beforeEnter: (_to, _from, next) => {
+            next(checkSession())
+        },
+    },
+    {
+        path: '/reports/patrols/incompleted/:filterParams',
+        name: 'patrols-incompleted',
+        props: true,
         component: PatrolIncompleted,
         beforeEnter: (_to, _from, next) => {
             next(checkSession())
@@ -267,6 +294,22 @@ const routes = [
             next(checkSession())
         },
     },
+    {
+        path: '/reports/supervision-patrol',
+        name: 'supervision-patrol',
+        component: SupervisionPatrolReport,
+        beforeEnter: (_to, _from, next) => {
+            next(checkSession())
+        },
+    },
+    // {
+    //     path: '/reports/patrol-points',
+    //     name: 'patrol-points',
+    //     component: MisssingCallReport,
+    //     beforeEnter: (_to, _from, next) => {
+    //         next(checkSession())
+    //     },
+    // },
 ]
 
 export default routes

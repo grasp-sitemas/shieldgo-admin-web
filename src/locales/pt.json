@@ -1187,5 +1187,13 @@
     "str.table.site.column.owner": "Responsável",
     "str.user.role.auditor": "Auditor",
     "AUDITOR": "Auditor",
-    "str.table.check.point.column.code": "ID"
+    "str.table.check.point.column.code": "ID",
+    "str.sidebar.menu.reports.patrol.points": "Pontos de ronda",
+    "str.sidebar.menu.reports.supervision.patrol": "Supervisão de rondas",
+    "str.table.reports.column.patrol.point": "Ponto de checagem",
+    "str.table.reports.column.status": "Status",
+    "str.not.visited": "Não visitado",
+    "str.visited": "Visitado",
+    "str.supervisor": "Supervisor",
+    "str.total.visits": "Visitas no período"
 }

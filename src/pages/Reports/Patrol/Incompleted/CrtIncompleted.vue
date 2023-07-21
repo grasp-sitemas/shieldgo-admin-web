@@ -7,11 +7,11 @@ export default {
     init: async payload => {
         setTimeout(async () => {
             payload.isSuperAdminMaster = await Common.isSuperAdminMaster(payload)
+            const role = await Common.getSubtype(payload)
 
             await payload.initTable()
             await payload.initRangeDate()
 
-            const role = await Common.getSubtype(payload)
             if (role === 'SUPER_ADMIN_MASTER') {
                 payload.accounts = await Services.getAccounts(payload)
             } else if (role === 'ADMIN' || role === 'MANAGER') {
@@ -23,6 +23,10 @@ export default {
             }
 
             if (!payload.isSuperAdminMaster) {
+                payload.columns.splice(6, 1)
+            }
+
+            if (role === 'AUDITOR') {
                 payload.columns.splice(6, 1)
             }
 
@@ -42,7 +46,7 @@ export default {
             this.isSearchLoading = true
             this.items = []
 
-            const results = await Services.filterReports(this, this.filters)
+            const results = await Services.SupervisorPatrol(this, this.filters)
 
             this.items = results?.tableItems
             this.reportItems = results?.reportItems
@@ -148,6 +152,15 @@ export default {
                 allLabel: this.$t('str.table.pagination.all.label'),
             }
         },
+        updateRangeDate: function (start, end) {
+            const startDate = moment(start).utc(true).subtract(0, 'days')
+            const endDate = moment(end).utc(true)
+
+            this.dateRange.range = {
+                startDate: startDate,
+                endDate: endDate,
+            }
+        },
         clearFilters: async function () {
             this.errors = []
             this.isLoading = false
@@ -165,10 +178,11 @@ export default {
             this.filters.account = Common.getAccountId(this)
         },
         initRangeDate: async function () {
-            const startDate = moment().subtract(0, 'days')
-            const endDate = moment()
-            const prevStartDate = moment().subtract(15, 'days').format('D MMMM YYYY')
-            const prevEndDate = moment().subtract(8, 'days').format('D MMMM YYYY')
+            const startDate = moment().utc(true).subtract(0, 'days')
+            const endDate = moment().utc(true)
+            const today = moment().utc(true)
+            const yesterday = moment().utc(true).subtract(1, 'days')
+            const thisMonthStart = moment().utc(true).startOf('month')
 
             this.dateRange = {
                 opens: 'right',
@@ -176,15 +190,15 @@ export default {
                 timePicker: false,
                 timePicker24Hour: false,
                 showWeekNumbers: false,
-                showDropdowns: false,
-                autoApply: false,
-                linkedCalendars: false,
+                showDropdowns: true,
+                autoApply: true,
+                linkedCalendars: true,
+                closeOnEsc: true,
                 range: {
                     startDate: startDate,
                     endDate: endDate,
-                    prevStartDate: prevStartDate,
-                    prevEndDate: prevEndDate,
                 },
+                maxDate: moment().utc(true).format(),
                 sampleLocaleData: {
                     direction: 'ltr',
                     format: 'dd/mm/yyyy',
@@ -192,6 +206,13 @@ export default {
                     applyLabel: this.$t('str.apply'),
                     cancelLabel: this.$t('str.cancel'),
                     weekLabel: 'W',
+                    ranges: {
+                        [this.$t('str.today')]: [today, today],
+                        [this.$t('str.yesterday')]: [yesterday, yesterday],
+                        [this.$t('str.this_month')]: [thisMonthStart, today], // alterado para hoje
+                        [this.$t('str.this_year')]: [moment().utc(true).startOf('year'), today], // alterado para hoje
+                        [this.$t('str.last_month')]: [moment().utc(true).subtract(1, 'month').startOf('month'), moment().utc(true).subtract(1, 'month').endOf('month')],
+                    },
                     daysOfWeek: [
                         this.$t('str.abbreviation.sunday'),
                         this.$t('str.abbreviation.monday'),

@@ -88,6 +88,7 @@ export default {
         return {
             isLoading: false,
             dateRange: {},
+            role: '',
             filters: {
                 account: '',
                 client: '',

@@ -5,23 +5,35 @@ import Common from '../../../common/Common.vue'
 import Services from '../../../common/Services.vue'
 export default {
     init: async payload => {
+        const role = await Common.getSubtype(payload)
+        payload.role = role
+
+        payload.initTable()
+
         payload.isSuperAdminMaster = await Common.isSuperAdminMaster(payload)
-        payload.accounts = await Services.getAccounts(payload)
-        const account = await Common.getAccountId(payload)
 
         if (!payload.isSuperAdminMaster) {
             payload.columns.splice(2, 1)
         }
+
+        if (role === 'AUDITOR') {
+            payload.columns.splice(2, 1)
+        }
+
+        payload.accounts = await Services.getAccounts(payload)
+        const account = await Common.getAccountId(payload)
 
         payload.filters.account = account
         if (account) {
             payload.clients = await Services.getClients(payload)
         }
 
-        const role = await Common.getSubtype(payload)
-        payload.role = role
+        if (role === 'MANAGER' || role === 'OPERATOR' || role === 'AUDITOR') {
+            const client = await Common.getClientId(payload)
+            payload.filters.client = client
+            payload.sites = await Services.getSites(payload)
+        }
 
-        payload.initTable()
         payload.filter()
     },
     methods: {

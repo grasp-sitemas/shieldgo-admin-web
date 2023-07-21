@@ -6,6 +6,9 @@ import Services from '../../../common/Services.vue'
 
 export default {
     init: async payload => {
+        const role = await Common.getSubtype(payload)
+        payload.role = role
+
         payload.isSuperAdminMaster = await Common.isSuperAdminMaster(payload)
         payload.accounts = await Services.getAccounts(payload)
         const account = await Common.getAccountId(payload)
@@ -14,9 +17,6 @@ export default {
         if (account) {
             payload.clients = await Services.getClients(payload)
         }
-
-        const role = await Common.getSubtype(payload)
-        payload.role = role
 
         payload.initTable()
         payload.filter()
@@ -167,6 +167,10 @@ export default {
 
             //remove account column if not super admin
             if (!this.isSuperAdminMaster) {
+                this.columns.splice(1, 1)
+            }
+
+            if (this.role === 'AUDITOR') {
                 this.columns.splice(1, 1)
             }
         },

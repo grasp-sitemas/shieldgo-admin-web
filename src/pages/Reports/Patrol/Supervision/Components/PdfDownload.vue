@@ -10,6 +10,7 @@
 <script>
 import moment from 'moment'
 import jsPDF from 'jspdf'
+// import { font } from '../../../../../assets/fonts/font'
 export default {
     props: {
         jsonData: {
@@ -76,9 +77,14 @@ export default {
     methods: {
         async downloadPDF() {
             this.isLoading = true
+
             let items = this.data
 
             var doc = new jsPDF({ orientation: 'p', unit: 'mm', format: 'a4' })
+
+            // doc.addFileToVFS('arial-unicode-ms-normal.ttf', font)
+            // doc.addFont('arial-unicode-ms-normal.ttf', 'arial-unicode-ms', 'normal')
+            // doc.setFont('arial-unicode-ms')
 
             let headers = createHeaders(this.headers)
 
@@ -112,42 +118,41 @@ export default {
             }
 
             try {
-                doc.setFont('Arial')
+                doc.setFont('Arial', 'bold')
                 doc.setFontSize(14)
-
                 doc.setTextColor(0, 0, 0)
+
                 let y = 20
                 doc.text(this.jsonTitle.toUpperCase(), 15, y)
                 y += 10
 
                 doc.setFontSize(12)
+                doc.setFont('arial', 'normal')
                 doc.text(this.$t('str.generated.on') + ': ' + moment().utc(true).format('DD/MM/YYYY HH:mm:ss'), 15, y)
-                y += 10
+                y += 5
 
                 const account = this.jsonInfo.account
                 const address = this.jsonInfo.accountAddress
-                doc.text(account, 15, y)
-                y += 10
 
+                doc.setFont('arial', 'bold')
+                doc.text(account?.toUpperCase(), 15, y)
+                y += 5
+                doc.setFont('arial', 'normal')
                 doc.text(address?.address + ', ' + address?.number + ', ' + address?.neighborhood + ', ' + address?.cep + ', ' + address?.city + ', ' + address?.state, 15, y)
                 y += 10
 
-                doc.text(`Total de visitas: ${this.totalVisits}`, 15, y)
-                y += 10
+                doc.text(`${this.$t('str.supervisor')}: ${this.supervisor}`, 15, y) // supervisor
+                doc.text(`${this.$t('str.total.visits')}: ${this.totalVisits}/${items.length}`, 110, y) // total visits
 
-                doc.text(`Supervisor: ${this.supervisor}`, 15, y)
-                y += 10
+                y += 5
 
-                doc.text(`Periodo: ${this.periodStart} - ${this.periodEnd}`, 15, y)
-                y += 10
+                doc.text(`${this.$t('str.period')}: ${this.periodStart} - ${this.periodEnd}`, 15, y)
+                y += 5
 
-                doc.text(`Visitas no periodo: ${this.totalVisits}`, 15, y)
                 y += 10
-
-                doc.setFontSize(8)
 
                 let data = await generateData(items, this)
-                doc.table(5, y, data, headers, { autoSize: true, fontSize: 6, printHeaders: true, margin: { top: 0, left: 0, right: 0, bottom: 0 } })
+                doc.table(15, y, data, headers, { autoSize: true, fontSize: 8, fontFamily: 'arial-unicode-ms', printHeaders: true, margin: { top: 0, left: 0, right: 0, bottom: 0 } })
 
                 y += 10
 

@@ -5,7 +5,7 @@ export const JSON_FIELDS_CSV = {
         pt: {
             json_fields: {
                 Status: 'read',
-                'Ponto de checagem': 'name',
+                Local: 'name',
             },
             json_data: [
                 {

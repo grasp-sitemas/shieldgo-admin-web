@@ -69,6 +69,21 @@ const sidebarMenu = [
         topMenu: false,
         children: [
             {
+                path: '/reports/sos-alert',
+                title: 'str.sidebar.menu.reports.sos.alert',
+                roles: [ROLES.SUPER_ADMIN_MASTER, ROLES.ADMIN, ROLES.MANAGER, ROLES.AUDITOR],
+            },
+            {
+                path: '/reports/missing-call',
+                title: 'str.sidebar.menu.reports.missed.calls',
+                roles: [ROLES.SUPER_ADMIN_MASTER, ROLES.ADMIN, ROLES.MANAGER, ROLES.AUDITOR],
+            },
+            {
+                path: '/reports/incident',
+                title: 'str.sidebar.menu.reports.incidents',
+                roles: [ROLES.SUPER_ADMIN_MASTER, ROLES.ADMIN, ROLES.MANAGER, ROLES.AUDITOR],
+            },
+            {
                 path: '/reports/patrols/completed',
                 title: 'str.sidebar.menu.reports.completed.patrols',
                 roles: [ROLES.SUPER_ADMIN_MASTER, ROLES.ADMIN, ROLES.MANAGER, ROLES.AUDITOR],
@@ -84,31 +99,17 @@ const sidebarMenu = [
                 title: 'str.sidebar.menu.reports.patrols.not-visited',
                 roles: [ROLES.SUPER_ADMIN_MASTER, ROLES.ADMIN, ROLES.MANAGER, ROLES.AUDITOR],
             },
-            {
-                path: '/reports/missing-call',
-                title: 'str.sidebar.menu.reports.missed.calls',
-                roles: [ROLES.SUPER_ADMIN_MASTER, ROLES.ADMIN, ROLES.MANAGER, ROLES.AUDITOR],
-            },
-            {
-                path: '/reports/sos-alert',
-                title: 'str.sidebar.menu.reports.sos.alert',
-                roles: [ROLES.SUPER_ADMIN_MASTER, ROLES.ADMIN, ROLES.MANAGER, ROLES.AUDITOR],
-            },
-            {
-                path: '/reports/incident',
-                title: 'str.sidebar.menu.reports.incidents',
-                roles: [ROLES.SUPER_ADMIN_MASTER, ROLES.ADMIN, ROLES.MANAGER, ROLES.AUDITOR],
-            },
+
             {
                 path: '/reports/supervision-patrol',
                 title: 'str.sidebar.menu.reports.supervision.patrol',
                 roles: [ROLES.SUPER_ADMIN_MASTER, ROLES.ADMIN],
             },
-            {
-                path: '/reports/patrol-points',
-                title: 'str.sidebar.menu.reports.patrol.points',
-                roles: [ROLES.SUPER_ADMIN_MASTER, ROLES.ADMIN],
-            },
+            // {
+            //     path: '/reports/patrol-points',
+            //     title: 'str.sidebar.menu.reports.patrol.points',
+            //     roles: [ROLES.SUPER_ADMIN_MASTER, ROLES.ADMIN],
+            // },
         ],
     },
 ]

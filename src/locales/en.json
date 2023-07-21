@@ -1200,5 +1200,7 @@
     "str.table.reports.column.patrol.point": "Check point",
     "str.table.reports.column.status": "Status",
     "str.not.visited": "Not visited",
-    "str.visited": "Visited"
+    "str.visited": "Visited",
+    "str.supervisor": "Supervisor",
+    "str.total.visits": "Total visits"
 }       

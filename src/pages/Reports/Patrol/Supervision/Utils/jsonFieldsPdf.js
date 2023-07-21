@@ -6,7 +6,7 @@ export const PDF_HEADER = {
         },
         {
             _id: 'name',
-            name: 'Ponto de checagem',
+            name: 'Local',
         },
     ],
     en: [

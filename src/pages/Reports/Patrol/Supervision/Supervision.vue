@@ -86,8 +86,34 @@
 
             <div class="row">
                 <div class="col-md-12 mb-3 d-inline-flex">
-                    <CsvDownload class="me-2" v-show="items?.length > 0" :jsonFields="jsonFields" :jsonData="items" :jsonMeta="jsonMeta" :filename="filename" :jsonTitle="jsonTitle" />
-                    <XlsDownload class="me-2" v-show="items?.length > 0" :jsonFields="jsonFields" :jsonData="items" :jsonMeta="jsonMeta" :filename="filename" :jsonTitle="jsonTitle" />
+                    <CsvDownload
+                        class="me-2"
+                        v-show="items?.length > 0"
+                        :jsonFields="jsonFields"
+                        :jsonData="items"
+                        :jsonMeta="jsonMeta"
+                        :filename="filename"
+                        :jsonTitle="jsonTitle"
+                        :period-end="moment(filters.endDate).format('DD/MM/YYYY')"
+                        :period-start="moment(filters.startDate).format('DD/MM/YYYY')"
+                        :supervisor="jsonInfo?.vigilant"
+                        :totalVisits="totalVisits"
+                        :jsonInfo="jsonInfo"
+                    />
+                    <XlsDownload
+                        class="me-2"
+                        v-show="items?.length > 0"
+                        :jsonFields="jsonFields"
+                        :jsonData="items"
+                        :jsonMeta="jsonMeta"
+                        :period-end="moment(filters.endDate).format('DD/MM/YYYY')"
+                        :period-start="moment(filters.startDate).format('DD/MM/YYYY')"
+                        :filename="filename"
+                        :jsonTitle="jsonTitle"
+                        :supervisor="jsonInfo?.vigilant"
+                        :totalVisits="totalVisits"
+                        :jsonInfo="jsonInfo"
+                    />
                     <PdfDownload
                         v-show="items?.length > 0"
                         :pdfHeader="pdfHeader"
@@ -95,7 +121,7 @@
                         :period-start="moment(filters.startDate).format('DD/MM/YYYY')"
                         :jsonData="reportItems"
                         :supervisor="jsonInfo?.vigilant"
-                        :totalVisits="reportItems?.length"
+                        :totalVisits="totalVisits"
                         :filename="filename"
                         :jsonInfo="jsonInfo"
                         :jsonTitle="jsonTitle"
@@ -161,6 +187,7 @@ export default {
             items: [],
             reportItems: [],
             paginationOptions: {},
+            totalVisits: 0,
             fields: [],
             isLoading: true,
             isSearchLoading: false,

@@ -50,6 +50,9 @@ export default {
                 vigilant: results?.vigilant,
             }
 
+            //pegar o total de pontos de patrulha que foram visitados. todos os pontos visitados sao os que o read for true
+            this.totalVisits = this.items.filter(item => item.read === true).length
+
             this.isSearchLoading = false
         },
         async initTable() {

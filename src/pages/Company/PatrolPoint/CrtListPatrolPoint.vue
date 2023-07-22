@@ -151,7 +151,7 @@ export default {
                 mode: 'records',
                 perPage: 10,
                 position: 'bottom',
-                perPageDropdown: [10, 20, 50, 100],
+                perPageDropdown: [10, 20, 50, 100, 1000, 10000],
                 dropdownAllowAll: false,
                 setCurrentPage: 1,
                 jumpFirstOrLast: true,

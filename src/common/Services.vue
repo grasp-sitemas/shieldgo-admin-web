@@ -189,6 +189,14 @@ export default {
 
         return []
     },
+    getPatrolPoints: async function (state, filter) {
+        if (filter) {
+            const response = await Request.do(state, 'POST', Request.getDefaultHeader(state), filter, `${Endpoints.patrolPoints.filter}`)
+            return response?.data?.results || []
+        }
+
+        return []
+    },
     getPatrolPointsBySite: async function (state, site) {
         if (site) {
             const filters = {
@@ -482,8 +490,17 @@ export default {
                 }
             })
 
-            // Juntando todos os patrolPoints em um único array
             const allPatrolPoints = [].concat(...formattedResults.map(result => result.patrolPoints))
+
+            allPatrolPoints.sort((a, b) => {
+                if (a.read === false) {
+                    return -1
+                }
+                if (b.read === false) {
+                    return 1
+                }
+                return 0
+            })
 
             const finalResult = {
                 account: formattedResults[0].account,
@@ -493,8 +510,6 @@ export default {
                 vigilant: formattedResults[0].vigilant,
                 patrolPoints: allPatrolPoints,
             }
-
-            console.log(finalResult)
 
             return finalResult
         }

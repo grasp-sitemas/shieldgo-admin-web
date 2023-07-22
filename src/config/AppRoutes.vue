@@ -31,6 +31,8 @@ import sosAlert from '../pages/Reports/PanicAlert/PanicAlert.vue'
 import IncidentReport from '../pages/Reports/Incident/Incident.vue'
 import MisssingCallReport from '../pages/Reports/Event/MissedCall/MissedCall.vue'
 import SupervisionPatrolReport from '../pages/Reports/Patrol/Supervision/Supervision.vue'
+import PatrolPointsReport from '../pages/Reports/PatrolPoints/PatrolPoints.vue'
+
 Vue.use(VueSession)
 
 const session = Vue.prototype.$session
@@ -302,14 +304,14 @@ const routes = [
             next(checkSession())
         },
     },
-    // {
-    //     path: '/reports/patrol-points',
-    //     name: 'patrol-points',
-    //     component: MisssingCallReport,
-    //     beforeEnter: (_to, _from, next) => {
-    //         next(checkSession())
-    //     },
-    // },
+    {
+        path: '/reports/patrol-points',
+        name: 'patrol-points',
+        component: PatrolPointsReport,
+        beforeEnter: (_to, _from, next) => {
+            next(checkSession())
+        },
+    },
 ]
 
 export default routes

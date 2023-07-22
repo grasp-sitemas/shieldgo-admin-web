@@ -1202,5 +1202,9 @@
     "str.not.visited": "Not visited",
     "str.visited": "Visited",
     "str.supervisor": "Supervisor",
-    "str.total.visits": "Total visits"
+    "str.total.visits": "Total visits",
+    "str.menu.reports.patrol.points": "Patrol points",
+    "str.table.reports.column.code": "ID",
+    "str.table.reports.column.name" : "Name",
+    "str.supervision.area": "Area de supervisão"
 }       

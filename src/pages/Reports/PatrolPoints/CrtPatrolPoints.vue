@@ -1,6 +1,6 @@
 <script>
-import Common from '../../../../common/Common.vue'
-import Services from '../../../../common/Services.vue'
+import Common from '../../../common/Common.vue'
+import Services from '../../../common/Services.vue'
 import moment from 'moment'
 
 export default {
@@ -22,47 +22,42 @@ export default {
                 payload.sites = await Services.getSites(payload)
             }
 
-            payload.jsonFields = payload.JSON_FIELDS_CSV.supervizionPatrol[payload.$i18n.locale].json_fields
-            payload.jsonData = [payload.JSON_FIELDS_CSV.supervizionPatrol[payload.$i18n.locale].json_data]
-            payload.jsonMeta = [payload.JSON_FIELDS_CSV.supervizionPatrol[payload.$i18n.locale].json_meta]
-            payload.filename = payload.JSON_FIELDS_CSV.supervizionPatrol[payload.$i18n.locale].filename
-            payload.jsonTitle = payload.JSON_FIELDS_CSV.supervizionPatrol[payload.$i18n.locale].title
+            payload.jsonFields = payload.JSON_FIELDS_CSV.patrolPoint[payload.$i18n.locale].json_fields
+            payload.jsonData = [payload.JSON_FIELDS_CSV.patrolPoint[payload.$i18n.locale].json_data]
+            payload.jsonMeta = [payload.JSON_FIELDS_CSV.patrolPoint[payload.$i18n.locale].json_meta]
+            payload.filename = payload.JSON_FIELDS_CSV.patrolPoint[payload.$i18n.locale].filename
+            payload.jsonTitle = payload.JSON_FIELDS_CSV.patrolPoint[payload.$i18n.locale].title
             payload.pdfHeader = payload.PDF_HEADER[payload.$i18n.locale]
 
             payload.role = role
             payload.isLoading = false
-        }, 1000)
+        }, 700)
     },
     methods: {
         async filter() {
             this.isSearchLoading = true
             this.items = []
 
-            const results = await Services.SupervisorPatrol(this, this.filters)
-            const patrolPoints = results?.patrolPoints
+            const results = await Services.getPatrolPoints(this, this.filters)
 
-            if (patrolPoints && patrolPoints.length > 0) {
-                this.jsonInfo = {
-                    account: results?.account,
-                    accountAddress: results?.accountAddress,
-                    client: results?.client,
-                    site: results?.site,
-                    vigilant: results?.vigilant,
+            const patrolPoints = results.map(item => {
+                return {
+                    _id: item?._id,
+                    patrolPointCode: item?.patrolPointCode,
+                    name: item?.name,
                 }
+            })
 
-                this.items = patrolPoints
-                this.reportItems = patrolPoints
-
-                this.totalVisits = patrolPoints.filter(item => item.read === true).length
-            }
+            this.items = patrolPoints
+            this.reportItems = patrolPoints
 
             this.isSearchLoading = false
         },
         async initTable() {
             this.columns = [
                 {
-                    label: this.$t('str.table.reports.column.status'),
-                    field: 'read',
+                    label: this.$t('str.table.reports.column.code'),
+                    field: 'patrolPointCode',
                     width: '15%',
                     sortable: true,
                     firstSortType: 'desc',
@@ -70,7 +65,7 @@ export default {
                     tdClass: 'text-nowrap',
                 },
                 {
-                    label: this.$t('str.table.reports.column.patrol.point'),
+                    label: this.$t('str.table.reports.column.name'),
                     field: 'name',
                     width: '85%',
                     sortable: true,
@@ -78,30 +73,6 @@ export default {
                     thClass: 'text-nowrap',
                     tdClass: 'text-nowrap',
                 },
-                // {
-                //     label: this.$t('str.table.reports.column.account'),
-                //     field: 'account',
-                //     width: '15%',
-                //     sortable: true,
-                //     thClass: 'text-nowrap',
-                //     tdClass: 'text-nowrap',
-                // },
-                // {
-                //     label: this.$t('str.table.reports.column.client'),
-                //     field: 'client',
-                //     width: '15%',
-                //     sortable: true,
-                //     thClass: 'text-nowrap',
-                //     tdClass: 'text-nowrap',
-                // },
-                // {
-                //     label: this.$t('str.table.reports.column.site'),
-                //     field: 'site',
-                //     width: '15%',
-                //     sortable: true,
-                //     thClass: 'text-nowrap',
-                //     tdClass: 'text-nowrap',
-                // },
             ]
 
             this.paginationOptions = {
@@ -139,10 +110,7 @@ export default {
                 account: '',
                 client: '',
                 site: '',
-                vigilant: '',
-                startDate: moment().utc(true),
-                endDate: moment().utc(true),
-                report: 'SUPERVISION_PATROL',
+                status: 'ACTIVE',
             }
             this.items = []
             this.initRangeDate()

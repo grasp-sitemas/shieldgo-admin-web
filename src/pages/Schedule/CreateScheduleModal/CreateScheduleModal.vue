@@ -2,7 +2,9 @@
     <b-modal no-close-on-backdrop id="createScheduleModal" @hide="closeModal" :hide-footer="true" size="lg" class="modal-message">
         <template slot="modal-header">
             <h4 class="modal-title">{{ data?._id ? $t('str.modal.schedule.title.information') : $t('str.modal.create.schedule.title.create') }}</h4>
-            <span v-if="data?.status === 'ARCHIVED'" class="badge bg-danger rounded-5 cursor_pointer f-right">{{ $t('str.modal.schedule.status.archived') }}</span>
+            <span v-if="data?.status === 'ARCHIVED'" class="m-2 badge bg-danger rounded-5 cursor_pointer f-right"
+                ><a>{{ $t('str.modal.schedule.status.archived') }}</a></span
+            >
             <a class="btn-close cursor_pointer" @click="$bvModal.hide('createScheduleModal')"></a>
         </template>
         <div v-if="!isLoading">

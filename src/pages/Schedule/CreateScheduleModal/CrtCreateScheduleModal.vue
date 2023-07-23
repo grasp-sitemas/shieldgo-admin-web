@@ -5,6 +5,7 @@ import Endpoints from '../../../common/Endpoints.vue'
 import Request from '../../../common/Request.vue'
 import moment from 'moment'
 import Vue from 'vue'
+
 Vue.prototype.$registerEvent = new Vue()
 
 export default {
@@ -200,10 +201,14 @@ export default {
         cancelAppointmentSeries: async function () {
             const filters = {
                 schedule: this.data._id,
+                startDate: this?.appointment?.startDate ? this.appointment.startDate : '',
             }
+
             await Services.cancelAppointmentSeries(this, filters)
-            this.isLoading = false
+
             this.$registerEvent.$emit('cancelAppointment')
+
+            this.isLoading = false
         },
         cancelAppointmentOccurrence: async function () {
             const filters = {
@@ -280,6 +285,7 @@ export default {
             }
 
             this.siteList = []
+            this.isPastDate = false
 
             this.$bvModal.hide('createScheduleModal')
         },
@@ -314,6 +320,7 @@ export default {
 
             this.patrolPoints = []
             this.vigilants = []
+            this.isPastDate = false
 
             this.data = this.scheduleObj
 
@@ -413,6 +420,9 @@ export default {
                 this.data.account = this.data?.account?._id
                 this.data.client = this.data?.client?._id
                 this.data.site = this.data?.site?._id
+                this.appointment = this.data?.appointment
+
+                this.isPastDate = moment(this.appointment?.startDate).utc(false).isBefore(moment().utc(true).startOf('day'))
 
                 if (Common.isSuperAdminMaster(this)) {
                     this.accountList = await Services.getAccounts(this)

@@ -43,6 +43,7 @@
     "leaflet-draw": "^1.0.4",
     "moment": "^2.29.4",
     "node-sass": "^8.0.0",
+    "qrcode": "^1.5.3",
     "qrcode.vue": "^1.7.0",
     "simple-line-icons": "^2.5.5",
     "v-autocomplete": "^1.8.2",

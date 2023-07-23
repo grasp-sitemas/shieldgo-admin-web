@@ -1198,5 +1198,8 @@
     "str.total.visits": "Visitas no período",
     "str.menu.reports.patrol.points": "Pontos de ronda",
     "str.table.reports.column.code": "ID",
-    "str.table.reports.column.name" : "Nome"
+    "str.table.reports.column.name" : "Nome",
+    "str.table.reports.column.scan.date":"Data",
+    "response.startDate.invalid": "Não é permitido deletar um evento passado",
+    "str.modal.schedule.status.archived": "Arquivado"
 }

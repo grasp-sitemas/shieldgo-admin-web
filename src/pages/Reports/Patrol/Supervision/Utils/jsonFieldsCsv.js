@@ -5,11 +5,13 @@ export const JSON_FIELDS_CSV = {
         pt: {
             json_fields: {
                 Status: 'read',
+                Data: 'scanDate',
                 Local: 'name',
             },
             json_data: [
                 {
                     read: '',
+                    scanDate: '',
                     name: '',
                 },
             ],
@@ -27,11 +29,13 @@ export const JSON_FIELDS_CSV = {
         en: {
             json_fields: {
                 Status: 'read',
+                'Scan date': 'scanDate',
                 'Patrol point': 'name',
             },
             json_data: [
                 {
                     read: '',
+                    scanDate: '',
                     name: '',
                 },
             ],

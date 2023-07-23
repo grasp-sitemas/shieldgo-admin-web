@@ -106,7 +106,7 @@
                         :pdfHeader="pdfHeader"
                         :period-end="moment(filters.endDate).format('DD/MM/YYYY')"
                         :period-start="moment(filters.startDate).format('DD/MM/YYYY')"
-                        :jsonData="reportItems"
+                        :jsonData="items"
                         :supervisor="jsonInfo?.vigilant"
                         :totalVisits="totalVisits"
                         :filename="filename"
@@ -123,6 +123,11 @@
                 :search-options="{ enabled: false, placeholder: $t('str.table.search.in.this.table') }"
                 :pagination-options="paginationOptions"
                 @on-row-click="selectItem"
+                @on-sort-change="onSortChange"
+                :sort-options="{
+                    enabled: true,
+                    initialSortBy: { field: 'read', type: 'desc' },
+                }"
             >
                 <div slot="emptystate" class="vgt-center-align vgt-text-disabled">
                     <i v-if="isLoading" class="fas fa-spinner fa-spin" />
@@ -172,7 +177,6 @@ export default {
             vigilants: [],
             errors: [],
             items: [],
-            reportItems: [],
             paginationOptions: {},
             totalVisits: 0,
             fields: [],

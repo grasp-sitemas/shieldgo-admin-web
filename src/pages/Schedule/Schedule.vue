@@ -69,7 +69,6 @@ export default {
                 account: '',
                 client: '',
                 site: '',
-                status: 'ACTIVE',
                 startDate: moment().startOf('month').utc(true).format(),
                 endDate: moment().endOf('month').utc(true).format(),
                 isSortByStartDate: true,

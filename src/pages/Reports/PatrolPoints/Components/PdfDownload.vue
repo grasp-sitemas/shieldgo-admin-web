@@ -8,8 +8,8 @@
 </template>
 
 <script>
-import moment from 'moment'
 import jsPDF from 'jspdf'
+import QRCode from 'qrcode'
 export default {
     props: {
         jsonData: {
@@ -58,57 +58,58 @@ export default {
             this.isLoading = true
 
             let items = this.data
-
             var doc = new jsPDF({ orientation: 'p', unit: 'mm', format: 'a4' })
-
-            let headers = createHeaders(this.headers)
 
             function generateData(items) {
                 const results = []
-
-                items.forEach(item => {
+                for (let i = 0; i < items.length; i++) {
                     const newItem = {
-                        _id: item._id,
-                        patrolPointCode: item.patrolPointCode,
-                        name: item.name,
+                        _id: items[i]._id ? String(items[i]._id) : '',
+                        patrolPointCode: items[i].patrolPointCode ? String(items[i].patrolPointCode) : '',
+                        name: items[i].name ? String(items[i].name) : '',
                     }
 
                     results.push(newItem)
-                })
+                }
                 return results
             }
 
-            function createHeaders(keys) {
-                const result = []
-                for (let i = 0; i < keys?.length; i += 1) {
-                    result.push({
-                        id: keys[i]._id,
-                        name: keys[i]._id,
-                        prompt: keys[i].name,
-                        width: 45,
-                        align: 'left',
-                        padding: 0,
-                    })
-                }
-                return result
-            }
-
             try {
-                let y = 10
-
-                doc.setFontSize(12)
-                doc.setFont('arial', 'normal')
-                doc.text(this.$t('str.generated.on') + ': ' + moment().utc(true).format('DD/MM/YYYY HH:mm:ss'), 15, y)
-                y += 5
+                let x = 10 // posição inicial do x
+                let y = 20 // posição inicial do y
 
                 let data = await generateData(items, this)
-                doc.table(15, y, data, headers, { autoSize: true, fontSize: 8, fontFamily: 'arial-unicode-ms', printHeaders: true, margin: { top: 0, left: 0, right: 0, bottom: 0 } })
+
+                for (let i = 0; i < data.length; i++) {
+                    if (i !== 0 && i % 30 === 0) {
+                        // Agora verifica se são 25 QRCodes para uma nova página
+                        doc.addPage()
+                        y = 20
+                        x = 10
+                    }
+
+                    // se passar de 5 QRCodes, resetar x e incrementar y
+                    if (i !== 0 && i % 5 === 0) {
+                        x = 10
+                        y += 40 // Adicione espaço suficiente para o QRCode maior e o texto
+                    }
+
+                    doc.text(data[i].patrolPointCode, x + 7, y + 1) // Adicione o texto abaixo do QRCode
+
+                    // Generate QR Code
+                    const qrImageData = await QRCode.toDataURL(data[i]._id, { errorCorrectionLevel: 'H' })
+                    const qrImage = qrImageData.replace('data:image/png;base64,', '')
+                    doc.addImage(qrImage, 'PNG', x, y + 1, 36, 36) // Aumentar o tamanho do QRCode
+
+                    x += 37 // Incrementar x para a próxima coluna
+                }
 
                 this.isLoading = false
 
                 return new Promise(resolve => {
-                    const pdfData = doc.output('blob')
-                    resolve(pdfData)
+                    const pdfArrayBuffer = doc.output('arraybuffer')
+                    const pdfBlob = new Blob([pdfArrayBuffer], { type: 'application/pdf' })
+                    resolve(pdfBlob)
                 })
             } catch (error) {
                 this.isLoading = false

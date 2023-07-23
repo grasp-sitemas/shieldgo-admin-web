@@ -2,6 +2,7 @@
     <b-modal no-close-on-backdrop id="createScheduleModal" @hide="closeModal" :hide-footer="true" size="lg" class="modal-message">
         <template slot="modal-header">
             <h4 class="modal-title">{{ data?._id ? $t('str.modal.schedule.title.information') : $t('str.modal.create.schedule.title.create') }}</h4>
+            <span v-if="data?.status === 'ARCHIVED'" class="badge bg-danger rounded-5 cursor_pointer f-right">{{ $t('str.modal.schedule.status.archived') }}</span>
             <a class="btn-close cursor_pointer" @click="$bvModal.hide('createScheduleModal')"></a>
         </template>
         <div v-if="!isLoading">
@@ -337,7 +338,7 @@
                             <i v-if="isSaveLoading === true" class="fas fa-spinner fa-pulse"></i>
                             {{ $t('str.btn.save') }}
                         </button>
-                        <button v-if="data._id && data.status === 'ACTIVE'" v-on:click="confirmArchive" type="submit" class="ms-10px btn btn-warning w-200px">
+                        <button v-if="data._id && !isPastDate" v-on:click="confirmArchive" type="submit" class="ms-10px btn btn-warning w-200px">
                             {{ $t('str.btn.delete') }}
                         </button>
                         <button @click="closeModal()" type="submit" class="ms-10px btn btn-secondary w-200px">
@@ -417,6 +418,8 @@ export default {
         return {
             isLoading: false,
             isSaveLoading: false,
+            isPastDate: false,
+            appointment: {},
             errors: [],
             accountList: [],
             clientList: [],

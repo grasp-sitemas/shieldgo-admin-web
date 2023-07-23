@@ -1206,5 +1206,8 @@
     "str.menu.reports.patrol.points": "Patrol points",
     "str.table.reports.column.code": "ID",
     "str.table.reports.column.name" : "Name",
-    "str.supervision.area": "Area de supervisão"
+    "str.supervision.area": "Area de supervisão",
+    "str.table.reports.column.scan.date":"Scan date",
+    "response.startDate.invalid": "It is not allowed to delete a past event",
+    "str.modal.schedule.status.archived": "Archived"
 }       

@@ -41,6 +41,8 @@ export default {
             const results = await Services.SupervisorPatrol(this, this.filters)
             const patrolPoints = results?.patrolPoints
 
+            console.log('patrolPoints', patrolPoints)
+
             if (patrolPoints && patrolPoints.length > 0) {
                 this.jsonInfo = {
                     account: results?.account,
@@ -51,12 +53,42 @@ export default {
                 }
 
                 this.items = patrolPoints
-                this.reportItems = patrolPoints
 
                 this.totalVisits = patrolPoints.filter(item => item.read === true).length
             }
 
             this.isSearchLoading = false
+        },
+        onSortChange(params) {
+            const sortOptions = params && params?.length > 0 && params[0]
+
+            if (sortOptions) {
+                const sortField = sortOptions.field
+                const sortOrder = sortOptions.type
+
+                this.items.sort((a, b) => {
+                    const valueA = a[sortField]
+                    const valueB = b[sortField]
+
+                    if (sortOrder === 'asc') {
+                        if (valueA < valueB) {
+                            return -1
+                        }
+                        if (valueA > valueB) {
+                            return 1
+                        }
+                        return 0
+                    } else {
+                        if (valueA > valueB) {
+                            return -1
+                        }
+                        if (valueA < valueB) {
+                            return 1
+                        }
+                        return 0
+                    }
+                })
+            }
         },
         async initTable() {
             this.columns = [
@@ -70,9 +102,17 @@ export default {
                     tdClass: 'text-nowrap',
                 },
                 {
+                    label: this.$t('str.table.reports.column.scan.date'),
+                    field: 'scanDate',
+                    width: '10%',
+                    sortable: true,
+                    tdClass: 'text-nowrap',
+                    thClass: 'text-nowrap',
+                },
+                {
                     label: this.$t('str.table.reports.column.patrol.point'),
                     field: 'name',
-                    width: '85%',
+                    width: '75%',
                     sortable: true,
                     firstSortType: 'desc',
                     thClass: 'text-nowrap',

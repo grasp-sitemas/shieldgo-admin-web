@@ -122,7 +122,6 @@ export default {
                 client: appointment?.client?._id,
                 site: appointment?.site?._id,
                 schedule: appointment?.schedule,
-                status: 'ACTIVE',
             }
 
             const selectedAppointment = await Services.getScheduleById(this, filters)

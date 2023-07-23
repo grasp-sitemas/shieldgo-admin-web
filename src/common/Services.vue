@@ -232,8 +232,17 @@ export default {
         return response?.data?.results[0] || []
     },
     cancelAppointmentSeries: async function (state, filters) {
-        const response = await Request.do(state, 'POST', Request.getDefaultHeader(state), filters, `${Endpoints.appointments.cancelSeries}`)
-        return response?.data?.deleteSchedule || null
+        try {
+            const response = await Request.do(state, 'POST', Request.getDefaultHeader(state), filters, `${Endpoints.appointments.cancelSeries}`)
+            if (response.status === 200) {
+                return true
+            }
+
+            return null
+        } catch (error) {
+            console.log('error', error)
+            return null
+        }
     },
     cancelAppointmentOccurrence: async function (state, filters) {
         const response = await Request.do(state, 'POST', Request.getDefaultHeader(state), filters, `${Endpoints.appointments.cancelOccurrence}`)

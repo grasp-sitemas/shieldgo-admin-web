@@ -1209,5 +1209,8 @@
     "str.supervision.area": "Area de supervisão",
     "str.table.reports.column.scan.date":"Scan date",
     "response.startDate.invalid": "It is not allowed to delete a past event",
-    "str.modal.schedule.status.archived": "Archived"
+    "str.modal.schedule.status.archived": "Archived",
+    "str.are.you.sure.edit.schedule":"Are you sure you want to edit this schedule?",
+    "str.title.edit.series": "Edit series",
+    "str.title.edit.occurrence": "Edit occurrence"
 }       

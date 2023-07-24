@@ -14,6 +14,7 @@ export default {
         delete: `${domain}/api/company/appointments/delete/v1/`,
         cancelSeries: `${domain}/api/company/appointments/cancel/series/v1/`,
         cancelOccurrence: `${domain}/api/company/appointments/cancel/occurrence/v1/`,
+        update: `${domain}/api/company/appointments/update/v1/`,
     },
     addresses: {
         address: `${domain}/api/address/v1/`,
@@ -109,6 +110,7 @@ export default {
         filter: `${domain}/api/company/schedules/filter/v1/`,
         schedule: `${domain}/api/company/schedules/v1/`,
         delete: `${domain}/api/company/schedules/delete/v1/`,
+        update: `${domain}/api/company/schedules/update/v1/`,
     },
     cep: {
         find: `${viaCepDomain}`,

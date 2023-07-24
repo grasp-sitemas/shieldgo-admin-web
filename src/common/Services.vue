@@ -244,6 +244,32 @@ export default {
             return null
         }
     },
+    updateScheduleSeries: async function (state, body) {
+        try {
+            const response = await Request.do(state, 'POST', Request.getDefaultHeader(state), body, `${Endpoints.schedules.update}`)
+            if (response.status === 200) {
+                return true
+            }
+
+            return null
+        } catch (error) {
+            console.log('error', error)
+            return null
+        }
+    },
+    updateAppointmentOccurence: async function (state, body) {
+        try {
+            const response = await Request.do(state, 'POST', Request.getDefaultHeader(state), body, `${Endpoints.appointments.update}`)
+            if (response.status === 200) {
+                return true
+            }
+
+            return null
+        } catch (error) {
+            console.log('error', error)
+            return null
+        }
+    },
     cancelAppointmentOccurrence: async function (state, filters) {
         const response = await Request.do(state, 'POST', Request.getDefaultHeader(state), filters, `${Endpoints.appointments.cancelOccurrence}`)
         return response?.data?.deleteAppointment || null

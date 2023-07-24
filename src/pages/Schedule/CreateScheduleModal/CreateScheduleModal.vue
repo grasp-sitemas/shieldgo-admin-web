@@ -279,14 +279,13 @@
             <div class="row">
                 <label class="form-label" for="patrolPointsTable">{{ $t('str.register.schedule.patrol.points.table') }}</label>
                 <vue-good-table
-                    ref="table"
                     :columns="columns"
                     :rows="patrolPoints"
                     :search-options="{ enabled: true, placeholder: $t('str.table.search.in.this.table') }"
                     :lineNumbers="true"
-                    :select-options="selectOptions"
                     :pagination-options="paginationOptions"
                     @on-selected-rows-change="selectionChanged"
+                    :select-options="selectOptions"
                 >
                     <div slot="emptystate" class="vgt-center-align vgt-text-disabled">{{ $t('str.table.subtitle.no.data') }}</div>
                     <template slot="table-row" slot-scope="props">
@@ -339,6 +338,9 @@
                         <button v-if="!data._id" @click="checkForm" type="submit" class="btn btn-primary w-200px me-10px is-loading">
                             <i v-if="isSaveLoading === true" class="fas fa-spinner fa-pulse"></i>
                             {{ $t('str.btn.save') }}
+                        </button>
+                        <button v-if="data._id && !isPastDate" v-on:click="confirmEdit" type="submit" class="ms-10px btn btn-primary w-200px">
+                            {{ $t('str.btn.edit') }}
                         </button>
                         <button v-if="data._id && !isPastDate" v-on:click="confirmArchive" type="submit" class="ms-10px btn btn-warning w-200px">
                             {{ $t('str.btn.delete') }}
@@ -398,9 +400,7 @@ export default {
     watch: {
         selectedAppointment: async function () {
             this.data = this?.selectedAppointment
-            if (this.data) {
-                this.selectOptions.enabled = false
-            }
+
             this.initSelectedAppointment()
         },
         selectedDate: function () {
@@ -434,6 +434,7 @@ export default {
             table: null,
             data: schedule,
             scheduleObj: schedule,
+            updateSchedule: false,
             columns: [],
             paginationOptions: {},
             selectOptions: {

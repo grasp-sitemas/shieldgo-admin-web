@@ -58,6 +58,39 @@ export default {
                 this.data.vigilants = []
             }
         },
+        async update() {
+            if (!this.isSaveLoading) {
+                this.isSaveLoading = true
+
+                try {
+                    Request.do(
+                        this,
+                        'post',
+                        Request.getDefaultHeader(this),
+                        this.data,
+                        `${Endpoints.schedules.update}`,
+                        async response => {
+                            if (response.status === 200) {
+                                this.isSaveLoading = false
+                                this.$registerEvent.$emit('refreshSchedule')
+                                await this.closeModal()
+                            }
+                        },
+                        error => {
+                            this.isLoading = false
+                            this.isSaveLoading = false
+                            Common.show(this, 'bottom-right', 'warn', this.data._id ? this.$t('str.form.update.generic.error') : this.$t('str.form.save.generic.error'))
+                            console.log(error)
+                        },
+                    )
+                } catch (error) {
+                    this.isLoading = false
+                    this.isSaveLoading = false
+                    Common.show(this, 'bottom-right', 'warn', this.data._id ? this.$t('str.form.update.generic.error') : this.$t('str.form.save.generic.error'))
+                    console.log(error)
+                }
+            }
+        },
         async save() {
             if (!this.isSaveLoading) {
                 this.isSaveLoading = true
@@ -152,10 +185,11 @@ export default {
                 this.data.beginDate = this.data.beginDate + 'T' + this.data.beginHour + ':00.000Z'
                 this.data.endDate = this.data.endDate + 'T' + this.data.endHour + ':00.000Z'
 
-                console.log('begin data' + this.data.beginDate)
-                console.log('endhour' + this.data.endDate)
-
-                await this.save()
+                if (this.updateSchedule) {
+                    await this.update()
+                } else {
+                    await this.save()
+                }
             }
         },
         checkRangeDate: async function () {
@@ -176,6 +210,52 @@ export default {
                 return true
             }
             return false
+        },
+        confirmEdit: async function () {
+            this.$swal({
+                title: this.$t('str.are.you.sure'),
+                text: this.$t('str.are.you.sure.edit.schedule'),
+                showCancelButton: true,
+                showDenyButton: false,
+                buttonsStyling: false,
+                confirmButtonText: this.$t('str.title.edit.series'),
+                cancelButtonClass: 'btn btn-default min-btn-width',
+                denyButtonText: this.$t('str.title.edit.occurrence'),
+                confirmButtonClass: 'btn me-5px btn-danger min-btn-width',
+                cancelButtonText: this.$t('str.btn.exit'),
+                denyButtonClass: 'btn me-5px btn-warning min-btn-width',
+            }).then(result => {
+                if (result.isConfirmed) {
+                    this.updateAppointmentSeries()
+                } else if (result.isDenied) {
+                    this.updateAppointmentOccurrence()
+                }
+            })
+        },
+        updateAppointmentSeries: function () {
+            const newData = JSON.parse(JSON.stringify(this.data))
+            newData.schedule = newData._id
+            delete newData._id
+
+            if (!this.isPastDate) {
+                newData.beginDate = moment(this.data?.appointment?.startDate).utc(false).format('YYYY-MM-DD')
+            }
+
+            this.data = newData
+            this.updateSchedule = true
+            this.selectOptions.enabled = true
+        },
+        updateAppointmentOccurrence: async function () {
+            const newData = JSON.parse(JSON.stringify(this.data.appointment))
+            newData.appointment = newData._id
+            delete newData._id
+
+            newData.startDate = moment(this.data?.appointment?.startDate).utc(false).format('YYYY-MM-DD')
+            newData.endDate = moment(this.data?.appointment?.endDate).utc(false).format('YYYY-MM-DD')
+
+            this.data = newData
+            this.updateSchedule = true
+            this.selectOptions.enabled = true
         },
         confirmArchive() {
             this.$swal({
@@ -272,8 +352,6 @@ export default {
                 status: 'ACTIVE',
             }
 
-            this.selectOptions.enabled = true
-
             this.patrolPoints = []
             this.vigilants = []
 
@@ -286,6 +364,8 @@ export default {
 
             this.siteList = []
             this.isPastDate = false
+            this.updateSchedule = false
+            this.selectOptions.enabled = false
 
             this.$bvModal.hide('createScheduleModal')
         },
@@ -314,23 +394,6 @@ export default {
             if (day > 31) {
                 this.data.frequencyMonth.day = 31
             }
-        },
-        clearForm: async function () {
-            this.errors = []
-
-            this.patrolPoints = []
-            this.vigilants = []
-            this.isPastDate = false
-
-            this.data = this.scheduleObj
-
-            if (this.isSuperAdminMaster) {
-                this.clientList = []
-                this.siteList = []
-            } else this.data.account = await Common.getAccountId(this)
-            this.selectOptions.enabled = true
-            this.isSaveLoading = false
-            this.isLoading = false
         },
         async initTable() {
             this.columns = [
@@ -398,7 +461,7 @@ export default {
                 selectOnCheckboxOnly: false,
                 selectionText: this.$t('str.schedule.selected.rows'),
                 clearSelectionText: this.$t('str.schedule.selected.rows.clear'),
-                disableSelectInfo: false,
+                disableSelectInfo: true,
                 selectAllByGroup: true,
             }
 
@@ -431,11 +494,23 @@ export default {
                 this.clientList = await Services.getClientsByAccount(this, this.data.account)
                 this.siteList = await Services.getSitesByClient(this, this.data.client)
 
-                if (!this.data._id) {
+                // selecionar todos os pontos de ronda que estao dentro de this.data.points
+                if (this.data._id) {
                     this.patrolPoints = await Services.getPatrolPointsBySite(this, this.data.site)
-                } else {
-                    this.patrolPoints = this.data?.points || []
+                    this.data.points = this.data?.points || []
                 }
+
+                if (this.data.points.length > 0) {
+                    this.patrolPoints.forEach(patrolPoint => {
+                        this.data.points.forEach(point => {
+                            if (patrolPoint._id === point._id) {
+                                this.$set(patrolPoint, 'vgtSelected', true)
+                            }
+                        })
+                    })
+                }
+
+                this.selectOptions.enabled = false
 
                 this.vigilants = await Services.getVigilantsBySite(this, this.data.site)
 

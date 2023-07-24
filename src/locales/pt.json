@@ -1201,5 +1201,8 @@
     "str.table.reports.column.name" : "Nome",
     "str.table.reports.column.scan.date":"Data",
     "response.startDate.invalid": "Não é permitido deletar um evento passado",
-    "str.modal.schedule.status.archived": "Arquivado"
+    "str.modal.schedule.status.archived": "Arquivado",
+    "str.are.you.sure.edit.schedule":"Deseja editar este agendamento?",
+    "str.title.edit.series": "Editar série",
+    "str.title.edit.occurrence": "Editar ocorrência"
 }

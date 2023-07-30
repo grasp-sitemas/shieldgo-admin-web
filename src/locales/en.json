@@ -1212,5 +1212,7 @@
     "str.modal.schedule.status.archived": "Archived",
     "str.are.you.sure.edit.schedule":"Are you sure you want to edit this schedule?",
     "str.title.edit.series": "Edit series",
-    "str.title.edit.occurrence": "Edit occurrence"
+    "str.title.edit.occurrence": "Edit occurrence",
+    "str.operator.without.sites.title": "Operator without locals",
+    "str.operator.without.sites.text": "The operator does not have locals assigned to him. Please contact the administrator."
 }       

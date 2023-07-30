@@ -94,12 +94,13 @@ export default {
                         y += 40 // Adicione espaço suficiente para o QRCode maior e o texto
                     }
 
-                    doc.text(data[i].patrolPointCode, x + 7, y + 1) // Adicione o texto abaixo do QRCode
+                    doc.setFontSize(11)
+                    doc.text(data[i].patrolPointCode, x + 7, y) // Adicione o texto abaixo do QRCode
 
                     // Generate QR Code
                     const qrImageData = await QRCode.toDataURL(data[i]._id, { errorCorrectionLevel: 'H' })
                     const qrImage = qrImageData.replace('data:image/png;base64,', '')
-                    doc.addImage(qrImage, 'PNG', x, y + 1, 36, 36) // Aumentar o tamanho do QRCode
+                    doc.addImage(qrImage, 'PNG', x, y, 36, 36) // Aumentar o tamanho do QRCode
 
                     x += 37 // Incrementar x para a próxima coluna
                 }

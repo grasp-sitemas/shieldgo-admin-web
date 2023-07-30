@@ -81,7 +81,7 @@
                     <div class="invalid-feedback">{{ $t('str.register.schedule.name.required') }}</div>
                 </div>
             </div>
-
+            <!-- 
             <div class="row">
                 <div class="col-md-12 mb-3">
                     <label class="form-label" for="vigilantsField">{{ $t('str.register.schedule.invited.vigilants.field') }}</label>
@@ -105,7 +105,7 @@
                     />
                     <div class="invalid-feedback">{{ $t('str.register.schedule.vigilants.required') }}</div>
                 </div>
-            </div>
+            </div> -->
 
             <div class="row">
                 <div class="col-md-4 mb-3">
@@ -339,9 +339,9 @@
                             <i v-if="isSaveLoading === true" class="fas fa-spinner fa-pulse"></i>
                             {{ $t('str.btn.save') }}
                         </button>
-                        <button v-if="data._id && !isPastDate" v-on:click="confirmEdit" type="submit" class="ms-10px btn btn-primary w-200px">
+                        <!-- <button v-if="data._id && !isPastDate" v-on:click="confirmEdit" type="submit" class="ms-10px btn btn-primary w-200px">
                             {{ $t('str.btn.edit') }}
-                        </button>
+                        </button> -->
                         <button v-if="data._id && !isPastDate" v-on:click="confirmArchive" type="submit" class="ms-10px btn btn-warning w-200px">
                             {{ $t('str.btn.delete') }}
                         </button>

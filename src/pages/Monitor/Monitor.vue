@@ -23,7 +23,7 @@
                                             </option>
                                         </select>
                                     </div>
-                                    <div class="col-md-3 mb-3">
+                                    <div v-if="isSuperAdminMaster || role === 'ADMIN' || role === 'MANAGER'" class="col-md-3 mb-3">
                                         <label class="form-label" for="clientField">{{ $t('str.register.user.client.field') }}</label>
                                         <select v-model="filters.client" @change="changeClient" class="form-select" id="clientField">
                                             <option value="">{{ $t('str.register.select.placeholder') }}</option>
@@ -289,12 +289,13 @@
                     </div>
                 </panel>
             </div>
+            <gritterNotify v-if="operatorWithoutGroup" :title="$t('str.operator.without.sites.title')" :text="$t('str.operator.without.sites.text')" @after-close="operatorWithoutGroup = false" />
         </div>
+
         <div v-else class="center-spinner">
             <i class="fas fa-spinner fa-spin" />
         </div>
         <notifications group="top-right" position="top right" :speed="1000" />
-
         <Photo :photoURL="selectedEvent?.photoURL" />
         <Signature :signatureURL="selectedEvent?.signatureURL" />
         <Sound :soundURL="selectedEvent?.soundURL" />
@@ -304,6 +305,7 @@
 </template>
 
 <script>
+import gritterNotify from '../../components/notification/gritter.vue'
 import Controller from './CrtMonitor.vue'
 import Services from '../../common/Services.vue'
 import Common from '../../common/Common.vue'
@@ -315,6 +317,7 @@ import Sound from './Components/Sound/Sound.vue'
 import DeviceInfo from './Components/DeviceInfo/DeviceInfo.vue'
 import db from '../../firebaseInit.js'
 import { doc, onSnapshot, deleteDoc } from 'firebase/firestore'
+
 import moment from 'moment'
 import Vue from 'vue'
 Vue.prototype.$registerEvent = new Vue()
@@ -325,6 +328,7 @@ export default {
         Signature,
         Sound,
         DeviceInfo,
+        gritterNotify,
     },
     data() {
         return {
@@ -343,11 +347,13 @@ export default {
             items: [],
             events: null,
             user: null,
+            role: null,
             attendances: [],
             selectedEvent: null,
             selectedAttendence: null,
             attendancesTypes: [],
             attendanceEventEnabled: false,
+            operatorWithoutGroup: false,
             attendance: {
                 account: null,
                 client: null,
@@ -367,6 +373,7 @@ export default {
                 account: '',
                 client: '',
                 site: '',
+                eventNotAttandance: true,
                 startDate: moment().utc(true).subtract(1, 'days').format(),
                 endDate: moment().utc(true).format(),
             },
@@ -389,8 +396,11 @@ export default {
 
         const siteIds = await state.$session.get('user')?.siteGroup?.sites
         const siteGroupId = await state.$session.get('user')?.siteGroup?._id
+        const role = await state.$session.get('user')?.companyUser?.subtype
 
-        console.log('siteIds', siteIds)
+        if ((!siteIds || siteIds?.length === 0) && role === 'OPERATOR') {
+            state.operatorWithoutGroup = true
+        }
 
         // subscribe notifications snapshot in array of sites ids
         if (siteIds && siteIds?.length > 0) {

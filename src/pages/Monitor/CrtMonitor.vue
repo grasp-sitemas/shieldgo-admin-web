@@ -12,14 +12,24 @@ export default {
 
                 payload.user = await payload.$session.get('user')
 
+                payload.role = await Common.getSubtype(payload)
+
                 payload.isSuperAdminMaster = await Common.isSuperAdminMaster(payload)
                 payload.attendancesTypes = await Services.getAttendancesOptionsTypes(payload)
 
                 if (payload.isSuperAdminMaster) {
                     payload.accounts = await Services.getAccounts(payload)
-                } else {
+                } else if (payload.role === 'ADMIN') {
                     payload.clients = await Services.getClients(payload)
                     payload.filters.account = await Common.getAccountId(payload)
+                } else if (payload.role === 'MANAGER') {
+                    payload.clients = await Services.getClients(payload)
+                    payload.filters.account = await Common.getAccountId(payload)
+                    payload.filters.client = await Common.getClientId(payload)
+                } else if (payload.role === 'OPERATOR') {
+                    payload.sites = await Services.getSites(payload)
+                    payload.filters.account = await Common.getAccountId(payload)
+                    payload.filters.client = await Common.getClientId(payload)
                 }
 
                 await payload.selectAllTypes()
@@ -30,7 +40,7 @@ export default {
                     payload.selectedEvent = event
 
                     const filters = {
-                        patrolAction: payload.selectedEvent?._id,
+                        patrolAction: event?._id,
                         status: 'ACTIVE',
                     }
 
@@ -40,7 +50,7 @@ export default {
                 }
 
                 payload.isLoading = false
-            }, 300)
+            }, 500)
         } catch (error) {
             console.log(error)
             payload.isLoading = false
@@ -54,6 +64,14 @@ export default {
         async filter() {
             this.isLoadingEvents = true
             this.items = []
+
+            if (this.filters?.types?.length === 0) {
+                this.selectedEvent = null
+            }
+
+            if (this.selectedEvent && !this.filters.types.includes(this.selectedEvent.type)) {
+                this.selectedEvent = null
+            }
 
             try {
                 this.items = await Services.getPatrolActions(this, this.filters)

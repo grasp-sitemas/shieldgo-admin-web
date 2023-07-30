@@ -1204,5 +1204,7 @@
     "str.modal.schedule.status.archived": "Arquivado",
     "str.are.you.sure.edit.schedule":"Deseja editar este agendamento?",
     "str.title.edit.series": "Editar série",
-    "str.title.edit.occurrence": "Editar ocorrência"
+    "str.title.edit.occurrence": "Editar ocorrência",
+    "str.operator.without.sites.title": "Grupo de locais não encontrado",
+    "str.operator.without.sites.text": "O operador não possui grupo de locais atribuído. Contate o administrador da empresa."
 }

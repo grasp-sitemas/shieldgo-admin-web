@@ -13,7 +13,6 @@ export const schedule = {
         day: '',
     },
     points: [],
-    vigilants: [],
     weeklyDays: [],
     beginDate: null,
     endDate: null,

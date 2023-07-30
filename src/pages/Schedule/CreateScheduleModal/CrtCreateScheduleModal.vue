@@ -61,7 +61,7 @@ export default {
         async update() {
             if (!this.isSaveLoading) {
                 this.isSaveLoading = true
-
+                alert('update')
                 try {
                     Request.do(
                         this,
@@ -137,9 +137,9 @@ export default {
             if (!this.data.name || this.data.name === '') {
                 this.errors.push('name')
             }
-            if (!this.data.vigilants || this.data.vigilants.length === 0) {
-                this.errors.push('vigilants')
-            }
+            // if (!this.data.vigilants || this.data.vigilants.length === 0) {
+            //     this.errors.push('vigilants')
+            // }
             if (!this.data.beginDate || this.data.beginDate === '') {
                 this.errors.push('beginDate')
             }
@@ -354,6 +354,7 @@ export default {
 
             this.patrolPoints = []
             this.vigilants = []
+            this.errors = []
 
             if (!this.isSuperAdminMaster) {
                 this.data.account = await Common.getAccountId(this)
@@ -365,7 +366,7 @@ export default {
             this.siteList = []
             this.isPastDate = false
             this.updateSchedule = false
-            this.selectOptions.enabled = false
+            this.selectOptions.enabled = true
 
             this.$bvModal.hide('createScheduleModal')
         },
@@ -484,6 +485,9 @@ export default {
                 this.data.client = this.data?.client?._id
                 this.data.site = this.data?.site?._id
                 this.appointment = this.data?.appointment
+
+                this.data.beginDate = moment(this.data?.beginDate).format('YYYY-MM-DD')
+                this.data.endDate = moment(this.data?.endDate).format('YYYY-MM-DD')
 
                 this.isPastDate = moment(this.appointment?.startDate).utc(false).isBefore(moment().utc(true).startOf('day'))
 

@@ -125,8 +125,6 @@ export default {
             }
 
             const selectedAppointment = await Services.getScheduleById(this, filters)
-            selectedAppointment.beginDate = moment(selectedAppointment?.beginDate).format('YYYY-MM-DD')
-            selectedAppointment.endDate = moment(selectedAppointment?.endDate).format('YYYY-MM-DD')
             selectedAppointment.appointment = appointment
             this.selectedAppointment = selectedAppointment
 

@@ -61,7 +61,6 @@ export default {
         async update() {
             if (!this.isSaveLoading) {
                 this.isSaveLoading = true
-                alert('update')
                 try {
                     Request.do(
                         this,
@@ -69,6 +68,38 @@ export default {
                         Request.getDefaultHeader(this),
                         this.data,
                         `${Endpoints.schedules.update}`,
+                        async response => {
+                            if (response.status === 200) {
+                                this.isSaveLoading = false
+                                this.$registerEvent.$emit('refreshSchedule')
+                                await this.closeModal()
+                            }
+                        },
+                        error => {
+                            this.isLoading = false
+                            this.isSaveLoading = false
+                            Common.show(this, 'bottom-right', 'warn', this.data._id ? this.$t('str.form.update.generic.error') : this.$t('str.form.save.generic.error'))
+                            console.log(error)
+                        },
+                    )
+                } catch (error) {
+                    this.isLoading = false
+                    this.isSaveLoading = false
+                    Common.show(this, 'bottom-right', 'warn', this.data._id ? this.$t('str.form.update.generic.error') : this.$t('str.form.save.generic.error'))
+                    console.log(error)
+                }
+            }
+        },
+        async updateOccurrence() {
+            if (!this.isSaveLoading) {
+                this.isSaveLoading = true
+                try {
+                    Request.do(
+                        this,
+                        'post',
+                        Request.getDefaultHeader(this),
+                        this.data,
+                        `${Endpoints.appointments.updateOccurrence}`,
                         async response => {
                             if (response.status === 200) {
                                 this.isSaveLoading = false
@@ -187,6 +218,9 @@ export default {
 
                 if (this.updateSchedule) {
                     await this.update()
+                }
+                if (this.updateAppointment) {
+                    await this.updateOccurrence()
                 } else {
                     await this.save()
                 }
@@ -216,7 +250,7 @@ export default {
                 title: this.$t('str.are.you.sure'),
                 text: this.$t('str.are.you.sure.edit.schedule'),
                 showCancelButton: true,
-                showDenyButton: false,
+                showDenyButton: true,
                 buttonsStyling: false,
                 confirmButtonText: this.$t('str.title.edit.series'),
                 cancelButtonClass: 'btn btn-default min-btn-width',
@@ -246,15 +280,33 @@ export default {
             this.selectOptions.enabled = true
         },
         updateAppointmentOccurrence: async function () {
-            const newData = JSON.parse(JSON.stringify(this.data.appointment))
-            newData.appointment = newData._id
+            const newData = JSON.parse(JSON.stringify(this.data))
+            newData.schedule = this.data._id
+
             delete newData._id
 
-            newData.startDate = moment(this.data?.appointment?.startDate).utc(false).format('YYYY-MM-DD')
+            newData.beginDate = moment(this.data?.appointment?.startDate).utc(false).format('YYYY-MM-DD')
             newData.endDate = moment(this.data?.appointment?.endDate).utc(false).format('YYYY-MM-DD')
 
+            console.log(this.data?.appointment)
+
+            newData.beginHour = this.data?.appointment?.startHour
+            newData.endHour = this.data?.appointment?.endHour
+            newData.timeSlot = this.data?.appointment?.timeSlot
+            newData.points = this.data?.appointment?.patrolPoints
+
+            if (newData.points.length > 0) {
+                this.patrolPoints.forEach(patrolPoint => {
+                    newData.points.forEach(point => {
+                        if (patrolPoint._id === point) {
+                            this.$set(patrolPoint, 'vgtSelected', true)
+                        }
+                    })
+                })
+            }
+
             this.data = newData
-            this.updateSchedule = true
+            this.updateAppointment = true
             this.selectOptions.enabled = true
         },
         confirmArchive() {
@@ -366,6 +418,7 @@ export default {
             this.siteList = []
             this.isPastDate = false
             this.updateSchedule = false
+            this.updateAppointment = false
             this.selectOptions.enabled = true
 
             this.$bvModal.hide('createScheduleModal')

@@ -14,7 +14,7 @@
                     <select
                         v-model="data.account"
                         v-on:change="changeAccount"
-                        :disabled="data._id ? true : false"
+                        :disabled="data._id ? true : updateAppointment ? true : false"
                         class="form-select"
                         v-bind:class="checkRequiredField('account') ? 'is-invalid' : ''"
                         @focus="removeRequiredField('account')"
@@ -32,7 +32,7 @@
                     <select
                         v-model="data.client"
                         v-on:change="changeClient"
-                        :disabled="data._id ? true : false"
+                        :disabled="data._id ? true : updateAppointment ? true : false"
                         class="form-select"
                         v-bind:class="checkRequiredField('client') ? 'is-invalid' : ''"
                         @focus="removeRequiredField('client')"
@@ -49,7 +49,7 @@
                     <label class="form-label" for="siteField">{{ $t('str.register.incident.site.field') }}</label>
                     <select
                         v-model="data.site"
-                        :disabled="data._id ? true : false"
+                        :disabled="data._id ? true : updateAppointment ? true : false"
                         v-on:change="changeSite"
                         class="form-select"
                         v-bind:class="checkRequiredField('site') ? 'is-invalid' : ''"
@@ -70,7 +70,7 @@
                     <label class="form-label" for="nameField">{{ $t('str.register.schedule.name.field') }}</label>
                     <input
                         v-model="data.name"
-                        :disabled="data._id ? true : false"
+                        :disabled="data._id ? true : updateAppointment ? true : false"
                         type="text"
                         class="form-control"
                         v-bind:class="checkRequiredField('name') ? 'is-invalid' : ''"
@@ -112,7 +112,7 @@
                     <label class="form-label" for="frequencyField">{{ $t('str.register.schedule.frequency.field') }}</label>
                     <select
                         v-model="data.frequency"
-                        :disabled="data._id ? true : false"
+                        :disabled="data._id ? true : updateAppointment ? true : false"
                         @change="changeFrequency()"
                         class="form-select"
                         v-bind:class="checkRequiredField('frequency') ? 'is-invalid' : ''"
@@ -130,7 +130,7 @@
                     <label class="form-label" for="beginDateField">{{ $t('str.register.schedule.starts.in.field') }}</label>
                     <input
                         v-model="data.beginDate"
-                        :disabled="data._id ? true : false"
+                        :disabled="data._id ? true : updateAppointment ? true : false"
                         type="date"
                         class="form-control"
                         v-bind:class="checkRequiredField('beginDate') ? 'is-invalid' : ''"
@@ -145,7 +145,7 @@
                     <label class="form-label" for="endDateField">{{ $t('str.register.schedule.ends.in.field') }}</label>
                     <input
                         v-model="data.endDate"
-                        :disabled="data._id ? true : false"
+                        :disabled="data._id ? true : updateAppointment ? true : false"
                         type="date"
                         class="form-control"
                         v-bind:class="checkRequiredField('endDate') ? 'is-invalid' : ''"
@@ -163,7 +163,7 @@
                     <div class="form-check form-switch mb-2 me-3" v-bind:key="item.value" v-for="item in this.weeklyDays">
                         <input
                             v-model="data.weeklyDays"
-                            :disabled="data._id ? true : false"
+                            :disabled="data._id ? true : updateAppointment ? true : false"
                             :id="item.value"
                             :value="item.value"
                             :true-value="item.value"
@@ -180,7 +180,7 @@
                     <label class="form-label" for="monthlyDayFrequencyField">{{ $t('str.register.schedule.frequency.monthly.day.field') }}</label>
                     <input
                         v-model="data.frequencyMonth.day"
-                        :disabled="data._id ? true : false"
+                        :disabled="data._id ? true : updateAppointment ? true : false"
                         type="number"
                         class="form-control"
                         min="1"
@@ -200,7 +200,7 @@
                     <label class="form-label" for="yearlyMonthFrequencyField">{{ $t('str.register.schedule.frequency.yearly.month.field') }}</label>
                     <select
                         v-model="data.frequencyYear.month"
-                        :disabled="data._id ? true : false"
+                        :disabled="data._id ? true : updateAppointment ? true : false"
                         class="form-select"
                         v-bind:class="checkRequiredField('frequencyYearMonth') ? 'is-invalid' : ''"
                         @focus="removeRequiredField('frequencyYearMonth')"
@@ -217,7 +217,7 @@
                     <label class="form-label" for="yearlyDayFrequencyField">{{ $t('str.register.schedule.frequency.yearly.day.field') }}</label>
                     <input
                         v-model="data.frequencyYear.day"
-                        :disabled="data._id ? true : false"
+                        :disabled="data._id ? true : updateAppointment ? true : false"
                         type="number"
                         class="form-control"
                         min="1"
@@ -339,9 +339,9 @@
                             <i v-if="isSaveLoading === true" class="fas fa-spinner fa-pulse"></i>
                             {{ $t('str.btn.save') }}
                         </button>
-                        <!-- <button v-if="data._id && !isPastDate" v-on:click="confirmEdit" type="submit" class="ms-10px btn btn-primary w-200px">
+                        <button v-if="data._id && !isPastDate" v-on:click="confirmEdit" type="submit" class="ms-10px btn btn-primary w-200px">
                             {{ $t('str.btn.edit') }}
-                        </button> -->
+                        </button>
                         <button v-if="data._id && !isPastDate" v-on:click="confirmArchive" type="submit" class="ms-10px btn btn-warning w-200px">
                             {{ $t('str.btn.delete') }}
                         </button>
@@ -421,6 +421,8 @@ export default {
             isLoading: false,
             isSaveLoading: false,
             isPastDate: false,
+            updateAppointment: false,
+            updateSchedule: false,
             appointment: {},
             errors: [],
             accountList: [],
@@ -434,7 +436,6 @@ export default {
             table: null,
             data: schedule,
             scheduleObj: schedule,
-            updateSchedule: false,
             columns: [],
             paginationOptions: {},
             selectOptions: {

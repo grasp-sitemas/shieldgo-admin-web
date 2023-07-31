@@ -107,7 +107,7 @@
                         </div>
                         <hr class="bg-gray-500" />
 
-                        <div class="flex-1 mb-3">
+                        <div v-if="selectedEvent?.vigilant" class="flex-1 mb-3">
                             <div class="timeline-header">
                                 <div class="userimage">
                                     <img
@@ -131,7 +131,7 @@
                                 <label class="info-result">{{ selectedEvent?.vigilant?.email }}</label>
                             </div>
                         </div>
-                        <hr class="bg-gray-500" />
+                        <hr v-if="selectedEvent?.vigilant" class="bg-gray-500" />
 
                         <div v-if="selectedEvent?.attendance?.isAttendance" class="flex-1 mb-3">
                             <div class="text-opacity-50 small fw-bold">
@@ -289,6 +289,7 @@
                     </div>
                 </panel>
             </div>
+
             <gritterNotify v-if="operatorWithoutGroup" :title="$t('str.operator.without.sites.title')" :text="$t('str.operator.without.sites.text')" @after-close="operatorWithoutGroup = false" />
         </div>
 

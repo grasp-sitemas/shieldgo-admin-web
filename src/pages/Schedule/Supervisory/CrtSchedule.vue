@@ -1,6 +1,6 @@
 <script>
-import Common from '../../common/Common.vue'
-import Services from '../../common/Services.vue'
+import Common from '../../../common/Common.vue'
+import Services from '../../../common/Services.vue'
 import '@fullcalendar/core/vdom' // solves problem with Vite
 import dayGridPlugin from '@fullcalendar/daygrid'
 import timeGridPlugin from '@fullcalendar/timegrid'

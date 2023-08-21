@@ -9,7 +9,7 @@
         </template>
         <div v-if="!isLoading">
             <div class="row">
-                <div v-if="isSuperAdminMaster" class="col-md-4 mb-3">
+                <div v-if="isSuperAdminMaster" class="col-md-6 mb-3">
                     <label class="form-label" for="accountField">{{ $t('str.register.incident.account.field') }}</label>
                     <select
                         v-model="data.account"
@@ -27,7 +27,7 @@
                     </select>
                     <div class="invalid-feedback">{{ $t('str.register.incident.account.required') }}</div>
                 </div>
-                <div class="col-md-4 mb-3">
+                <div class="col-md-6 mb-3">
                     <label class="form-label" for="clientField">{{ $t('str.register.incident.client.field') }}</label>
                     <select
                         v-model="data.client"
@@ -45,24 +45,7 @@
                     </select>
                     <div class="invalid-feedback">{{ $t('str.register.incident.client.required') }}</div>
                 </div>
-                <div class="col-md-4 mb-3">
-                    <label class="form-label" for="siteField">{{ $t('str.register.incident.site.field') }}</label>
-                    <select
-                        v-model="data.site"
-                        :disabled="data._id ? true : updateAppointment ? true : false"
-                        v-on:change="changeSite"
-                        class="form-select"
-                        v-bind:class="checkRequiredField('site') ? 'is-invalid' : ''"
-                        @focus="removeRequiredField('site')"
-                        id="siteField"
-                    >
-                        <option value="">{{ $t('str.register.select.placeholder') }}</option>
-                        <option v-for="site in siteList" :value="site._id" :key="site._id">
-                            {{ site.name }}
-                        </option>
-                    </select>
-                    <div class="invalid-feedback">{{ $t('str.register.incident.site.required') }}</div>
-                </div>
+               
             </div>
 
             <div class="row">
@@ -81,31 +64,7 @@
                     <div class="invalid-feedback">{{ $t('str.register.schedule.name.required') }}</div>
                 </div>
             </div>
-            <!-- 
-            <div class="row">
-                <div class="col-md-12 mb-3">
-                    <label class="form-label" for="vigilantsField">{{ $t('str.register.schedule.invited.vigilants.field') }}</label>
-                    <span v-show="!data._id" @click="removeAllVigilants()" disabled class="badge bg-dark rounded-5 cursor_pointer f-right badge-ml-5">{{
-                        $t('str.register.schedule.remove.all.vigilants.label')
-                    }}</span>
-                    <span v-show="!data._id" @click="selectAllVigilants()" disabled class="badge bg-dark rounded-5 cursor_pointer f-right">{{ $t('str.register.schedule.select.all.vigilants.label') }}</span>
-
-                    <v-select
-                        taggable
-                        multiple
-                        :disabled="data._id ? true : false"
-                        label="fullName"
-                        key="vigilantsField"
-                        v-model="data.vigilants"
-                        @search:blur="removeRequiredField('vigilants')"
-                        v-bind:class="checkRequiredField('vigilants') ? 'is-invalid' : ''"
-                        :options="vigilants"
-                        :create-option="vigilant => ({ _id: '' })"
-                        :placeholder="$t('str.register.select.placeholder')"
-                    />
-                    <div class="invalid-feedback">{{ $t('str.register.schedule.vigilants.required') }}</div>
-                </div>
-            </div> -->
+           
 
             <div class="row">
                 <div class="col-md-4 mb-3">
@@ -276,48 +235,89 @@
                 </div>
             </div>
 
-            <div class="row">
-                <label class="form-label" for="patrolPointsTable">{{ $t('str.register.schedule.patrol.points.table') }}</label>
-                <vue-good-table
-                    :columns="columns"
-                    :rows="patrolPoints"
-                    :search-options="{ enabled: true, placeholder: $t('str.table.search.in.this.table') }"
-                    :lineNumbers="true"
-                    :pagination-options="paginationOptions"
-                    @on-selected-rows-change="selectionChanged"
-                    :select-options="selectOptions"
-                >
-                    <div slot="emptystate" class="vgt-center-align vgt-text-disabled">{{ $t('str.table.subtitle.no.data') }}</div>
-                    <template slot="table-row" slot-scope="props">
-                        <span v-if="props.column.field === 'type'">
-                            {{ $t(props.formattedRow[props.column.field]) }}
-                        </span>
+            <hr />
+            <label class="form-label mb-3" for="patrolPointsTable">{{ $t('str.register.schedule.add.patrol.points.table') }}</label>
 
-                        <span v-else-if="props.column.field === 'geolocation'">
-                            <span
-                                v-if="
-                                    props.formattedRow[props.column.field]?.latitude &&
-                                    props.formattedRow[props.column.field]?.longitude &&
-                                    props.formattedRow[props.column.field]?.latitude?.length > 0 &&
-                                    props.formattedRow[props.column.field]?.longitude?.length > 0
-                                "
-                            >
-                                {{ 'Lat: ' + props.formattedRow[props.column.field]?.latitude + ' Lng: ' + props.formattedRow[props.column.field]?.longitude }}
-                            </span>
-                            <span v-else>
-                                <i class="fas fa-ban"></i>
-                            </span>
-                        </span>
-                        <span v-else>
-                            {{ props.formattedRow[props.column.field] }}
-                        </span>
-                    </template>
-                </vue-good-table>
-                <div class="invalid-feedback">{{ $t('str.register.schedule.patrol.points.required') }}</div>
+
+            <div class="row">
+                <div class="col-md-4 mb-3">
+                    <label class="form-label" for="siteField">{{ $t('str.register.incident.site.field') }}</label>
+                    <select
+                        v-model="site"
+                        :disabled="data._id ? true : updateAppointment ? true : false"
+                        v-on:change="changeSite"
+                        class="form-select"
+                        v-bind:class="checkRequiredField('site') ? 'is-invalid' : ''"
+                        @focus="removeRequiredField('site')"
+                        id="siteField"
+                    >
+                        <option :value="null">{{ $t('str.register.select.placeholder') }}</option>
+                        <option v-for="site in siteList" :value="site._id" :key="site._id">
+                            {{ site.name }}
+                        </option>
+                    </select>
+                    <div class="invalid-feedback">{{ $t('str.register.incident.site.required') }}</div>
+                </div>
+                            
+                <div class="col-md-6 mb-3">
+                    <label class="form-label" for="vigilantsField">{{ $t('str.register.schedule.invited.patrol.points.field') }}</label>
+                    <span v-show="!data._id" @click="removeAllPatrolPoints()" disabled class="badge bg-dark rounded-5 cursor_pointer f-right badge-ml-5">{{
+                        $t('str.register.schedule.remove.all.patrol.points.label')
+                    }}</span>
+                    <span v-show="!data._id" @click="selectAllPatrolPoints()" disabled class="badge bg-dark rounded-5 cursor_pointer f-right">{{ $t('str.register.schedule.select.all.patrol.points.label') }}</span>
+
+                    <v-select
+                        taggable
+                        multiple
+                        :disabled="data._id ? true : false"
+                        label="patrolPoints"
+                        key="patrolPointsFields"
+                        v-model="selectedPatrolPooints"
+                        @search:blur="removeRequiredField('patrolPoints')"
+                        v-bind:class="checkRequiredField('patrolPoints') ? 'is-invalid' : ''"
+                        :options="patrolPoints"
+                        :placeholder="$t('str.register.select.placeholder')"
+                    />
+                    <div class="invalid-feedback">{{ $t('str.register.schedule.patrol.points.required') }}</div>
+                </div>
+
+                <div class="col-md-2 mt-4">
+                    <button @click="addPatrolPoints()" class="btn btn-warning" type="button" :disabled="selectedPatrolPooints?.length > 0 ? false : true">
+                        {{ $t('str.patrol.points.add.button') }}
+                    </button>
+                </div>
+
             </div>
 
+            <vue-good-table
+                class="table-container"
+                :columns="columns"
+                :rows="data.points"
+                :search-options="{ enabled: true, placeholder: $t('str.table.search.in.this.table') }"
+                :lineNumbers="true"
+                @on-row-click="selectItem"
+            >
+
+                <div slot="emptystate" class="vgt-center-align vgt-text-disabled">{{ $t('str.table.subtitle.no.data') }}</div>
+                <template slot="table-row" slot-scope="props">
+                    <span v-if="props.column.field === 'type'">
+                        {{ $t(props.formattedRow[props.column.field]) }}
+                    </span>
+                    <span v-else-if="props.column.field === 'geolocation'" class="icon-cell">
+                        <i v-on:click="showMap()" class="fas fa-map-marker-alt cursor_pointer" />
+                    </span>
+                    <span v-else-if="props.column.field === 'actions'" class="icon-cell">
+                        <i v-on:click="removeRow(props.row)" class="fas fa-trash-alt cursor_pointer" />
+                    </span>
+                    <span v-else>
+                        {{ props.formattedRow[props.column.field] }}
+                    </span>
+                </template>
+            </vue-good-table>
+            <div class="invalid-feedback">{{ $t('str.register.schedule.patrol.points.required') }}</div>
+
             <div class="row mb-3 mt-10px">
-                <div class="col-md-4 mb-2">
+                <div class="col-md-4 mt-4 mb-2">
                     <div class="form-check">
                         <input
                             v-model="data.notifyVigilants"
@@ -327,7 +327,7 @@
                             :value="data.notifyVigilants"
                             id="notifyVigilantsCheck"
                         />
-                        <label class="form-check-label cursor-pointer" for="notifyVigilantsCheck">{{ $t('str.register.schedule.notify.vigilants.field') }} </label>
+                        <label class="form-check-label cursor-pointer" for="notifyVigilantsCheck">{{ $t('str.register.schedule.notify.supervisors.field') }} </label>
                     </div>
                 </div>
             </div>
@@ -351,7 +351,9 @@
                     </div>
                 </div>
             </div>
+
             <notifications group="bottom-right" position="bottom right" :speed="500" />
+            <Map :data="patrolPointItem" />
         </div>
         <div v-else class="center-spinner">
             <i class="fas fa-spinner fa-spin" />
@@ -361,10 +363,14 @@
 
 <script>
 import Controller from './CrtCreateScheduleModal.vue'
-import { FREQUENCIES, WEEKLY_DAYS, MONTHS } from '../../../utils/schedules.js'
-import { schedule } from '../../../types/schedule'
+import { FREQUENCIES, WEEKLY_DAYS, MONTHS } from '../../../../utils/schedules.js'
+import { schedule } from '../../../../types/schedule'
 import { moment } from 'moment'
+import Map from '../Map/Map.vue'
 export default {
+    components: {
+        Map,
+    },
     props: {
         selectedDate: {
             type: String,
@@ -423,12 +429,15 @@ export default {
             isPastDate: false,
             updateAppointment: false,
             updateSchedule: false,
+            patrolPointItem: {},
             appointment: {},
+            site: null,
             errors: [],
             accountList: [],
             clientList: [],
             siteList: [],
             patrolPoints: [],
+            selectedPatrolPooints: [],
             vigilants: [],
             frequencies: FREQUENCIES,
             weeklyDays: WEEKLY_DAYS,
@@ -437,10 +446,6 @@ export default {
             data: schedule,
             scheduleObj: schedule,
             columns: [],
-            paginationOptions: {},
-            selectOptions: {
-                enabled: true,
-            },
         }
     },
     methods: Controller.methods,
@@ -463,5 +468,15 @@ export default {
     height: 100%;
     margin-top: 30%;
     margin-bottom: 30%;
+}
+.table-container {
+  max-height: 320px;
+  overflow-y: auto;
+}
+
+.icon-cell {
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 </style>

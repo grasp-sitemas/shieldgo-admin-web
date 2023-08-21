@@ -1,8 +1,8 @@
 <script>
-import Common from '../../../common/Common.vue'
-import Services from '../../../common/Services.vue'
-import Endpoints from '../../../common/Endpoints.vue'
-import Request from '../../../common/Request.vue'
+import Common from '../../../../common/Common.vue'
+import Services from '../../../../common/Services.vue'
+import Endpoints from '../../../../common/Endpoints.vue'
+import Request from '../../../../common/Request.vue'
 import moment from 'moment'
 import Vue from 'vue'
 
@@ -168,9 +168,7 @@ export default {
             if (!this.data.name || this.data.name === '') {
                 this.errors.push('name')
             }
-            // if (!this.data.vigilants || this.data.vigilants.length === 0) {
-            //     this.errors.push('vigilants')
-            // }
+
             if (!this.data.beginDate || this.data.beginDate === '') {
                 this.errors.push('beginDate')
             }
@@ -383,6 +381,7 @@ export default {
                 client: '',
                 site: '',
                 frequency: '',
+                category: '',
                 frequencyMonth: {
                     day: '',
                 },
@@ -551,7 +550,6 @@ export default {
                 this.clientList = await Services.getClientsByAccount(this, this.data.account)
                 this.siteList = await Services.getSitesByClient(this, this.data.client)
 
-                // selecionar todos os pontos de ronda que estao dentro de this.data.points
                 if (this.data._id) {
                     this.patrolPoints = await Services.getPatrolPointsBySite(this, this.data.site)
                     this.data.points = this.data?.points || []
@@ -569,17 +567,17 @@ export default {
 
                 this.selectOptions.enabled = false
 
-                this.vigilants = await Services.getVigilantsBySite(this, this.data.site)
+                // this.vigilants = await Services.getVigilantsBySite(this, this.data.site)
 
-                const mappedVigilants = this.data.vigilants.map(vigilant => {
-                    return {
-                        _id: vigilant._id,
-                        firstName: vigilant.firstName,
-                        lastName: vigilant.lastName,
-                        fullName: `${vigilant.firstName} ${vigilant.lastName}`,
-                    }
-                })
-                this.data.vigilants = mappedVigilants ? mappedVigilants : []
+                // const mappedVigilants = this.data.vigilants.map(vigilant => {
+                //     return {
+                //         _id: vigilant._id,
+                //         firstName: vigilant.firstName,
+                //         lastName: vigilant.lastName,
+                //         fullName: `${vigilant.firstName} ${vigilant.lastName}`,
+                //     }
+                // })
+                // this.data.vigilants = mappedVigilants ? mappedVigilants : []
 
                 this.isLoading = false
             } catch (error) {

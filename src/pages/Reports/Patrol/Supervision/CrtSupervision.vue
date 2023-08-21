@@ -277,13 +277,13 @@ export default {
             }
 
             this.sites = await Services.getSitesByClient(this, client)
-            this.vigilants = await Services.getVigilantsByClient(this, client)
+            this.vigilants = await Services.getSupervisorsByClient(this, client)
         },
         changeSite: async function () {
             if (this.filters.vigilant && this.filters.vigilant !== '') {
                 this.filters.vigilant = ''
             }
-            this.vigilants = await Services.getVigilantsBySite(this, this.filters.site)
+            this.vigilants = await Services.getSupervisorsBySite(this, this.filters.site)
         },
         updateValues(d) {
             this.filters.startDate = new Date(d.startDate)

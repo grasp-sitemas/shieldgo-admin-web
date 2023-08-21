@@ -5,6 +5,7 @@ export const schedule = {
     client: '',
     site: '',
     frequency: '',
+    category: '',
     frequencyMonth: {
         day: '',
     },

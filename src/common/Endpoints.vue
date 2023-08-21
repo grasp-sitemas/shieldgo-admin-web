@@ -16,6 +16,7 @@ export default {
         cancelOccurrence: `${domain}/api/company/appointments/cancel/occurrence/v1/`,
         update: `${domain}/api/company/appointments/update/v1/`,
         updateOccurrence: `${domain}/api/company/appointments/update/occurrence/v1/`,
+        supervisorUpdateOccurrence: `${domain}/api/company/appointments/supervisor/update/occurrence/v1/`,
     },
     addresses: {
         address: `${domain}/api/address/v1/`,
@@ -112,6 +113,8 @@ export default {
         schedule: `${domain}/api/company/schedules/v1/`,
         delete: `${domain}/api/company/schedules/delete/v1/`,
         update: `${domain}/api/company/schedules/update/v1/`,
+        supervisorySchedule: `${domain}/api/company/schedules/supervisory/v1/`,
+        supervisoryUpdate: `${domain}/api/company/schedules/supervisory/update/v1/`,
     },
     cep: {
         find: `${viaCepDomain}`,

@@ -1,6 +1,6 @@
 <template>
     <div>
-        <panel :title="$t('str.table.list.vigilants')" bodyClass="p-0">
+        <panel :title="$t('str.table.list.colaborators')" bodyClass="p-0" class="mb-3">
             <div class="row ms-2 mb-1 mt-3 me-1">
                 <div v-if="isSuperAdminMaster" class="col-md-4 mb-3">
                     <label class="form-label" for="accountField">{{ $t('str.register.guard.groups.account.field') }}</label>
@@ -39,7 +39,16 @@
                         <option value="ARCHIVED">{{ $t('str.register.status.archived') }}</option>
                     </select>
                 </div>
-                <div v-if="role !== 'AUDITOR'" class="col-md-3" :class="{ 'mt-4': isSuperAdminMaster }">
+                <div class="col-md-4">
+                    <label class="form-label" for="statusField">{{ $t('str.register.type.field') }}</label>
+                    <select v-model="filters.subtype" @change="filter" class="form-select" id="statusField">
+                        <option value="">{{ $t('str.register.select.placeholder') }}</option>
+                        <option value="VIGILANT">{{ $t('str.register.type.vigilant') }}</option>
+                        <option value="SUPERVISOR">{{ $t('str.register.type.supervisor') }}</option>
+                    </select>
+                </div>
+               
+                <div v-if="role !== 'AUDITOR'" class="col-md-3 mt-3" :class="{ 'mt-4': isSuperAdminMaster }">
                     <button @click="selectItem()" type="submit" class="btn btn-default w-50">{{ $t('str.btn.new.form') }}</button>
                 </div>
             </div>
@@ -54,6 +63,7 @@
                 :sort-options="{
                     enabled: true,
                     multipleColumns: true,
+                    initialSortBy: [{ field: 'fullName', type: 'asc' }],
                 }"
                 tableLayout="fixed"
             >
@@ -65,8 +75,8 @@
                     <span v-if="props.column.field === 'customerUser.subtype'">
                         {{ $t(props.formattedRow[props.column.field]) }}
                     </span>
-                    <span v-else-if="props.column.field === 'account' || props.column.field === 'client' || props.column.field === 'site'">
-                        {{ props.formattedRow[props.column.field]?.name }}
+                    <span v-else-if="props.column.field === 'account.name' || props.column.field === 'client.name' || props.column.field === 'site.name'">
+                        {{ props.formattedRow[props.column.field] }}
                     </span>
                     <span v-else-if="props.column.field === 'createDate'">
                         {{ formatDate(props.formattedRow[props.column.field], true) }}
@@ -80,21 +90,21 @@
                 </template>
             </vue-good-table>
         </panel>
-        <VigilantModal :selectedData="data" />
+        <ColaboratorModal :selectedData="data" />
         <notifications group="bottom-right" position="bottom right" :speed="500" />
     </div>
 </template>
 
 <script>
-import Controller from './CrtListVigilant.vue'
-import VigilantModal from './Vigilant.vue'
+import Controller from './CrtListColaborator.vue'
+import ColaboratorModal from './Colaborator.vue'
 import { vigilant } from '../../../types/vigilant'
 import Vue from 'vue'
 Vue.prototype.$registerEvent = new Vue()
 
 export default {
     components: {
-        VigilantModal,
+        ColaboratorModal,
     },
     data() {
         return {
@@ -109,6 +119,7 @@ export default {
                 status: 'ACTIVE',
                 name: '',
                 isSortByName: true,
+                subtype: '',
             },
             vigilantObj: JSON.parse(JSON.stringify(vigilant)),
             columns: [],

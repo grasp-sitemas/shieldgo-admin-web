@@ -7,7 +7,7 @@
                 {{ $t('str.error.code.404.description') }}
             </div>
             <div>
-                <router-link to="/dashboard" class="btn btn-primary px-3" custom v-slot="{ navigate }">
+                <router-link to="/dashboard/analysis" class="btn btn-primary px-3" custom v-slot="{ navigate }">
                     <span @click="navigate" @keypress.enter="navigate">{{ $t('str.error.btn.go.home') }}</span>
                 </router-link>
             </div>

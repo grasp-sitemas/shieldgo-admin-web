@@ -192,6 +192,11 @@ export default {
         async checkForm() {
             if (this.isLoading) return
 
+            if (!this.data.customerUser?.subtype || this.data.customerUser?.subtype === '') {
+                alert('subtype')
+                this.errors.push('subtype')
+            }
+
             if (!this.data.account || this.data.account === '') {
                 this.errors.push('account')
             }

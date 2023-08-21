@@ -354,11 +354,11 @@ export default {
             this.removeRequiredField('vigilants')
         },
         async selectAllPatrolPoints() {
-            this.selectedPatrolPooints = this.patrolPoints
+            this.selectedPatrolPoints = this.patrolPoints
             this.removeRequiredField('points')
         },
         removeAllPatrolPoints() {
-            this.selectedPatrolPooints = []
+            this.selectedPatrolPoints = []
             this.removeRequiredField('patrolPoints')
         },
         async closeModal() {
@@ -508,12 +508,12 @@ export default {
             this.data.points = []; // Limpa a lista de pontos
         },
         addPatrolPoints() {
-            for (const selectedPoint of this.selectedPatrolPooints) {
+            for (const selectedPoint of this.selectedPatrolPoints) {
                 if (!this.data.points.some(point => point === selectedPoint)) {
                     this.data.points.push(selectedPoint);
                 }
             }
-            this.selectedPatrolPooints = []; // Limpar seleção após adicionar
+            this.selectedPatrolPoints = []; // Limpar seleção após adicionar
         },
         isEnabledBtnSave: function () {
             return this.data.name && this.data.frequency && this.data.vigilants.length > 0 && this.data.points.length > 0 && this.data.beginDate && this.data.endDate && this.data.client && this.site

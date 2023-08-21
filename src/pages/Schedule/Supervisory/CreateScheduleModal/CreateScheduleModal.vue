@@ -270,9 +270,11 @@
                         taggable
                         multiple
                         :disabled="data._id ? true : false"
-                        label="patrolPoints"
+                        :searchable="true"
+                        :clearable="true"
+                        label="name"
                         key="patrolPointsFields"
-                        v-model="selectedPatrolPooints"
+                        v-model="selectedPatrolPoints"
                         @search:blur="removeRequiredField('patrolPoints')"
                         v-bind:class="checkRequiredField('patrolPoints') ? 'is-invalid' : ''"
                         :options="patrolPoints"
@@ -282,7 +284,7 @@
                 </div>
 
                 <div class="col-md-2 mt-4">
-                    <button @click="addPatrolPoints()" class="btn btn-warning" type="button" :disabled="selectedPatrolPooints?.length > 0 ? false : true">
+                    <button @click="addPatrolPoints()" class="btn btn-warning" type="button" :disabled="selectedPatrolPoints?.length > 0 ? false : true">
                         {{ $t('str.patrol.points.add.button') }}
                     </button>
                 </div>
@@ -437,7 +439,7 @@ export default {
             clientList: [],
             siteList: [],
             patrolPoints: [],
-            selectedPatrolPooints: [],
+            selectedPatrolPoints: [],
             vigilants: [],
             frequencies: FREQUENCIES,
             weeklyDays: WEEKLY_DAYS,

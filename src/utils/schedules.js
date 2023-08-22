@@ -1,6 +1,7 @@
 export const FREQUENCIES = [
   { value: 'NOT_REPEAT', label: 'schedule.frequencies.not.repeat' },
   { value: 'DAILY', label: 'schedule.frequencies.daily' },
+  { value: 'EVERY_OTHER_DAY', label: 'schedule.frequencies.every.other.day'},
   { value: 'WEEKLY', label: 'schedule.frequencies.weekly' },
   { value: 'MONTHLY', label: 'schedule.frequencies.monthly' },
   { value: 'YEARLY', label: 'schedule.frequencies.yearly' },

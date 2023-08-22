@@ -1227,5 +1227,8 @@
     "str.register.schedule.add.patrol.points.table": "Pontos de ronda do agendamento",
     "str.patrol.points.add.button": "Adicionar",
     "str.table.check.point.column.actions": "Ações",
-    "str.register.schedule.notify.supervisors.field": "Notificar supervisores"
+    "str.register.schedule.notify.supervisors.field": "Notificar supervisores",
+    "EVERY_OTHER_DAY": "12/36",
+    "schedule.frequencies.every.other.day": "12/36"
+
 }

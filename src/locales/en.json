@@ -1235,5 +1235,7 @@
     "str.register.schedule.add.patrol.points.table": "Schedule checkpoints",
     "str.patrol.points.add.button": "Add",
     "str.table.check.point.column.actions": "Actions",
-    "str.register.schedule.notify.supervisors.field": "Notify supervisors"
+    "str.register.schedule.notify.supervisors.field": "Notify supervisors",
+    "EVERY_OTHER_DAY": "12/36",
+    "schedule.frequencies.every.other.day": "12/36"
 }       

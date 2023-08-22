@@ -36,7 +36,7 @@
             </div>
         </div>
 
-        <CreateScheduleModal :role="role" :selectedAppointment="selectedAppointment" :selectedDate="selectedDate" :accounts="accounts" :clients="clients" :isSuperAdminMaster="isSuperAdminMaster" />
+        <CreateScheduleModal  :role="role" :selectedAppointment="selectedAppointment" :selectedDate="selectedDate" :accounts="accounts" :clients="clients" :isSuperAdminMaster="isSuperAdminMaster" />
         <FullCalendar :events="appointments" :options="calendarOptions"></FullCalendar>
     </div>
 </template>

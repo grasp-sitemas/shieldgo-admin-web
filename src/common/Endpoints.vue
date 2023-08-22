@@ -15,6 +15,7 @@ export default {
         cancelSeries: `${domain}/api/company/appointments/cancel/series/v1/`,
         cancelOccurrence: `${domain}/api/company/appointments/cancel/occurrence/v1/`,
         update: `${domain}/api/company/appointments/update/v1/`,
+        updateSupervisory: `${domain}/api/company/appointments/supervisor/update/v1/`,
         updateOccurrence: `${domain}/api/company/appointments/update/occurrence/v1/`,
         supervisorUpdateOccurrence: `${domain}/api/company/appointments/supervisor/update/occurrence/v1/`,
     },

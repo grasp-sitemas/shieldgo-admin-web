@@ -275,7 +275,10 @@ export default {
             newData.beginHour = this.data?.appointment?.startHour
             newData.endHour = this.data?.appointment?.endHour
             newData.timeSlot = this.data?.appointment?.timeSlot
-            
+
+            console.log(this.data)
+
+            newData.points = this.data?.appointment?.patrolPoints ? this.data.appointment.patrolPoints : []
 
             // if (newData.points.length > 0) {
             //     this.patrolPoints.forEach(patrolPoint => {
@@ -494,7 +497,7 @@ export default {
             this.patrolPointItem = item
         },
         removeRow(row) {
-            if(this.updateAppointment || this.updateSchedule) {
+            if(this.updateAppointment || this.updateSchedule || !this.data._id) {
 
                 const index = row?.originalIndex
 

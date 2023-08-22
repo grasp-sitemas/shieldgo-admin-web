@@ -127,6 +127,7 @@ export default {
             const selectedAppointment = await Services.getScheduleById(this, filters)
             selectedAppointment.appointment = appointment
             this.selectedAppointment = selectedAppointment
+            console.log(this.selectedAppointment)
 
             this.$bvModal.show('createScheduleModal')
         },

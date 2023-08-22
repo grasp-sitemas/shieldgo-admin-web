@@ -235,8 +235,11 @@
                 </div>
             </div>
 
-            <hr />
-            <label class="form-label mb-3" for="patrolPointsTable">{{ $t('str.register.schedule.add.patrol.points.table') }}</label>
+        
+            <div style="display: flex;" class="mb-2">
+                <label class="form-label mt-1 mr-1" for="patrolPointsTable">{{ $t('str.register.schedule.add.patrol.points.table') }}</label>
+                <hr style="flex-grow: 1; margin-left: 10px;"/><!-- Simulando um <hr> -->
+            </div>
 
 
             <div class="row">
@@ -244,7 +247,7 @@
                     <label class="form-label" for="siteField">{{ $t('str.register.incident.site.field') }}</label>
                     <select
                         v-model="site"
-                        :disabled="data._id ? true : updateAppointment ? true : false"
+                        :disabled="updateAppointment ? false : data._id ? true : false"
                         v-on:change="changeSite"
                         class="form-select"
                         v-bind:class="checkRequiredField('site') ? 'is-invalid' : ''"

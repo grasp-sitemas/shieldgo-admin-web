@@ -33,6 +33,7 @@ import IncidentReport from '../pages/Reports/Incident/Incident.vue'
 import MisssingCallReport from '../pages/Reports/Event/MissedCall/MissedCall.vue'
 import SupervisionPatrolReport from '../pages/Reports/Patrol/Supervision/Supervision.vue'
 import PatrolPointsReport from '../pages/Reports/PatrolPoints/PatrolPoints.vue'
+import PrivacyPolicy from '../pages/PrivacyPolicy/PrivacyPolicy.vue'
 
 Vue.use(VueSession)
 
@@ -52,6 +53,10 @@ const checkSession = () => {
 const routes = [
     { path: '/', component: Login },
     { path: '/404', component: PageNotFound },
+    {
+        path: '/privacy-policy',
+        component: PrivacyPolicy,
+    },
     { path: '*', redirect: '/404' },
     {
         path: '/actions-log',
@@ -321,6 +326,7 @@ const routes = [
             next(checkSession())
         },
     },
+   
 ]
 
 export default routes

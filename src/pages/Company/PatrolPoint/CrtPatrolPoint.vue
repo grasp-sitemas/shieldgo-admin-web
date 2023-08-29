@@ -53,6 +53,10 @@ export default {
 
             if (this.data.radius) this.data.radius = Number(this.data.radius)
 
+            if(this.data?.type === 'SUPERVISION'){
+                delete this.data.site
+            }
+
             try {
                 Request.do(
                     this,
@@ -141,7 +145,7 @@ export default {
                 if (!this.data.client || this.data.client === '') {
                     this.errors.push('client')
                 }
-                if (!this.data.site || this.data.site === '') {
+                if (this.data?.type === 'QRCODE' && (!this.data.site || this.data.site === '')) {
                     this.errors.push(this.$t('site'))
                 }
                 if (!this.data.name || this.data.name === '') {

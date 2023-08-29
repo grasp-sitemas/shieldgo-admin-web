@@ -9,15 +9,14 @@
 
                 <div>
                     <div class="row">
-                        <div class="col-md-3 mb-3">
-                            <label class="form-label" for="statusField">{{ $t('str.register.status.field') }}</label>
-                            <select v-model="data.status" class="form-select" id="statusField">
-                                <option value="ACTIVE">{{ $t('str.register.status.active') }}</option>
-                                <option value="ARCHIVED">{{ $t('str.register.status.archived') }}</option>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label" for="statusField">{{ $t('str.register.type.field') }}</label>
+                            <select v-model="data.type" class="form-select" id="statusField">
+                                <option value="QRCODE">{{ $t('str.qrcode.option') }}</option>
+                                <option value="SUPERVISION">{{ $t('str.supervision.option') }}</option>
                             </select>
                         </div>
-
-                        <div v-if="isSuperAdminMaster" class="col-md-3 mb-3">
+                        <div v-if="isSuperAdminMaster" class="col-md-6 mb-3">
                             <label class="form-label" for="accountField">{{ $t('str.register.check.point.account.field') }}</label>
                             <select
                                 v-model="data.account"
@@ -34,7 +33,7 @@
                             </select>
                             <div class="invalid-feedback">{{ $t('str.register.check.point.account.required') }}</div>
                         </div>
-                        <div v-if="role === 'SUPER_ADMIN_MASTER' || role === 'ADMIN' || role === 'MANAGER'" class="col-md-3 mb-3">
+                        <div v-if="role === 'SUPER_ADMIN_MASTER' || role === 'ADMIN' || role === 'MANAGER'" :class="data?.type === 'QRCODE' ? 'col-md-6 mb-3' : 'col-md-12 mb-3'">
                             <label class="form-label" for="clientField">{{ $t('str.register.check.point.client.field') }}</label>
                             <select
                                 v-model="data.client"
@@ -51,7 +50,7 @@
                             </select>
                             <div class="invalid-feedback">{{ $t('str.register.check.point.client.required') }}</div>
                         </div>
-                        <div class="col-md-3 mb-3">
+                        <div v-if="data.type === 'QRCODE'" class="col-md-6 mb-3">
                             <label class="form-label" for="siteField">{{ $t('str.register.check.point.site.field') }}</label>
                             <select v-model="data.site" class="form-select" v-bind:class="checkRequiredField('site') ? 'is-invalid' : ''" @focus="removeRequiredField('site')" id="siteField">
                                 <option value="">{{ $t('str.register.select.placeholder') }}</option>

@@ -2,6 +2,14 @@
     <div>
         <panel :title="$t('str.table.list.patrol.points')" bodyClass="p-0">
             <div class="row ms-2 mb-1 mt-3 me-1">
+                <div class="col-md-4 mb-3">
+                    <label class="form-label" for="typeField">{{ $t('str.register.type.field') }}</label>
+                    <select v-model="filters.type"  @change="filter" class="form-select" id="typeField">
+                        <option value="">{{ $t('str.register.select.placeholder') }}</option>
+                        <option value="QRCODE">{{ $t('str.qrcode.option') }}</option>
+                        <option value="SUPERVISION">{{ $t('str.supervision.option') }}</option>
+                    </select>
+                </div>
                 <div v-if="isSuperAdminMaster" class="col-md-4 mb-3">
                     <label class="form-label" for="accountField">{{ $t('str.register.guard.groups.account.field') }}</label>
                     <select v-model="filters.account" @change="changeAccount" class="form-select" id="accountField">
@@ -141,6 +149,7 @@ export default {
                 client: '',
                 site: '',
                 status: 'ACTIVE',
+                type: '',
                 name: '',
             },
             listAccounts: [],

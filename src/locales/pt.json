@@ -1221,7 +1221,7 @@
     "str.sidebar.menu.schedule.supervision": "Supervisão",
     "str.form.title.schedules.vigilant.patrol":"Agendamentos - Rondas de vigilancia",
     "str.form.title.schedules.supervisory.patrol":"Agendamentos - Rondas de supervisão",
-    "str.register.schedule.invited.patrol.points.field": "Pontos de checagem",
+    "str.register.schedule.invited.patrol.points.field": "Lista de pontos",
     "str.register.schedule.remove.all.patrol.points.label": "Remover todos",
     "str.register.schedule.select.all.patrol.points.label": "Selecionar todos",
     "str.register.schedule.add.patrol.points.table": "Pontos de checagem do agendamento",

@@ -23,9 +23,7 @@ export default {
             this.errors = this.errors.filter(item => item !== field)
         },
         changeAccount: async function () {
-            this.sites = []
             this.data.client = ''
-            this.site = ''
 
             this.clearFields()
 
@@ -33,18 +31,9 @@ export default {
             this.clientList = await Services.getClientsByAccount(this, account)
         },
         changeClient: async function () {
-            const client = this.data.client
-
-            if (!client || client === '') {
-                this.site = ''
-            }
-
             this.clearFields()
 
-            this.siteList = await Services.getSitesByClient(this, client)
-        },
-        changeSite: async function () {
-            this.patrolPoints = await Services.getPatrolPointsBySite(this, this.site)
+            this.patrolPoints = await Services.getSupervisionCheckPointsByClient(this, this.data?.client)
         },
         async update() {
             if (!this.isSaveLoading) {
@@ -250,10 +239,12 @@ export default {
                 }
             })
         },
-        updateAppointmentSeries: function () {
+        updateAppointmentSeries: async function () {
             const newData = JSON.parse(JSON.stringify(this.data))
             newData.schedule = newData._id
             delete newData._id
+
+            this.patrolPoints = await Services.getSupervisionCheckPointsByClient(this, this.data?.client)
 
             if (!this.isPastDate) {
                 newData.beginDate = moment(this.data?.appointment?.startDate).utc(false).format('YYYY-MM-DD')
@@ -268,6 +259,8 @@ export default {
             newData.schedule = this.data._id
 
             delete newData._id
+
+            this.patrolPoints = await Services.getSupervisionCheckPointsByClient(this, this.data?.client)
 
             newData.beginDate = moment(this.data?.appointment?.startDate).utc(false).format('YYYY-MM-DD')
             newData.endDate = moment(this.data?.appointment?.endDate).utc(false).format('YYYY-MM-DD')
@@ -348,14 +341,6 @@ export default {
             this.removeRequiredField('frequencyYearMonth')
             this.removeRequiredField('frequencyYearDay')
         },
-        async selectAllVigilants() {
-            if (!this.data?.guardGroup || this.data.guardGroup === '') this.data.vigilants = this.vigilants ? this.vigilants : await Services.getVigilantsBySite(this, this.site)
-            else {
-                this.data.vigilants = this.vigilants
-            }
-
-            this.removeRequiredField('vigilants')
-        },
         async selectAllPatrolPoints() {
             this.selectedPatrolPoints = this.patrolPoints
             this.removeRequiredField('points')
@@ -393,9 +378,7 @@ export default {
                 status: 'ACTIVE',
             }
 
-            this.site = null
             this.patrolPoints = []
-            this.vigilants = []
             this.errors = []
 
             if (!this.isSuperAdminMaster) {
@@ -405,7 +388,6 @@ export default {
                 this.clientList = []
             }
 
-            this.siteList = []
             this.isPastDate = false
             this.updateSchedule = false
             this.updateAppointment = false
@@ -413,11 +395,8 @@ export default {
             this.$bvModal.hide('createScheduleModal')
         },
         clearFields() {
-            this.data.vigilants = []
             this.data.points = []
-
             this.patrolPoints = []
-            this.vigilants = []
         },
         verifyDay: function () {
             // check if day of month is valid for selected month
@@ -518,9 +497,6 @@ export default {
             }
             this.selectedPatrolPoints = []; // Limpar seleção após adicionar
         },
-        isEnabledBtnSave: function () {
-            return this.data.name && this.data.frequency && this.data.vigilants.length > 0 && this.data.points.length > 0 && this.data.beginDate && this.data.endDate && this.data.client && this.site
-        },
         async initSelectedAppointment() {
             this.isLoading = true
 
@@ -539,7 +515,6 @@ export default {
                 }
 
                 this.clientList = await Services.getClientsByAccount(this, this.data.account)
-                this.siteList = await Services.getSitesByClient(this, this.data.client)
 
                 if (this.data.points.length > 0) {
                     this.patrolPoints.forEach(patrolPoint => {

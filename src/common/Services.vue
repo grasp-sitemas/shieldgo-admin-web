@@ -267,6 +267,21 @@ export default {
 
         return []
     },
+    getSupervisionCheckPointsByClient: async function (state, client) {
+        if (client) {
+            const filters = {
+                client: client,
+                type: 'SUPERVISION',
+                status: 'ACTIVE',
+            }
+
+            const response = await Request.do(state, 'POST', Request.getDefaultHeader(state), filters, `${Endpoints.patrolPoints.filter}`)
+            return response?.data?.results || []
+        }
+
+        return []
+    },
+    
     getPatrolActions: async function (state, filters) {
         const response = await Request.do(state, 'POST', Request.getDefaultHeader(state), filters, `${Endpoints.patrolActions.filter}`)
         return response?.data?.results || []

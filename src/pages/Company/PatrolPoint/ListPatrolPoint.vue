@@ -75,11 +75,11 @@
                     <span v-else-if="props.column.field === 'account' || props.column.field === 'client' || props.column.field === 'site'">
                         {{ props.formattedRow[props.column.field]?.name }}
                     </span>
-                    <span v-else-if="props.column.field === 'geolocation'">
+                    <!-- <span v-else-if="props.column.field === 'geolocation'">
                         <span v-if="props.formattedRow[props.column.field]?.latitude && props.formattedRow[props.column.field]?.longitude">
                             {{ 'Lat: ' + props.formattedRow[props.column.field]?.latitude + ' Lng: ' + props.formattedRow[props.column.field]?.longitude }}
                         </span>
-                    </span>
+                    </span> -->
                     <span v-else-if="props.column.field === 'createDate'">
                         {{ formatDate(props.formattedRow[props.column.field], true) }}
                     </span>
@@ -92,6 +92,7 @@
                 </template>
             </vue-good-table>
         </panel>
+        <Map :data="patrolPointItem" />
         <CheckPointModal :isSuperAdminMaster="isSuperAdminMaster" :accounts="accounts" :clients="clients" :sites="listSites" :role="role" />
     </div>
 </template>
@@ -152,6 +153,7 @@ export default {
                 type: '',
                 name: '',
             },
+            patrolPointItem: {},
             listAccounts: [],
             listClients: [],
             listSites: [],
@@ -175,3 +177,8 @@ export default {
     methods: Controller.methods,
 }
 </script>
+<style scoped>
+.no-select-item {
+    pointer-events: none; /* Impede que o elemento receba eventos de clique */
+}
+</style>

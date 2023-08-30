@@ -243,32 +243,13 @@
 
 
             <div class="row">
-                <div class="col-md-4 mb-3">
-                    <label class="form-label" for="siteField">{{ $t('str.register.incident.site.field') }}</label>
-                    <select
-                        v-model="site"
-                        :disabled="updateAppointment ? false : data._id ? true : false"
-                        v-on:change="changeSite"
-                        class="form-select"
-                        v-bind:class="checkRequiredField('site') ? 'is-invalid' : ''"
-                        @focus="removeRequiredField('site')"
-                        id="siteField"
-                    >
-                        <option :value="null">{{ $t('str.register.select.placeholder') }}</option>
-                        <option v-for="site in siteList" :value="site._id" :key="site._id">
-                            {{ site.name }}
-                        </option>
-                    </select>
-                    <div class="invalid-feedback">{{ $t('str.register.incident.site.required') }}</div>
-                </div>
                             
-                <div class="col-md-6 mb-3">
+                <div class="col-md-10 mb-3">
                     <label class="form-label" for="vigilantsField">{{ $t('str.register.schedule.invited.patrol.points.field') }}</label>
                     <span v-show="!data._id" @click="removeAllPatrolPoints()" disabled class="badge bg-dark rounded-5 cursor_pointer f-right badge-ml-5">{{
                         $t('str.register.schedule.remove.all.patrol.points.label')
                     }}</span>
                     <span v-show="!data._id" @click="selectAllPatrolPoints()" disabled class="badge bg-dark rounded-5 cursor_pointer f-right">{{ $t('str.register.schedule.select.all.patrol.points.label') }}</span>
-
                     <v-select
                         taggable
                         multiple
@@ -395,10 +376,6 @@ export default {
             type: Array,
             default: () => [],
         },
-        sites: {
-            type: Array,
-            default: () => [],
-        },
         isSuperAdminMaster: {
             type: Boolean,
             default: false,
@@ -423,9 +400,6 @@ export default {
         clients: function () {
             this.clientList = this.clients
         },
-        sites: function () {
-            this.siteList = this.sites
-        },
     },
     data() {
         return {
@@ -436,11 +410,9 @@ export default {
             updateSchedule: false,
             patrolPointItem: {},
             appointment: {},
-            site: null,
             errors: [],
             accountList: [],
             clientList: [],
-            siteList: [],
             patrolPoints: [],
             selectedPatrolPoints: [],
             vigilants: [],

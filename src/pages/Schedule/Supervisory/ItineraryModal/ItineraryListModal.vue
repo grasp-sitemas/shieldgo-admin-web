@@ -6,27 +6,28 @@
         </template>
 
         <vue-good-table
-                class="table-container"
-                :columns="columns"
-                :rows="items"
-                :search-options="{ enabled: true, placeholder: $t('str.table.search.in.this.table') }"
-                :lineNumbers="true"
-                @on-row-click="selectItem"
-            >
+            class="table-container"
+            :columns="columns"
+            :rows="items"
+            :search-options="{ enabled: true, placeholder: $t('str.table.search.in.this.table') }"
+        >
 
-                <div slot="emptystate" class="vgt-center-align vgt-text-disabled">{{ $t('str.table.subtitle.no.data') }}</div>
-                <template slot="table-row" slot-scope="props">
-                    <span>
-                        {{ props.formattedRow[props.column.field] }}
-                    </span>
-                </template>
-            </vue-good-table>
+            <template slot="table-row" slot-scope="props">
+            <div
+                @click="selectRow(props.row)"
+                :class="{ 'selected-row': selectedRow === props.row }"
+                class="table-row-cursor-pointer"
+            >
+                <span>{{ props.formattedRow[props.column.field] }}</span>
+            </div>
+            </template>
+        </vue-good-table>
      
         <div class="row">
             <div class="col-md-12 mb-3">
                 <div class="btn-center mt-4 mb-2">
                     <button @click="save()" class="ms-10px btn btn-primary w-100px" type="button" 
-                        :disabled="!selectedItinerary ? true : false">
+                        :disabled="!selectedRow ? true : false">
                             {{ $t('str.btn.select') }}
                     </button>
                     <button @click="closeModal()" type="submit" class="ms-10px btn btn-secondary w-100px">
@@ -54,13 +55,15 @@ export default {
         return {
             isLoading: false,
             errors: [],
-            selectedItinerary: null,
+            selectedRow: null,
             items: [],
             columns: [
                 {
                     label: this.$t('str.table.header.name'),
                     field: 'name',
-                    type: 'string',
+                    width: '100%',
+                    thClass: 'text-nowrap',
+                    tdClass: 'text-nowrap',
                 },
             ],
         }
@@ -68,6 +71,19 @@ export default {
     methods: {
         closeModal() {
             this.$bvModal.hide('itineraryListModal')
+        },
+        selectRow(row) {
+            this.selectedRow = row; // Define a linha selecionada
+        },
+
+        clearSelection() {
+            this.selectedRow = null; // Limpa a seleção da linha
+        },
+        save() {
+            if (this.selectedRow) {
+                this.$emit('selected-row', this.selectedRow); // Emite o evento com a linha selecionada
+                this.$bvModal.hide('itineraryListModal')
+            }
         },
     },
     created() {
@@ -96,5 +112,14 @@ export default {
     display: flex;
     justify-content: center;
     align-items: center;
+}
+
+.table-row-cursor-pointer {
+  cursor: pointer;
+}
+
+.selected-row {
+  background-color: #dc3545 !important;
+  cursor: pointer;
 }
 </style>

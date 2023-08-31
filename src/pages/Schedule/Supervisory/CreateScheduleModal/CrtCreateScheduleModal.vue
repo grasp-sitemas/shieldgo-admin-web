@@ -331,6 +331,19 @@ export default {
             this.isLoading = false
             this.$registerEvent.$emit('cancelAppointment')
         },
+        selectItineraryRow(row) {
+            this.selectedItinerary = row; // Define a linha selecionada
+        },
+        clearItinerarySelection() {
+            this.selectedItinerary = null; // Limpa a seleção da linha
+        },
+        updateSelectedItinerary(selectedRow) {
+            this.selectedItinerary = selectedRow; // Atualiza a linha selecionada na primeira modal
+            this.data.points = selectedRow?.patrolPoints // Atualiza os pontos do itinerário na segunda modal
+        },
+        clearCheckPoints() {
+            this.data.points = []; // Limpa a lista de pontos
+        },
         changeFrequency: function () {
             this.data.frequencyYear = {
                 month: '',

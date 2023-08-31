@@ -1250,5 +1250,6 @@
     "str.modal.create.itinerary.placeholder.name": "Enter the name",
     "str.btn.select": "Select",
     "str.modal.itinerary.list.title": "Itinerary list",
-    "str.table.header.name": "Name"
+    "str.table.header.name": "Name",
+    "str.btn.clear.table": "Clear table"
 }       

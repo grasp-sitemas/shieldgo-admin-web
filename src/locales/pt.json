@@ -1242,5 +1242,6 @@
     "str.modal.create.itinerary.placeholder.name": "Informe o nome do roteiro",
     "str.btn.select": "Selecionar",
     "str.modal.itinerary.list.title": "Lista de roteiros",
-    "str.table.header.name": "Nome"
+    "str.table.header.name": "Nome",
+    "str.btn.clear.table": "Limpar tabela"
 }

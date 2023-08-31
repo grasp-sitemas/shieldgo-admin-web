@@ -304,6 +304,12 @@
             <div class="align-right mt-3 mb-2" style="text-align: right;">
                 <button 
                     v-if="(data.points?.length > 0 && (updateAppointment || updateSchedule)) || (!data._id && data.points?.length > 0)" 
+                    @click="clearCheckPoints()" class="btn btn-primary" type="button" style="margin-right: 10px;" >
+                    <i class="fas fa-eraser"></i>
+                    {{ $t('str.btn.clear.table') }}
+                </button>
+                <button 
+                    v-if="(data.points?.length > 0 && (updateAppointment || updateSchedule)) || (!data._id && data.points?.length > 0)" 
                     @click="createRoute()" class="btn btn-primary" type="button" style="margin-right: 10px;" >
                     <i class="fas fa-route"></i>
                     {{ $t('str.patrol.points.create.route.button') }}
@@ -359,7 +365,9 @@
             <ItineraryModal
                 :itinerary="data"
             />
-            <ItineraryListModal :itineraryList="itineraries" />
+            <ItineraryListModal :itineraryList="itineraries" 
+                @selected-row="updateSelectedItinerary($event)"
+            />
         </div>
         <div v-else class="center-spinner">
             <i class="fas fa-spinner fa-spin" />
@@ -439,6 +447,7 @@ export default {
             updateSchedule: false,
             patrolPointItem: {},
             appointment: {},
+            selectedItinerary: null,
             errors: [],
             accountList: [],
             clientList: [],
@@ -469,6 +478,14 @@ export default {
         state.$registerEvent.$on('refreshItinerary', async function () {
             state.itineraries = await Services.getItinerariesByClient(state, state.data?.client)
         })
+
+        // state.$registerEvent.$on('selected-row', async function (row) {
+        //     if(row?.patrolPoints?.length > 0) {
+        //         state.selectedItinerary = row
+        //         state.data.points = row?.patrolPoints
+        //     }
+        // })
+
     },
 }
 </script>

@@ -47,6 +47,15 @@ export default {
         const response = await Request.do(state, 'POST', Request.getDefaultHeader(state), filters, `${Endpoints.companies.filter}`)
         return response?.data?.results || []
     },
+    getItinerariesByClient: async function (state, client) {
+        const filters = {
+            client: client,
+            status: 'ACTIVE',
+        }
+
+        const response = await Request.do(state, 'POST', Request.getDefaultHeader(state), filters, `${Endpoints.itineraries.filter}`)
+        return response?.data?.results || []
+    },
     getClientsByAccount: async function (state, account) {
         const filters = {
             name: '',

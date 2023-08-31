@@ -22,6 +22,16 @@ export default {
         removeRequiredField(field) {
             this.errors = this.errors.filter(item => item !== field)
         },
+        createRoute: async function () {
+            if(!this.data?.points) return
+
+            this.$bvModal.show('createItineraryModal')
+        },
+        loadRoute: async function () {
+            if(!this.data?.points) return
+
+            this.$bvModal.show('itineraryListModal')
+        },
         changeAccount: async function () {
             this.data.client = ''
 
@@ -34,6 +44,7 @@ export default {
             this.clearFields()
 
             this.patrolPoints = await Services.getSupervisionCheckPointsByClient(this, this.data?.client)
+            this.itineraries = await Services.getItinerariesByClient(this, this.data?.client)
         },
         async update() {
             if (!this.isSaveLoading) {
@@ -245,6 +256,7 @@ export default {
             delete newData._id
 
             this.patrolPoints = await Services.getSupervisionCheckPointsByClient(this, this.data?.client)
+            this.itineraries = await Services.getItinerariesByClient(this, this.data?.client)
 
             if (!this.isPastDate) {
                 newData.beginDate = moment(this.data?.appointment?.startDate).utc(false).format('YYYY-MM-DD')
@@ -261,6 +273,7 @@ export default {
             delete newData._id
 
             this.patrolPoints = await Services.getSupervisionCheckPointsByClient(this, this.data?.client)
+            this.itineraries = await Services.getItinerariesByClient(this, this.data?.client)
 
             newData.beginDate = moment(this.data?.appointment?.startDate).utc(false).format('YYYY-MM-DD')
             newData.endDate = moment(this.data?.appointment?.endDate).utc(false).format('YYYY-MM-DD')
@@ -272,16 +285,6 @@ export default {
             console.log(this.data)
 
             newData.points = this.data?.appointment?.patrolPoints ? this.data.appointment.patrolPoints : []
-
-            // if (newData.points.length > 0) {
-            //     this.patrolPoints.forEach(patrolPoint => {
-            //         newData.points.forEach(point => {
-            //             if (patrolPoint._id === point) {
-            //                 this.$set(patrolPoint, 'vgtSelected', true)
-            //             }
-            //         })
-            //     })
-            // }
 
             this.data = newData
             this.updateAppointment = true

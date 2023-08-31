@@ -272,7 +272,7 @@
                         {{ $t('str.patrol.points.add.button') }}
                     </button>
                 </div>
-
+           
             </div>
 
             <vue-good-table
@@ -300,10 +300,26 @@
                     </span>
                 </template>
             </vue-good-table>
+            
+            <div class="align-right mt-3 mb-2" style="text-align: right;">
+                <button 
+                    v-if="(data.points?.length > 0 && (updateAppointment || updateSchedule)) || (!data._id && data.points?.length > 0)" 
+                    @click="createRoute()" class="btn btn-primary" type="button" style="margin-right: 10px;" >
+                    <i class="fas fa-route"></i>
+                    {{ $t('str.patrol.points.create.route.button') }}
+                </button>
+                <button 
+                    v-if="(updateAppointment || updateSchedule) || !data._id" 
+                    @click="loadRoute()" class="btn btn-primary" type="button" >
+                    <i class="fas fa-upload"></i>
+                    {{ $t('str.patrol.points.load.route.button') }}
+                </button>
+            </div>
+
             <div class="invalid-feedback">{{ $t('str.register.schedule.patrol.points.required') }}</div>
 
             <div class="row mb-3 mt-10px">
-                <div class="col-md-4 mt-4 mb-2">
+                <div class="col-md-4">
                     <div class="form-check">
                         <input
                             v-model="data.notifyVigilants"
@@ -340,10 +356,15 @@
 
             <notifications group="bottom-right" position="bottom right" :speed="500" />
             <Map :data="patrolPointItem" />
+            <ItineraryModal
+                :itinerary="data"
+            />
+            <ItineraryListModal :itineraryList="itineraries" />
         </div>
         <div v-else class="center-spinner">
             <i class="fas fa-spinner fa-spin" />
         </div>
+
     </b-modal>
 </template>
 
@@ -353,9 +374,17 @@ import { FREQUENCIES, WEEKLY_DAYS, MONTHS } from '../../../../utils/schedules.js
 import { schedule } from '../../../../types/schedule'
 import { moment } from 'moment'
 import Map from '../Map/Map.vue'
+import ItineraryModal from '../ItineraryModal/ItineraryModal.vue'
+import ItineraryListModal from '../ItineraryModal/ItineraryListModal.vue'
+import Services from '../../../../common/Services.vue'
+import Vue from 'vue'
+Vue.prototype.$registerEvent = new Vue()
+
 export default {
     components: {
         Map,
+        ItineraryModal,
+        ItineraryListModal
     },
     props: {
         selectedDate: {
@@ -416,6 +445,7 @@ export default {
             patrolPoints: [],
             selectedPatrolPoints: [],
             vigilants: [],
+            itineraries: [],
             frequencies: FREQUENCIES,
             weeklyDays: WEEKLY_DAYS,
             months: MONTHS,
@@ -429,10 +459,15 @@ export default {
     mounted() {
         Controller.init(this)
     },
-    created() {
+    async created() {
         let state = this
+
         state.$registerEvent.$on('changeLanguage', function () {
             state.initTable()
+        })
+
+        state.$registerEvent.$on('refreshItinerary', async function () {
+            state.itineraries = await Services.getItinerariesByClient(state, state.data?.client)
         })
     },
 }

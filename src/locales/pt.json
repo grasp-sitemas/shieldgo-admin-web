@@ -1234,6 +1234,13 @@
     "str.qrcode.option": "QR Code",
     "str.supervision.option": "Supervisão",
     "str.modal.check.points.qr.code": "QR Code",
-    "str.modal.check.points.supervision": "Supervisão"
-
+    "str.modal.check.points.supervision": "Supervisão",
+    "str.patrol.points.create.route.button": "Criar roteiro",
+    "str.patrol.points.load.route.button": "Carregar roteiro",
+    "str.modal.itinerary.register.title": "Roteiro",
+    "str.modal.create.itinerary.label.name": "Nome do roteiro",
+    "str.modal.create.itinerary.placeholder.name": "Informe o nome do roteiro",
+    "str.btn.select": "Selecionar",
+    "str.modal.itinerary.list.title": "Lista de roteiros",
+    "str.table.header.name": "Nome"
 }

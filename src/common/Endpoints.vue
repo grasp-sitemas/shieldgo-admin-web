@@ -1,7 +1,7 @@
 <script>
 
-const domain = 'https://api-gateway-shield.herokuapp.com'
-// const domain = 'http://localhost:3000'
+// const domain = 'https://api-gateway-shield.herokuapp.com'
+const domain = 'http://localhost:3000'
 // const socketDomain = 'http://localhost:5004'
 // const socketDomain = 'https://ms-socket-shield.herokuapp.com'
 const viaCepDomain = 'https://viacep.com.br/ws/'
@@ -23,6 +23,12 @@ export default {
     addresses: {
         address: `${domain}/api/address/v1/`,
         geolocation: `${domain}/api/address/geo/v1/`,
+    },
+    itineraries: {
+        itinerary: `${domain}/api/company/itineraries/v1/`,
+        delete: `${domain}/api/company/itineraries/delete/v1/`,
+        update: `${domain}/api/company/itineraries/update/v1/`,
+        filter: `${domain}/api/company/itineraries/filter/v1/`,
     },
     events: {
         filter: `${domain}/api/company/events/filter/v1/`,

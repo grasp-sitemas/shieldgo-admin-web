@@ -30,19 +30,34 @@ export default {
 
             this.sites = await Services.getSitesByClient(this, client)
         },
-        handleQrCode: function () {
-            this.isSelected = !this.isSelected
+        async handleCheckpointOption(option) {
+            this.errors = []
+            if(!this.isSuperAdminMaster){
+                this.data.account = await Common.getAccountId(this)
+            }
+            this.data.client = ''
+            this.data.site = ''
+            this.data.type = option;
         },
         checkForm() {
+
             if (!this.data.account || this.data.account === '') {
                 this.errors.push('account')
             }
+
             if (!this.data.client || this.data.client === '') {
                 this.errors.push('client')
             }
-            if (!this.data.site || this.data.site === '') {
-                this.errors.push(this.$t('site'))
+
+            if(this.data?.type === 'QRCODE'){
+                if (!this.data.site || this.data.site === '') {
+                    this.errors.push(this.$t('site'))
+                }
+            }else{
+                this.data.site = ''
+                this.removeRequiredField('site')
             }
+
             if (!this.quantity || this.quantity === '') {
                 this.errors.push(this.$t('quantity'))
             }
@@ -55,15 +70,28 @@ export default {
             this.isLoading = true
 
             const arrayOfData = []
-            for (let i = 0; i < this.quantity; i++) {
-                arrayOfData.push({
-                    name: this.$t('str.generic.check.point.name') + ' ' + (i + 1),
-                    account: this.data.account,
-                    client: this.data.client,
-                    site: this.data.site,
-                    type: this.data.type,
-                    status: this.data.status,
-                })
+
+            if(this.data?.type === 'QRCODE'){
+                for (let index = 0; index < this.quantity; index++) {
+                    arrayOfData.push({
+                        name: '',
+                        account: this.data.account,
+                        client: this.data.client,
+                        site: this.data.site,
+                        type: this.data.type,
+                        status: this.data.status,
+                    })
+                }
+            }else{
+                for (let index = 0; index < this.quantity; index++) {
+                    arrayOfData.push({
+                        name: '',
+                        account: this.data.account,
+                        client: this.data.client,
+                        type: this.data.type,
+                        status: this.data.status,
+                    })
+                }
             }
 
             try {
@@ -94,7 +122,7 @@ export default {
                 console.log(error)
             }
         },
-        closeModal() {
+        async closeModal() {
             this.clearForm()
             this.$bvModal.hide('checkPointModal')
         },
@@ -102,11 +130,13 @@ export default {
             this.errors = []
             this.quantity = null
             this.isSelected = false
+            this.isSupervisionSelected = false
+
             this.data = {
                 account: '',
                 client: '',
                 site: '',
-                type: 'QRCODE',
+                type: '',
                 status: 'ACTIVE',
             }
             if (this.isSuperAdminMaster) {
@@ -114,7 +144,11 @@ export default {
                 this.sites = []
             } else this.data.account = Common.getAccountId(this)
 
+
             this.isLoading = false
+
+            this.$bvModal.hide('checkPointModal')
+
         },
     },
 }

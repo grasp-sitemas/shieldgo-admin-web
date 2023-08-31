@@ -1,6 +1,6 @@
 <template>
     <div>
-        <h1 class="page-header">{{ $t('str.form.title.schedules') }}</h1>
+        <h1 class="page-header">{{ $t('str.form.title.schedules.vigilant.patrol') }}</h1>
         <hr />
 
         <div class="row">
@@ -43,7 +43,7 @@
 
 <script>
 import moment from 'moment'
-import Common from '../../common/Common.vue'
+import Common from '../../../common/Common.vue'
 import Controller from './CrtSchedule.vue'
 import FullCalendar from '@fullcalendar/vue'
 import CreateScheduleModal from './CreateScheduleModal/CreateScheduleModal.vue'
@@ -69,7 +69,7 @@ export default {
                 account: '',
                 client: '',
                 site: '',
-                status: 'ACTIVE',
+                category: 'SECURITY_PATROL',
                 startDate: moment().startOf('month').utc(true).format(),
                 endDate: moment().endOf('month').utc(true).format(),
                 isSortByStartDate: true,

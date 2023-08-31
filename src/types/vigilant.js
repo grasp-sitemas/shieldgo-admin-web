@@ -12,7 +12,7 @@ export const vigilant = {
     site: '',
     customerUser: {
         status: 'ACTIVE',
-        subtype: 'VIGILANT',
+        subtype: '',
     },
     address: {
         cep: '',

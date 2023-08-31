@@ -23,14 +23,18 @@ import RegisterData from '../pages/Company/RegisterData/RegisterData.vue'
 import Settings from '../pages/Settings/Settings.vue'
 import SiteGroup from '../pages/Company/SiteGroup/ListSiteGroup.vue'
 import Sites from '../pages/Company/Site/ListSite.vue'
-import Schedule from '../pages/Schedule/Schedule.vue'
+import VigilantSchedule from '../pages/Schedule/Vigilant/Schedule.vue'
+import SupervisorySchedule from '../pages/Schedule/Supervisory/Schedule.vue'
 import Timeline from '../pages/Timeline/Timeline.vue'
 import User from '../pages/User/User/ListUser.vue'
-import Vigilant from '../pages/User/Vigilant/ListVigilant.vue'
+import Colaborator from '../pages/User/Colaborator/ListColaborator.vue'
 import sosAlert from '../pages/Reports/PanicAlert/PanicAlert.vue'
 import IncidentReport from '../pages/Reports/Incident/Incident.vue'
 import MisssingCallReport from '../pages/Reports/Event/MissedCall/MissedCall.vue'
 import SupervisionPatrolReport from '../pages/Reports/Patrol/Supervision/Supervision.vue'
+import PatrolPointsReport from '../pages/Reports/PatrolPoints/PatrolPoints.vue'
+import PrivacyPolicy from '../pages/PrivacyPolicy/PrivacyPolicy.vue'
+
 Vue.use(VueSession)
 
 const session = Vue.prototype.$session
@@ -49,6 +53,10 @@ const checkSession = () => {
 const routes = [
     { path: '/', component: Login },
     { path: '/404', component: PageNotFound },
+    {
+        path: '/privacy-policy',
+        component: PrivacyPolicy,
+    },
     { path: '*', redirect: '/404' },
     {
         path: '/actions-log',
@@ -179,9 +187,17 @@ const routes = [
         },
     },
     {
-        path: '/schedules',
-        name: 'schedules',
-        component: Schedule,
+        path: '/schedules/vigilant',
+        name: 'vigilant-schedule',
+        component: VigilantSchedule,
+        beforeEnter: (_to, _from, next) => {
+            next(checkSession())
+        },
+    },
+    {
+        path: '/schedules/supervisory',
+        name: 'supervisory-schedule',
+        component: SupervisorySchedule,
         beforeEnter: (_to, _from, next) => {
             next(checkSession())
         },
@@ -212,9 +228,9 @@ const routes = [
         },
     },
     {
-        path: '/vigilants',
-        name: 'vigilants',
-        component: Vigilant,
+        path: '/colaborators',
+        name: 'colaborators',
+        component: Colaborator,
         beforeEnter: (_to, _from, next) => {
             next(checkSession())
         },
@@ -302,14 +318,15 @@ const routes = [
             next(checkSession())
         },
     },
-    // {
-    //     path: '/reports/patrol-points',
-    //     name: 'patrol-points',
-    //     component: MisssingCallReport,
-    //     beforeEnter: (_to, _from, next) => {
-    //         next(checkSession())
-    //     },
-    // },
+    {
+        path: '/reports/patrol-points',
+        name: 'patrol-points',
+        component: PatrolPointsReport,
+        beforeEnter: (_to, _from, next) => {
+            next(checkSession())
+        },
+    },
+   
 ]
 
 export default routes

@@ -15,7 +15,7 @@ export default {
         }
 
         if (role === 'AUDITOR') {
-            payload.columns.splice(5, 1)
+            payload.columns.splice(3, 1)
         }
 
         payload.filter()
@@ -45,6 +45,7 @@ export default {
             this.$bvModal.show('checkPointModal')
         },
         selectItem(params) {
+
             if (this.role === 'AUDITOR') return
 
             const data = params && params?.row ? JSON.parse(JSON.stringify(params.row)) : { ...this.patrolPointObj }
@@ -63,9 +64,42 @@ export default {
                 }
             }
 
+
+            if (!data?.address) {
+                data.address = {
+                    cep: '',
+                    address: '',
+                    number: '',
+                    complement: '',
+                    neighborhood: '',
+                    city: '',
+                    state: '',
+                    ibge: '',
+                    gia: '',
+                    name: '',
+                    lat: '',
+                    lng: '',
+                }
+            }
+
+            if ((!data?.geolocation?.latitude || !data.geolocation?.longitude) && data?.address?.location?.coordinates) {
+                const lat = data.address.location.coordinates[1]
+                const lng = data.address.location.coordinates[0]
+
+                data.geolocation.latitude = lat
+                data.geolocation.longitude = lng
+            }
+
+            if (!data?.geolocation?.longitude && data?.address?.lng) {
+                data.geolocation.longitude = data.address.lng
+            }
+
             this.data = data
 
             this.$emit('load-item', data)
+        },
+        showMap() {
+            this.$bvModal.show('mapModal')
         },
         async initTable() {
             this.columns = [
@@ -95,21 +129,21 @@ export default {
                     thClass: 'text-nowrap',
                     tdClass: 'text-nowrap',
                 },
-                {
-                    label: this.$t('str.table.check.point.column.geolocation'),
-                    field: 'geolocation',
-                    width: '5%',
-                    thClass: 'text-nowrap',
-                    tdClass: 'text-nowrap',
-                },
-                {
-                    label: this.$t('str.table.check.point.column.radius'),
-                    field: 'radius',
-                    width: '5%',
-                    sortable: true,
-                    thClass: 'text-nowrap',
-                    tdClass: 'text-nowrap',
-                },
+                // {
+                //     label: this.$t('str.table.check.point.column.geolocation'),
+                //     field: 'geolocation',
+                //     width: '5%',
+                //     thClass: 'text-nowrap',
+                //     tdClass: 'text-nowrap',
+                // },
+                // {
+                //     label: this.$t('str.table.check.point.column.radius'),
+                //     field: 'radius',
+                //     width: '5%',
+                //     sortable: true,
+                //     thClass: 'text-nowrap',
+                //     tdClass: 'text-nowrap',
+                // },
                 {
                     label: this.$t('str.table.check.point.column.account'),
                     field: 'account',
@@ -151,7 +185,7 @@ export default {
                 mode: 'records',
                 perPage: 10,
                 position: 'bottom',
-                perPageDropdown: [10, 20, 50, 100],
+                perPageDropdown: [10, 20, 50, 100, 1000, 10000],
                 dropdownAllowAll: false,
                 setCurrentPage: 1,
                 jumpFirstOrLast: true,

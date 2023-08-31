@@ -80,7 +80,7 @@
                 </template>
             </vue-good-table>
         </panel>
-        <UserModal :selectedData="data" />
+        <UserModal :selectedData="data" :accountList="accounts" />
         <notifications group="bottom-right" position="bottom right" :speed="500" />
     </div>
 </template>

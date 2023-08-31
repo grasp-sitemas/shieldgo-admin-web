@@ -33,11 +33,33 @@ const sidebarMenu = [
     { path: '/sites', icon: 'fa fa-sitemap', title: 'str.sidebar.menu.sites', roles: [ROLES.SUPER_ADMIN_MASTER, ROLES.ADMIN, ROLES.MANAGER, ROLES.AUDITOR] },
     { path: '/patrol-points', icon: 'fa fa-road', title: 'str.sidebar.menu.patrol.points', roles: [ROLES.SUPER_ADMIN_MASTER, ROLES.ADMIN, ROLES.MANAGER, ROLES.OPERATOR, ROLES.AUDITOR] },
     { path: '/incidents', icon: 'fa fa-person-burst', title: 'str.sidebar.menu.incidents', roles: [ROLES.SUPER_ADMIN_MASTER, ROLES.ADMIN, ROLES.MANAGER, ROLES.AUDITOR] },
-    { path: '/vigilants', icon: 'fa fa-person-military-pointing', title: 'str.sidebar.menu.vigilants', roles: [ROLES.SUPER_ADMIN_MASTER, ROLES.ADMIN, ROLES.MANAGER, ROLES.AUDITOR] },
-    // { path: '/guard-groups', icon: 'fa fa-people-group', title: 'str.sidebar.menu.guard.groups', roles: [ROLES.SUPER_ADMIN_MASTER, ROLES.ADMIN, ROLES.MANAGER] },
-    { path: '/schedules', icon: 'fa fa-calendar', title: 'str.sidebar.menu.schedules', roles: [ROLES.SUPER_ADMIN_MASTER, ROLES.ADMIN, ROLES.MANAGER, ROLES.AUDITOR] },
+    {
+        path: '/schedules',
+        icon: 'fa fa-calendar',
+        title: 'str.sidebar.menu.schedules',
+        roles: [ROLES.SUPER_ADMIN_MASTER, ROLES.ADMIN, ROLES.MANAGER,ROLES.AUDITOR],
+        children: [
+            {
+                path: '/schedules/vigilant',
+                title: 'str.sidebar.menu.schedule.vigilant',
+                roles: [ROLES.SUPER_ADMIN_MASTER, ROLES.ADMIN, ROLES.MANAGER],
+            },
+            {
+                path: '/schedules/supervisory',
+                title: 'str.sidebar.menu.schedule.supervision',
+                roles: [ROLES.SUPER_ADMIN_MASTER, ROLES.ADMIN, ROLES.MANAGER],
+            },
+            
+        ],
+    },
     { path: '/timeline', icon: 'fa fa-bars-staggered', title: 'str.sidebar.menu.timeline', roles: [ROLES.SUPER_ADMIN_MASTER, ROLES.ADMIN, ROLES.MANAGER, ROLES.OPERATOR, ROLES.AUDITOR] },
     { path: '/users', icon: 'fa fa-users', title: 'str.sidebar.menu.users', roles: [ROLES.SUPER_ADMIN_MASTER, ROLES.ADMIN, ROLES.MANAGER] },
+    {
+        path: '/colaborators',
+        icon: 'fa fa-person-military-pointing',
+        title: 'str.sidebar.menu.colaborators',
+        roles: [ROLES.SUPER_ADMIN_MASTER, ROLES.ADMIN, ROLES.MANAGER],
+    },
     {
         path: '/groups',
         icon: 'fa fa-align-left',
@@ -105,11 +127,11 @@ const sidebarMenu = [
                 title: 'str.sidebar.menu.reports.supervision.patrol',
                 roles: [ROLES.SUPER_ADMIN_MASTER, ROLES.ADMIN],
             },
-            // {
-            //     path: '/reports/patrol-points',
-            //     title: 'str.sidebar.menu.reports.patrol.points',
-            //     roles: [ROLES.SUPER_ADMIN_MASTER, ROLES.ADMIN],
-            // },
+            {
+                path: '/reports/patrol-points',
+                title: 'str.sidebar.menu.reports.patrol.points',
+                roles: [ROLES.SUPER_ADMIN_MASTER, ROLES.ADMIN],
+            },
         ],
     },
 ]

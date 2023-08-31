@@ -1,10 +1,11 @@
 <script>
-import Common from '../../../common/Common.vue'
-import Services from '../../../common/Services.vue'
-import Endpoints from '../../../common/Endpoints.vue'
-import Request from '../../../common/Request.vue'
+import Common from '../../../../common/Common.vue'
+import Services from '../../../../common/Services.vue'
+import Endpoints from '../../../../common/Endpoints.vue'
+import Request from '../../../../common/Request.vue'
 import moment from 'moment'
 import Vue from 'vue'
+
 Vue.prototype.$registerEvent = new Vue()
 
 export default {
@@ -57,6 +58,70 @@ export default {
                 this.data.vigilants = []
             }
         },
+        async update() {
+            if (!this.isSaveLoading) {
+                this.isSaveLoading = true
+                try {
+                    Request.do(
+                        this,
+                        'post',
+                        Request.getDefaultHeader(this),
+                        this.data,
+                        `${Endpoints.schedules.update}`,
+                        async response => {
+                            if (response.status === 200) {
+                                this.isSaveLoading = false
+                                this.$registerEvent.$emit('refreshSchedule')
+                                await this.closeModal()
+                            }
+                        },
+                        error => {
+                            this.isLoading = false
+                            this.isSaveLoading = false
+                            Common.show(this, 'bottom-right', 'warn', this.data._id ? this.$t('str.form.update.generic.error') : this.$t('str.form.save.generic.error'))
+                            console.log(error)
+                        },
+                    )
+                } catch (error) {
+                    this.isLoading = false
+                    this.isSaveLoading = false
+                    Common.show(this, 'bottom-right', 'warn', this.data._id ? this.$t('str.form.update.generic.error') : this.$t('str.form.save.generic.error'))
+                    console.log(error)
+                }
+            }
+        },
+        async updateOccurrence() {
+            if (!this.isSaveLoading) {
+                this.isSaveLoading = true
+                try {
+                    Request.do(
+                        this,
+                        'post',
+                        Request.getDefaultHeader(this),
+                        this.data,
+                        `${Endpoints.appointments.updateOccurrence}`,
+                        async response => {
+                            if (response.status === 200) {
+                                this.isSaveLoading = false
+                                this.$registerEvent.$emit('refreshSchedule')
+                                await this.closeModal()
+                            }
+                        },
+                        error => {
+                            this.isLoading = false
+                            this.isSaveLoading = false
+                            Common.show(this, 'bottom-right', 'warn', this.data._id ? this.$t('str.form.update.generic.error') : this.$t('str.form.save.generic.error'))
+                            console.log(error)
+                        },
+                    )
+                } catch (error) {
+                    this.isLoading = false
+                    this.isSaveLoading = false
+                    Common.show(this, 'bottom-right', 'warn', this.data._id ? this.$t('str.form.update.generic.error') : this.$t('str.form.save.generic.error'))
+                    console.log(error)
+                }
+            }
+        },
         async save() {
             if (!this.isSaveLoading) {
                 this.isSaveLoading = true
@@ -103,9 +168,7 @@ export default {
             if (!this.data.name || this.data.name === '') {
                 this.errors.push('name')
             }
-            if (!this.data.vigilants || this.data.vigilants.length === 0) {
-                this.errors.push('vigilants')
-            }
+
             if (!this.data.beginDate || this.data.beginDate === '') {
                 this.errors.push('beginDate')
             }
@@ -151,10 +214,14 @@ export default {
                 this.data.beginDate = this.data.beginDate + 'T' + this.data.beginHour + ':00.000Z'
                 this.data.endDate = this.data.endDate + 'T' + this.data.endHour + ':00.000Z'
 
-                console.log('begin data' + this.data.beginDate)
-                console.log('endhour' + this.data.endDate)
-
-                await this.save()
+                if (this.updateSchedule) {
+                    await this.update()
+                }
+                if (this.updateAppointment) {
+                    await this.updateOccurrence()
+                } else {
+                    await this.save()
+                }
             }
         },
         checkRangeDate: async function () {
@@ -175,6 +242,70 @@ export default {
                 return true
             }
             return false
+        },
+        confirmEdit: async function () {
+            this.$swal({
+                title: this.$t('str.are.you.sure'),
+                text: this.$t('str.are.you.sure.edit.schedule'),
+                showCancelButton: true,
+                showDenyButton: true,
+                buttonsStyling: false,
+                confirmButtonText: this.$t('str.title.edit.series'),
+                cancelButtonClass: 'btn btn-default min-btn-width',
+                denyButtonText: this.$t('str.title.edit.occurrence'),
+                confirmButtonClass: 'btn me-5px btn-danger min-btn-width',
+                cancelButtonText: this.$t('str.btn.exit'),
+                denyButtonClass: 'btn me-5px btn-warning min-btn-width',
+            }).then(result => {
+                if (result.isConfirmed) {
+                    this.updateAppointmentSeries()
+                } else if (result.isDenied) {
+                    this.updateAppointmentOccurrence()
+                }
+            })
+        },
+        updateAppointmentSeries: function () {
+            const newData = JSON.parse(JSON.stringify(this.data))
+            newData.schedule = newData._id
+            delete newData._id
+
+            if (!this.isPastDate) {
+                newData.beginDate = moment(this.data?.appointment?.startDate).utc(false).format('YYYY-MM-DD')
+            }
+
+            this.data = newData
+            this.updateSchedule = true
+            this.selectOptions.enabled = true
+        },
+        updateAppointmentOccurrence: async function () {
+            const newData = JSON.parse(JSON.stringify(this.data))
+            newData.schedule = this.data._id
+
+            delete newData._id
+
+            newData.beginDate = moment(this.data?.appointment?.startDate).utc(false).format('YYYY-MM-DD')
+            newData.endDate = moment(this.data?.appointment?.endDate).utc(false).format('YYYY-MM-DD')
+
+            console.log(this.data?.appointment)
+
+            newData.beginHour = this.data?.appointment?.startHour
+            newData.endHour = this.data?.appointment?.endHour
+            newData.timeSlot = this.data?.appointment?.timeSlot
+            newData.points = this.data?.appointment?.patrolPoints
+
+            if (newData.points.length > 0) {
+                this.patrolPoints.forEach(patrolPoint => {
+                    newData.points.forEach(point => {
+                        if (patrolPoint._id === point) {
+                            this.$set(patrolPoint, 'vgtSelected', true)
+                        }
+                    })
+                })
+            }
+
+            this.data = newData
+            this.updateAppointment = true
+            this.selectOptions.enabled = true
         },
         confirmArchive() {
             this.$swal({
@@ -200,10 +331,14 @@ export default {
         cancelAppointmentSeries: async function () {
             const filters = {
                 schedule: this.data._id,
+                startDate: this?.appointment?.startDate ? this.appointment.startDate : '',
             }
+
             await Services.cancelAppointmentSeries(this, filters)
-            this.isLoading = false
+
             this.$registerEvent.$emit('cancelAppointment')
+
+            this.isLoading = false
         },
         cancelAppointmentOccurrence: async function () {
             const filters = {
@@ -246,6 +381,7 @@ export default {
                 client: '',
                 site: '',
                 frequency: '',
+                category: '',
                 frequencyMonth: {
                     day: '',
                 },
@@ -267,10 +403,9 @@ export default {
                 status: 'ACTIVE',
             }
 
-            this.selectOptions.enabled = true
-
             this.patrolPoints = []
             this.vigilants = []
+            this.errors = []
 
             if (!this.isSuperAdminMaster) {
                 this.data.account = await Common.getAccountId(this)
@@ -280,6 +415,10 @@ export default {
             }
 
             this.siteList = []
+            this.isPastDate = false
+            this.updateSchedule = false
+            this.updateAppointment = false
+            this.selectOptions.enabled = true
 
             this.$bvModal.hide('createScheduleModal')
         },
@@ -308,22 +447,6 @@ export default {
             if (day > 31) {
                 this.data.frequencyMonth.day = 31
             }
-        },
-        clearForm: async function () {
-            this.errors = []
-
-            this.patrolPoints = []
-            this.vigilants = []
-
-            this.data = this.scheduleObj
-
-            if (this.isSuperAdminMaster) {
-                this.clientList = []
-                this.siteList = []
-            } else this.data.account = await Common.getAccountId(this)
-            this.selectOptions.enabled = true
-            this.isSaveLoading = false
-            this.isLoading = false
         },
         async initTable() {
             this.columns = [
@@ -391,7 +514,7 @@ export default {
                 selectOnCheckboxOnly: false,
                 selectionText: this.$t('str.schedule.selected.rows'),
                 clearSelectionText: this.$t('str.schedule.selected.rows.clear'),
-                disableSelectInfo: false,
+                disableSelectInfo: true,
                 selectAllByGroup: true,
             }
 
@@ -413,6 +536,12 @@ export default {
                 this.data.account = this.data?.account?._id
                 this.data.client = this.data?.client?._id
                 this.data.site = this.data?.site?._id
+                this.appointment = this.data?.appointment
+
+                this.data.beginDate = moment(this.data?.beginDate).format('YYYY-MM-DD')
+                this.data.endDate = moment(this.data?.endDate).format('YYYY-MM-DD')
+
+                this.isPastDate = moment(this.appointment?.startDate).utc(false).isBefore(moment().utc(true).startOf('day'))
 
                 if (Common.isSuperAdminMaster(this)) {
                     this.accountList = await Services.getAccounts(this)
@@ -421,23 +550,34 @@ export default {
                 this.clientList = await Services.getClientsByAccount(this, this.data.account)
                 this.siteList = await Services.getSitesByClient(this, this.data.client)
 
-                if (!this.data._id) {
+                if (this.data._id) {
                     this.patrolPoints = await Services.getPatrolPointsBySite(this, this.data.site)
-                } else {
-                    this.patrolPoints = this.data?.points || []
+                    this.data.points = this.data?.points || []
                 }
 
-                this.vigilants = await Services.getVigilantsBySite(this, this.data.site)
+                if (this.data.points.length > 0) {
+                    this.patrolPoints.forEach(patrolPoint => {
+                        this.data.points.forEach(point => {
+                            if (patrolPoint._id === point._id) {
+                                this.$set(patrolPoint, 'vgtSelected', true)
+                            }
+                        })
+                    })
+                }
 
-                const mappedVigilants = this.data.vigilants.map(vigilant => {
-                    return {
-                        _id: vigilant._id,
-                        firstName: vigilant.firstName,
-                        lastName: vigilant.lastName,
-                        fullName: `${vigilant.firstName} ${vigilant.lastName}`,
-                    }
-                })
-                this.data.vigilants = mappedVigilants ? mappedVigilants : []
+                this.selectOptions.enabled = false
+
+                // this.vigilants = await Services.getVigilantsBySite(this, this.data.site)
+
+                // const mappedVigilants = this.data.vigilants.map(vigilant => {
+                //     return {
+                //         _id: vigilant._id,
+                //         firstName: vigilant.firstName,
+                //         lastName: vigilant.lastName,
+                //         fullName: `${vigilant.firstName} ${vigilant.lastName}`,
+                //     }
+                // })
+                // this.data.vigilants = mappedVigilants ? mappedVigilants : []
 
                 this.isLoading = false
             } catch (error) {

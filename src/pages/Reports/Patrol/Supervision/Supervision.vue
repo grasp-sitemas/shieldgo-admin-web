@@ -5,47 +5,6 @@
 
         <div v-if="!isLoading">
             <div class="row">
-                <div v-if="isSuperAdminMaster" class="col-md-4 mb-3">
-                    <label class="form-label" for="accountField">{{ $t('str.register.user.account.field') }}</label>
-                    <select v-model="filters.account" @change="changeAccount" class="form-select" id="accountField">
-                        <option value="">{{ $t('str.register.select.placeholder') }}</option>
-                        <option v-for="account in accounts" :value="account._id" :key="account._id">
-                            {{ account.name }}
-                        </option>
-                    </select>
-                </div>
-                <div v-if="role === 'SUPER_ADMIN_MASTER' || role === 'ADMIN' || role === 'MANAGER'" class="col-md-4 mb-3">
-                    <label class="form-label" for="clientField">{{ $t('str.register.guard.groups.client.field') }}</label>
-                    <select v-model="filters.client" @change="changeClient" class="form-select" id="clientField">
-                        <option value="">{{ $t('str.register.select.placeholder') }}</option>
-                        <option v-for="client in clients" :value="client._id" :key="client._id">
-                            {{ client.name }}
-                        </option>
-                    </select>
-                    <div class="invalid-feedback">{{ $t('str.register.guard.groups.client.required') }}</div>
-                </div>
-                <div class="col-md-4 mb-3">
-                    <label class="form-label" for="siteField">{{ $t('str.register.guard.groups.site.field') }}</label>
-                    <select v-model="filters.site" @change="changeSite" class="form-select" id="siteField">
-                        <option value="">{{ $t('str.register.select.placeholder') }}</option>
-                        <option v-for="site in sites" :value="site._id" :key="site._id">
-                            {{ site.name }}
-                        </option>
-                    </select>
-                    <div class="invalid-feedback">{{ $t('str.register.guard.groups.site.required') }}</div>
-                </div>
-            </div>
-
-            <div class="row">
-                <div class="col-md-4 mb-3">
-                    <label class="form-label" for="vigilantField">{{ $t('str.reports.vigilant.field') }}</label>
-                    <select v-model="filters.vigilant" class="form-select" id="vigilantField">
-                        <option value="">{{ $t('str.register.select.placeholder') }}</option>
-                        <option v-for="vigilant in vigilants" :value="vigilant._id" :key="vigilant._id">
-                            {{ vigilant.fullName }}
-                        </option>
-                    </select>
-                </div>
                 <div class="col-md-4 mb-3">
                     <label class="form-label" for="statusField">{{ $t('str.range.date.field') }}</label>
                     <date-range-picker
@@ -72,8 +31,36 @@
                         </template>
                     </date-range-picker>
                 </div>
+                <div v-if="isSuperAdminMaster" class="col-md-4 mb-3">
+                    <label class="form-label" for="accountField">{{ $t('str.register.user.account.field') }}</label>
+                    <select v-model="filters.account" @change="changeAccount" class="form-select" id="accountField">
+                        <option value="">{{ $t('str.register.select.placeholder') }}</option>
+                        <option v-for="account in accounts" :value="account._id" :key="account._id">
+                            {{ account.name }}
+                        </option>
+                    </select>
+                </div>
+                <div v-if="role === 'SUPER_ADMIN_MASTER' || role === 'ADMIN' || role === 'MANAGER'" class="col-md-4 mb-3">
+                    <label class="form-label" for="clientField">{{ $t('str.supervision.area') }}</label>
+                    <select v-model="filters.client" @change="changeClient" class="form-select" id="clientField">
+                        <option value="">{{ $t('str.register.select.placeholder') }}</option>
+                        <option v-for="client in clients" :value="client._id" :key="client._id">
+                            {{ client.name }}
+                        </option>
+                    </select>
+                    <div class="invalid-feedback">{{ $t('str.register.guard.groups.client.required') }}</div>
+                </div>
+                <div class="col-md-4 mb-3">
+                    <label class="form-label" for="vigilantField">{{ $t('str.supervisor') }}</label>
+                    <select v-model="filters.vigilant" class="form-select" id="vigilantField">
+                        <option value="">{{ $t('str.register.select.placeholder') }}</option>
+                        <option v-for="vigilant in vigilants" :value="vigilant._id" :key="vigilant._id">
+                            {{ vigilant.fullName }}
+                        </option>
+                    </select>
+                </div>
 
-                <div class="col-md-4 mt-3 mb-2 text-center">
+                <div :class="!isSuperAdminMaster ? 'col-md-12 mt-2 text-center' : 'col-md-6 mt-3 text-center'">
                     <button @click="filter" type="submit" class="btn btn-primary w-200px me-10px is-loading mb-1">
                         <i v-if="isSearchLoading" class="fas fa-spinner fa-pulse"></i>
                         {{ $t('str.generate.report') }}
@@ -119,7 +106,7 @@
                         :pdfHeader="pdfHeader"
                         :period-end="moment(filters.endDate).format('DD/MM/YYYY')"
                         :period-start="moment(filters.startDate).format('DD/MM/YYYY')"
-                        :jsonData="reportItems"
+                        :jsonData="items"
                         :supervisor="jsonInfo?.vigilant"
                         :totalVisits="totalVisits"
                         :filename="filename"
@@ -136,6 +123,11 @@
                 :search-options="{ enabled: false, placeholder: $t('str.table.search.in.this.table') }"
                 :pagination-options="paginationOptions"
                 @on-row-click="selectItem"
+                @on-sort-change="onSortChange"
+                :sort-options="{
+                    enabled: true,
+                    initialSortBy: { field: 'read', type: 'desc' },
+                }"
             >
                 <div slot="emptystate" class="vgt-center-align vgt-text-disabled">
                     <i v-if="isLoading" class="fas fa-spinner fa-spin" />
@@ -185,7 +177,6 @@ export default {
             vigilants: [],
             errors: [],
             items: [],
-            reportItems: [],
             paginationOptions: {},
             totalVisits: 0,
             fields: [],

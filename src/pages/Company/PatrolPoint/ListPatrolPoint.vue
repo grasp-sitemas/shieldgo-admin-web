@@ -2,6 +2,14 @@
     <div>
         <panel :title="$t('str.table.list.patrol.points')" bodyClass="p-0">
             <div class="row ms-2 mb-1 mt-3 me-1">
+                <div class="col-md-4 mb-3">
+                    <label class="form-label" for="typeField">{{ $t('str.register.type.field') }}</label>
+                    <select v-model="filters.type"  @change="filter" class="form-select" id="typeField">
+                        <option value="">{{ $t('str.register.select.placeholder') }}</option>
+                        <option value="QRCODE">{{ $t('str.qrcode.option') }}</option>
+                        <option value="SUPERVISION">{{ $t('str.supervision.option') }}</option>
+                    </select>
+                </div>
                 <div v-if="isSuperAdminMaster" class="col-md-4 mb-3">
                     <label class="form-label" for="accountField">{{ $t('str.register.guard.groups.account.field') }}</label>
                     <select v-model="filters.account" @change="changeAccount" class="form-select" id="accountField">
@@ -67,11 +75,11 @@
                     <span v-else-if="props.column.field === 'account' || props.column.field === 'client' || props.column.field === 'site'">
                         {{ props.formattedRow[props.column.field]?.name }}
                     </span>
-                    <span v-else-if="props.column.field === 'geolocation'">
+                    <!-- <span v-else-if="props.column.field === 'geolocation'">
                         <span v-if="props.formattedRow[props.column.field]?.latitude && props.formattedRow[props.column.field]?.longitude">
                             {{ 'Lat: ' + props.formattedRow[props.column.field]?.latitude + ' Lng: ' + props.formattedRow[props.column.field]?.longitude }}
                         </span>
-                    </span>
+                    </span> -->
                     <span v-else-if="props.column.field === 'createDate'">
                         {{ formatDate(props.formattedRow[props.column.field], true) }}
                     </span>
@@ -84,6 +92,7 @@
                 </template>
             </vue-good-table>
         </panel>
+        <Map :data="patrolPointItem" />
         <CheckPointModal :isSuperAdminMaster="isSuperAdminMaster" :accounts="accounts" :clients="clients" :sites="listSites" :role="role" />
     </div>
 </template>
@@ -141,8 +150,10 @@ export default {
                 client: '',
                 site: '',
                 status: 'ACTIVE',
+                type: '',
                 name: '',
             },
+            patrolPointItem: {},
             listAccounts: [],
             listClients: [],
             listSites: [],
@@ -166,3 +177,8 @@ export default {
     methods: Controller.methods,
 }
 </script>
+<style scoped>
+.no-select-item {
+    pointer-events: none; /* Impede que o elemento receba eventos de clique */
+}
+</style>

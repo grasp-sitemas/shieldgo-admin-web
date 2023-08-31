@@ -10,7 +10,6 @@
 <script>
 import moment from 'moment'
 import jsPDF from 'jspdf'
-// import { font } from '../../../../../assets/fonts/font'
 export default {
     props: {
         jsonData: {
@@ -94,6 +93,7 @@ export default {
                 items.forEach(item => {
                     const newItem = {
                         read: item.read ? state.$t('str.visited') : state.$t('str.not.visited'),
+                        scanDate: item?.scanDate ? String(item.scanDate) : ' ',
                         name: String(item.name).toUpperCase(),
                     }
 

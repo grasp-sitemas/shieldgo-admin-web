@@ -29,11 +29,11 @@ export default {
             payload.initTable()
 
             if (!payload.isSuperAdminMaster) {
-                payload.columns.splice(1, 1)
+                payload.columns.splice(2, 1)
             }
 
             if (role === 'AUDITOR') {
-                payload.columns.splice(1, 1)
+                payload.columns.splice(2, 1)
             }
             await payload.filter()
         }, 500)
@@ -90,8 +90,17 @@ export default {
                     filterable: true,
                 },
                 {
+                    label: this.$t('str.table.user.column.customer.type'),
+                    field: 'customerUser.subtype',
+                    width: '20%',
+                    thClass: 'text-nowrap',
+                    tdClass: 'text-nowrap',
+                    sortable: true,
+                    filterable: true,
+                },
+                {
                     label: this.$t('str.table.user.column.account'),
-                    field: 'account',
+                    field: 'account.name',
                     width: '10%',
                     thClass: 'text-nowrap',
                     tdClass: 'text-nowrap',
@@ -100,7 +109,7 @@ export default {
                 },
                 {
                     label: this.$t('str.table.user.column.client'),
-                    field: 'client',
+                    field: 'client.name',
                     width: '10%',
                     thClass: 'text-nowrap',
                     tdClass: 'text-nowrap',
@@ -109,7 +118,7 @@ export default {
                 },
                 {
                     label: this.$t('str.table.user.column.site'),
-                    field: 'site',
+                    field: 'site.name',
                     width: '10%',
                     thClass: 'text-nowrap',
                     tdClass: 'text-nowrap',

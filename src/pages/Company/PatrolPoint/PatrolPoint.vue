@@ -9,15 +9,14 @@
 
                 <div>
                     <div class="row">
-                        <div class="col-md-3 mb-3">
-                            <label class="form-label" for="statusField">{{ $t('str.register.status.field') }}</label>
-                            <select v-model="data.status" class="form-select" id="statusField">
-                                <option value="ACTIVE">{{ $t('str.register.status.active') }}</option>
-                                <option value="ARCHIVED">{{ $t('str.register.status.archived') }}</option>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label" for="statusField">{{ $t('str.register.type.field') }}</label>
+                            <select v-model="data.type" class="form-select" id="statusField">
+                                <option value="QRCODE">{{ $t('str.qrcode.option') }}</option>
+                                <option value="SUPERVISION">{{ $t('str.supervision.option') }}</option>
                             </select>
                         </div>
-
-                        <div v-if="isSuperAdminMaster" class="col-md-3 mb-3">
+                        <div v-if="isSuperAdminMaster" class="col-md-6 mb-3">
                             <label class="form-label" for="accountField">{{ $t('str.register.check.point.account.field') }}</label>
                             <select
                                 v-model="data.account"
@@ -34,7 +33,7 @@
                             </select>
                             <div class="invalid-feedback">{{ $t('str.register.check.point.account.required') }}</div>
                         </div>
-                        <div v-if="role === 'SUPER_ADMIN_MASTER' || role === 'ADMIN' || role === 'MANAGER'" class="col-md-3 mb-3">
+                        <div v-if="role === 'SUPER_ADMIN_MASTER' || role === 'ADMIN' || role === 'MANAGER'" :class="data?.type === 'QRCODE' ? 'col-md-6 mb-3' : 'col-md-12 mb-3'">
                             <label class="form-label" for="clientField">{{ $t('str.register.check.point.client.field') }}</label>
                             <select
                                 v-model="data.client"
@@ -51,7 +50,7 @@
                             </select>
                             <div class="invalid-feedback">{{ $t('str.register.check.point.client.required') }}</div>
                         </div>
-                        <div class="col-md-3 mb-3">
+                        <div v-if="data.type === 'QRCODE'" class="col-md-6 mb-3">
                             <label class="form-label" for="siteField">{{ $t('str.register.check.point.site.field') }}</label>
                             <select v-model="data.site" class="form-select" v-bind:class="checkRequiredField('site') ? 'is-invalid' : ''" @focus="removeRequiredField('site')" id="siteField">
                                 <option value="">{{ $t('str.register.select.placeholder') }}</option>
@@ -125,6 +124,93 @@
                                     />
                                 </div>
                             </div>
+                        </div>
+                    </div>
+
+                    <div class="row mt-3">
+                        <div class="col-md-4 mb-3">
+                            <label class="form-label" for="cepField">{{ $t('str.register.site.cep.field') }}</label>
+                            <input
+                                type="tel"
+                                v-mask="'#####-###'"
+                                key="cepField"
+                                @keyup.delete="handleCEPDelete"
+                                @input="inputCep()"
+                                @focus="removeRequiredField('allAddress')"
+                                v-bind:class="checkRequiredField('cep') ? 'is-invalid' : ''"
+                                v-model="data.address.cep"
+                                class="form-control"
+                                :placeholder="$t('str.register.site.cep.placeholder')"
+                            />
+                            <div class="invalid-feedback">{{ $t('str.register.site.cep.required') }}</div>
+                        </div>
+                        <div v-if="data?.address?.cep?.length === 9" class="col-md-4 mb-3">
+                            <label class="form-label" for="addressField">{{ $t('str.register.site.address.field') }}</label>
+                            <input
+                                v-model="data.address.address"
+                                v-bind:class="checkRequiredField('address') ? 'is-invalid' : ''"
+                                @focus="removeRequiredField('address')"
+                                class="form-control"
+                                type="text"
+                                key="addressField"
+                                :placeholder="$t('str.register.site.address.placeholder')"
+                            />
+                            <div class="invalid-feedback">{{ $t('str.register.site.address.required') }}</div>
+                        </div>
+                        <div v-if="data?.address?.cep?.length === 9" class="col-md-4 mb-3">
+                            <label class="form-label" for="numberField">{{ $t('str.register.site.number.field') }}</label>
+                            <input
+                                v-model="data.address.number"
+                                v-bind:class="checkRequiredField('number') ? 'is-invalid' : ''"
+                                @focus="removeRequiredField('number')"
+                                class="form-control"
+                                type="number"
+                                key="numberField"
+                                ref="numberField"
+                                :placeholder="$t('str.register.site.number.placeholder')"
+                            />
+                            <div class="invalid-feedback">{{ $t('str.register.site.number.required') }}</div>
+                        </div>
+                    </div>
+                    <div class="row" v-if="data?.address?.cep?.length === 9">
+                        <div class="col-md-4 mb-3">
+                            <label class="form-label" for="complementField">{{ $t('str.register.site.complement.field') }}</label>
+                            <input v-model="data.address.complement" class="form-control" type="text" id="complementField" :placeholder="$t('str.register.site.complement.placeholder')" />
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label class="form-label" for="districtField">{{ $t('str.register.site.district.field') }}</label>
+                            <input
+                                v-model="data.address.neighborhood"
+                                v-bind:class="checkRequiredField('neighborhood') ? 'is-invalid' : ''"
+                                @focus="removeRequiredField('neighborhood')"
+                                class="form-control"
+                                type="text"
+                                key="districtField"
+                                :placeholder="$t('str.register.site.district.placeholder')"
+                            />
+                            <div class="invalid-feedback">{{ $t('str.register.site.neighborhood.required') }}</div>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label class="form-label" for="cityField">{{ $t('str.register.site.city.field') }}</label>
+                            <input
+                                v-model="data.address.city"
+                                v-bind:class="checkRequiredField('city') ? 'is-invalid' : ''"
+                                @focus="removeRequiredField('city')"
+                                class="form-control"
+                                type="text"
+                                key="cityField"
+                                :placeholder="$t('str.register.site.city.placeholder')"
+                            />
+                            <div class="invalid-feedback">{{ $t('str.register.site.city.required') }}</div>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label class="form-label" for="stateField">{{ $t('str.register.site.state.field') }}</label>
+                            <select v-model="data.address.state" class="form-select" v-bind:class="checkRequiredField('state') ? 'is-invalid' : ''" @focus="removeRequiredField('state')" id="stateField">
+                                <option v-for="state in states" :value="state.value" :key="state.value">
+                                    {{ state.label }}
+                                </option>
+                            </select>
+                            <div class="invalid-feedback">{{ $t('str.register.site.cep.required') }}</div>
                         </div>
                     </div>
 

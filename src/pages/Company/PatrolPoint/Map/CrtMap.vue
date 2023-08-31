@@ -30,10 +30,14 @@ export default {
             this.zoom = zoom
         },
         centerUpdated(geolocation) {
-            this.geolocation = geolocation
+            if (geolocation) {
+                this.geolocation = geolocation
+            }
         },
         boundsUpdated(geolocation) {
-            this.geolocation = geolocation
+            if (geolocation) {
+                this.geolocation = geolocation
+            }
         },
     },
 }

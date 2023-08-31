@@ -5,6 +5,10 @@ export const PDF_HEADER = {
             name: 'Status',
         },
         {
+            _id: 'scanDate',
+            name: 'Data',
+        },
+        {
             _id: 'name',
             name: 'Local',
         },
@@ -13,6 +17,10 @@ export const PDF_HEADER = {
         {
             _id: 'read',
             name: 'Status',
+        },
+        {
+            _id: 'scanDate',
+            name: 'Scan date',
         },
         {
             _id: 'name',

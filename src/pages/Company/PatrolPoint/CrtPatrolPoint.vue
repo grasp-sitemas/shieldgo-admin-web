@@ -4,10 +4,22 @@ import Request from '../../../common/Request.vue'
 import Common from '../../../common/Common.vue'
 import Services from '../../../common/Services.vue'
 
+const instanceateAddress = (addressObj, geo) => {
+    addressObj.name = 'MAIN'
+    if (geo.geometry.lat) {
+        addressObj.lat = geo.geometry.lat
+    } else return null
+    if (geo.geometry.lng) {
+        addressObj.lng = geo.geometry.lng
+    } else return null
+
+    return addressObj
+}
+
 export default {
     init: async payload => {
         payload.data.account = await Common.getAccountId(payload)
-        await payload.getMe()
+        // await payload.getMe()
 
         payload.isSuperAdminMaster = await Common.isSuperAdminMaster(payload)
         const role = await Common.getSubtype(payload)
@@ -23,35 +35,39 @@ export default {
         payload.role = role
     },
     methods: {
-        async getMe() {
-            Request.do(
-                this,
-                'get',
-                Request.getDefaultHeader(this),
-                {},
-                `${Endpoints.systemUsers.getMe}`,
-                response => {
-                    if (response) {
-                        this.user = response?.result
-                        this.$session.set('user', this.user)
-                    }
-                },
-                error => {
-                    console.log(error)
-                },
-            )
-        },
+        // async getMe() {
+        //     Request.do(
+        //         this,
+        //         'get',
+        //         Request.getDefaultHeader(this),
+        //         {},
+        //         `${Endpoints.systemUsers.getMe}`,
+        //         response => {
+        //             if (response) {
+        //                 this.user = response?.result
+        //                 this.$session.set('user', this.user)
+        //             }
+        //         },
+        //         error => {
+        //             console.log(error)
+        //         },
+        //     )
+        // },
         async clearForm() {
             this.errors = []
             this.data = this.patrolPointObj
             this.data.account = await Common.getAccountId(this)
             this.isLoading = false
         },
-        save() {
+        async save() {
             this.data.geolocation.latitude = this.data?.geolocation?.latitude.toString()
             this.data.geolocation.longitude = this.data?.geolocation?.longitude.toString()
 
             if (this.data.radius) this.data.radius = Number(this.data.radius)
+
+            if(this.data?.type === 'SUPERVISION'){
+                delete this.data.site
+            }
 
             try {
                 Request.do(
@@ -105,6 +121,14 @@ export default {
                 Common.show(this, 'bottom-right', 'warn', this.$t('str.form.archive.generic.error'))
             }
         },
+         openMapModal(row) {
+        // You can do any necessary data processing here before opening the map modal
+        // For example, you can set the relevant data to your component's data properties
+        this.patrolPointItem = row;
+
+        // Then, show the map modal
+        this.$bvModal.show('mapModal');
+    },
         confirmArchive() {
             this.$swal({
                 title: this.$t('str.are.you.sure'),
@@ -132,31 +156,129 @@ export default {
             this.errors = this.errors.filter(item => item !== field)
         },
         async checkForm() {
-            if (!this.isLoading) {
+            if (this.isLoading) return
+
+            if (!this.data.account || this.data.account === '') {
+                this.errors.push('account')
+            }
+            if (!this.data.client || this.data.client === '') {
+                this.errors.push('client')
+            }
+            if (this.data?.type === 'QRCODE' && (!this.data.site || this.data.site === '')) {
+                this.errors.push(this.$t('site'))
+            }
+            if (!this.data.name || this.data.name === '') {
+                this.errors.push(this.$t('name'))
+            }
+            if (this.data.priority === null || this.data.priority === '') {
+                this.errors.push(this.$t('priority'))
+            }
+
+            if (!this.errors || this.errors.length === 0) {
                 this.isLoading = true
 
-                if (!this.data.account || this.data.account === '') {
-                    this.errors.push('account')
-                }
-                if (!this.data.client || this.data.client === '') {
-                    this.errors.push('client')
-                }
-                if (!this.data.site || this.data.site === '') {
-                    this.errors.push(this.$t('site'))
-                }
-                if (!this.data.name || this.data.name === '') {
-                    this.errors.push(this.$t('name'))
-                }
-                if (this.data.priority === null || this.data.priority === '') {
-                    this.errors.push(this.$t('priority'))
-                }
-
-                if (!this.errors || this.errors.length === 0) {
-                    await this.save()
-                } else {
-                    this.isLoading = false
-                }
+                this.loadGeolocation(
+                    async data => {
+                        await this.save(data)
+                    },
+                    async error => {
+                        this.data.address.name = 'MAIN'
+                        await this.save(error)
+                    },
+                )
             }
+
+        },
+        inputCep() {
+            if (this.data.address.cep.length === 9) this.loadInfosByCEP()
+        },
+        clearCep() {
+            const cep = this.data?.address?.cep
+            const address = {
+                cep: cep,
+                address: '',
+                number: '',
+                complement: '',
+                neighborhood: '',
+                city: '',
+                state: '',
+                ibge: '',
+                gia: '',
+            }
+            this.data.address = address
+        },
+        handleCEPDelete(e) {
+            if (e.key === 'Backspace' || e.key === 'Delete') {
+                this.clearCep()
+            }
+        },
+        clearAddress() {
+            const address = {
+                cep: this.data?.address?.cep,
+                address: '',
+                number: '',
+                complement: '',
+                neighborhood: '',
+                city: '',
+                state: '',
+                ibge: '',
+                gia: '',
+            }
+            this.data.address = address
+        },
+        loadInfosByCEP() {
+            Request.do(
+                this,
+                'get',
+                {},
+                {},
+                `${Endpoints.cep.find}${this.data.address.cep}/json`,
+                response => {
+                    if (response && !response.erro) {
+                        this.removeRequiredField('allAddress')
+                        this.data.address.address = response.logradouro
+                        this.data.address.neighborhood = response.bairro
+                        this.data.address.city = response.localidade
+                        this.data.address.state = response.uf
+                        this.data.address.ibge = response.ibge
+                        this.data.address.gia = response.gia
+                        this.$refs.numberField.focus()
+                    } else {
+                        this.clearAddress()
+                    }
+                },
+                error => {
+                    console.log(error)
+                    this.clearAddress()
+                },
+            )
+        },
+        loadGeolocation: function (callbackSuccess, callbackError) {
+            let state = this
+            Request.do(
+                this,
+                'POST',
+                Request.getDefaultHeader(this),
+                this.data.address,
+                `${Endpoints.addresses.geolocation}`,
+                geoResponse => {
+                    if (geoResponse.results.length == 0) {
+                        return callbackError(this.$t('string.company.register.address.invalid'))
+                    } else if (geoResponse.results.length == 1) {
+                        let addressObj = instanceateAddress(state.data.address, geoResponse.results[0])
+                        if (addressObj) {
+                            return callbackSuccess(state.data)
+                        } else {
+                            return callbackError(state.$t('string.company.register.address.invalid'))
+                        }
+                    } else if (geoResponse.results.length > 1) {
+                        state.addresses = geoResponse.results
+                    }
+                },
+                error => {
+                    console.log(error)
+                },
+            )
         },
         changeAccount: async function () {
             const account = this.data.account

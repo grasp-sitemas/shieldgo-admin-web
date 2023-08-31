@@ -47,6 +47,15 @@ export default {
         const response = await Request.do(state, 'POST', Request.getDefaultHeader(state), filters, `${Endpoints.companies.filter}`)
         return response?.data?.results || []
     },
+    getItinerariesByClient: async function (state, client) {
+        const filters = {
+            client: client,
+            status: 'ACTIVE',
+        }
+
+        const response = await Request.do(state, 'POST', Request.getDefaultHeader(state), filters, `${Endpoints.itineraries.filter}`)
+        return response?.data?.results || []
+    },
     getClientsByAccount: async function (state, account) {
         const filters = {
             name: '',
@@ -135,6 +144,62 @@ export default {
         }
         return []
     },
+    getSupervisorsBySite: async function (state, site) {
+        const filters = {
+            name: '',
+            site: site,
+            status: 'ACTIVE',
+            subtype: 'SUPERVISOR',
+        }
+
+        if (site) {
+            const response = await Request.do(state, 'POST', Request.getDefaultHeader(state), filters, `${Endpoints.systemUsers.customerUser.search}`)
+
+            const result = response?.data?.results
+            if (result && result.length > 0) {
+                const mappedResult = result.map(item => {
+                    return {
+                        _id: item._id,
+                        firstName: item.firstName,
+                        lastName: item.lastName,
+                        fullName: `${item.firstName} ${item.lastName}`,
+                        status: item.status,
+                    }
+                })
+                return mappedResult
+            }
+            return []
+        }
+        return []
+    },
+    getSupervisorsByClient: async function (state, client) {
+        const filters = {
+            name: '',
+            client: client,
+            status: 'ACTIVE',
+            subtype: 'SUPERVISOR',
+        }
+
+        if (client) {
+            const response = await Request.do(state, 'POST', Request.getDefaultHeader(state), filters, `${Endpoints.systemUsers.customerUser.search}`)
+
+            const result = response?.data?.results
+            if (result && result.length > 0) {
+                const mappedResult = result.map(item => {
+                    return {
+                        _id: item._id,
+                        firstName: item.firstName,
+                        lastName: item.lastName,
+                        fullName: `${item.firstName} ${item.lastName}`,
+                        status: item.status,
+                    }
+                })
+                return mappedResult
+            }
+            return []
+        }
+        return []
+    },
     getVigilantsByGuardGroup: async function (state, guardGroup) {
         const filters = {
             guardGroup: guardGroup,
@@ -162,6 +227,7 @@ export default {
         return []
     },
     getAppointmentsByDate: async function (state, filters) {
+
         const response = await Request.do(state, 'POST', Request.getDefaultHeader(state), filters, `${Endpoints.appointments.filter}`)
 
         return response?.data?.results || []
@@ -189,6 +255,14 @@ export default {
 
         return []
     },
+    getPatrolPoints: async function (state, filter) {
+        if (filter) {
+            const response = await Request.do(state, 'POST', Request.getDefaultHeader(state), filter, `${Endpoints.patrolPoints.filter}`)
+            return response?.data?.results || []
+        }
+
+        return []
+    },
     getPatrolPointsBySite: async function (state, site) {
         if (site) {
             const filters = {
@@ -202,6 +276,21 @@ export default {
 
         return []
     },
+    getSupervisionCheckPointsByClient: async function (state, client) {
+        if (client) {
+            const filters = {
+                client: client,
+                type: 'SUPERVISION',
+                status: 'ACTIVE',
+            }
+
+            const response = await Request.do(state, 'POST', Request.getDefaultHeader(state), filters, `${Endpoints.patrolPoints.filter}`)
+            return response?.data?.results || []
+        }
+
+        return []
+    },
+    
     getPatrolActions: async function (state, filters) {
         const response = await Request.do(state, 'POST', Request.getDefaultHeader(state), filters, `${Endpoints.patrolActions.filter}`)
         return response?.data?.results || []
@@ -224,8 +313,43 @@ export default {
         return response?.data?.results[0] || []
     },
     cancelAppointmentSeries: async function (state, filters) {
-        const response = await Request.do(state, 'POST', Request.getDefaultHeader(state), filters, `${Endpoints.appointments.cancelSeries}`)
-        return response?.data?.deleteSchedule || null
+        try {
+            const response = await Request.do(state, 'POST', Request.getDefaultHeader(state), filters, `${Endpoints.appointments.cancelSeries}`)
+            if (response.status === 200) {
+                return true
+            }
+
+            return null
+        } catch (error) {
+            console.log('error', error)
+            return null
+        }
+    },
+    updateScheduleSeries: async function (state, body) {
+        try {
+            const response = await Request.do(state, 'POST', Request.getDefaultHeader(state), body, `${Endpoints.schedules.update}`)
+            if (response.status === 200) {
+                return true
+            }
+
+            return null
+        } catch (error) {
+            console.log('error', error)
+            return null
+        }
+    },
+    updateAppointmentOccurence: async function (state, body) {
+        try {
+            const response = await Request.do(state, 'POST', Request.getDefaultHeader(state), body, `${Endpoints.appointments.update}`)
+            if (response.status === 200) {
+                return true
+            }
+
+            return null
+        } catch (error) {
+            console.log('error', error)
+            return null
+        }
     },
     cancelAppointmentOccurrence: async function (state, filters) {
         const response = await Request.do(state, 'POST', Request.getDefaultHeader(state), filters, `${Endpoints.appointments.cancelOccurrence}`)
@@ -482,8 +606,17 @@ export default {
                 }
             })
 
-            // Juntando todos os patrolPoints em um único array
             const allPatrolPoints = [].concat(...formattedResults.map(result => result.patrolPoints))
+
+            allPatrolPoints.sort((a, b) => {
+                if (a.read === false) {
+                    return -1
+                }
+                if (b.read === false) {
+                    return 1
+                }
+                return 0
+            })
 
             const finalResult = {
                 account: formattedResults[0].account,
@@ -493,8 +626,6 @@ export default {
                 vigilant: formattedResults[0].vigilant,
                 patrolPoints: allPatrolPoints,
             }
-
-            console.log(finalResult)
 
             return finalResult
         }

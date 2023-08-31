@@ -1,13 +1,23 @@
 <template>
     <b-modal no-close-on-backdrop id="createGuardModal" @hide="closeModal" :hide-footer="true" size="lg" class="modal-message">
         <template slot="modal-header">
-            <h4 class="modal-title">{{ $t('str.breadcrumb.vigilants') }}</h4>
+            <h4 class="modal-title">{{ $t('str.breadcrumb.colaborators') }}</h4>
             <a class="btn-close cursor_pointer" @click="closeModal"></a>
         </template>
 
         <div>
-            <div v-if="data?._id" class="row">
+          
+            <div class="row">
                 <div class="col-md-4 mb-3">
+                    <label class="form-label" for="subtypeField">{{ $t('str.register.type.field') }}</label>
+                    <select v-model="data.customerUser.subtype" class="form-select" v-bind:class="checkRequiredField('subtype') ? 'is-invalid' : ''" @focus="removeRequiredField('subtype')" id="subtypeField">
+                        <option value="">{{ $t('str.register.select.placeholder') }}</option>
+                        <option value="VIGILANT">{{ $t('str.register.type.vigilant') }}</option>
+                        <option value="SUPERVISOR">{{ $t('str.register.type.supervisor') }}</option>
+                    </select>
+                    <div class="invalid-feedback">{{ $t('str.register.colaborator.subtype.required') }}</div>
+                </div>
+                <div  v-if="data?._id" class="col-md-4 mb-3">
                     <label class="form-label" for="statusField">{{ $t('str.register.status.field') }}</label>
                     <select v-model="data.status" class="form-select" id="statusField">
                         <option value="ACTIVE">{{ $t('str.register.status.active') }}</option>
@@ -228,7 +238,7 @@
     </b-modal>
 </template>
 <script>
-import Controller from './CrtVigilant.vue'
+import Controller from './CrtColaborator.vue'
 import Vue from 'vue'
 Vue.prototype.$registerEvent = new Vue()
 

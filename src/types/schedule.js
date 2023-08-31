@@ -5,6 +5,7 @@ export const schedule = {
     client: '',
     site: '',
     frequency: '',
+    category: '',
     frequencyMonth: {
         day: '',
     },
@@ -13,7 +14,6 @@ export const schedule = {
         day: '',
     },
     points: [],
-    vigilants: [],
     weeklyDays: [],
     beginDate: null,
     endDate: null,

@@ -270,21 +270,28 @@ import { user } from '../../../types/user'
 import { STATES } from '../../../utils/states.js'
 import { ROLES } from '../../../utils/roles.js'
 import Services from '../../../common/Services.vue'
-import Common from '../../../common/Common.vue'
+// import Common from '../../../common/Common.vue'
 export default {
     props: {
         selectedData: {
             type: Object,
             default: () => {},
         },
+        accountList: {
+            type: Array,
+            default: () => {},
+        },
     },
     watch: {
+        accountList: async function () {
+            this.accounts = this.accountList
+        },
         selectedData: async function () {
             this.data = this?.selectedData
 
-            if (!this.data?.account) {
-                this.data.account = await Common.getAccountId(this)
-            }
+            // if (!this.data?.account) {
+            //     this.data.account = await Common.getAccountId(this)
+            // }
 
             if (!this.data?.companyUser?.subtype) {
                 this.data.companyUser = {
@@ -314,15 +321,21 @@ export default {
             }
 
             if (this.data?.companyUser?.subtype === 'OPERATOR' || this.data?.companyUser?.subtype === 'AUDITOR') {
-                this.siteGroups = await Services.getSiteGroupsByAccount(this, this.data?.account?._id)
+                this.siteGroups = await Services.getSiteGroupsByClient(this, this.data?.client)
             }
 
             if (this.data?.companyUser?.subtype === 'MANAGER') {
-                this.clientGroups = await Services.getClientGroupsByAccount(this, this.data?.account?._id)
+                this.clientGroups = await Services.getClientGroupsByAccount(this, this.data?.account)
             }
 
             this.data.oldEmail = this.data?.email
             this.data.oldUsername = this.data?.username
+
+            if (this.data.status === 'ARCHIVED') {
+                this.archived = true
+            } else {
+                this.archived = false
+            }
 
             this.errors = []
         },
@@ -344,6 +357,8 @@ export default {
             valuekey: 0,
             showPassword: false,
             isSuperAdminMaster: false,
+            archived: false,
+            unarchive: false,
             data: JSON.parse(JSON.stringify(user)),
             userObj: JSON.parse(JSON.stringify(user)),
         }

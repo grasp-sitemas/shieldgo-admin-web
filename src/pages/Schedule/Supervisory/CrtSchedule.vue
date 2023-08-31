@@ -1,6 +1,6 @@
 <script>
-import Common from '../../common/Common.vue'
-import Services from '../../common/Services.vue'
+import Common from '../../../common/Common.vue'
+import Services from '../../../common/Services.vue'
 import '@fullcalendar/core/vdom' // solves problem with Vite
 import dayGridPlugin from '@fullcalendar/daygrid'
 import timeGridPlugin from '@fullcalendar/timegrid'
@@ -122,14 +122,12 @@ export default {
                 client: appointment?.client?._id,
                 site: appointment?.site?._id,
                 schedule: appointment?.schedule,
-                status: 'ACTIVE',
             }
 
             const selectedAppointment = await Services.getScheduleById(this, filters)
-            selectedAppointment.beginDate = moment(selectedAppointment?.beginDate).format('YYYY-MM-DD')
-            selectedAppointment.endDate = moment(selectedAppointment?.endDate).format('YYYY-MM-DD')
             selectedAppointment.appointment = appointment
             this.selectedAppointment = selectedAppointment
+            console.log(this.selectedAppointment)
 
             this.$bvModal.show('createScheduleModal')
         },

@@ -1,9 +1,11 @@
 <template>
-    <l-map ref="map" @update:zoom="zoomUpdated" @update:center="centerUpdated" @update:bounds="boundsUpdated" :zoom="zoom" :center="geolocation" :options="mapOptions" style="height: 380px">
-        <l-tile-layer :url="url" :attribution="attribution" />
-        <l-circle :lat-lng="circle.center" :radius="circle.radius" :color="circle.color" :interactive="true" :bubblingMouseEvents="true" />
-        <l-draw-toolbar position="topright" />
-    </l-map>
+    <div>
+        <l-map ref="map" @update:zoom="zoomUpdated" @update:center="centerUpdated" @update:bounds="boundsUpdated" :zoom="zoom" :center="geolocation" :options="mapOptions" style="height: 380px">
+            <l-tile-layer :url="url" :attribution="attribution" />
+            <l-circle :lat-lng="circle.center" :radius="circle.radius" :color="circle.color" :interactive="true" :bubblingMouseEvents="true" />
+            <l-draw-toolbar position="topright" />
+        </l-map>
+    </div>
 </template>
 <script>
 import Controller from './CrtMap.vue'
@@ -36,7 +38,7 @@ export default {
             mapOptions: {
                 zoomSnap: 0.5,
             },
-            center: [47.31322, -1.319482],
+            center: [0, 0],
             circle: {
                 center: [0, 0],
                 radius: 0,

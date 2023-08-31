@@ -19,14 +19,14 @@ const instanceateAddress = (addressObj, geo) => {
 export default {
     init: async payload => {
         payload.domain = Endpoints.domain
+
+        payload.isSuperAdminMaster = await Common.isSuperAdminMaster(payload)
+
         payload.data.account = await Common.getAccountId(payload)
 
         payload.role = await Common.getSubtype(payload)
 
-        payload.isSuperAdminMaster = await Common.isSuperAdminMaster(payload)
-        if (payload.isSuperAdminMaster) {
-            payload.accounts = await Services.getAccounts(payload)
-        } else if (payload.role === 'ADMIN' || payload.role === 'MANAGER') {
+        if (payload.role === 'ADMIN' || payload.role === 'MANAGER') {
             payload.clients = await Services.getClients(payload)
             payload.siteGroups = await Services.getSiteGroupsByAccount(payload, payload.data.account)
             payload.clientGroups = await Services.getClientGroupsByAccount(payload, payload.data.account)
@@ -112,12 +112,18 @@ export default {
             this.$refs.file.value = null
             this.isLoading = false
             this.data = this.userObj
+            this.archived = false
+            this.unarchive = false
 
             if (!this.isSuperAdminMaster) {
                 this.data.account = Common.getAccountId(this)
             }
         },
         async save() {
+            if (this.archived && this.data.status === 'ACTIVE') {
+                this.data.unarchive = true
+            }
+
             let formData = new FormData()
 
             formData.append('file', this.file)
@@ -344,9 +350,10 @@ export default {
             if (this?.data?.account) {
                 if (role === 'MANAGER') {
                     this.clientGroups = await Services.getClientGroupsByAccount(this, this.data.account)
-                } else if (role === 'OPERATOR' || role === 'AUDITOR') {
-                    this.siteGroups = await Services.getSiteGroupsByAccount(this, this.data.account)
                 }
+                //  else if (role === 'OPERATOR' || role === 'AUDITOR') {
+                //     this.siteGroups = await Services.getSiteGroupsByAccount(this, this.data.account)
+                // }
             }
         },
         async changeClientGroup() {

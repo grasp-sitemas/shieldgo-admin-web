@@ -1,17 +1,15 @@
 import moment from 'moment'
 
 export const JSON_FIELDS_CSV = {
-    supervizionPatrol: {
+    patrolPoint: {
         pt: {
             json_fields: {
-                Status: 'read',
-                Data: 'scanDate',
-                Local: 'name',
+                ID: 'patrolPointCode',
+                Nome: 'name',
             },
             json_data: [
                 {
-                    read: '',
-                    scanDate: '',
+                    patrolPointCode: '',
                     name: '',
                 },
             ],
@@ -23,19 +21,17 @@ export const JSON_FIELDS_CSV = {
                     },
                 ],
             ],
-            title: 'Relátorio de visitas de supervisão',
-            filename: 'supervision_' + moment().format('YYYY-MM-DD:HH:mm:ss'),
+            title: 'Relatório de Pontos de Ronda',
+            filename: 'pontos_ronda_' + moment().format('YYYY-MM-DD:HH:mm:ss'),
         },
         en: {
             json_fields: {
-                Status: 'read',
-                'Scan date': 'scanDate',
-                'Patrol point': 'name',
+                ID: 'patrolPointCode',
+                Name: 'name',
             },
             json_data: [
                 {
-                    read: '',
-                    scanDate: '',
+                    patrolPointCode: '',
                     name: '',
                 },
             ],
@@ -47,8 +43,8 @@ export const JSON_FIELDS_CSV = {
                     },
                 ],
             ],
-            title: 'Supervision visits report',
-            filename: 'supervision_' + moment().format('YYYY-MM-DD:HH:mm:ss'),
+            title: 'Patrol Points Report',
+            filename: 'patrol_points_' + moment().format('YYYY-MM-DD:HH:mm:ss'),
         },
     },
 }

@@ -32,7 +32,6 @@ export default {
     props: ['data'],
     watch: {
         data: function () {
-            console.log(JSON.stringify(this.data?.row?.geolocation))
             this.geolocation = this.data?.row?.geolocation
         },
     },

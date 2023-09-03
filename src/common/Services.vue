@@ -144,6 +144,25 @@ export default {
         }
         return []
     },
+    getSupervisoryPointByClient: async function (state, filters) {
+    
+        if (filters) {
+            const response = await Request.do(state, 'POST', Request.getDefaultHeader(state), filters, `${Endpoints.patrolPoints.filter}`)
+
+            const result = response?.data?.results
+            if (result && result.length > 0) {
+                const mappedResult = result.map(item => {
+                    return {
+                        ...item,
+                        actions: true
+                    }
+                })
+                return mappedResult
+            }
+            return []
+        }
+        return []
+    },
     getSupervisorsBySite: async function (state, site) {
         const filters = {
             name: '',
@@ -589,6 +608,16 @@ export default {
                 reportItems: results,
             }
         }
+    },
+    getPatrolPointsByClient: async function (state, client) {
+        const filters = {
+            client: client,
+            status: 'ACTIVE',
+            type: 'SUPERVISION',
+        }
+
+        const response = await Request.do(state, 'POST', Request.getDefaultHeader(state), filters, `${Endpoints.patrolPoints.filter}`)
+        return response?.data?.results || []
     },
     SupervisorPatrol: async function (state, filters) {
         const response = await Request.do(state, 'POST', Request.getDefaultHeader(state), filters, `${Endpoints.reports.filter}`)

@@ -81,6 +81,11 @@ const sidebarMenu = [
                 title: 'str.sidebar.menu.client.groups',
                 roles: [ROLES.SUPER_ADMIN_MASTER, ROLES.ADMIN],
             },
+            {
+                path: '/itineraries',
+                title: 'str.sidebar.menu.itineraries',
+                roles: [ROLES.SUPER_ADMIN_MASTER, ROLES.ADMIN, ROLES.MANAGER],
+            },
         ],
     },
     {

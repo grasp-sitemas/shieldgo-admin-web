@@ -34,6 +34,7 @@ import MisssingCallReport from '../pages/Reports/Event/MissedCall/MissedCall.vue
 import SupervisionPatrolReport from '../pages/Reports/Patrol/Supervision/Supervision.vue'
 import PatrolPointsReport from '../pages/Reports/PatrolPoints/PatrolPoints.vue'
 import PrivacyPolicy from '../pages/PrivacyPolicy/PrivacyPolicy.vue'
+import Itinerary from '../pages/Company/Itineraries/ListItineraries.vue'
 
 Vue.use(VueSession)
 
@@ -118,6 +119,14 @@ const routes = [
         path: '/groups/guards',
         name: 'guard-groups',
         component: GuardGroup,
+        beforeEnter: (_to, _from, next) => {
+            next(checkSession())
+        },
+    },
+    {
+        path: '/itineraries',
+        name: 'itineraries',
+        component: Itinerary,
         beforeEnter: (_to, _from, next) => {
             next(checkSession())
         },

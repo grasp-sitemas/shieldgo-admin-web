@@ -479,13 +479,6 @@ export default {
             state.itineraries = await Services.getItinerariesByClient(state, state.data?.client)
         })
 
-        // state.$registerEvent.$on('selected-row', async function (row) {
-        //     if(row?.patrolPoints?.length > 0) {
-        //         state.selectedItinerary = row
-        //         state.data.points = row?.patrolPoints
-        //     }
-        // })
-
     },
 }
 </script>

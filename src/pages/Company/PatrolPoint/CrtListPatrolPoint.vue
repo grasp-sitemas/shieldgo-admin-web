@@ -5,8 +5,6 @@ import Common from '../../../common/Common.vue'
 import Services from '../../../common/Services.vue'
 export default {
     init: async payload => {
-        const role = await Common.getSubtype(payload)
-        payload.role = role
 
         payload.filters.account = await Common.getAccountId(payload)
         await payload.initTable()
@@ -14,7 +12,7 @@ export default {
             payload.columns.splice(5, 1)
         }
 
-        if (role === 'AUDITOR') {
+        if (payload?.role === 'AUDITOR') {
             payload.columns.splice(3, 1)
         }
 

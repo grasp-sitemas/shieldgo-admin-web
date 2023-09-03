@@ -1,6 +1,5 @@
 <template>
     <div>
-        <!-- BEGIN #sidebar -->
         <div
             id="sidebar"
             class="app-sidebar"

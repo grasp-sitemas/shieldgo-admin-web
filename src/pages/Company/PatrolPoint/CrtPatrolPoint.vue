@@ -177,15 +177,20 @@ export default {
             if (!this.errors || this.errors.length === 0) {
                 this.isLoading = true
 
-                this.loadGeolocation(
-                    async data => {
-                        await this.save(data)
-                    },
-                    async error => {
-                        this.data.address.name = 'MAIN'
-                        await this.save(error)
-                    },
-                )
+                if(this.data?.address?.cep?.length < 9 || !this.data?.address?.cep){
+                    delete this.data.address
+                    await this.save()
+                }else{
+                    this.loadGeolocation(
+                        async data => {
+                            await this.save(data)
+                        },
+                        async error => {
+                            this.data.address.name = 'MAIN'
+                            await this.save(error)
+                        },
+                    )
+                }
             }
 
         },

@@ -36,6 +36,7 @@
                 </div>
             </div>
         </div>
+        <notifications group="bottom-right" position="bottom right" :speed="500" />
 
     </b-modal>
 </template>

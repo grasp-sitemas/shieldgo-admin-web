@@ -230,6 +230,7 @@
                 </div>
             </b-modal>
         </template>
+
         <QrCodeModal :qrcodeId="data._id" :data="data" />
         <ListPatrolPoint v-on:load-item="selectItem" :isSuperAdminMaster="isSuperAdminMaster" :accounts="accounts" :clients="clients" :role="role" />
         <notifications group="bottom-right" position="bottom right" :speed="500" />
@@ -270,7 +271,7 @@ export default {
             patrolPointObj: JSON.parse(JSON.stringify(patrolPoint)),
         }
     },
-    mounted() {
+    created() {
         Controller.init(this)
     },
     methods: Controller.methods,

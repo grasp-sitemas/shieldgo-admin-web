@@ -1266,5 +1266,12 @@
     "str.breadcrumb.itineraries": "Roteiros",
     "str.register.itineraries.checkpoints.table.title": "Pontos atribuídos",
     "str.table.itineraries.column.geolocation": "GPS",
-    "str.register.itineraries.account.required": "Empresa é obrigatória"
+    "str.register.itineraries.account.required": "Empresa é obrigatória",
+    "str.form.schedule.error.points.empty": "É necessário selecionar ao menos um ponto de checagem",
+
+    "str.modal.schedule.information": "Informações do agendamento",
+    "str.modal.schedule.new": "Novo agendamento",
+    "str.modal.schedule.title.edit.serie": "Editar agendamento - Série",
+    "str.modal.schedule.title.edit.ocurrence": "Editar agendamento - Ocorrência"
+
 }

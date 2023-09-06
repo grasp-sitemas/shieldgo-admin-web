@@ -60,6 +60,7 @@ export default {
                             if (response.status === 200) {
                                 this.isSaveLoading = false
                                 this.$registerEvent.$emit('refreshSchedule')
+                                Common.show(this, 'bottom-right', 'success', this.data._id ? this.$t('str.form.update.success') : this.$t('str.form.create.success'))
                                 await this.closeModal()
                             }
                         },
@@ -90,6 +91,8 @@ export default {
                         `${Endpoints.appointments.supervisorUpdateOccurrence}`,
                         async response => {
                             if (response.status === 200) {
+                                Common.show(this, 'bottom-right', 'success', this.data._id ? this.$t('str.form.update.success') : this.$t('str.form.create.success'))
+
                                 this.isSaveLoading = false
                                 this.$registerEvent.$emit('refreshSchedule')
                                 await this.closeModal()
@@ -125,6 +128,8 @@ export default {
                             if (response.status === 200) {
                                 this.isSaveLoading = false
                                 this.$registerEvent.$emit('refreshSchedule')
+
+                                Common.show(this, 'bottom-right', 'success', this.data._id ? this.$t('str.form.update.success') : this.$t('str.form.create.success'))
                                 await this.closeModal()
                             }
                         },
@@ -150,11 +155,9 @@ export default {
             if (!this.data.client || this.data.client === '') {
                 this.errors.push('client')
             }
-           
             if (!this.data.name || this.data.name === '') {
                 this.errors.push('name')
             }
-         
             if (!this.data.beginDate || this.data.beginDate === '') {
                 this.errors.push('beginDate')
             }
@@ -171,7 +174,8 @@ export default {
                 this.errors.push('endHour')
             }
             if (!this.data.points || this.data.points.length === 0) {
-                this.errors.push('points')
+                Common.show(this, 'bottom-right', 'warn', this.$t('str.form.schedule.error.points.empty'))
+                return
             }
 
             if (this.data?.frequency === 'YEARLY' && (!this.data?.frequencyYear?.month || this.data?.frequencyYear?.month === '')) {
@@ -203,7 +207,9 @@ export default {
                 if (this.updateSchedule) {
                     await this.update()
                 }
+                else
                 if (this.updateAppointment) {
+                 
                     await this.updateOccurrence()
                 } else {
                     await this.save()

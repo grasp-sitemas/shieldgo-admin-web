@@ -7,8 +7,9 @@
         <div class="row">
             <div class="col-md-12">
                 <div class="form-group">
-                    <label class="form-label" for="name">{{ $t('str.modal.create.itinerary.label.name') }}</label>
-                    <input type="text" class="form-control" id="name" v-model="data.name" :placeholder="$t('str.modal.create.itinerary.placeholder.name')">
+                    <label class="form-label" for="nameField">{{ $t('str.modal.create.itinerary.label.name') }}</label>
+                    <input 
+                    :autofocus="true"  type="text" class="form-control" name="nameField" key="nameField" id="nameField" ref="nameField" v-model="data.name" :placeholder="$t('str.modal.create.itinerary.placeholder.name')">
                 </div>
             </div>
         </div>
@@ -17,7 +18,8 @@
             <div class="col-md-12 mb-3">
                 <div class="btn-center mt-4 mb-2">
                     <button @click="save()" class="ms-10px btn btn-primary w-100px" type="button" 
-                        :disabled="(!data?.points || data?.points?.length === 0) && (!data?.name || data?.name?.length === 0)">
+                        :disabled="(!data?.patrolPoints || data?.patrolPoints?.length === 0) && (!data?.name || data?.name?.length === 0)">
+                        <i v-if="isLoading" class="fa fa-spinner fa-spin"></i>
                             {{ $t('str.btn.save') }}
                     </button>
                     <button @click="closeModal()" type="submit" class="ms-10px btn btn-secondary w-100px">
@@ -26,37 +28,48 @@
                 </div>
             </div>
         </div>
-
+        <notifications group="bottom-right" position="bottom right" :speed="500" />
     </b-modal>
 </template>
 
 <script>
 import Controller from './CrtItineraryModal.vue'
+import { itinerary } from '../../../../types/itinerary'
 import Vue from 'vue'
 Vue.prototype.$registerEvent = new Vue()
 
 export default {
-    props: ['itinerary'],
-    watch: {
-        itinerary: function () {
-            this.data.account = this.itinerary?.account
-            this.data.client = this.itinerary?.client
-            this.data.patrolPoints = this.itinerary?.points?.map(point => point._id)
-            this.data.status = 'ACTIVE',
-            this.data.name = ''
+    props: {
+        account: {
+            type: String,
+            default: () => {},
+        },
+        client: {
+            type: String,
+            default: () => {},
+        },
+        patrolPoints: {
+            type: Array,
+            default: () => {},
         },
     },
+    watch: {
+        patrolPoints: function () {
+            this.data.patrolPoints = this.patrolPoints?.map(point => point._id)
+          
+        },
+        account: function () {
+            this.data.account = this.account
+        },
+        client: function () {
+            this.data.client = this.client
+        },
+    },  
     data() {
         return {
             isLoading: false,
             errors: [],
-            data: {
-                name: '',
-                account: '',
-                client: '',
-                patrolPoints: [],
-                status: 'ACTIVE',
-            }
+            data: JSON.parse(JSON.stringify(itinerary)),
         }
     },
     methods: Controller.methods,

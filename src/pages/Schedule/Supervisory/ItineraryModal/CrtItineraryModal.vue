@@ -7,7 +7,10 @@ import Vue from 'vue'
 Vue.prototype.$registerEvent = new Vue()
 
 export default {
-    init: () => {
+    init: (payload) => {
+        if (payload.$refs.nameField) {
+            payload.$refs.nameField.focus()
+        }
     },
     methods: {
         async save() {
@@ -24,19 +27,20 @@ export default {
                         async response => {
                             if (response.status === 200) {
                                 this.isLoading = false
+                                Common.show(this, 'bottom-right', 'success', this.$t('str.form.create.success'))
                                 this.$registerEvent.$emit('refreshItinerary')
                                 await this.closeModal()
                             }
                         },
                         error => {
                             this.isLoading = false
-                            Common.show(this, 'bottom-right', 'warn', this.data._id ? this.$t('str.form.update.generic.error') : this.$t('str.form.save.generic.error'))
+                            Common.show(this, 'bottom-right', 'warn', this.$t('str.form.save.generic.error'))
                             console.log(error)
                         },
                     )
                 } catch (error) {
                     this.isLoading = false
-                    Common.show(this, 'bottom-right', 'warn', this.data._id ? this.$t('str.form.update.generic.error') : this.$t('str.form.save.generic.error'))
+                    Common.show(this, 'bottom-right', 'warn', this.$t('str.form.save.generic.error'))
                     console.log(error)
                 }
             }
@@ -44,6 +48,7 @@ export default {
         async closeModal() {
             this.errors = []
             this.data.name = ''
+            this.isLoading = false
             
             if(this.data?._id){
                 delete this.data._id

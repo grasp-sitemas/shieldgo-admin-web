@@ -1,7 +1,16 @@
 <template>
     <b-modal no-close-on-backdrop id="createScheduleModal" @hide="closeModal" :hide-footer="true" size="lg" class="modal-message">
         <template slot="modal-header">
-            <h4 class="modal-title">{{ data?._id ? $t('str.modal.schedule.title.information') : $t('str.modal.create.schedule.title.create') }}</h4>
+            <h4 class="modal-title">
+            {{ data._id }}
+            {{ updateAppointment }}
+            {{ updateSchedule }}
+                <span v-if="data?._id && !updateAppointment && !updateSchedule">{{ $t('str.modal.schedule.information') }}</span>
+                <span v-if="!data?._id && !updateAppointment && !updateSchedule">{{ $t('str.modal.schedule.new') }}</span>
+                <span v-else-if="updateSchedule">{{ $t('str.modal.schedule.title.edit.serie') }}</span>
+                <span v-else-if="updateAppointment">{{ $t('str.modal.schedule.title.edit.ocurrence') }}</span>
+
+            </h4>
             <span v-if="data?.status === 'ARCHIVED'" class="m-2 badge bg-danger rounded-5 cursor_pointer f-right"
                 ><a>{{ $t('str.modal.schedule.status.archived') }}</a></span
             >
@@ -238,7 +247,7 @@
         
             <div style="display: flex;" class="mb-2">
                 <label class="form-label mt-1 mr-1" for="patrolPointsTable">{{ $t('str.register.schedule.add.patrol.points.table') }}</label>
-                <hr style="flex-grow: 1; margin-left: 10px;"/><!-- Simulando um <hr> -->
+                <hr style="flex-grow: 1; margin-left: 10px;"/>
             </div>
 
 
@@ -363,7 +372,9 @@
             <notifications group="bottom-right" position="bottom right" :speed="500" />
             <Map :data="patrolPointItem" />
             <ItineraryModal
-                :itinerary="data"
+                :account="data.account"
+                :client="data.client"
+                :patrolPoints="data.points"
             />
             <ItineraryListModal :itineraryList="itineraries" 
                 @selected-row="updateSelectedItinerary($event)"
@@ -372,6 +383,7 @@
         <div v-else class="center-spinner">
             <i class="fas fa-spinner fa-spin" />
         </div>
+        <notifications group="bottom-right" position="bottom right" :speed="500" />
 
     </b-modal>
 </template>

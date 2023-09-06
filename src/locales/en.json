@@ -1251,5 +1251,10 @@
     "str.btn.select": "Select",
     "str.modal.itinerary.list.title": "Itinerary list",
     "str.table.header.name": "Name",
-    "str.btn.clear.table": "Clear table"
+    "str.btn.clear.table": "Clear table",
+    "str.form.schedule.error.points.empty": "You must select at least one checkpoint",
+    "str.modal.schedule.information": "Schedule information",
+    "str.modal.schedule.new": "New schedule",
+    "str.modal.schedule.title.edit.serie": "Edit schedule - Series",
+    "str.modal.schedule.title.edit.ocurrence": "Edit schedule - Occurrence"
 }       

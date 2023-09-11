@@ -139,6 +139,21 @@ const sidebarMenu = [
             },
         ],
     },
+    {
+        path: 'integrations',
+        // api icon
+        icon: 'fa-solid fa-plug',
+        title: 'str.sidebar.menu.integrations',
+        roles: [ROLES.SUPER_ADMIN_MASTER],
+        topMenu: false,
+        children: [
+            {
+                path: '/integrations/logs',
+                title: 'str.sidebar.menu.integrations.logs',
+                roles: [ROLES.SUPER_ADMIN_MASTER],
+            },
+        ],
+    },
 ]
 
 export default sidebarMenu

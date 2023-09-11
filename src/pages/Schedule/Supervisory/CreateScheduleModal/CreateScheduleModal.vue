@@ -2,9 +2,6 @@
     <b-modal no-close-on-backdrop id="createScheduleModal" @hide="closeModal" :hide-footer="true" size="lg" class="modal-message">
         <template slot="modal-header">
             <h4 class="modal-title">
-            {{ data._id }}
-            {{ updateAppointment }}
-            {{ updateSchedule }}
                 <span v-if="data?._id && !updateAppointment && !updateSchedule">{{ $t('str.modal.schedule.information') }}</span>
                 <span v-if="!data?._id && !updateAppointment && !updateSchedule">{{ $t('str.modal.schedule.new') }}</span>
                 <span v-else-if="updateSchedule">{{ $t('str.modal.schedule.title.edit.serie') }}</span>

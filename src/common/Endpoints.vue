@@ -2,13 +2,13 @@
 
 const domain = 'https://api-gateway-shield.herokuapp.com'
 // const domain = 'http://localhost:3000'
-// const socketDomain = 'http://localhost:5004'
-// const socketDomain = 'https://ms-socket-shield.herokuapp.com'
+// const socketDomain = 'http://localhost:3001'
+const socketDomain = 'https://ms-worker-shield-d3de0825cf06.herokuapp.com'
 const viaCepDomain = 'https://viacep.com.br/ws/'
 
 export default {
     domain: domain,
-    // socketDomain: socketDomain,
+    socketDomain: socketDomain,
     appointments: {
         filter: `${domain}/api/company/appointments/filter/v1/`,
         appointment: `${domain}/api/company/appointments/v1/`,
@@ -115,6 +115,9 @@ export default {
     },
     logs: {
         filter: `${domain}/api/logs/filter/v1/`,
+    },
+    integrationLogs: {
+        filter: `${domain}/api/logs/integrations/filter/v1/`,
     },
     schedules: {
         filter: `${domain}/api/company/schedules/filter/v1/`,

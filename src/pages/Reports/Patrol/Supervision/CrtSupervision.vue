@@ -41,8 +41,6 @@ export default {
             const results = await Services.SupervisorPatrol(this, this.filters)
             const patrolPoints = results?.patrolPoints
 
-            console.log('patrolPoints', patrolPoints)
-
             if (patrolPoints && patrolPoints.length > 0) {
                 this.jsonInfo = {
                     account: results?.account,

@@ -1272,6 +1272,12 @@
     "str.modal.schedule.information": "Informações do agendamento",
     "str.modal.schedule.new": "Novo agendamento",
     "str.modal.schedule.title.edit.serie": "Editar agendamento - Série",
-    "str.modal.schedule.title.edit.ocurrence": "Editar agendamento - Ocorrência"
-
+    "str.modal.schedule.title.edit.ocurrence": "Editar agendamento - Ocorrência",
+    "str.form.title.integration.logs.list": "Lista de logs - Integração Sigma",
+    "str.sidebar.menu.integrations": "Integrações",
+    "str.sidebar.menu.integrations.logs": "Logs - Sigma",
+    "str.table.actions.log.column.substatus": "Status",
+    "str.table.actions.log.column.message": "Mensagem",
+    "SUCCESS": "Ok",
+    "ERROR": "Erro"
 }

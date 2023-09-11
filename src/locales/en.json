@@ -1256,5 +1256,10 @@
     "str.modal.schedule.information": "Schedule information",
     "str.modal.schedule.new": "New schedule",
     "str.modal.schedule.title.edit.serie": "Edit schedule - Series",
-    "str.modal.schedule.title.edit.ocurrence": "Edit schedule - Occurrence"
+    "str.modal.schedule.title.edit.ocurrence": "Edit schedule - Occurrence",
+    "str.form.title.integration.logs.list": "Log list - Sigma",
+    "str.table.actions.log.column.substatus": "Status",
+    "str.table.actions.log.column.message": "Message",
+    "SUCCESS": "Ok",
+    "ERROR": "Error"
 }       

@@ -43,10 +43,7 @@ import Controller from './CrtLog.vue'
 import Vue from 'vue'
 Vue.prototype.$registerEvent = new Vue()
 
-const { socketDomain } = require('../../../common/Endpoints.vue').default
-import io from 'socket.io-client';
-const socket = io(socketDomain);
-
+import socket from '../../../config/websocket'; // Importe o cliente WebSocket configurado
 
 export default {
     components: {},
@@ -77,9 +74,11 @@ export default {
             state.initTable()
         })
 
+          // Evento de recebimento de novos eventos
         socket.on('new-events', () => {
-          state.filter()
+            state.filter(); // Execute a lógica de filtragem ao receber novos eventos
         });
+
     },
     methods: Controller.methods,
 }

@@ -23,7 +23,7 @@
                                 {{ $t(props.formattedRow[props.column.field]) }}
                             </span>
                             <span v-else-if="props.column.field === 'createDate'">
-                                {{ formatDate(props.formattedRow[props.column.field]) }}
+                                {{ moment(props.formattedRow[props.column.field]).utc(true).format('DD/MM/YYYY HH:mm:ss') }}
                             </span>
                             <span v-else-if="props.column.field === 'substatus'">
                                 <span class="badge" v-bind:class="props.formattedRow[props.column.field] === 'SUCCESS' ? 'bg-success' : 'bg-danger'"> {{ $t(props.formattedRow[props.column.field]) }} </span>
@@ -42,9 +42,7 @@
 import Controller from './CrtLog.vue'
 import Vue from 'vue'
 Vue.prototype.$registerEvent = new Vue()
-
-import socket from '../../../config/websocket'; // Importe o cliente WebSocket configurado
-
+import moment from 'moment'
 export default {
     components: {},
     data() {
@@ -62,10 +60,23 @@ export default {
             paginationOptions: {
                 perPage: 25,
             },
+            moment: moment, 
         }
     },
     mounted() {
         Controller.init(this)
+    },
+    sockets: {
+        connect() {
+            console.log('Connected to server');
+        },
+        disconnect() {
+            console.log('Disconnected from server');
+        },
+        'new-events'(msg) {
+            console.log('New event received', msg);
+            this.filter();
+        }
     },
     created() {
         const state = this
@@ -73,12 +84,6 @@ export default {
         state.$registerEvent.$on('changeLanguage', function () {
             state.initTable()
         })
-
-          // Evento de recebimento de novos eventos
-        socket.on('new-events', () => {
-            state.filter(); // Execute a lógica de filtragem ao receber novos eventos
-        });
-
     },
     methods: Controller.methods,
 }

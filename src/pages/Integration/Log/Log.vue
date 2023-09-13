@@ -4,16 +4,20 @@
             <h1 class="page-header">{{ $t('str.form.title.integration.logs.list') }}</h1>
             <hr />
             <div class="row">
-               
-                <div class="col-md-12">
-                    <vue-good-table
-                        :columns="columns"
-                        :rows="items"
-                        :lineNumbers="false"
-                        :totalRows="items?.length"
-                        :search-options="{ enabled: true, placeholder: $t('str.table.search.in.this.table') }"
-                        :pagination-options="paginationOptions"
-                    >
+               {{ totalPages }}
+
+               <div class="col-md-12">
+                <vue-good-table
+                    :columns="columns"
+                    :rows="items"
+                    :lineNumbers="false"
+                    :totalRows="totalItems"
+                    :search-options="{ enabled: true, placeholder: $t('str.table.search.in.this.table') }"
+                    :pagination-options="paginationOptions"
+                    :current-page="currentPage" 
+                    :total-pages="totalPages"  
+                    @on-page-change="onPageChange"
+                >
                         <div slot="emptystate" class="vgt-center-align vgt-text-disabled">
                             <i v-if="isLoading" class="fas fa-spinner fa-spin" />
                             <span v-if="!isLoading && items?.length === 0">{{ $t('str.table.subtitle.no.data') }}</span>
@@ -51,9 +55,14 @@ export default {
             valuekey: 0,
             errors: [],
             items: [],
+            currentPage: 0, // Current page number
+            totalPages: 1,  // Total number of pages
+            totalItems: 0,  // Total number of items
             filters: {
                 status: 'ACTIVE',
                 substatus: '',
+                skip: 0,
+                limit: 25,
             },
             isSuperAdminMaster: false,
             columns: [],
@@ -65,18 +74,6 @@ export default {
     },
     mounted() {
         Controller.init(this)
-    },
-    sockets: {
-        connect() {
-            console.log('Connected to server');
-        },
-        disconnect() {
-            console.log('Disconnected from server');
-        },
-        'new-events'(msg) {
-            console.log('New event received', msg);
-            this.filter();
-        }
     },
     created() {
         const state = this

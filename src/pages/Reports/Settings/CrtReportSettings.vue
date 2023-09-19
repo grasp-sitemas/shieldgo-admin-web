@@ -138,8 +138,6 @@ export default {
 
             const newEmail = tagArray[tagArray.length - 1];
 
-            console.log(newEmail);
-
             if (!this.isValidEmail(newEmail)) {
                 this.data.emails.pop();
                 Common.show(this, 'bottom-right', 'warn', this.$t('str.email.invalid'));

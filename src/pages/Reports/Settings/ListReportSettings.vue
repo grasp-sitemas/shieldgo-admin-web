@@ -14,7 +14,7 @@
                 </div>
                     
                 <div class="col-md-3">
-                    <label class="form-label" for="reportNameField">{{ $t('str.register.report.type.field') }}</label>
+                    <label class="form-label" for="reportNameField">{{ $t('str.register.report.name.field') }}</label>
                     <select v-model="filters.reportName" @change="changeReportName" class="form-select" id="reportNameField">
                         <option value="">{{ $t('str.register.select.placeholder') }}</option>
                         <option v-for="report in reportNames" :value="report._id" :key="report._id">
@@ -77,7 +77,7 @@
                 </template>
             </vue-good-table>
         </panel>
-        <ReportSettingsModal :selectedData="data" :reportNames="reportNames" :accounts="accounts"  />
+        <ReportSettingsModal :selectedData="data" :reportNames="reportNames" :items="items" :accounts="accounts"  />
         <notifications group="bottom-right" position="bottom right" :speed="500" />
     </div>
 </template>

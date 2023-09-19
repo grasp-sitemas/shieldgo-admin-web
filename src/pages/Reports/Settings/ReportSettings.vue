@@ -106,6 +106,10 @@ export default {
             type: Array,
             default: () => [],
         },
+        items: {
+            type: Array,
+            default: () => [],
+        },
     },
     watch: {
         selectedData: async function () {

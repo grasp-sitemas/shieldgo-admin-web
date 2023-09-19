@@ -137,6 +137,11 @@ const sidebarMenu = [
                 title: 'str.sidebar.menu.reports.patrol.points',
                 roles: [ROLES.SUPER_ADMIN_MASTER, ROLES.ADMIN],
             },
+            {
+                path: '/reports/settings',
+                title: 'str.sidebar.menu.reports.settings',
+                roles: [ROLES.SUPER_ADMIN_MASTER, ROLES.ADMIN],
+            },
         ],
     },
     {

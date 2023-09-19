@@ -113,6 +113,11 @@ export default {
         filter: `${domain}/api/company/clientgroups/filter/v1/`,
         delete: `${domain}/api/company/clientgroups/delete/v1/`,
     },
+    reportSettings: {
+        reportSetting: `${domain}/api/users/reports/settings/v1/`,
+        filter: `${domain}/api/users/reports/settings/filter/v1/`,
+        delete: `${domain}/api/users/reports/settings/delete/v1/`,
+    },
     logs: {
         filter: `${domain}/api/logs/filter/v1/`,
     },
@@ -132,6 +137,7 @@ export default {
     },
     helpers: {
         attendancesTypes: `${domain}/api/helpers/data/events/attendances/types/v1/`,
+        reportNames: `${domain}/api/helpers/data/reports/scheduled/types/v1/`,
     },
     location: {
         geolocation: `https://maps.googleapis.com/maps/api/geocode/json?latlng=`,

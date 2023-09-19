@@ -4,7 +4,6 @@
             <h1 class="page-header">{{ $t('str.form.title.integration.logs.list') }}</h1>
             <hr />
             <div class="row">
-               {{ totalPages }}
 
                <div class="col-md-12">
                 <vue-good-table

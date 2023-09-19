@@ -21,7 +21,12 @@ export default {
                 response => {
                     if (response) {
                         this.user = response?.result
+                        this.company = response?.result?.company
                         this.darkMode = this.user.darkMode
+
+                        if(!this.company.reportConfigs) {
+                            this.company.reportConfigs = []
+                        }
 
                         if (this.darkMode) {
                             document.body.classList.add('dark-mode')
@@ -80,6 +85,16 @@ export default {
 
             this.updateDarkMode()
         },
+        addEmailField(report) {
+            if (this.company?.reportConfigs?.emails.length < 5) {
+                if(this.newEmail) { // Verifica se o novo e-mail não está vazio
+                    this.company.reportConfigs[report].emails.push(this.newEmail)
+                    this.newEmail = ''; // Limpa o campo de e-mail após adicionar à lista
+                }
+            } else {
+                alert('Maximum of 5 emails allowed.');
+            }
+        }
     },
 }
 </script>

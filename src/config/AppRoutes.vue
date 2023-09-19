@@ -36,6 +36,7 @@ import PatrolPointsReport from '../pages/Reports/PatrolPoints/PatrolPoints.vue'
 import PrivacyPolicy from '../pages/PrivacyPolicy/PrivacyPolicy.vue'
 import Itinerary from '../pages/Company/Itineraries/ListItineraries.vue'
 import IntegrationLogs from '../pages/Integration/Log/Log.vue'
+import ReportSettings from '../pages/Reports/Settings/ListReportSettings.vue'
 Vue.use(VueSession)
 
 const session = Vue.prototype.$session
@@ -336,6 +337,14 @@ const routes = [
         },
     },
     {
+        path: '/reports/settings',
+        name: 'reports-settings',
+        component: ReportSettings,
+        beforeEnter: (_to, _from, next) => {
+            next(checkSession())
+        },
+    },
+    {
         path: '/integrations/logs',
         name: 'integrations-logs',
         component: IntegrationLogs,
@@ -343,6 +352,7 @@ const routes = [
             next(checkSession())
         },
     },
+   
    
 ]
 

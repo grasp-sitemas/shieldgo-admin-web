@@ -2,7 +2,6 @@ import Vue from 'vue'
 import VueX from 'vuex'
 import routes from './config/AppRoutes'
 import { MAPS } from './envs'
-
 // plugins
 import i18n from './i18n'
 import VueRouter from 'vue-router'

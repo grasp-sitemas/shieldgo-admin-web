@@ -12,24 +12,37 @@ export default {
     },
     methods: {
         filter: async function () {
-            this.isLoading = true
-            this.items = []
+            this.isLoading = true;
+            this.items = [];
+
+            const filtersWithPagination = {
+                ...this.filters,
+                skip: this.currentPage,
+                limit: this.paginationOptions.perPage,
+            };
 
             Request.do(
                 this,
                 'POST',
                 Request.getDefaultHeader(this),
-                this.filters,
+                filtersWithPagination,
                 `${Endpoints.integrationLogs.filter}`,
                 response => {
-                    this.items = response?.results
-                    this.isLoading = false
+                    this.items = response?.results[0]?.paginatedResults;
+                    // Calculate totalPages based on totalCount
+                    this.totalItems = response?.results[0]?.totalCount[0]?.count;
+                    this.totalPages = Math.ceil(response?.results[0]?.totalCount[0]?.count / this.paginationOptions.perPage);
+                    this.isLoading = false;
                 },
                 error => {
-                    this.isLoading = false
-                    console.log(error)
+                    this.isLoading = false;
+                    console.log(error);
                 },
-            )
+            );
+        },
+        onPageChange(pageNumber) {
+            this.currentPage = pageNumber?.currentPage - 1;
+            this.filter();
         },
         initTable() {
             this.columns = [

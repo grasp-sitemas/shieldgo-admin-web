@@ -84,7 +84,7 @@
                     />
                 </div>
                 <div class="col-md-2 mt-4">
-                    <button @click="addCheckpoints()" class="btn btn-warning" type="button" :disabled="selectedCheckpoints?.length > 0 ? false : true">
+                    <button @click="addCheckpoints()" class="btn btn-warning w-100" type="button" :disabled="selectedCheckpoints?.length > 0 ? false : true">
                         {{ $t('str.register.checkpoints.add.button') }}
                     </button>
                 </div>

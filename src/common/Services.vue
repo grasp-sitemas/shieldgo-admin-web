@@ -322,7 +322,10 @@ export default {
         const response = await Request.do(state, 'GET', Request.getDefaultHeader(state), {}, `${Endpoints.helpers.attendancesTypes}`)
         return response?.data?.results || []
     },
-
+    getReportNamesTypes: async function (state) {
+        const response = await Request.do(state, 'GET', Request.getDefaultHeader(state), {}, `${Endpoints.helpers.reportNames}`)
+        return response?.data?.results || []
+    },
     getEventAttendances: async function (state, filters) {
         const response = await Request.do(state, 'POST', Request.getDefaultHeader(state), filters, `${Endpoints.events.attendances.filter}`)
         return response?.data?.results || []

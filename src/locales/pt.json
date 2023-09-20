@@ -1309,5 +1309,24 @@
     "str.register.report.settings.emails.info": "Para adicionar um novo e-mail, digite o e-mail e pressione a tecla Enter",
     "str.breadcrumb.report.settings": "Configurações do relatório",
     "str.add.at.least.one.email": "Adicione ao menos um e-mail para receber o relatório",
-    "str.sidebar.menu.reports.settings": "Configuração de envio"
+    "str.sidebar.menu.reports.settings": "Configuração de envio",
+    "REPORT-SETTINGS": "Configuração de relatório",
+    "str.log.domain.report_settings": "Configuração de relatório",
+
+    "str.register.report.period.field": "Período dos dados",
+    "str.register.report.period.required": "Período dos dados é obrigatório",
+    "YESTERDAY": "Dia anterior (d-1)",
+    "TODAY": "Dia atual (d)",
+    "WEEK": "Semanal",
+    "MONTH": "Mensal",
+    "YEAR": "Anual",
+    "str.report.settings.period.yesterday": "Dia anterior (d-1)",
+    "str.report.settings.period.today": "Dia atual (d)",
+    "str.report.settings.period.week": "Semanal",
+    "str.report.settings.period.month": "Mensal",
+    "str.report.settings.period.year": "Anual",
+    "str.report.settings.period.required": "Frequência é obrigatória",
+    "str.report.settings.emails.required": "E-mails são obrigatórios",
+    "str.table.report.column.period": "Período dos dados"
+    
 }

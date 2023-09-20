@@ -13,4 +13,5 @@ export const DOMAINS = [
     { value: 'GUARD-GROUP', label: 'str.log.domain.guard_group' },
     { value: 'SITE-GROUP', label: 'str.log.domain.site_group' },
     { value: 'CLIENT-GROUP', label: 'str.log.domain.client_group' },
+    { value: 'REPORT-SETTINGS', label: 'str.log.domain.report_settings' },
 ]

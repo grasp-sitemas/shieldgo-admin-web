@@ -3,5 +3,6 @@ export const reportConfig = {
     reportName: '',
     dispatchTime: '',
     emails: [],
+    period: '',
     status: '',
 }

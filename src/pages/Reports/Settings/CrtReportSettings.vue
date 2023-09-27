@@ -89,20 +89,24 @@ export default {
             return this.errors.includes(field)
         },
         removeRequiredField(field) {
-          
             this.errors = this.errors.filter(item => item !== field)
-            
         },
         checkForm() {
          
             if (!this.data.account || this.data.account === '') {
                 this.errors.push('account')
             }
+
             if (!this.data.dispatchTime || this.data.dispatchTime === '') {
                 this.errors.push('dispatchTime')
             }
+
             if (!this.data.reportName || this.data.reportName === '') {
                 this.errors.push('reportName')
+            }
+
+            if (!this.data.period || this.data.period === '') {
+                this.errors.push('period')
             }
 
             if (!this.data.emails || this.data.emails?.length === 0) {

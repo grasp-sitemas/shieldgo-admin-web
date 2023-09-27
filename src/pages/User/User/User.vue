@@ -52,7 +52,7 @@
                     </select>
                     <div class="invalid-feedback">{{ $t('str.register.user.account.required') }}</div>
                 </div>
-                <div v-if="data.companyUser.subtype === 'OPERATOR' || data.companyUser.subtype === 'AUDITOR' || data.companyUser.subtype === 'MANAGER'" class="col-md-4 mb-3">
+                <div v-if="data.companyUser.subtype === 'OPERATOR' || data.companyUser.subtype === 'AUDITOR'" class="col-md-4 mb-3">
                     <label class="form-label" for="clientField">{{ $t('str.register.user.client.field') }}</label>
                     <select
                         v-model="data.client"
@@ -69,7 +69,28 @@
                     </select>
                     <div class="invalid-feedback">{{ $t('str.register.user.client.required') }}</div>
                 </div>
-                <div v-if="data.companyUser.subtype === 'MANAGER'" class="col-md-4 mb-3">
+
+                <div v-if="data.companyUser.subtype === 'OPERATOR' || data.companyUser.subtype === 'AUDITOR' || data.companyUser.subtype === 'MANAGER'" class="col-md-4 mb-3">
+                    <label class="form-label d-block mb-3">Tipo de atribuição</label>
+                    <div v-if="data.companyUser.subtype === 'OPERATOR' || data.companyUser.subtype === 'AUDITOR'" class="form-check form-check-inline">
+                        <input :disabled="!data.client" @change="changeAssignmentType" class="form-check-input" type="radio" v-model="assignmentType" value="LOCAL_GROUP" id="groupLocal" />
+                        <label class="form-check-label" for="groupLocal">{{ $t('LOCAL_GROUP') }}</label>
+                    </div>
+                    <div v-if="data.companyUser.subtype === 'OPERATOR' || data.companyUser.subtype === 'AUDITOR'" class="form-check form-check-inline">
+                        <input :disabled="!data.client" @change="changeAssignmentType" class="form-check-input" type="radio" v-model="assignmentType" value="LOCAL" id="local" />
+                        <label class="form-check-label" for="local">{{ $t('LOCAL') }}</label>
+                    </div>
+                    <div v-if="data.companyUser.subtype === 'MANAGER'" class="form-check form-check-inline">
+                        <input :disabled="!data.account" @change="changeAssignmentType" class="form-check-input" type="radio" v-model="assignmentType" value="CLIENT_GROUP" id="groupClient" />
+                        <label class="form-check-label" for="groupClient">{{ $t('CLIENT_GROUP') }}</label>
+                    </div>
+                    <div v-if="data.companyUser.subtype === 'MANAGER'" class="form-check form-check-inline">
+                        <input :disabled="!data.account" @change="changeAssignmentType" class="form-check-input" type="radio" v-model="assignmentType" value="CLIENT" id="client" />
+                        <label class="form-check-label" for="client">{{ $t('CLIENT') }}</label>
+                    </div>
+                </div>
+
+                <div v-if="data.companyUser.subtype === 'MANAGER' && assignmentType === 'CLIENT_GROUP'" class="col-md-4 mb-3">
                     <label class="form-label" for="clientGroupField">{{ $t('str.register.user.clientGroup.field') }}</label>
                     <select
                         v-model="data.clientGroup"
@@ -86,8 +107,25 @@
                     </select>
                     <div class="invalid-feedback">{{ $t('str.register.user.client.required') }}</div>
                 </div>
+                <div v-else-if="data.companyUser.subtype === 'MANAGER' && assignmentType === 'CLIENT'" class="col-md-4 mb-3">
+                    <label class="form-label" for="clientField">{{ $t('str.register.user.client.field') }}</label>
+                    <select
+                        v-model="data.client"
+                        @change="changeClient"
+                        class="form-select"
+                        v-bind:class="checkRequiredField('client') ? 'is-invalid' : ''"
+                        @focus="removeRequiredField('client')"
+                        id="clientField"
+                    >
+                        <option value="">{{ $t('str.register.select.placeholder') }}</option>
+                        <option v-for="client in clients" :value="client._id" :key="client._id">
+                            {{ client.name }}
+                        </option>
+                    </select>
+                    <div class="invalid-feedback">{{ $t('str.register.user.client.required') }}</div>
+                </div>
 
-                <div v-if="data.companyUser.subtype === 'OPERATOR' || (data.companyUser.subtype === 'AUDITOR' && data.account)" class="col-md-4 mb-3">
+                <div v-if="assignmentType === 'LOCAL' && (data.companyUser.subtype === 'OPERATOR' || data.companyUser.subtype === 'AUDITOR')" class="col-md-4 mb-3">
                     <label class="form-label" for="siteField">{{ $t('str.register.user.site.field') }}</label>
                     <select v-model="data.site" class="form-select" v-bind:class="checkRequiredField('site') ? 'is-invalid' : ''" @focus="removeRequiredField('site')" id="siteField">
                         <option value="">{{ $t('str.register.select.placeholder') }}</option>
@@ -98,7 +136,7 @@
                     <div class="invalid-feedback">{{ $t('str.register.user.siteGroup.required') }}</div>
                 </div>
 
-                <div v-if="data.companyUser.subtype === 'OPERATOR' || (data.companyUser.subtype === 'AUDITOR' && data.account)" class="col-md-4 mb-3">
+                <div v-if="assignmentType === 'LOCAL_GROUP' && (data.companyUser.subtype === 'OPERATOR' || data.companyUser.subtype === 'AUDITOR')" class="col-md-4 mb-3">
                     <label class="form-label" for="siteGroupField">{{ $t('str.register.user.siteGroup.field') }}</label>
                     <select v-model="data.siteGroup" class="form-select" v-bind:class="checkRequiredField('siteGroup') ? 'is-invalid' : ''" @focus="removeRequiredField('siteGroup')" id="siteGroupField">
                         <option value="">{{ $t('str.register.select.placeholder') }}</option>
@@ -270,7 +308,7 @@ import { user } from '../../../types/user'
 import { STATES } from '../../../utils/states.js'
 import { ROLES } from '../../../utils/roles.js'
 import Services from '../../../common/Services.vue'
-// import Common from '../../../common/Common.vue'
+import Common from '../../../common/Common.vue'
 export default {
     props: {
         selectedData: {
@@ -289,9 +327,9 @@ export default {
         selectedData: async function () {
             this.data = this?.selectedData
 
-            // if (!this.data?.account) {
-            //     this.data.account = await Common.getAccountId(this)
-            // }
+            if (!this.data?.account && !this.data._id) {
+                this.data.account = await Common.getAccountId(this)
+            }
 
             if (!this.data?.companyUser?.subtype) {
                 this.data.companyUser = {
@@ -302,12 +340,16 @@ export default {
 
             if (this.data?.siteGroup) {
                 this.data.siteGroup = this.data.siteGroup._id
+                this.assignmentType = 'LOCAL_GROUP'
+                this.data.site = ''
             } else {
                 this.data.siteGroup = ''
             }
 
             if (this.data?.clientGroup) {
                 this.data.clientGroup = this.data.clientGroup._id
+                this.assignmentType = 'CLIENT_GROUP'
+                this.data.client = ''
             } else {
                 this.data.clientGroup = ''
             }
@@ -344,6 +386,7 @@ export default {
         return {
             states: STATES,
             roles: ROLES,
+            assignmentType: null,
             domain: null,
             file: null,
             isLoading: false,

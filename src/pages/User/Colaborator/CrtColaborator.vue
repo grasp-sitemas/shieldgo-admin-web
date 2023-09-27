@@ -193,7 +193,6 @@ export default {
             if (this.isLoading) return
 
             if (!this.data.customerUser?.subtype || this.data.customerUser?.subtype === '') {
-                alert('subtype')
                 this.errors.push('subtype')
             }
 
@@ -301,10 +300,7 @@ export default {
         },
         changeClient: async function () {
             const client = this.data.client
-
-            if (client === '') {
-                this.data.site = ''
-            }
+            this.data.site = ''
 
             this.sites = await Services.getSitesByClient(this, client)
         },

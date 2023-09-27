@@ -22,8 +22,6 @@ export default {
 
         payload.isSuperAdminMaster = await Common.isSuperAdminMaster(payload)
 
-        payload.data.account = await Common.getAccountId(payload)
-
         payload.role = await Common.getSubtype(payload)
 
         if (payload.role === 'ADMIN' || payload.role === 'MANAGER') {
@@ -39,6 +37,10 @@ export default {
     methods: {
         inputCep() {
             if (this.data.address.cep.length === 9) this.loadInfosByCEP()
+        },
+        changeAssignmentType() {
+            this.data.site = ''
+            this.data.siteGroup = ''
         },
         clearCep() {
             const cep = this.data?.address?.cep

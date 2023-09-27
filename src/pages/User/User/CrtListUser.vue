@@ -190,13 +190,9 @@ export default {
         },
         changeClient: async function () {
             const client = this.filters.client
-
-            if (client === '') {
-                this.filters.site = ''
-            }
+            this.filters.site = ''
 
             this.filter()
-
             this.sites = await Services.getSitesByClient(this, client)
         },
         changeSite: function () {

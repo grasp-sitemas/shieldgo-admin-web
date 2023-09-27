@@ -68,7 +68,7 @@
                     <span v-else-if="props.column.field === 'status'">
                         <span class="badge" v-bind:class="props.formattedRow[props.column.field] === 'ACTIVE' ? 'bg-success' : 'bg-danger'"> {{ $t(props.formattedRow[props.column.field]) }} </span>
                     </span>
-                    <span v-else-if="props.column.field === 'reportName'">
+                    <span v-else-if="props.column.field === 'reportName' || props.column.field === 'period'">
                         {{ $t(props.formattedRow[props.column.field]) }}
                     </span>
                     <span v-else>

@@ -16,7 +16,7 @@
                 </div>
             </div>
             <div class="row">
-                <div v-if="isSuperAdminMaster" class="col-md-6 mb-3">
+                <div v-if="isSuperAdminMaster" class="col-md-8 mb-3">
                     <label class="form-label" for="accountField">{{ $t('str.register.report.settings.account.field') }}</label>
                     <select
                         v-model="data.account"
@@ -35,7 +35,7 @@
             </div>
 
             <div class="row">
-                <div class="col-md-6 mb-3">
+                <div class="col-md-4 mb-3">
                     <label class="form-label" for="reportNameField">{{ $t('str.register.report.name.field') }}</label>
                     <select v-model="data.reportName" class="form-select" id="reportNameField"
                         v-bind:class="checkRequiredField('reportName') ? 'is-invalid' : ''"
@@ -48,7 +48,7 @@
                     </select>
                     <div class="invalid-feedback">{{ $t('str.register.report.type.required') }}</div>
                 </div>
-                <div class="col-md-6 mb-3">
+                <div class="col-md-4 mb-3">
                     <div class="control-label fw-bold">
                         <label class="form-label">{{ $t('str.report.dispatchTime') }}</label>
                     </div>
@@ -56,6 +56,20 @@
                         v-bind:class="checkRequiredField('dispatchTime') ? 'is-invalid' : ''"
                         @focus="removeRequiredField('dispatchTime')">
                     <div class="invalid-feedback">{{ $t('str.register.report.dispatchTime.required') }}</div>
+                </div>
+
+                <div class="col-md-4 mb-3">
+                    <label class="form-label" for="periodField">{{ $t('str.register.report.period.field') }}</label>
+                    <select v-model="data.period" class="form-select" id="periodField"
+                        v-bind:class="checkRequiredField('period') ? 'is-invalid' : ''"
+                        @focus="removeRequiredField('period')"
+                    >
+                        <option value="">{{ $t('str.register.select.placeholder') }}</option>
+                        <option v-for="period in periods" :value="period._id" :key="period._id">
+                            {{ $t(period.name) }}
+                        </option>
+                    </select>
+                    <div class="invalid-feedback">{{ $t('str.register.report.period.required') }}</div>
                 </div>
             </div>
 
@@ -95,6 +109,7 @@ import Vue from 'vue'
 Vue.prototype.$registerEvent = new Vue()
 import { reportConfig } from '../../../types/reportConfig'
 import Common from '../../../common/Common.vue'
+import { REPORT_SETTINGS_PERIODS } from '../../../utils/report-settings'
 
 export default {
     props: {
@@ -121,6 +136,10 @@ export default {
                 this.data.account = await Common.getAccountId(this)
             }
 
+            if(!this.data?.period) {
+                this.data.period = ''
+            }
+
             this.errors = []
         },
     },
@@ -135,6 +154,7 @@ export default {
             newStatus: '',
             data: JSON.parse(JSON.stringify(reportConfig)),
             reportConfigObj: JSON.parse(JSON.stringify(reportConfig)),
+            periods: REPORT_SETTINGS_PERIODS,
         }
     },
     created() {

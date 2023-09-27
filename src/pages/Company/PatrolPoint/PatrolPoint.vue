@@ -8,6 +8,15 @@
                 </template>
 
                 <div>
+                    <div v-if="data._id" class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label" for="statusField">{{ $t('str.register.status.field') }}</label>
+                            <select v-model="data.status" class="form-select" id="statusField">
+                                <option value="ACTIVE">{{ $t('str.register.status.active') }}</option>
+                                <option value="ARCHIVED">{{ $t('str.register.status.archived') }}</option>
+                            </select>
+                        </div>
+                    </div>
                     <div class="row">
                         <div class="col-md-6 mb-3">
                             <label class="form-label" for="statusField">{{ $t('str.register.type.field') }}</label>

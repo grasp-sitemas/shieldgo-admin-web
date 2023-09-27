@@ -145,7 +145,6 @@ export default {
         return []
     },
     getSupervisoryPointByClient: async function (state, filters) {
-    
         if (filters) {
             const response = await Request.do(state, 'POST', Request.getDefaultHeader(state), filters, `${Endpoints.patrolPoints.filter}`)
 
@@ -154,7 +153,7 @@ export default {
                 const mappedResult = result.map(item => {
                     return {
                         ...item,
-                        actions: true
+                        actions: true,
                     }
                 })
                 return mappedResult
@@ -246,7 +245,6 @@ export default {
         return []
     },
     getAppointmentsByDate: async function (state, filters) {
-
         const response = await Request.do(state, 'POST', Request.getDefaultHeader(state), filters, `${Endpoints.appointments.filter}`)
 
         return response?.data?.results || []
@@ -309,7 +307,7 @@ export default {
 
         return []
     },
-    
+
     getPatrolActions: async function (state, filters) {
         const response = await Request.do(state, 'POST', Request.getDefaultHeader(state), filters, `${Endpoints.patrolActions.filter}`)
         return response?.data?.results || []

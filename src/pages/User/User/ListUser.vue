@@ -32,6 +32,15 @@
                     </select>
                     <div class="invalid-feedback">{{ $t('str.register.guard.groups.site.required') }}</div>
                 </div>
+                <div class="col-md-4 mb-3">
+                    <label class="form-label" for="subtypeField">{{ $t('str.register.user.subtype.field') }}</label>
+                    <select v-model="filters.subtype" @change="filter" class="form-select" id="subtypeField">
+                        <option value="">{{ $t('str.register.select.placeholder') }}</option>
+                        <option v-for="role in roles" :value="role.value" :key="role.value">
+                            {{ $t(role.label) }}
+                        </option>
+                    </select>
+                </div>
                 <div class="col-md-4">
                     <label class="form-label" for="statusField">{{ $t('str.register.status.field') }}</label>
                     <select v-model="filters.status" @change="filter" class="form-select" id="statusField">
@@ -39,7 +48,7 @@
                         <option value="ARCHIVED">{{ $t('str.register.status.archived') }}</option>
                     </select>
                 </div>
-                <div class="col-md-3" :class="{ 'mt-4': isSuperAdminMaster }">
+                <div class="col-md-3 mt-4" :class="{ 'mt-4': isSuperAdminMaster }">
                     <button @click="selectItem" type="submit" class="btn btn-default w-50">{{ $t('str.btn.new.form') }}</button>
                 </div>
             </div>
@@ -89,6 +98,7 @@
 import Controller from './CrtListUser.vue'
 import UserModal from './User.vue'
 import Vue from 'vue'
+import { ROLES } from '../../../utils/roles.js'
 Vue.prototype.$registerEvent = new Vue()
 import { user } from '../../../types/user'
 export default {
@@ -101,10 +111,12 @@ export default {
             isLoading: true,
             data: {},
             isSuperAdminMaster: false,
+            roles: ROLES,
             filters: {
                 account: '',
                 client: '',
                 site: '',
+                subtype: '',
                 status: 'ACTIVE',
                 name: '',
                 isSortByName: true,
@@ -133,3 +145,8 @@ export default {
     methods: Controller.methods,
 }
 </script>
+<style scoped>
+.float-right {
+    float: right;
+}
+</style>

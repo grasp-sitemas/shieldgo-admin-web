@@ -26,6 +26,7 @@ export default {
                 ...state.clientGroupObj,
             }
             state.isLoading = false
+            state.$bvModal.hide('createClientGroupModal')
         },
         save() {
             this.isLoading = true

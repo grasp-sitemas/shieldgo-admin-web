@@ -74,13 +74,13 @@
                         {{ formatDate(props.formattedRow[props.column.field], true) }}
                     </span>
                     <span v-else-if="props.column.field === 'priority'">
-                        <span v-if="props.formattedRow[props.column.field] === 1">
+                        <span v-if="props.formattedRow[props.column.field] === 3">
                             {{ $t('str.incident.level.high') }}
                         </span>
                         <span v-else-if="props.formattedRow[props.column.field] === 2">
                             {{ $t('str.incident.level.medium') }}
                         </span>
-                        <span v-else-if="props.formattedRow[props.column.field] === 3">
+                        <span v-else-if="props.formattedRow[props.column.field] === 1">
                             {{ $t('str.incident.level.low') }}
                         </span>
                     </span>

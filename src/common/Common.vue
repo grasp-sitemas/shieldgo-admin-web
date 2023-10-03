@@ -26,6 +26,30 @@ export default {
             .split('.')
             .join(',')
     },
+    sortAccountFn(x, y, col, rowX, rowY) {
+        let nameX = rowX.account ? rowX.account.name : ''
+        let nameY = rowY.account ? rowY.account.name : ''
+
+        return nameX.localeCompare(nameY)
+    },
+    sortClientFn(x, y, col, rowX, rowY) {
+        let nameX = rowX.client ? rowX.client.name : ''
+        let nameY = rowY.client ? rowY.client.name : ''
+
+        return nameX.localeCompare(nameY)
+    },
+    sortSiteFn(x, y, col, rowX, rowY) {
+        let nameX = rowX.site ? rowX.site.name : ''
+        let nameY = rowY.site ? rowY.site.name : ''
+
+        return nameX.localeCompare(nameY)
+    },
+    sortAddressFn(x, y, col, rowX, rowY) {
+        let nameX = rowX.address ? rowX.address?.address : ''
+        let nameY = rowY.address ? rowY.address?.address : ''
+
+        return nameX.localeCompare(nameY)
+    },
     formatDate: text => {
         return new Date(text).toLocaleDateString()
     },
@@ -38,6 +62,28 @@ export default {
         const formattedTime = dateTimezone.format('HH:mm')
 
         return formattedDate + ' - ' + formattedTime
+    },
+    compareObjectFields(a, b) {
+        if (a.name < b.name) return -1
+        if (a.name > b.name) return 1
+        return 0
+    },
+    concatAddress: addressItem => {
+        if (!addressItem) return ''
+
+        const { address, number, complement, neighborhood, city, state, cep } = addressItem
+
+        let addressParts = []
+
+        if (address) addressParts.push(address)
+        if (number) addressParts.push(number)
+        if (complement) addressParts.push(complement)
+        if (neighborhood) addressParts.push(neighborhood)
+        if (city) addressParts.push(city)
+        if (state) addressParts.push(state)
+        if (cep) addressParts.push(cep)
+
+        return addressParts.join(' - ')
     },
     checkValidDate: function (date) {
         const currentDate = moment().format('DD/MM/YYYY')

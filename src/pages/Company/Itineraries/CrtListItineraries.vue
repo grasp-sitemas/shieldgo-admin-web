@@ -5,7 +5,6 @@ import Common from '../../../common/Common.vue'
 import Services from '../../../common/Services.vue'
 export default {
     init: async payload => {
-
         payload.isSuperAdminMaster = await Common.isSuperAdminMaster(payload)
         payload.accounts = await Services.getAccounts(payload)
         const account = await Common.getAccountId(payload)
@@ -90,7 +89,7 @@ export default {
                 },
                 {
                     label: this.$t('str.table.site.groups.column.account'),
-                    field: 'account',
+                    field: 'account.name',
                     width: '20%',
                     thClass: 'text-nowrap',
                     tdClass: 'text-nowrap',
@@ -99,7 +98,7 @@ export default {
                 },
                 {
                     label: this.$t('str.table.site.groups.column.client'),
-                    field: 'client',
+                    field: 'client.name',
                     width: '20%',
                     thClass: 'text-nowrap',
                     tdClass: 'text-nowrap',
@@ -121,8 +120,8 @@ export default {
                     width: '20%',
                     tdClass: 'text-nowrap',
                     thClass: 'text-nowrap',
-                    sortable: true,
-                    filterable: true,
+                    sortable: false,
+                    filterable: false,
                 },
             ]
             this.paginationOptions = {

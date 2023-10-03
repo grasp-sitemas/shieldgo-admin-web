@@ -44,6 +44,7 @@ export default {
                 `${Endpoints.companies.filter}`,
                 response => {
                     this.items = response.results
+
                     this.isLoading = false
                 },
                 error => {
@@ -79,12 +80,13 @@ export default {
 
             this.$bvModal.show('createSiteModal')
         },
+
         initTable() {
             this.columns = [
                 {
                     label: this.$t('str.table.site.column.name'),
                     field: 'name',
-                    width: '25%',
+                    width: '30%',
                     thClass: 'text-nowrap',
                     tdClass: 'text-nowrap',
                     sortable: true,
@@ -98,6 +100,7 @@ export default {
                     tdClass: 'text-nowrap',
                     sortable: true,
                     filterable: true,
+                    sortFn: Common.sortAccountFn,
                 },
                 {
                     label: this.$t('str.table.site.column.client'),
@@ -107,16 +110,18 @@ export default {
                     tdClass: 'text-nowrap',
                     sortable: true,
                     filterable: true,
+                    sortFn: Common.sortClientFn,
                 },
                 {
                     label: this.$t('str.table.site.column.address'),
                     field: 'address',
                     type: 'address',
-                    width: '25%',
+                    width: '20%',
                     tdClass: 'text-nowrap',
                     thClass: 'text-nowrap',
                     sortable: true,
                     filterable: true,
+                    sortFn: Common.sortAddressFn,
                 },
                 {
                     label: this.$t('str.table.site.column.owner'),
@@ -130,7 +135,7 @@ export default {
                 {
                     label: this.$t('str.table.site.column.creat.at'),
                     field: 'createDate',
-                    width: '25%',
+                    width: '5%',
                     tdClass: 'text-nowrap',
                     thClass: 'text-nowrap',
                     sortable: true,
@@ -139,11 +144,11 @@ export default {
                 {
                     label: this.$t('str.table.site.column.status'),
                     field: 'status',
-                    width: '25%',
+                    width: '5%',
                     tdClass: 'text-nowrap',
                     thClass: 'text-nowrap',
-                    sortable: true,
-                    filterable: true,
+                    sortable: false,
+                    filterable: false,
                 },
             ]
             this.paginationOptions = {

@@ -78,6 +78,7 @@ export default {
 
             this.$bvModal.show('createGuardModal')
         },
+
         async initTable() {
             this.columns = [
                 {

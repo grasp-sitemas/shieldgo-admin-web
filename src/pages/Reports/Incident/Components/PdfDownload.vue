@@ -265,11 +265,28 @@ export default {
                                         doc.text(`${this.$t('str.incident.notes')}`, 5, y)
                                         doc.setFont('helvetica', 'normal')
 
-                                        // se o notes passar de 50 caracteres, quebra a linha
-                                        doc.text(item.notes, 40, y, {
-                                            maxWidth: 90,
-                                            align: 'justify',
-                                        })
+                                        // se o notes passar de 50 caracteres, quebra a linha e adiciona mais 10px
+                                        if (item.notes.length > 50) {
+                                            doc.text(item.notes.substring(0, 50), 40, y, {
+                                                maxWidth: 50,
+                                                align: 'left',
+                                            })
+                                            y += 10
+                                            doc.text(item.notes.substring(50, item.notes.length), 40, y, {
+                                                maxWidth: 50,
+                                                align: 'left',
+                                            })
+                                        } else {
+                                            doc.text(item.notes, 40, y, {
+                                                maxWidth: 50,
+                                                align: 'left',
+                                            })
+                                        }
+
+                                        // doc.text(item.notes, 40, y, {
+                                        //     maxWidth: 50,
+                                        //     align: 'left',
+                                        // })
 
                                         y += 30
                                     }

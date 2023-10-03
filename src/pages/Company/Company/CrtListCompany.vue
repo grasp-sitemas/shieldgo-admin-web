@@ -19,7 +19,12 @@ export default {
                 this.filters,
                 `${Endpoints.companies.filter}`,
                 response => {
+                    response.results.forEach(item => {
+                        item.address = Common.concatAddress(item.address)
+                    })
+
                     this.items = response.results
+
                     this.isLoading = false
                 },
                 error => {
@@ -65,7 +70,6 @@ export default {
                 {
                     label: this.$t('str.table.company.column.email'),
                     field: 'email',
-                    type: 'number',
                     width: '10%',
                     tdClass: 'text-nowrap',
                     thClass: 'text-nowrap',
@@ -107,8 +111,8 @@ export default {
                     width: '10%',
                     thClass: 'text-nowrap',
                     tdClass: 'text-nowrap',
-                    sortable: true,
-                    filterable: true,
+                    sortable: false,
+                    filterable: false,
                 },
             ]
             this.paginationOptions = {

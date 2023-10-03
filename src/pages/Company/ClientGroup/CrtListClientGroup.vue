@@ -75,7 +75,7 @@ export default {
                 },
                 {
                     label: this.$t('str.table.client.groups.column.account'),
-                    field: 'account',
+                    field: 'account.name',
                     width: '20%',
                     thClass: 'text-nowrap',
                     tdClass: 'text-nowrap',
@@ -97,8 +97,8 @@ export default {
                     width: '20%',
                     tdClass: 'text-nowrap',
                     thClass: 'text-nowrap',
-                    sortable: true,
-                    filterable: true,
+                    sortable: false,
+                    filterable: false,
                 },
             ]
             this.paginationOptions = {

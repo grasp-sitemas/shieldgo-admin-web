@@ -4,7 +4,7 @@
             <div class="row ms-2 mb-1 mt-3 me-1">
                 <div class="col-md-4 mb-3">
                     <label class="form-label" for="typeField">{{ $t('str.register.type.field') }}</label>
-                    <select v-model="filters.type"  @change="filter" class="form-select" id="typeField">
+                    <select v-model="filters.type" @change="filter" class="form-select" id="typeField">
                         <option value="">{{ $t('str.register.select.placeholder') }}</option>
                         <option value="QRCODE">{{ $t('str.qrcode.option') }}</option>
                         <option value="SUPERVISION">{{ $t('str.supervision.option') }}</option>

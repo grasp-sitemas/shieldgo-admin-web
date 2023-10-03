@@ -72,11 +72,11 @@ export default {
                     tdClass: 'text-nowrap',
                     sortable: true,
                     filterable: true,
+                    sortFn: Common.sortAccountFn,
                 },
                 {
                     label: this.$t('str.table.client.column.email'),
                     field: 'email',
-                    type: 'number',
                     width: '15%',
                     tdClass: 'text-nowrap',
                     thClass: 'text-nowrap',
@@ -117,8 +117,8 @@ export default {
                     width: '15%',
                     tdClass: 'text-nowrap',
                     thClass: 'text-nowrap',
-                    sortable: true,
-                    filterable: true,
+                    sortable: false,
+                    filterable: false,
                 },
             ]
             this.paginationOptions = {

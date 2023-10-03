@@ -48,10 +48,16 @@ export default {
         async filter() {
             if (!this.isSearchLoading) {
                 this.items = []
+                this.csvItems = []
 
                 this.isSearchLoading = true
 
                 const results = await Services.incidents(this, this.filters)
+
+                if (!results) {
+                    this.isSearchLoading = false
+                    return
+                }
 
                 const { tableItems, reportItems } = results
 

@@ -5,7 +5,6 @@ import Common from '../../../common/Common.vue'
 import Services from '../../../common/Services.vue'
 export default {
     init: async payload => {
-
         payload.filters.account = await Common.getAccountId(payload)
         await payload.initTable()
         if (!payload.isSuperAdminMaster) {
@@ -43,7 +42,6 @@ export default {
             this.$bvModal.show('checkPointModal')
         },
         selectItem(params) {
-
             if (this.role === 'AUDITOR') return
 
             const data = params && params?.row ? JSON.parse(JSON.stringify(params.row)) : { ...this.patrolPointObj }
@@ -61,7 +59,6 @@ export default {
                     longitude: '',
                 }
             }
-
 
             if (!data?.address) {
                 data.address = {
@@ -148,6 +145,9 @@ export default {
                     width: '10%',
                     thClass: 'text-nowrap',
                     tdClass: 'text-nowrap',
+                    sortable: true,
+                    filterable: true,
+                    sortFn: Common.sortAccountFn,
                 },
                 {
                     label: this.$t('str.table.check.point.column.client'),
@@ -155,6 +155,9 @@ export default {
                     width: '10%',
                     thClass: 'text-nowrap',
                     tdClass: 'text-nowrap',
+                    sortable: true,
+                    filterable: true,
+                    sortFn: Common.sortClientFn,
                 },
                 {
                     label: this.$t('str.table.check.point.column.site'),
@@ -162,6 +165,9 @@ export default {
                     width: '10%',
                     thClass: 'text-nowrap',
                     tdClass: 'text-nowrap',
+                    sortable: true,
+                    filterable: true,
+                    sortFn: Common.sortSiteFn,
                 },
                 {
                     label: this.$t('str.table.check.point.column.creat.at'),
@@ -176,6 +182,8 @@ export default {
                     width: '10%',
                     tdClass: 'text-nowrap',
                     thClass: 'text-nowrap',
+                    sortable: false,
+                    filterable: false,
                 },
             ]
             this.paginationOptions = {

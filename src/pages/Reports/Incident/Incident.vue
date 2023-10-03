@@ -210,6 +210,7 @@ import Vue from 'vue'
 import { JSON_FIELDS_CSV } from './Utils/jsonFieldsCsv'
 import { PDF_HEADER } from './Utils/jsonFieldsPdf'
 import { PRIORITY_INCIDENTS_FILTER_TYPES } from '../../../utils/incidents'
+import Endpoints from '../../../common/Endpoints'
 Vue.prototype.$registerEvent = new Vue()
 
 export default {
@@ -232,6 +233,7 @@ export default {
             items: [],
             reportItems: [],
             csvItems: [],
+            domain: Endpoints.domain,
             priorities: PRIORITY_INCIDENTS_FILTER_TYPES,
             paginationOptions: {},
             fields: [],

@@ -28,20 +28,7 @@
                     <span v-if="!isLoading && items?.length === 0">{{ $t('str.table.subtitle.no.data') }}</span>
                 </div>
                 <template slot="table-row" slot-scope="props">
-                    <span v-if="props.column.field === 'address'">
-                        {{
-                            props.formattedRow[props.column.field].address +
-                            ' ' +
-                            props.formattedRow[props.column.field].number +
-                            ', ' +
-                            props.formattedRow[props.column.field].neighborhood +
-                            ', ' +
-                            props.formattedRow[props.column.field].city +
-                            '- ' +
-                            props.formattedRow[props.column.field].state
-                        }}
-                    </span>
-                    <span v-else-if="props.column.field === 'status'">
+                    <span v-if="props.column.field === 'status'">
                         <span class="badge" v-bind:class="props.formattedRow[props.column.field] === 'ACTIVE' ? 'bg-success' : 'bg-danger'"> {{ $t(props.formattedRow[props.column.field]) }} </span>
                     </span>
                     <span v-else-if="props.column.field === 'createDate'">

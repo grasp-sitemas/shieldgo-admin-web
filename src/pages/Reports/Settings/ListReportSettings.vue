@@ -12,7 +12,7 @@
                     </select>
                     <div class="invalid-feedback">{{ $t('str.register.report.setting.account.required') }}</div>
                 </div>
-                    
+
                 <div class="col-md-3">
                     <label class="form-label" for="reportNameField">{{ $t('str.register.report.name.field') }}</label>
                     <select v-model="filters.reportName" @change="changeReportName" class="form-select" id="reportNameField">
@@ -54,10 +54,7 @@
                 </div>
 
                 <template slot="table-row" slot-scope="props">
-                    <span v-if="props.column.field === 'account'">
-                        {{ props.formattedRow[props.column.field]?.name }}
-                    </span>
-                    <span v-else-if="props.column.field === 'emails'">
+                    <span v-if="props.column.field === 'emails'">
                         <p class="m-0 p-0" v-for="(email, emailIndex) in props.formattedRow[props.column.field]" :key="'email-' + emailIndex">
                             {{ email }}
                         </p>
@@ -77,7 +74,7 @@
                 </template>
             </vue-good-table>
         </panel>
-        <ReportSettingsModal :selectedData="data" :reportNames="reportNames" :items="items" :accounts="accounts"  />
+        <ReportSettingsModal :selectedData="data" :reportNames="reportNames" :items="items" :accounts="accounts" />
         <notifications group="bottom-right" position="bottom right" :speed="500" />
     </div>
 </template>
@@ -128,10 +125,9 @@ export default {
 }
 </script>
 <style lang="scss">
-.table-centered td, 
+.table-centered td,
 .table-centered th {
     vertical-align: middle !important; /* Centraliza verticalmente */
     text-align: left !important; /* Centraliza horizontalmente */
 }
 </style>
-

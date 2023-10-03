@@ -104,7 +104,7 @@ export default {
                 },
                 {
                     label: this.$t('str.table.timeline.column.account'),
-                    field: 'account',
+                    field: 'account.name',
                     width: '10%',
                     sortable: true,
                     thClass: 'text-nowrap',
@@ -112,7 +112,7 @@ export default {
                 },
                 {
                     label: this.$t('str.table.timeline.column.client'),
-                    field: 'client',
+                    field: 'client.name',
                     width: '10%',
                     sortable: true,
                     thClass: 'text-nowrap',
@@ -120,7 +120,7 @@ export default {
                 },
                 {
                     label: this.$t('str.table.timeline.column.site'),
-                    field: 'site',
+                    field: 'site.name',
                     width: '10%',
                     sortable: true,
                     thClass: 'text-nowrap',

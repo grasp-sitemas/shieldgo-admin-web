@@ -74,6 +74,7 @@ export default {
             this.data = data
             this.$bvModal.show('createUserModal')
         },
+
         initTable: async function () {
             this.columns = [
                 {
@@ -93,6 +94,7 @@ export default {
                     tdClass: 'text-nowrap',
                     sortable: true,
                     filterable: true,
+                    sortFn: Common.sortAccountFn,
                 },
                 {
                     label: this.$t('str.table.user.column.client'),
@@ -102,6 +104,7 @@ export default {
                     tdClass: 'text-nowrap',
                     sortable: true,
                     filterable: true,
+                    sortFn: Common.sortClientFn,
                 },
                 {
                     label: this.$t('str.table.user.column.site'),
@@ -111,6 +114,7 @@ export default {
                     tdClass: 'text-nowrap',
                     sortable: true,
                     filterable: true,
+                    sortFn: Common.sortSiteFn,
                 },
                 {
                     label: this.$t('str.table.user.column.role'),
@@ -147,6 +151,7 @@ export default {
                     tdClass: 'text-nowrap',
                     thClass: 'text-nowrap',
                     sortable: true,
+                    filterable: true,
                 },
                 {
                     label: this.$t('str.table.user.column.status'),
@@ -154,7 +159,8 @@ export default {
                     width: '10%',
                     tdClass: 'text-nowrap',
                     thClass: 'text-nowrap',
-                    sortable: true,
+                    sortable: false,
+                    filterable: false,
                 },
             ]
 

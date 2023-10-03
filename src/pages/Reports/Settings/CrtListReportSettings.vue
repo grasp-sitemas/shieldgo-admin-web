@@ -5,7 +5,6 @@ import Common from '../../../common/Common.vue'
 import Services from '../../../common/Services.vue'
 export default {
     init: async payload => {
-        
         payload.isSuperAdminMaster = await Common.isSuperAdminMaster(payload)
         payload.reportNames = await Services.getReportNamesTypes(payload)
 
@@ -16,8 +15,7 @@ export default {
 
             const account = await Common.getAccountId(payload)
             payload.filters.account = account
-        }else{
-         
+        } else {
             payload.accounts = await Services.getAccounts(payload)
         }
 
@@ -97,7 +95,7 @@ export default {
                 },
                 {
                     label: this.$t('str.table.report.column.account'),
-                    field: 'account',
+                    field: 'account.name',
                     width: '20%',
                     thClass: 'text-nowrap',
                     tdClass: 'text-nowrap',

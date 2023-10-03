@@ -82,7 +82,7 @@ export default {
                 },
                 {
                     label: this.$t('str.table.guard.groups.column.account'),
-                    field: 'account',
+                    field: 'account.name',
                     width: '15%',
                     thClass: 'text-nowrap',
                     tdClass: 'text-nowrap',
@@ -91,7 +91,7 @@ export default {
                 },
                 {
                     label: this.$t('str.table.guard.groups.column.client'),
-                    field: 'client',
+                    field: 'client.name',
                     width: '15%',
                     thClass: 'text-nowrap',
                     tdClass: 'text-nowrap',
@@ -100,7 +100,7 @@ export default {
                 },
                 {
                     label: this.$t('str.table.guard.groups.column.site'),
-                    field: 'site',
+                    field: 'site.name',
                     width: '15%',
                     thClass: 'text-nowrap',
                     tdClass: 'text-nowrap',
@@ -122,8 +122,8 @@ export default {
                     width: '10%',
                     tdClass: 'text-nowrap',
                     thClass: 'text-nowrap',
-                    sortable: true,
-                    filterable: true,
+                    sortable: false,
+                    filterable: false,
                 },
             ]
             this.paginationOptions = {

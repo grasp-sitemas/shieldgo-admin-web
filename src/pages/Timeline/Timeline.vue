@@ -93,9 +93,9 @@
 
                 <template slot="table-row" slot-scope="props">
                     <span v-if="props.column.field === 'vigilant'"> {{ props.formattedRow[props.column.field]?.firstName }} {{ props.formattedRow[props.column.field]?.lastName }} </span>
-                    <span v-else-if="props.column.field === 'account' || props.column.field === 'client' || props.column.field === 'site'">
+                    <!-- <span v-else-if="props.column.field === 'account' || props.column.field === 'client' || props.column.field === 'site'">
                         {{ props.formattedRow[props.column.field]?.name }}
-                    </span>
+                    </span> -->
                     <span v-else-if="props.column.field === 'startDate' || props.column.field === 'endDate'">
                         {{ formatDate(props.formattedRow[props.column.field]) }}
                     </span>

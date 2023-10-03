@@ -100,6 +100,7 @@ export default {
                     tdClass: 'text-nowrap',
                     sortable: true,
                     filterable: true,
+                    sortFn: Common.sortAccountFn,
                 },
                 {
                     label: this.$t('str.table.incident.column.client'),
@@ -109,6 +110,7 @@ export default {
                     tdClass: 'text-nowrap',
                     sortable: true,
                     filterable: true,
+                    sortFn: Common.sortClientFn,
                 },
                 {
                     label: this.$t('str.table.incident.column.site'),
@@ -118,6 +120,7 @@ export default {
                     tdClass: 'text-nowrap',
                     sortable: true,
                     filterable: true,
+                    sortFn: Common.sortSiteFn,
                 },
                 {
                     label: this.$t('str.table.incident.column.creat.at'),
@@ -134,8 +137,8 @@ export default {
                     width: '10%',
                     tdClass: 'text-nowrap',
                     thClass: 'text-nowrap',
-                    sortable: true,
-                    filterable: true,
+                    sortable: false,
+                    filterable: false,
                 },
             ]
             this.paginationOptions = {

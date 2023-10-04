@@ -1333,5 +1333,8 @@
     "str.register.user.subtype.field": "Role",
     "LOCAL": "Local",
     "LOCAL_GROUP": "Local Group",
-    "REPORT_SETTINGS": "Report settings"
+    "REPORT_SETTINGS": "Report settings",
+    "str.download.last.version": "Download last app version",
+    "str.monitor.no.events.title": "No events",
+    "str.monitor.no.events.description": "There are no events to display"
 }

@@ -172,10 +172,13 @@
                 <button v-if="data._id && data.status === 'ACTIVE'" v-on:click="confirmArchive" type="submit" class="btn btn-warning w-25 m-2">
                     {{ $t('str.btn.archive') }}
                 </button>
+                <button v-b-modal.qrCodeModal v-if="data._id && data.status === 'ACTIVE'" type="submit" class="ms-10px btn btn-success w-200px">
+                    {{ $t('str.btn.qrcode') }}
+                </button>
                 <button @click="closeModal" type="submit" class="btn btn-default w-25 m-2">{{ $t('str.btn.close') }}</button>
             </div>
         </div>
-
+        <QrCodeModal :qrcodeId="data._id" :data="data" />
         <notifications group="bottom-right" position="bottom right" :speed="500" />
     </b-modal>
 </template>
@@ -187,7 +190,12 @@ import { site } from '../../../types/site'
 import { STATES } from '../../../utils/states.js'
 import Services from '../../../common/Services.vue'
 import Common from '../../../common/Common.vue'
+import QrCodeModal from './QrCodeModal/QrCodeModal.vue'
+
 export default {
+    components: {
+        QrCodeModal,
+    },
     props: {
         selectedData: {
             type: Object,

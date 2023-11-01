@@ -37,7 +37,7 @@ const sidebarMenu = [
         path: '/schedules',
         icon: 'fa fa-calendar',
         title: 'str.sidebar.menu.schedules',
-        roles: [ROLES.SUPER_ADMIN_MASTER, ROLES.ADMIN, ROLES.MANAGER,ROLES.AUDITOR],
+        roles: [ROLES.SUPER_ADMIN_MASTER, ROLES.ADMIN, ROLES.MANAGER, ROLES.AUDITOR],
         children: [
             {
                 path: '/schedules/vigilant',
@@ -49,7 +49,6 @@ const sidebarMenu = [
                 title: 'str.sidebar.menu.schedule.supervision',
                 roles: [ROLES.SUPER_ADMIN_MASTER, ROLES.ADMIN, ROLES.MANAGER],
             },
-            
         ],
     },
     { path: '/timeline', icon: 'fa fa-bars-staggered', title: 'str.sidebar.menu.timeline', roles: [ROLES.SUPER_ADMIN_MASTER, ROLES.ADMIN, ROLES.MANAGER, ROLES.OPERATOR, ROLES.AUDITOR] },
@@ -146,12 +145,16 @@ const sidebarMenu = [
     },
     {
         path: 'integrations',
-        // api icon
         icon: 'fa-solid fa-plug',
         title: 'str.sidebar.menu.integrations',
-        roles: [ROLES.SUPER_ADMIN_MASTER],
+        roles: [ROLES.SUPER_ADMIN_MASTER, ROLES.ADMIN],
         topMenu: false,
         children: [
+            {
+                path: '/integrations/reports/summary-patrol',
+                title: 'str.sidebar.menu.integrations.reports.summary.patrol',
+                roles: [ROLES.SUPER_ADMIN_MASTER, ROLES.ADMIN],
+            },
             {
                 path: '/integrations/logs',
                 title: 'str.sidebar.menu.integrations.logs',

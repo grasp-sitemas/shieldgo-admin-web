@@ -1335,5 +1335,7 @@
     "REPORT_SETTINGS": "Configuração de relatório",
     "str.download.last.version": "Baixar última versão do aplicativo",
     "str.monitor.no.events.title": "Nenhum evento encontrado",
-    "str.monitor.no.events.description": "Não há eventos para serem exibidos"
+    "str.monitor.no.events.description": "Não há eventos para serem exibidos",
+    "str.sidebar.menu.integrations.reports.summary.patrol": "Relatório de rondas",
+    "str.sidebar.menu.integration.reports.analysis.patrols": "Análise de rondas"
 }

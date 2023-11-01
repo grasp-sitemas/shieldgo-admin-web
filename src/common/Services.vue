@@ -244,6 +244,11 @@ export default {
 
         return []
     },
+    externalAnalysisPatrol: async function (state, filters) {
+        const response = await Request.do(state, 'POST', Request.getDefaultHeader(state), filters, `${Endpoints.reports.externalFilter}`)
+
+        return response?.data?.results || []
+    },
     getAppointmentsByDate: async function (state, filters) {
         const response = await Request.do(state, 'POST', Request.getDefaultHeader(state), filters, `${Endpoints.appointments.filter}`)
 
@@ -311,6 +316,26 @@ export default {
     getPatrolActions: async function (state, filters) {
         const response = await Request.do(state, 'POST', Request.getDefaultHeader(state), filters, `${Endpoints.patrolActions.filter}`)
         return response?.data?.results || []
+    },
+    getExternalCompanies: async function (state) {
+        const response = await Request.do(state, 'GET', Request.getDefaultHeader(state), {}, `${Endpoints.companies.externalList}`)
+
+        const results = response?.data?.results
+
+        if (results?.length > 0) {
+            const mappedResults = results.map(item => {
+                return {
+                    ...item,
+                    _id: `${item.deptID}-${item.database}`,
+                }
+            })
+
+            console.log('getExternalCompanies', mappedResults)
+
+            return mappedResults
+        }
+
+        return []
     },
     getPatrolActionById: async function (state, id) {
         const response = await Request.do(state, 'GET', Request.getDefaultHeader(state), {}, `${Endpoints.patrolActions.patrolAction}/${id}`)

@@ -1336,5 +1336,7 @@
     "REPORT_SETTINGS": "Report settings",
     "str.download.last.version": "Download last app version",
     "str.monitor.no.events.title": "No events",
-    "str.monitor.no.events.description": "There are no events to display"
+    "str.monitor.no.events.description": "There are no events to display",
+    "str.sidebar.menu.integrations.reports.summary.patrol": "Patrol summary",
+    "str.sidebar.menu.integration.reports.analysis.patrols": "Analysis patrols"
 }

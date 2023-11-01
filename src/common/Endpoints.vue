@@ -73,12 +73,14 @@ export default {
     },
     reports: {
         filter: `${domain}/api/users/reports/filter/v1/`,
+        externalFilter: `${domain}/api/users/reports/external/filter/v1/`,
     },
     companies: {
         company: `${domain}/api/company/v1/`,
         formData: `${domain}/api/company/formdata/v1/`,
         filter: `${domain}/api/company/filter/v1/`,
         delete: `${domain}/api/company/delete/v1/`,
+        externalList: `${domain}/api/company/external/list/v1/`,
     },
     incidents: {
         incident: `${domain}/api/company/incidents/v1/`,

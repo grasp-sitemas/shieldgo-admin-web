@@ -22,6 +22,8 @@ export default {
 
     methods: {
         createChart() {
+            if (!this.item) return
+
             const ctx = this.$refs.patrolDataChart.getContext('2d')
 
             const data = {

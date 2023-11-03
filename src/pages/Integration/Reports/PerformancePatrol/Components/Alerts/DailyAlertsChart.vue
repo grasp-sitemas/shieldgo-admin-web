@@ -56,6 +56,8 @@ export default {
         },
 
         createChart() {
+            if (!this.item) return
+
             const ctx = this.$refs.dailyAlertsChart.getContext('2d')
             const { days, datasets } = this.processData()
 

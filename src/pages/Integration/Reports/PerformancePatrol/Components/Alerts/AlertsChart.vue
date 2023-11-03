@@ -22,6 +22,8 @@ export default {
 
     methods: {
         createChart() {
+            if (!this.item) return
+
             const ctx = this.$refs.alertsChart.getContext('2d')
 
             const data = {
@@ -29,10 +31,7 @@ export default {
                 datasets: [
                     {
                         data: [this.item.SOSAlerts, this.item.LowBatteryAlerts],
-                        backgroundColor: [
-                            'rgba(255, 99, 132, 0.9)', // Cor para "Alertas de SOS"
-                            'rgba(255, 206, 86, 0.9)', // Cor para "Alertas de Bateria Baixa"
-                        ],
+                        backgroundColor: ['rgba(255, 99, 132, 0.9)', 'rgba(255, 206, 86, 0.9)'],
                         borderColor: ['rgba(255, 99, 132, 1)', 'rgba(255, 206, 86, 1)'],
                         borderWidth: 1,
                     },
@@ -47,18 +46,18 @@ export default {
                     maintainAspectRatio: false,
                     title: {
                         display: true,
-                        text: `Total de Alertas: ${this.item.TotalAlerts}`,
-                        fontColor: '#FFFFFF', // Cor do título
+                        text: `${this.$t('str.total.alerts')}: ${this.item.TotalAlerts}`,
+                        fontColor: '#FFFFFF',
                     },
                     legend: {
                         labels: {
-                            fontColor: '#FFFFFF', // Cor das labels da legenda
+                            fontColor: '#FFFFFF',
                         },
                     },
                     tooltips: {
-                        titleFontColor: '#FFFFFF', // Cor do título dos tooltips
-                        bodyFontColor: '#FFFFFF', // Cor do corpo dos tooltips
-                        footerFontColor: '#FFFFFF', // Cor do rodapé dos tooltips
+                        titleFontColor: '#FFFFFF',
+                        bodyFontColor: '#FFFFFF',
+                        footerFontColor: '#FFFFFF',
                     },
                 },
             })

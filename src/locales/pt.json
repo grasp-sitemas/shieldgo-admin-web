@@ -1337,5 +1337,14 @@
     "str.monitor.no.events.title": "Nenhum evento encontrado",
     "str.monitor.no.events.description": "Não há eventos para serem exibidos",
     "str.sidebar.menu.integrations.reports.summary.patrol": "Relatório de rondas",
-    "str.sidebar.menu.integration.reports.analysis.patrols": "Análise de rondas"
+    "str.sidebar.menu.integration.reports.analysis.patrols": "Análise de rondas",
+    "str.patrol.point.performance.list": "Lista de pontos de checagem - Lidos x Não lidos",
+    "READ": "Lido",
+    "UNREAD": "Não lido",
+    "str.patrol.point.performance.begin.time": "Hora de início",
+    "str.patrol.point.performance.site.name": "Local",
+    "str.patrol.point.performance.patrol.time": "Hora da leiura",
+    "str.patrol.point.performance.dept.name": "Empresa",
+    "str.patrol.point.performance.status": "Status",
+    "str.select.account": "Selecione a empresa"
 }

@@ -50,6 +50,8 @@ export default {
             return { dates, datasets }
         },
         createChart() {
+            if (!this.item) return
+
             const ctx = this.$refs.dailyPatrolPointDataChart.getContext('2d')
             const { dates, datasets } = this.processData()
 

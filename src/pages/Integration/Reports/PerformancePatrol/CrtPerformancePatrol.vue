@@ -16,19 +16,23 @@ export default {
     },
     methods: {
         async filter() {
+            if (!this.filters.companyLegacyId) {
+                Common.show(this, 'top-right', 'error', this.$t('str.select.account'))
+                return
+            }
+
             if (!this.isSearchLoading) {
                 this.isSearchLoading = true
 
-                this.items = []
-                this.dailyItems = []
+                this.items = null
+                this.dailyItems = null
 
-                const filters = this.filters
+                const result = await Services.externalAnalysisPatrol(this, this.filters)
 
-                filters.report = 'EXTERNAL_PERFORMANCE_PATROLS'
-                this.items = await Services.externalAnalysisPatrol(this, filters)
-
-                filters.report = 'EXTERNAL_DAILY_PERFORMANCE_PATROLS'
-                this.dailyItems = Services.externalAnalysisPatrol(this, filters)
+                if (result) {
+                    this.items = result?.summary
+                    this.dailyItems = result?.daily
+                }
 
                 this.isSearchLoading = false
             }
@@ -40,6 +44,7 @@ export default {
         clearFilters: async function () {
             this.errors = []
             this.isLoading = false
+            this.isSearchLoading = false
             this.selectedCompany = {
                 _id: '',
             }
@@ -49,9 +54,10 @@ export default {
                 endDate: moment().utc(true),
                 sqlLegacyBase: '',
                 companyLegacyId: '',
+                searchAllPatrolPerform: true,
             }
-            this.items = []
-            this.csvItems = []
+            this.items = null
+            this.dailyItems = null
             this.initRangeDate()
         },
         initRangeDate: async function () {

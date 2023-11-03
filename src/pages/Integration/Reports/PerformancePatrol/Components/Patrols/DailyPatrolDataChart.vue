@@ -61,6 +61,8 @@ export default {
             return `rgb(${r}, ${g}, ${b})`
         },
         createChart() {
+            if (!this.item) return
+
             const ctx = this.$refs.dailyPatrolDataChart.getContext('2d')
             const { dates, datasets } = this.processData()
 

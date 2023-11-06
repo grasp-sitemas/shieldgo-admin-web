@@ -20,10 +20,18 @@ export default {
             }
         },
     },
+    data() {
+        return {
+            chart: null,
+        }
+    },
     mounted() {
         this.createChart()
     },
     methods: {
+        getChartInstance() {
+            return this.chart
+        },
         processData() {
             const dates = this.item.map(day => day.Day)
 

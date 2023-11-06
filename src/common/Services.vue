@@ -330,7 +330,23 @@ export default {
                 }
             })
 
-            console.log('getExternalCompanies', mappedResults)
+            return mappedResults
+        }
+
+        return []
+    },
+    getGatewayExternalCompanies: async function (state) {
+        const response = await Request.do(state, 'GET', Request.getDefaultHeader(state), {}, `${Endpoints.companies.gatewayExternalList}`)
+
+        const results = response?.data?.results
+
+        if (results?.length > 0) {
+            const mappedResults = results.map(item => {
+                return {
+                    ...item,
+                    _id: `${item.deptID}-${item.database}`,
+                }
+            })
 
             return mappedResults
         }

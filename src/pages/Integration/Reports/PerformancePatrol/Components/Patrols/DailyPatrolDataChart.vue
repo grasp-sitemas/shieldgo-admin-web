@@ -22,7 +22,15 @@ export default {
     mounted() {
         this.createChart()
     },
+    data() {
+        return {
+            chart: null,
+        }
+    },
     methods: {
+        getChartInstance() {
+            return this.chart
+        },
         processData() {
             const dates = [...new Set(this.item.substatus.flatMap(s => s.data.map(d => d[0])))].sort()
 

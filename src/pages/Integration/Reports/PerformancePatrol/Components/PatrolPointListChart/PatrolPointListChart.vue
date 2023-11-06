@@ -13,7 +13,7 @@
                     </tr>
                 </thead>
                 <tbody class="tbody">
-                    <tr class="form-body" v-for="point in sortedPatrolPoints" :key="point" :style="{ backgroundColor: point.Status === 'READ' ? '#d4edda' : '#f8d7da' }">
+                    <tr class="form-body" v-for="(point, index) in sortedPatrolPoints" :key="point + index" :style="{ backgroundColor: point.Status === 'READ' ? '#d4edda' : '#f8d7da' }">
                         <td class="form-td-label">{{ point?.BeginTime ? moment(point.BeginTime).format('DD/MM/YYYY HH:mm') : 'N/A' }}</td>
                         <td class="form-td-label">{{ point?.SiteName }}</td>
                         <td class="form-td-label">{{ point?.PatrolTime ? moment(point?.PatrolTime).format('DD/MM/YYYY HH:mm:ss') : 'N/A' }}</td>

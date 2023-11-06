@@ -8,7 +8,12 @@ export default {
         payload.isSuperAdminMaster = Common.isSuperAdminMaster(payload)
 
         if (payload.isSuperAdminMaster) {
-            payload.companies = await Services.getExternalCompanies(payload)
+            try {
+                payload.companies = await Services.getExternalCompanies(payload)
+            } catch (error) {
+                console.log(error)
+                payload.companies = await Services.getGatewayExternalCompanies(payload)
+            }
         }
 
         payload.initRangeDate()

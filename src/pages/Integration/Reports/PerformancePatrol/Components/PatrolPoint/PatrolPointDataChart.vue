@@ -21,6 +21,9 @@ export default {
     },
 
     methods: {
+        getChartInstance() {
+            return this.chart
+        },
         createChart() {
             if (!this.item) return
 

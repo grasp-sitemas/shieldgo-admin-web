@@ -21,6 +21,9 @@ export default {
     },
 
     methods: {
+        getChartInstance() {
+            return this.chart
+        },
         processData() {
             const days = this.item.map(alertData => alertData.Day).sort()
 

@@ -37,6 +37,8 @@ import PrivacyPolicy from '../pages/PrivacyPolicy/PrivacyPolicy.vue'
 import Itinerary from '../pages/Company/Itineraries/ListItineraries.vue'
 import IntegrationLogs from '../pages/Integration/Log/Log.vue'
 import ReportSettings from '../pages/Reports/Settings/ListReportSettings.vue'
+import ReportExternalPatrol from '../pages/Integration/Reports/PerformancePatrol/PerformancePatrol.vue'
+
 Vue.use(VueSession)
 
 const session = Vue.prototype.$session
@@ -352,8 +354,14 @@ const routes = [
             next(checkSession())
         },
     },
-   
-   
+    {
+        path: '/integrations/reports/summary-patrol',
+        name: 'integrations-reports-summary-patrol',
+        component: ReportExternalPatrol,
+        beforeEnter: (_to, _from, next) => {
+            next(checkSession())
+        },
+    },
 ]
 
 export default routes

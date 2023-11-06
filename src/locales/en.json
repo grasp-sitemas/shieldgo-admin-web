@@ -1333,5 +1333,19 @@
     "str.register.user.subtype.field": "Role",
     "LOCAL": "Local",
     "LOCAL_GROUP": "Local Group",
-    "REPORT_SETTINGS": "Report settings"
+    "REPORT_SETTINGS": "Report settings",
+    "str.download.last.version": "Download last app version",
+    "str.monitor.no.events.title": "No events",
+    "str.monitor.no.events.description": "There are no events to display",
+    "str.sidebar.menu.integrations.reports.summary.patrol": "Patrol summary",
+    "str.sidebar.menu.integration.reports.analysis.patrols": "Analysis patrols",
+    "str.patrol.point.performance.list": "List of checkpoints - Read x Unread",
+    "READ": "Read",
+    "UNREAD": "Unread",
+    "str.patrol.point.performance.begin.time": "Begin time",
+    "str.patrol.point.performance.site.name": "Local",
+    "str.patrol.point.performance.patrol.time": "Checkpoint read time",
+    "str.patrol.point.performance.dept.name": "Account",
+    "str.patrol.point.performance.status": "Status",
+    "str.select.account": "Select Account"
 }

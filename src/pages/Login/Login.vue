@@ -23,12 +23,22 @@
                             </button>
                         </div>
                     </form>
-                    <div class="text-gray-500">
+                    <!-- <div class="text-gray-500">
                         {{ $t('str.not.member.yet') + ' ' + $t('str.click') }}
                         <a href="javascript:;" class="text-white">{{ $t('str.here') }}</a> {{ $t('str.to.register') }}
-                    </div>
+                    </div> -->
                     <div class="text-gray-500 text-center mt-10px">
                         <a v-b-modal.recoveryPassword class="text-white">{{ $t('str.recovery.password') }}</a>
+                    </div>
+
+                    <div class="mt-5 text-gray-500 text-center">
+                        <p class="text-white-600 fs-13px p-0 m-1">
+                            {{ $t('str.download.last.version') }}
+                        </p>
+
+                        <a class="p-0 m-1" href="https://drive.google.com/drive/folders/1Y5Tm4nWQ5_dbtxmii0mLrxZzSU7ilgeJ?usp=sharing" target="_blank">
+                            <img src="../../assets/images/android-logo.png" alt="Android Logo Image" width="40" />
+                        </a>
                     </div>
                 </div>
             </div>

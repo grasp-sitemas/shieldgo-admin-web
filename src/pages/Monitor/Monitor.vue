@@ -57,7 +57,7 @@
         </div>
 
         <div v-if="!isLoading && events !== null" class="row">
-            <div class="col-xl-4 col-lg-6">
+            <div v-if="events?.length > 0" class="col-xl-4 col-lg-6">
                 <panel :title="$t('str.events.title')">
                     <div class="list-group list-group-flush rounded-bottom overflow-hidden panel-body p-0">
                         <div @click="handleSelectEvent(event)" v-for="event in events" :key="event.id">
@@ -83,6 +83,11 @@
                         </div>
                     </div>
                 </panel>
+            </div>
+            <div v-else class="no-events">
+                <i class="fa fa-exclamation-triangle fa-5x text-white mb-4" />
+                <h3>{{ $t('str.monitor.no.events.title') }}</h3>
+                <p>{{ $t('str.monitor.no.events.description') }}</p>
             </div>
 
             <div v-if="selectedEvent" class="col-xl-4 col-lg-6">
@@ -292,10 +297,10 @@
 
             <gritterNotify v-if="operatorWithoutGroup" :title="$t('str.operator.without.sites.title')" :text="$t('str.operator.without.sites.text')" @after-close="operatorWithoutGroup = false" />
         </div>
-
         <div v-else class="center-spinner">
             <i class="fas fa-spinner fa-spin" />
         </div>
+
         <notifications group="top-right" position="top right" :speed="1000" />
         <Photo :photoURL="selectedEvent?.photoURL" />
         <Signature :signatureURL="selectedEvent?.signatureURL" />
@@ -606,5 +611,31 @@ img {
 .list-group-selected {
     color: var(--app-component-hover-color);
     background-color: var(--app-component-hover-bg);
+}
+
+.no-events {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+    text-align: center;
+}
+
+.no-events h3 {
+    margin-top: 0;
+    margin-bottom: 10px;
+    font-size: 18px;
+    font-weight: bold;
+    color: #333;
+}
+
+.no-events p {
+    color: #777;
+    margin-bottom: 20px;
+}
+
+.no-events-icon {
+    width: 80px;
+    height: 80px;
 }
 </style>

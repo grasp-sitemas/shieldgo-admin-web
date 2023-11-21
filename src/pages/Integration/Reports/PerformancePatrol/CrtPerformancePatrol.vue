@@ -14,6 +14,16 @@ export default {
                 console.log(error)
                 payload.companies = await Services.getGatewayExternalCompanies(payload)
             }
+        } else {
+            const companyLegacy = await Common.getLegacyAccount(payload)
+
+            if (companyLegacy) {
+                payload.filters = {
+                    ...payload.filters,
+                    companyLegacyId: companyLegacy.companyLegacyId,
+                    sqlLegacyBase: companyLegacy.sqlLegacyBase,
+                }
+            }
         }
 
         payload.initRangeDate()
@@ -21,6 +31,11 @@ export default {
     },
     methods: {
         async filter() {
+            if (!this.isSuperAdminMaster && !this.filters.companyLegacyId) {
+                Common.show(this, 'top-right', 'error', this.$t('str.contact.admin.to.assign.account'))
+                return
+            }
+
             if (!this.filters.companyLegacyId) {
                 Common.show(this, 'top-right', 'error', this.$t('str.select.account'))
                 return
@@ -57,8 +72,6 @@ export default {
                 report: 'EXTERNAL_DAILY_PERFORMANCE_PATROLS',
                 startDate: moment().utc(true),
                 endDate: moment().utc(true),
-                sqlLegacyBase: '',
-                companyLegacyId: '',
                 searchAllPatrolPerform: true,
             }
             this.items = null

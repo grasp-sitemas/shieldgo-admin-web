@@ -141,6 +141,19 @@ export default {
         const type = state.$session.get('user')?.client?.type
         return type === 'CLIENT' && state.$session.get('user')?.client ? state.$session.get('user')?.client?._id : ''
     },
+    getLegacyAccount: async state => {
+        const account = state.$session.get('user')?.account
+        const { companyLegacyId, sqlLegacyBase } = account
+
+        if (!companyLegacyId || !sqlLegacyBase) {
+            return null
+        }
+
+        return {
+            companyLegacyId,
+            sqlLegacyBase,
+        }
+    },
     getEventStatusName(status) {
         switch (status) {
             case 'ACTIVE':

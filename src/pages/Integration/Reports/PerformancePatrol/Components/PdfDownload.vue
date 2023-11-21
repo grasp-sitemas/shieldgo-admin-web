@@ -1,9 +1,8 @@
 <template>
     <div class="card p-5">
-        <!-- Botão para baixar o PDF -->
-        <!-- <div class="row btn-container">
-            <button type="submit" class="btn btn-primary center w-25" :class="{ 'is-loading': isLoading }" @click="viewPDF">Baixar PDF</button>
-        </div> -->
+        <div class="row btn-container">
+            <button type="submit" class="btn btn-primary center w-25" @click="downloadPdf"><i v-if="isLoading" class="fas fa-spinner fa-spin" /> Baixar PDF</button>
+        </div>
 
         <div class="row">
             <div class="col-md-6">
@@ -37,48 +36,13 @@
                 <PatrolPointListChart ref="PatrolPointListChart" :items="items?.patrolPointData?.patrols" />
             </div>
         </div>
-
-        <div id="pdf-content" class="d-none">
-            <div class="row">
-                <div class="col-md-6">
-                    <PatrolDataChart ref="patrolDataChart" :item="items?.patrolData" />
-                </div>
-                <div class="col-md-6">
-                    <DailyPatrolDataChart ref="dailyPatrolDataChart" :item="dailyItems?.dailyPatrolData" />
-                </div>
-            </div>
-
-            <div class="row mt-xl-5">
-                <div class="col-md-6">
-                    <AlertsChart ref="alertsChart" :item="items?.alertData?.alertSummary ? items.alertData.alertSummary : alertSummary" />
-                </div>
-                <div class="col-md-6">
-                    <DailyAlertsChart ref="dailyAlertsChart" :item="dailyItems?.dailyAlertData" />
-                </div>
-            </div>
-
-            <div class="row mt-xl-5">
-                <div class="col-md-6">
-                    <PatrolPointDataChart ref="patrolPointDataChart" :item="items?.patrolPointData?.countSummary" />
-                </div>
-                <div class="col-md-6">
-                    <DailyPatrolPointDataChart ref="dailyPatrolPointDataChart" :item="dailyItems?.dailyPatrolPointData" />
-                </div>
-            </div>
-
-            <div class="row mt-xl-5">
-                <div class="col-md-12">
-                    <PatrolPointListChart ref="PatrolPointListChart" :items="items?.patrolPointData?.patrols" />
-                </div>
-            </div>
-        </div>
     </div>
 </template>
 
 <script>
 import jsPDF from 'jspdf'
 import html2canvas from 'html2canvas' // Usado para capturar imagens dos gráficos
-
+import moment from 'moment'
 export default {
     props: ['items', 'dailyItems'],
     components: {
@@ -98,84 +62,113 @@ export default {
                 LowBatteryAlerts: null,
                 TotalAlerts: 0,
             },
+            moment: moment,
         }
     },
     methods: {
-        async viewPDF() {
+        async downloadPdf() {
             this.isLoading = true
 
             try {
-                const pdfData = await this.generatePDF()
+                const pdf = new jsPDF('p', 'pt', 'a4')
+                const pageWidth = pdf.internal.pageSize.getWidth()
+                const pageHeight = pdf.internal.pageSize.getHeight()
+                const titleHeight = 40 // Altura para o título
+                const spacingBetweenGraphs = 20 // Espaçamento entre os gráficos
+                const graphHeight = (pageHeight - titleHeight - spacingBetweenGraphs * 3) / 2 // Altura ajustada para cada gráfico
 
-                console.log('pdfData', pdfData)
-                const pdfURL = URL.createObjectURL(pdfData)
+                // const rowHeight = 20
+                // const startX = 20
 
-                this.openPDFWindow(pdfURL)
-            } catch (error) {
-                console.error('Failed to view PDF', error)
-                this.$emit('error', 'Erro ao gerar o PDF.') // Emita um evento de erro
-            } finally {
-                this.isLoading = false
-            }
-        },
+                // Adicionando o título na primeira página
+                pdf.setFillColor('#2d353c')
+                pdf.rect(0, 0, pageWidth, pageHeight, 'F')
+                pdf.setFontSize(13)
+                pdf.setTextColor('#fff')
+                pdf.text(this.$t('str.reports.performance.patrol.legacy'), 20, 30) // Posição do título
 
-        async generatePDF() {
-            const pdf = new jsPDF()
+                // adicionar a data
+                pdf.setFontSize(9)
+                pdf.setTextColor('#fff')
+                pdf.text(`${this.$t('str.reports.performance.patrol.date')}: ${moment().utc(true).format('DD/MM/YYYY HH:mm:ss')}`, 20, 45) // Posição da data
 
-            // Mostra temporariamente o conteúdo do PDF para captura
-            const pdfContent = document.getElementById('pdf-content')
-            pdfContent.classList.remove('d-none')
-
-            try {
-                // Use html2canvas para capturar o conteúdo da div 'pdf-content'
-                const canvas = await html2canvas(pdfContent, {
-                    scale: 2, // Ajuste o scale conforme necessário para melhorar a qualidade
-                })
-
-                const imgData = canvas.toDataURL('image/jpeg', 1.0)
-                pdf.addImage(imgData, 'JPEG', 0, 0)
-
-                pdfContent.classList.add('d-none') // Esconder o conteúdo novamente após captura
-                return pdf.output('blob')
-            } catch (error) {
-                console.error('Error while generating PDF:', error)
-                throw error
-            }
-        },
-
-        async addChartToPDF(pdf, chartComponent, index, charts) {
-            if (chartComponent && chartComponent.getChartInstance) {
-                const chart = chartComponent.getChartInstance()
-                if (chart) {
-                    const canvas = chart.canvas
-                    const canvasImage = await html2canvas(canvas)
-                    const imgData = canvasImage.toDataURL('image/jpeg', 1.0)
-                    const imgProps = pdf.getImageProperties(imgData)
-                    const pdfWidth = pdf.internal.pageSize.getWidth() - 20
-                    const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width
-
-                    // Calcular a altura acumulada baseando-se na altura de cada gráfico anterior
-                    const margin = 10
-                    const positionY = index === 0 ? margin : pdf.internal.pageSize.getHeight() * index + margin
-
-                    pdf.addImage(imgData, 'JPEG', 10, positionY, pdfWidth, pdfHeight)
-
-                    if (index !== charts.length - 1) {
-                        pdf.addPage()
+                // Função para adicionar gráficos
+                const addGraph = async (ref, posY) => {
+                    if (this.$refs[ref]) {
+                        const canvas = await html2canvas(this.$refs[ref].$el, { backgroundColor: null, scale: 2 })
+                        pdf.addImage(canvas.toDataURL('image/png'), 'PNG', 0, posY, pageWidth, graphHeight - 60)
                     }
                 }
-            } else {
-                console.error('O componente do gráfico não está definido ou não possui o método getChartInstance.')
+
+                // Adicionando os gráficos
+                await addGraph('patrolDataChart', titleHeight + spacingBetweenGraphs)
+                await addGraph('dailyPatrolDataChart', titleHeight + graphHeight + spacingBetweenGraphs * 2)
+
+                // Nova página para os próximos gráficos
+                pdf.addPage()
+                pdf.setFillColor('#2d353c')
+                pdf.rect(0, 0, pageWidth, pageHeight, 'F')
+
+                await addGraph('alertsChart', spacingBetweenGraphs)
+                await addGraph('dailyAlertsChart', graphHeight + spacingBetweenGraphs * 2)
+
+                // Nova página para os próximos gráficos
+                pdf.addPage()
+                pdf.setFillColor('#2d353c')
+                pdf.rect(0, 0, pageWidth, pageHeight, 'F')
+
+                await addGraph('patrolPointDataChart', spacingBetweenGraphs)
+                await addGraph('dailyPatrolPointDataChart', graphHeight + spacingBetweenGraphs * 2)
+
+                // Nova página para os próximos gráficos
+                // pdf.addPage()
+                // pdf.setFillColor('#2d353c')
+                // pdf.rect(0, 0, pageWidth, pageHeight, 'F')
+
+                // const columnWidths = [100, 100, 100, 100, 100] // Ajuste conforme necessário
+                // let startY = 60s
+
+                // startY += rowHeight
+
+                // this.items.patrolPointData.patrols.forEach(point => {
+                //     let currentX = startX
+                //     const row = [
+                //         point.BeginTime ? moment(point.BeginTime).format('DD/MM/YYYY HH:mm') : 'N/A',
+                //         point.SiteName,
+                //         point.PatrolTime ? moment(point.PatrolTime).format('DD/MM/YYYY HH:mm:ss') : 'N/A',
+                //         point.DeptName,
+                //         this.$t(point.Status),
+                //     ]
+
+                //     let maxLineCount = 1
+
+                //     // Verificar se é necessário quebrar a linha para 'SiteName'
+                //     const siteNameLines = pdf.splitTextToSize(point.SiteName, columnWidths[1])
+                //     maxLineCount = Math.max(maxLineCount, siteNameLines.length)
+
+                //     // Calcular a nova altura da linha
+                //     const newHeight = rowHeight * maxLineCount
+
+                //     // Desenhar cada célula da linha
+                //     row.forEach((text, index) => {
+                //         if (index === 1) {
+                //             // Coluna 'SiteName'
+                //             pdf.text(siteNameLines, currentX, startY)
+                //         } else {
+                //             pdf.text(text, currentX, startY + (newHeight - rowHeight) / 2)
+                //         }
+                //         currentX += columnWidths[index]
+                //     })
+
+                //     startY += newHeight
+                // })
+
+                pdf.save(`${this.$t('str.reports.performance.patrol.file.name')}.pdf`)
+            } catch (error) {
+                console.error('Erro ao gerar PDF:', error)
             }
-        },
 
-        openPDFWindow(pdfURL) {
-            const width = window.innerWidth * 0.8
-            const height = window.innerHeight * 0.8
-            const left = (window.innerWidth - width) / 2
-            const top = (window.innerHeight - height) / 2
-
-            window.open(pdfURL, '_blank', `width=${width},height=${height},left=${left},top=${top},scrollbars=yes`)
+            this.isLoading = false
         },
     },
 }

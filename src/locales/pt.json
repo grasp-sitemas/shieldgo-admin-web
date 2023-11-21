@@ -1346,5 +1346,9 @@
     "str.patrol.point.performance.patrol.time": "Hora da leiura",
     "str.patrol.point.performance.dept.name": "Empresa",
     "str.patrol.point.performance.status": "Status",
-    "str.select.account": "Selecione a empresa"
+    "str.select.account": "Selecione a empresa",
+    "str.reports.performance.patrol.legacy": "Relatório de analise de rondas",
+    "str.reports.performance.patrol.date": "Gerado em",
+    "str.reports.performance.patrol.file.name": "relatorio_analise_rondas",
+    "str.contact.admin.to.assign.account": "Contate o administrador da plataforma para atribuir uma empresa"
 }

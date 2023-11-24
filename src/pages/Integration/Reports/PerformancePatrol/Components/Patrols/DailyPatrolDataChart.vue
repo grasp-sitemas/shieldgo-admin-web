@@ -118,7 +118,7 @@ export default {
                     },
                     title: {
                         display: true,
-                        text: 'Rondas Diárias',
+                        text: this.$t('str.daily.patrols'),
                         fontColor: '#FFFFFF', // Cor do título
                     },
                     legend: {

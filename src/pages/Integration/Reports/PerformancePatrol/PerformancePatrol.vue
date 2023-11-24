@@ -2,10 +2,9 @@
     <div>
         <h1 class="page-header">{{ $t('str.sidebar.menu.integration.reports.analysis.patrols') }}</h1>
         <hr />
-
         <div v-if="!isLoading">
             <div class="row">
-                <div v-if="isSuperAdminMaster" class="col-md-4 mb-3">
+                <div v-if="isSuperAdminMaster" class="col-md-3 mb-3">
                     <label class="form-label" for="accountField">{{ $t('str.register.user.account.field') }}</label>
                     <select v-model="selectedCompany._id" @change="changeCompany" class="form-select" id="accountField">
                         <option value="">{{ $t('str.register.select.placeholder') }}</option>
@@ -14,7 +13,16 @@
                         </option>
                     </select>
                 </div>
-                <div class="col-md-4 mb-3">
+                <div class="col-md-3 mb-3">
+                    <label class="form-label" for="accountField">{{ $t('str.register.user.site.field') }}</label>
+                    <select v-model="selectedSite._id" @change="changeLocal" class="form-select" id="accountField">
+                        <option value="">{{ $t('str.register.select.placeholder') }}</option>
+                        <option v-for="site in sites" :value="site?._id" :key="site?._id">
+                            {{ site.deptName }}
+                        </option>
+                    </select>
+                </div>
+                <div class="col-md-3 mb-3">
                     <label class="form-label" for="statusField">{{ $t('str.range.date.field') }}</label>
                     <date-range-picker
                         ref="picker"
@@ -40,7 +48,7 @@
                         </template>
                     </date-range-picker>
                 </div>
-                <div class="col-md-4 mt-4">
+                <div class="col-md-3 mt-4">
                     <button @click="filter" type="submit" class="btn btn-primary me-10px is-loading mb-1">
                         <i v-if="isSearchLoading" class="fas fa-spinner fa-pulse" />
                         {{ $t('str.generate.report') }}
@@ -80,7 +88,9 @@ export default {
     data() {
         return {
             companies: [],
+            sites: [],
             errors: [],
+            companyLegacy: {},
             items: null,
             dailyItems: null,
             reportItems: [],
@@ -93,6 +103,9 @@ export default {
             dateRange: DATE_RANGE_CONFIG,
             role: '',
             selectedCompany: {
+                _id: '',
+            },
+            selectedSite: {
                 _id: '',
             },
             filters: {

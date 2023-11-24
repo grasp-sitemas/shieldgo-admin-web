@@ -40,14 +40,14 @@ export default {
 
             const datasets = [
                 {
-                    label: 'Lidos',
+                    label: this.$t('str.chart.patrol.points.performance.read'),
                     data: readSitesData,
                     fill: false,
                     borderColor: 'rgba(75, 192, 192, 1)', // This can be any color of your choice
                     borderWidth: 2,
                 },
                 {
-                    label: 'Não Lidos',
+                    label: this.$t('str.chart.patrol.points.performance.unread'),
                     data: unreadSitesData,
                     fill: false,
                     borderColor: 'rgba(255, 99, 132, 1)', // This can be any color of your choice
@@ -92,7 +92,7 @@ export default {
                                 beginAtZero: true,
                                 scaleLabel: {
                                     display: true,
-                                    labelString: 'Total',
+                                    labelString: this.$t('str.total'),
                                     fontColor: '#FFFFFF', // Cor do texto da label do eixo Y
                                 },
                                 ticks: {
@@ -107,7 +107,7 @@ export default {
                     },
                     title: {
                         display: true,
-                        text: 'Dados Diários de Pontos de Ronda',
+                        text: this.$t('str.daily.patrol.points.data'),
                         fontColor: '#FFFFFF', // Cor do título
                     },
                     legend: {

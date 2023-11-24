@@ -30,7 +30,7 @@ export default {
             const ctx = this.$refs.patrolPointDataChart.getContext('2d')
 
             const data = {
-                labels: ['Leituras', 'Não Leituras'],
+                labels: [this.$t('str.chart.patrol.points.performance.read'), this.$t('str.chart.patrol.points.performance.unread')],
                 datasets: [
                     {
                         data: [this.item.ArrivedCount, this.item.NotArrivedCount],
@@ -52,7 +52,7 @@ export default {
                     maintainAspectRatio: false,
                     title: {
                         display: true,
-                        text: `Total de Pontos de Ronda: ${this.item.TotalSites}`,
+                        text: `${this.$t('str.patrol.points.total')}: ${this.item.TotalSites}`,
                         fontColor: '#FFFFFF', // Cor do título
                     },
                     legend: {

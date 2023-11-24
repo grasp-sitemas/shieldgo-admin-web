@@ -6,6 +6,7 @@ import moment from 'moment'
 export default {
     init: async payload => {
         payload.isSuperAdminMaster = Common.isSuperAdminMaster(payload)
+        payload.initRangeDate()
 
         if (payload.isSuperAdminMaster) {
             try {
@@ -16,17 +17,20 @@ export default {
             }
         } else {
             const companyLegacy = await Common.getLegacyAccount(payload)
-
-            if (companyLegacy) {
-                payload.filters = {
-                    ...payload.filters,
-                    companyLegacyId: companyLegacy.companyLegacyId,
-                    sqlLegacyBase: companyLegacy.sqlLegacyBase,
+            if (companyLegacy?.companyLegacyId) {
+                payload.selectedSite = {
+                    _id: '',
                 }
+
+                payload.sites = await Services.getExternalSites(payload, {
+                    companyLegacyId: companyLegacy?.companyLegacyId,
+                    sqlLegacyBase: companyLegacy?.sqlLegacyBase,
+                })
+            } else {
+                Common.show(payload, 'top-right', 'error', payload.$t('str.contact.admin.to.assign.account'))
             }
         }
 
-        payload.initRangeDate()
         payload.isLoading = false
     },
     methods: {
@@ -68,6 +72,11 @@ export default {
             this.selectedCompany = {
                 _id: '',
             }
+
+            this.selectedSite = {
+                _id: '',
+            }
+            this.sites = []
             this.filters = {
                 report: 'EXTERNAL_DAILY_PERFORMANCE_PATROLS',
                 startDate: moment().utc(true),
@@ -146,8 +155,25 @@ export default {
 
             const company = this?.companies?.find(item => item?._id === uniqueID)
 
-            this.filters.companyLegacyId = company?.deptID
-            this.filters.sqlLegacyBase = company?.database
+            const deptID = company?.deptID
+            const database = company?.database
+
+            this.selectedSite = {
+                _id: '',
+            }
+
+            this.sites = await Services.getExternalSites(this, {
+                companyLegacyId: deptID,
+                sqlLegacyBase: database,
+            })
+        },
+        changeLocal: async function () {
+            const uniqueID = this.selectedSite?._id
+
+            const site = this?.sites?.find(item => item?._id === uniqueID)
+
+            this.filters.companyLegacyId = site?.deptID
+            this.filters.sqlLegacyBase = site?.database
         },
         updateValues(d) {
             this.filters.startDate = new Date(d.startDate)

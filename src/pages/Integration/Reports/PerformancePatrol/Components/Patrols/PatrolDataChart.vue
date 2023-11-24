@@ -31,7 +31,7 @@ export default {
             const ctx = this.$refs.patrolDataChart.getContext('2d')
 
             const data = {
-                labels: ['Concluidas', 'Não Concluidas', 'Incompletas'],
+                labels: [this.$t('str.chart.completed'), this.$t('str.chart.notDone'), this.$t('str.chart.incomplete')],
                 datasets: [
                     {
                         data: [this.item.completedPatrols, this.item.notDonePatrols, this.item.incompletePatrols],
@@ -54,7 +54,7 @@ export default {
                     maintainAspectRatio: false,
                     title: {
                         display: true,
-                        text: `Total de Rondas: ${this.item.totalPatrols}`,
+                        text: `${this.$t('str.dashboard.patrol.total')}: ${this.item.totalPatrols}`,
                         fontColor: '#FFFFFF', // Cor do título
                     },
                     legend: {

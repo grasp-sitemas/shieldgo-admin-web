@@ -249,6 +249,24 @@ export default {
 
         return response?.data?.results || []
     },
+    getExternalSites: async function (state, filters) {
+        const response = await Request.do(state, 'POST', Request.getDefaultHeader(state), filters, `${Endpoints.companies.externalLocalList}`)
+
+        const results = response?.data?.results
+
+        if (results?.length > 0) {
+            const mappedResults = results.map(item => {
+                return {
+                    ...item,
+                    _id: `${item.deptID}-${item.database}`,
+                }
+            })
+
+            return mappedResults
+        }
+
+        return []
+    },
     getAppointmentsByDate: async function (state, filters) {
         const response = await Request.do(state, 'POST', Request.getDefaultHeader(state), filters, `${Endpoints.appointments.filter}`)
 

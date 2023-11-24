@@ -81,6 +81,7 @@ export default {
         filter: `${domain}/api/company/filter/v1/`,
         delete: `${domain}/api/company/delete/v1/`,
         externalList: `${domain}/api/company/external/list/v1/`,
+        externalLocalList: `${domain}/api/company/external/local/list/v1/`,
         gatewayExternalList: `${domain}/api/helpers/data/external/companies/v1/`,
     },
     incidents: {

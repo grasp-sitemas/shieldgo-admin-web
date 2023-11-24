@@ -41,8 +41,9 @@
 
 <script>
 import jsPDF from 'jspdf'
-import html2canvas from 'html2canvas' // Usado para capturar imagens dos gráficos
+import html2canvas from 'html2canvas'
 import moment from 'moment'
+
 export default {
     props: ['items', 'dailyItems'],
     components: {
@@ -76,9 +77,6 @@ export default {
                 const titleHeight = 40 // Altura para o título
                 const spacingBetweenGraphs = 20 // Espaçamento entre os gráficos
                 const graphHeight = (pageHeight - titleHeight - spacingBetweenGraphs * 3) / 2 // Altura ajustada para cada gráfico
-
-                // const rowHeight = 20
-                // const startX = 20
 
                 // Adicionando o título na primeira página
                 pdf.setFillColor('#2d353c')
@@ -119,49 +117,6 @@ export default {
 
                 await addGraph('patrolPointDataChart', spacingBetweenGraphs)
                 await addGraph('dailyPatrolPointDataChart', graphHeight + spacingBetweenGraphs * 2)
-
-                // Nova página para os próximos gráficos
-                // pdf.addPage()
-                // pdf.setFillColor('#2d353c')
-                // pdf.rect(0, 0, pageWidth, pageHeight, 'F')
-
-                // const columnWidths = [100, 100, 100, 100, 100] // Ajuste conforme necessário
-                // let startY = 60s
-
-                // startY += rowHeight
-
-                // this.items.patrolPointData.patrols.forEach(point => {
-                //     let currentX = startX
-                //     const row = [
-                //         point.BeginTime ? moment(point.BeginTime).format('DD/MM/YYYY HH:mm') : 'N/A',
-                //         point.SiteName,
-                //         point.PatrolTime ? moment(point.PatrolTime).format('DD/MM/YYYY HH:mm:ss') : 'N/A',
-                //         point.DeptName,
-                //         this.$t(point.Status),
-                //     ]
-
-                //     let maxLineCount = 1
-
-                //     // Verificar se é necessário quebrar a linha para 'SiteName'
-                //     const siteNameLines = pdf.splitTextToSize(point.SiteName, columnWidths[1])
-                //     maxLineCount = Math.max(maxLineCount, siteNameLines.length)
-
-                //     // Calcular a nova altura da linha
-                //     const newHeight = rowHeight * maxLineCount
-
-                //     // Desenhar cada célula da linha
-                //     row.forEach((text, index) => {
-                //         if (index === 1) {
-                //             // Coluna 'SiteName'
-                //             pdf.text(siteNameLines, currentX, startY)
-                //         } else {
-                //             pdf.text(text, currentX, startY + (newHeight - rowHeight) / 2)
-                //         }
-                //         currentX += columnWidths[index]
-                //     })
-
-                //     startY += newHeight
-                // })
 
                 pdf.save(`${this.$t('str.reports.performance.patrol.file.name')}.pdf`)
             } catch (error) {

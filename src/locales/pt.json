@@ -1126,7 +1126,8 @@
     "str.table.reports.column.geo": "GPS",
     "str.event.filter.failure_patrol": "Falha de ronda",
     "FAILURE_PATROL": "Falha de ronda",
-    "str.event.failure_patrol": "não realizou a ronda",
+    "str.event.failure_patrol": "A ronda",
+    "str.event.failure_patrol.description": "não foi realizada",
     "NOT_STARTED": "Não iniciada(s)",
     "INCOMPLETE": "Incompleta(s)",
     "str.msg.patrol": "Ronda",
@@ -1357,5 +1358,11 @@
     "str.chart.incomplete": "Incompleta(s)",
     "str.daily.patrols": "Rondas Diárias",
     "str.patrol.points.total": "Total de Pontos de Ronda",
-    "str.daily.patrol.points.data": "Dados Diários de Pontos de Ronda"
+    "str.daily.patrol.points.data": "Dados Diários de Pontos de Ronda",
+    "CANCEL_PATROL": "Ronda cancelada",
+    "CANCELLED": "Cancelada",
+    "str.status.cancelled": "Cancelada",
+    "str.event.status.cancelled": "Cancelada",
+    "str.event.incomplete_patrol.description": "não foi completada",
+    "str.event.expired_patrol.description": "foi expirada"
 }

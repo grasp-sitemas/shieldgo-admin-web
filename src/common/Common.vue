@@ -172,6 +172,8 @@ export default {
                 return 'str.event.status.in_progress'
             case 'CLOSED_BY_SYSTEM':
                 return 'str.event.status.closed_by_system'
+            case 'CANCELLED':
+                return 'str.event.status.cancelled'
 
             default:
                 return ''

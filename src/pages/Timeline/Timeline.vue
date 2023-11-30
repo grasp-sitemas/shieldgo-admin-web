@@ -74,6 +74,7 @@
                     <option value="FINISHED">{{ $t('str.status.done') }}</option>
                     <option value="EXPIRED">{{ $t('str.status.expired') }}</option>
                     <option value="CLOSED_BY_SYSTEM">{{ $t('str.status.closed.by.system') }}</option>
+                    <option value="CANCELLED">{{ $t('str.status.cancelled') }}</option>
                 </select>
             </div>
         </div>
@@ -108,11 +109,13 @@
                                     : props.formattedRow[props.column.field] === 'IN_PROGRESS'
                                     ? 'bg-success'
                                     : props.formattedRow[props.column.field] === 'FINISHED'
-                                    ? 'bg-info'
+                                    ? 'bg-green'
                                     : props.formattedRow[props.column.field] === 'EXPIRED'
                                     ? 'bg-danger'
                                     : props.formattedRow[props.column.field] === 'CLOSED_BY_SYSTEM'
                                     ? 'bg-warning'
+                                    : props.formattedRow[props.column.field] === 'CANCELLED'
+                                    ? 'bg-indigo'
                                     : 'bg-dark'
                             "
                         >

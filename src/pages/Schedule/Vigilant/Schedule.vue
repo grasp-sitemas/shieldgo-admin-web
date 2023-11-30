@@ -37,7 +37,7 @@
         </div>
 
         <CreateScheduleModal :role="role" :selectedAppointment="selectedAppointment" :selectedDate="selectedDate" :accounts="accounts" :clients="clients" :isSuperAdminMaster="isSuperAdminMaster" />
-        <FullCalendar :events="appointments" :options="calendarOptions"></FullCalendar>
+        <FullCalendar :events="appointments" :options="calendarOptions" />
     </div>
 </template>
 
@@ -62,6 +62,7 @@ export default {
             accounts: [],
             clients: [],
             sites: [],
+            isLoading: false,
             originalAppointments: [],
             selectedAppointment: {},
             lastFetchedMonth: null,
@@ -70,7 +71,7 @@ export default {
                 client: '',
                 site: '',
                 category: 'SECURITY_PATROL',
-                startDate: moment().startOf('month').utc(true).format(),
+                startDate: moment().utc(true).format(),
                 endDate: moment().endOf('month').utc(true).format(),
                 isSortByStartDate: true,
             },

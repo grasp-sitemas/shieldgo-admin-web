@@ -62,6 +62,8 @@ export default {
                     return 'blue'
                 case 'END_PATROL':
                     return 'blue'
+                case 'CANCEL_PATROL':
+                    return 'indigo'
                 default:
                     return 'gray'
             }

@@ -18,6 +18,8 @@
                         ? 'bg-danger'
                         : data.status === 'CLOSED_BY_SYSTEM'
                         ? 'bg-warning'
+                        : data.status === 'CANCELLED'
+                        ? 'bg-indigo'
                         : 'bg-dark'
                 "
             >

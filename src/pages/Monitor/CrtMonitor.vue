@@ -266,7 +266,9 @@ export default {
             data.forEach(item => {
                 const dataItem = item
 
-                const vigilant = dataItem?.vigilant?.firstName + ' ' + dataItem?.vigilant?.lastName + ' '
+                let vigilant = dataItem?.vigilant?.firstName ? dataItem?.vigilant?.firstName : ''
+                vigilant += dataItem?.vigilant?.lastName ? ' ' + dataItem?.vigilant?.lastName + ' ' : ''
+
                 dataItem.description = vigilant
 
                 switch (dataItem?.type) {
@@ -308,6 +310,13 @@ export default {
                     case 'FAILURE_PATROL':
                         {
                             dataItem.description += this.$t('str.event.failure_patrol')
+
+                            if (item?.event?.name) {
+                                dataItem.description += ' ' + item?.event?.name + ' '
+                            } else {
+                                dataItem.description += ' '
+                            }
+
                             dataItem.tag = 'badge dark-orange me-1'
                             dataItem.icon = 'fa fa-exclamation-triangle'
                         }
@@ -319,13 +328,22 @@ export default {
                 if (dataItem?.failurePatrolType) {
                     switch (dataItem.failurePatrolType) {
                         case 'NOT_STARTED':
-                            dataItem.failureText = this.$t('str.msg.not.started.patrol')
+                            {
+                                dataItem.failureText = this.$t('str.msg.not.started.patrol')
+                                dataItem.description += this.$t('str.event.failure_patrol.description') + ' '
+                            }
                             break
                         case 'INCOMPLETE':
-                            dataItem.failureText = this.$t('str.msg.incomplete.patrol')
+                            {
+                                dataItem.failureText = this.$t('str.msg.incomplete.patrol')
+                                dataItem.description += this.$t('str.event.incomplete_patrol.description') + ' '
+                            }
                             break
                         case 'EXPIRED':
-                            dataItem.failureText = this.$t('str.msg.expired.patrol')
+                            {
+                                dataItem.failureText = this.$t('str.msg.expired.patrol')
+                                dataItem.description += this.$t('str.event.expired_patrol.description') + ' '
+                            }
                             break
                         default:
                             break

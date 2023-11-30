@@ -42,8 +42,9 @@ export default {
             const formattedAppointments = await this.formatAppointments(appointments)
             this.appointments = formattedAppointments ? formattedAppointments : []
             this.calendarOptions.events = this.appointments
+            this.isLoading = false
         },
-        formatAppointments: function (appointments) {
+        formatAppointments: async function (appointments) {
             const formattedAppointments = []
             appointments.forEach(appointment => {
                 formattedAppointments.push({
@@ -53,6 +54,9 @@ export default {
                 })
             })
             return formattedAppointments
+        },
+        handleLoading(isLoading) {
+            this.isLoading = isLoading
         },
         initCalendar: function () {
             const language = this.$session.get('user')?.language
@@ -79,7 +83,7 @@ export default {
                 datesSet: ({ startStr, endStr }) => {
                     const currentMonth = moment(startStr).month()
                     if (this.lastFetchedMonth !== currentMonth) {
-                        this.filters.startDate = moment(startStr).utc(true).format()
+                        this.isLoading = true
                         this.filters.endDate = moment(endStr).utc(true).format()
                         this.getAppointments()
                         this.lastFetchedMonth = currentMonth

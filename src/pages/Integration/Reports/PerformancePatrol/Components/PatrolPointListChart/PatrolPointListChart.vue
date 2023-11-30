@@ -8,7 +8,6 @@
                 <label style="cursor: pointer" class="download-csv">XLS</label>
             </download-excel>
         </div>
-
         <h6 class="label">{{ $t('str.patrol.point.performance.list') }}</h6>
         <div class="table-container">
             <table class="table">
@@ -23,11 +22,11 @@
                 </thead>
                 <tbody class="tbody">
                     <tr class="form-body" v-for="(item, index) in sortedPatrolPoints" :key="index" :style="{ backgroundColor: item?.Status == 'Não visitado' ? '#f8d7da' : '#d4edda' }">
-                        <td class="form-td-label">{{ item?.BeginTime ? moment(item.BeginTime).utc(false).format('DD/MM/YYYY HH:mm') : 'N/A' }}</td>
+                        <td class="form-td-label">{{ item?.BeginTime }}</td>
                         <td class="form-td-label">{{ item?.SiteName }}</td>
-                        <td class="form-td-label">{{ item?.PatrolTime?.length > 0 ? moment(item?.PatrolTime).utc(false).format('DD/MM/YYYY HH:mm:ss') : 'N/A' }}</td>
+                        <td class="form-td-label">{{ item?.PatrolTime }}</td>
                         <td class="form-td-label">{{ item?.DeptName }}</td>
-                        <td class="form-td-label">{{ $t(item?.Status) }}</td>
+                        <td class="form-td-label">{{ item?.Status }}</td>
                     </tr>
                 </tbody>
             </table>
@@ -76,19 +75,15 @@ export default {
         sortedPatrolPoints() {
             if (!this.items) return
 
-            return [...this.items]
-                .map(item => {
-                    return {
-                        BeginTime: item.BeginTime ? item.BeginTime : 'N/A',
-                        SiteName: item.SiteName,
-                        PatrolTime: item.PatrolTime ? item.PatrolTime : 'N/A',
-                        DeptName: item.DeptName,
-                        Status: this.$t(item.Status),
-                    }
-                })
-                .sort((a, b) => {
-                    return new Date(a.BeginTime) - new Date(b.BeginTime) || a.SiteName.localeCompare(b.SiteName)
-                })
+            return [...this.items].map(item => {
+                return {
+                    BeginTime: item.BeginTime ? moment(item?.BeginTime).utc(false).format('DD/MM/YYYY HH:mm:ss') : 'N/A',
+                    SiteName: item.SiteName,
+                    PatrolTime: item.PatrolTime ? moment(item?.PatrolTime).utc(false).format('DD/MM/YYYY HH:mm:ss') : 'N/A',
+                    DeptName: item.DeptName,
+                    Status: this.$t(item.Status),
+                }
+            })
         },
     },
 }

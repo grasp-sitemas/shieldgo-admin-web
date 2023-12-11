@@ -30,13 +30,11 @@ export default {
     },
     watch: {
         jsonData() {
-            alert('watch')
-            // this.data = this.jsonData
-            // this.title = this.jsonTitle
-            // this.fields = this.jsonFields
-            // this.meta = this.jsonMeta
-            // this.name = this.filename + '.csv'
-            // console.log(this.data)
+            this.data = this.jsonData
+            this.title = this.jsonTitle
+            this.fields = this.jsonFields
+            this.meta = this.jsonMeta
+            this.name = this.filename + '.csv'
         },
     },
     computed: {

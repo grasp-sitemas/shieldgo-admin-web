@@ -33,7 +33,7 @@
 
         <div class="row mt-xl-5">
             <div class="col-md-12">
-                <PatrolPointListChart ref="PatrolPointListChart" :items="items?.patrolPointData?.patrols" />
+                <PatrolPointListChart ref="PatrolPointListChart" :items="items?.patrolPointData?.patrols" :periodStart="periodStart" :periodEnd="periodEnd" />
             </div>
         </div>
     </div>
@@ -45,7 +45,7 @@ import html2canvas from 'html2canvas'
 import moment from 'moment'
 
 export default {
-    props: ['items', 'dailyItems'],
+    props: ['items', 'dailyItems', 'periodStart', 'periodEnd'],
     components: {
         DailyPatrolDataChart: () => import('./Patrols/DailyPatrolDataChart.vue'),
         PatrolDataChart: () => import('./Patrols/PatrolDataChart.vue'),

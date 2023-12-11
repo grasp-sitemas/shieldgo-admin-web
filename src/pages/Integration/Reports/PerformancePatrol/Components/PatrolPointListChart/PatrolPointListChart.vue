@@ -39,7 +39,7 @@ import moment from 'moment'
 import { JSON_FIELDS_CSV } from '../../Utils/jsonFieldsCsv'
 
 export default {
-    props: ['items'],
+    props: ['items', 'account', 'periodStart', 'periodEnd'],
     watch: {
         items() {},
     },
@@ -68,6 +68,14 @@ export default {
     },
     methods: {
         fetchData() {
+            const account = this?.sortedPatrolPoints[0]?.DeptName ? this.sortedPatrolPoints[0].DeptName : ''
+            this.jsonTitle = [
+                this.jsonTitle,
+                ' ',
+                `${this.$t('str.company')}: ${account?.toUpperCase()}`,
+                `${this.$t('str.period')}:  ${moment(this.periodStart).utc(false).format('DD/MM/YYYY')} - ${moment(this.periodEnd).utc(false).format('DD/MM/YYYY')}`,
+                ' ',
+            ]
             return this.sortedPatrolPoints
         },
     },

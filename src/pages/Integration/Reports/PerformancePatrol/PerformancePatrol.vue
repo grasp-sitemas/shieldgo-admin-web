@@ -60,7 +60,7 @@
             </div>
 
             <div v-if="(items || dailyItems) && !isSearchLoading">
-                <PdfDownload :items="items" :dailyItems="dailyItems" />
+                <PdfDownload :items="items" :dailyItems="dailyItems" :periodStart="filters.startDate" :periodEnd="filters.endDate" />
             </div>
             <div v-else-if="isLoading || isSearchLoading" class="center-spinner">
                 <i class="fas fa-spinner fa-spin" />

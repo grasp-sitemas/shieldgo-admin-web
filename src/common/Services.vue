@@ -575,8 +575,6 @@ export default {
                 }, [])
                 return [...acc, ...items]
             }, [])
-            console.log(flattenedItems)
-            console.log(results)
             return {
                 tableItems: flattenedItems,
                 reportItems: results,
@@ -592,7 +590,6 @@ export default {
         if (results?.length > 0) {
             const flattenedItems = results.reduce((acc, account) => {
                 const items = account.clients.reduce((acc, client) => {
-                    console.log(client)
                     return [
                         ...acc,
                         ...client?.sites.reduce((acc, site) => {
@@ -637,7 +634,6 @@ export default {
         if (results?.length > 0) {
             const flattenedItems = results.reduce((acc, account) => {
                 const items = account.clients.reduce((acc, client) => {
-                    console.log(client)
                     return [
                         ...acc,
                         ...client?.sites.reduce((acc, site) => {

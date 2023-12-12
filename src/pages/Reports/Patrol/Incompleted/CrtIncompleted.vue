@@ -46,7 +46,7 @@ export default {
             this.isSearchLoading = true
             this.items = []
 
-            const results = await Services.SupervisorPatrol(this, this.filters)
+            const results = await Services.filterReports(this, this.filters)
 
             this.items = results?.tableItems
             this.reportItems = results?.reportItems

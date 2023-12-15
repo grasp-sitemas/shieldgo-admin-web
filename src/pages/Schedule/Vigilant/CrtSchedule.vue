@@ -32,7 +32,7 @@ export default {
             }
         }
 
-        payload.getAppointments()
+        // payload.getAppointments()
     },
 
     methods: {

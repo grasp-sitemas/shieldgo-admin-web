@@ -30,6 +30,7 @@ export default {
                     payload.sites = await Services.getSites(payload)
                     payload.filters.account = await Common.getAccountId(payload)
                     payload.filters.client = await Common.getClientId(payload)
+                    payload.filters.sites = await Common.getSiteGroupId(payload)
                 }
 
                 await payload.selectAllTypes()

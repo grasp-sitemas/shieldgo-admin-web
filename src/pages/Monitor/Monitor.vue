@@ -3,7 +3,6 @@
         <div class="d-flex align-items-center mb-3">
             <h1 class="page-header mb-0">{{ $t('str.form.title.monitor') }}</h1>
         </div>
-
         <div class="row">
             <div class="col-md-12 mb-3">
                 <div id="accordion" class="accordion rounded overflow-hidden">
@@ -379,6 +378,7 @@ export default {
                 account: '',
                 client: '',
                 site: '',
+                sites: [],
                 eventNotAttandance: true,
                 startDate: moment().utc(true).subtract(1, 'days').format(),
                 endDate: moment().utc(true).format(),

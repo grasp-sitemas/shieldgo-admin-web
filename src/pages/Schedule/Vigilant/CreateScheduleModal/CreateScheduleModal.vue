@@ -1,5 +1,6 @@
 <template>
     <b-modal no-close-on-backdrop id="createScheduleModal" @hide="closeModal" :hide-footer="true" size="lg" class="modal-message">
+        {{ errors }}
         <template slot="modal-header">
             <h4 class="modal-title">{{ data?._id ? $t('str.modal.schedule.title.information') : $t('str.modal.create.schedule.title.create') }}</h4>
             <span v-if="data?.status === 'ARCHIVED'" class="m-2 badge bg-danger rounded-5 cursor_pointer f-right"
@@ -134,7 +135,7 @@
                         type="date"
                         class="form-control"
                         v-bind:class="checkRequiredField('beginDate') ? 'is-invalid' : ''"
-                        @focus="removeRequiredField('beginDate')"
+                        @focus="clearErrorDate('beginDate')"
                         id="beginDateField"
                         :placeholder="$t('str.register.schedule.starts.in.placeholder')"
                     />
@@ -149,7 +150,7 @@
                         type="date"
                         class="form-control"
                         v-bind:class="checkRequiredField('endDate') ? 'is-invalid' : ''"
-                        @focus="removeRequiredField('endDate')"
+                        @focus="clearErrorDate('endDate')"
                         id="endDateField"
                         :placeholder="$t('str.register.schedule.ends.in.placeholder')"
                     />

@@ -200,8 +200,13 @@ export default {
                 this.errors.push('frequencyMonthDay')
             }
 
+            const validRangeDate = await this.checkRangeDate()
+
+            if (!validRangeDate) {
+                this.errors.push('rangeDate')
+            }
             // verify errors and if end date is greater than begin date and if range is smaller than one year
-            if (!this.errors || (this.errors.length === 0 && this.checkRangeDate())) {
+            if (!this.errors || this.errors.length === 0) {
                 if (!this.data.guardGroup || this.data.guardGroup === '') {
                     delete this.data.guardGroup
                 }
@@ -226,17 +231,20 @@ export default {
         },
         checkRangeDate: async function () {
             if (this.data.beginDate && this.data.endDate) {
-                const beginDate = new Date(this.data.beginDate)
-                const endDate = new Date(this.data.endDate)
-                const diff = endDate.getTime() - beginDate.getTime()
-                const diffDays = Math.ceil(diff / (1000 * 3600 * 24))
-                if (diffDays < 0) {
+                console.log(this.data.beginDate)
+                console.log(this.data.endDate)
+                const beginDate = moment(this.data.beginDate)
+                const endDate = moment(this.data.endDate)
+
+                if (!beginDate.isValid() || !endDate.isValid()) {
+                    // Invalid date format
+                    Common.show(this, 'bottom-right', 'warn', 'Invalid date format')
+                    return false
+                }
+
+                if (beginDate.isAfter(endDate)) {
                     // begin date is greater than end date
                     Common.show(this, 'bottom-right', 'warn', this.$t('str.form.schedule.error.begin.date.greater.than.end.date'))
-                    return false
-                } else if (diffDays > 365) {
-                    // range is greater than one year
-                    Common.show(this, 'bottom-right', 'warn', this.$t('str.form.schedule.error.range.greater.than.one.year'))
                     return false
                 }
                 return true
@@ -360,6 +368,7 @@ export default {
             this.removeRequiredField('frequencyMonthDay')
             this.removeRequiredField('frequencyYearMonth')
             this.removeRequiredField('frequencyYearDay')
+            this.removeRequiredField('rangeDate')
         },
         async selectAllVigilants() {
             if (!this.data?.guardGroup || this.data.guardGroup === '') this.data.vigilants = this.vigilants ? this.vigilants : await Services.getVigilantsBySite(this, this.data.site)
@@ -440,6 +449,10 @@ export default {
                     this.data.frequencyYear.day = daysInMonth
                 }
             }
+        },
+        clearErrorDate: function (name) {
+            this.removeRequiredField(name)
+            this.removeRequiredField('rangeDate')
         },
         verifyMonthDay: function () {
             // check if day of month is valid for selected month

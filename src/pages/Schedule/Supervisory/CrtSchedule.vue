@@ -79,8 +79,9 @@ export default {
                 datesSet: ({ startStr, endStr }) => {
                     const currentMonth = moment(startStr).month()
                     if (this.lastFetchedMonth !== currentMonth) {
-                        this.filters.startDate = moment(startStr).utc(true).format()
+                        this.isLoading = true
                         this.filters.endDate = moment(endStr).utc(true).format()
+                        this.filters.startDate = moment(startStr).utc(true).format()
                         this.getAppointments()
                         this.lastFetchedMonth = currentMonth
                     }

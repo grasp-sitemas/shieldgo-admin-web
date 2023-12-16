@@ -31,10 +31,7 @@ export default {
                 payload.sites = await Services.getSites(payload)
             }
         }
-
-        // payload.getAppointments()
     },
-
     methods: {
         async getAppointments() {
             const appointments = await Services.getAppointmentsByDate(this, this.filters)
@@ -85,6 +82,7 @@ export default {
                     if (this.lastFetchedMonth !== currentMonth) {
                         this.isLoading = true
                         this.filters.endDate = moment(endStr).utc(true).format()
+                        this.filters.startDate = moment(startStr).utc(true).format()
                         this.getAppointments()
                         this.lastFetchedMonth = currentMonth
                     }

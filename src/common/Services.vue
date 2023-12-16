@@ -268,7 +268,7 @@ export default {
         return []
     },
     getAppointmentsByDate: async function (state, filters) {
-        const response = await Request.do(state, 'POST', Request.getDefaultHeader(state), filters, `${Endpoints.appointments.filter}`)
+        const response = await Request.do(state, 'POST', Request.getDefaultHeader(state), filters, `${Endpoints.appointments.filterV2}`)
 
         return response?.data?.results || []
     },

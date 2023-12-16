@@ -10,6 +10,7 @@ export default {
     socketDomain: socketDomain,
     appointments: {
         filter: `${domain}/api/company/appointments/filter/v1/`,
+        filterV2: `${domain}/api/company/appointments/filter/v2/`,
         appointment: `${domain}/api/company/appointments/v1/`,
         delete: `${domain}/api/company/appointments/delete/v1/`,
         cancelSeries: `${domain}/api/company/appointments/cancel/series/v1/`,

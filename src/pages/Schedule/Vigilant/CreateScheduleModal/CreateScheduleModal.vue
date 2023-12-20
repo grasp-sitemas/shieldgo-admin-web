@@ -1,6 +1,5 @@
 <template>
     <b-modal no-close-on-backdrop id="createScheduleModal" @hide="closeModal" :hide-footer="true" size="lg" class="modal-message">
-        {{ errors }}
         <template slot="modal-header">
             <h4 class="modal-title">{{ data?._id ? $t('str.modal.schedule.title.information') : $t('str.modal.create.schedule.title.create') }}</h4>
             <span v-if="data?.status === 'ARCHIVED'" class="m-2 badge bg-danger rounded-5 cursor_pointer f-right"

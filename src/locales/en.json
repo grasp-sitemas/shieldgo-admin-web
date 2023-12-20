@@ -1366,5 +1366,8 @@
     "str.status.cancelled": "Canceled",
     "str.event.status.cancelled": "Canceled",
     "str.event.incomplete_patrol.description": "was not completed",
-    "str.event.expired_patrol.description": "was expired"
+    "str.event.expired_patrol.description": "was expired",
+    "msg.new.canceled.patrol.notification": "Canceled patrol",
+    "str.event.filter.cancel_patrol": "Canceled patrol",
+    "str.event.cancel_patrol": "cancelled the patrol"
 }

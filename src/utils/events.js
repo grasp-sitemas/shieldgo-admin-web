@@ -6,6 +6,7 @@ export const EVENT_TYPES = [
     // { value: 'START_PATROL', label: 'str.event.filter.start_patrol' },
     // { value: 'END_PATROL', label: 'str.event.filter.end_patrol' },
     { value: 'FAILURE_PATROL', label: 'str.event.filter.failure_patrol' },
+    { value: 'CANCEL_PATROL', label: 'str.event.filter.cancel_patrol' },
 ]
 
 export const EVENT_STATUS = {

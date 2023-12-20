@@ -1365,5 +1365,8 @@
     "str.status.cancelled": "Cancelada",
     "str.event.status.cancelled": "Cancelada",
     "str.event.incomplete_patrol.description": "não foi completada",
-    "str.event.expired_patrol.description": "foi expirada"
+    "str.event.expired_patrol.description": "foi expirada",
+    "msg.new.canceled.patrol.notification": "Ronda cancelada",
+    "str.event.filter.cancel_patrol": "Ronda cancelada",
+    "str.event.cancel_patrol": "cancelou a ronda"
 }

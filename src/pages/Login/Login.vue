@@ -30,19 +30,17 @@
                     <div class="text-gray-500 text-center mt-10px">
                         <a v-b-modal.recoveryPassword class="text-white">{{ $t('str.recovery.password') }}</a>
                     </div>
-
-                    <div class="mt-5 text-gray-500 text-center">
-                        <p class="text-white-600 fs-13px p-0 m-1">
-                            {{ $t('str.download.last.version') }}
-                        </p>
-
-                        <a class="p-0 m-1" href="https://drive.google.com/drive/folders/1Y5Tm4nWQ5_dbtxmii0mLrxZzSU7ilgeJ?usp=sharing" target="_blank">
-                            <img src="../../assets/images/android-logo.png" alt="Android Logo Image" width="40" />
-                        </a>
-                    </div>
+                </div>
+                <div class="footer-content text-center mt-20 mt-5">
+                    <a href="https://play.google.com/store/apps/details?id=com.shieldgo.app&hl=pt_BR" target="_blank">
+                        <img src="../../assets/images/googleplay.png" target alt="Google play" width="140" />
+                    </a>
+                    |
+                    <a href="https://admin.shieldgo.com.br/?#/privacy-policy" target="_blank" class="text-white">Política de Privacidade</a>
                 </div>
             </div>
         </div>
+
         <RecoveryPassword :email="data.email" />
         <notifications group="bottom-right" position="bottom right" :speed="500" />
     </div>
@@ -87,5 +85,23 @@ export default {
 }
 .login-header {
     place-content: center !important;
+}
+
+.footer-content {
+    margin-top: 20px;
+    padding: 10px;
+    color: #fff; /* Ajuste a cor conforme necessário */
+}
+
+.footer-content a {
+    text-decoration: none;
+    color: #fff; /* Ajuste a cor conforme necessário */
+    margin: 0 10px;
+}
+
+.footer-content {
+    padding: 10px 0;
+    color: #fff;
+    /* Remova a margin-top para que o conteúdo do rodapé fique mais próximo do formulário de login */
 }
 </style>

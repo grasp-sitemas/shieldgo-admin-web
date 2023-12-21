@@ -432,6 +432,8 @@ export default {
                                     Common.show(state, 'top-right', 'warn', state.$t('msg.incomplete.patrol.notification'))
                                     break
                             }
+                        } else if (type === 'CANCEL_PATROL') {
+                            Common.show(state, 'top-right', 'indigo', state.$t('msg.new.canceled.patrol.notification'))
                         }
                         await deleteDoc(doc(db, 'notifications', site))
                         await state.filter()

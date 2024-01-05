@@ -4,7 +4,7 @@
             <h4 class="modal-title">{{ $t('str.breadcrumb.companies') }}</h4>
             <a class="btn-close cursor_pointer" @click="closeModal"></a>
         </template>
-
+        {{ data }}
         <div>
             <div v-if="data._id" class="row">
                 <div class="col-md-4 mb-3">
@@ -223,11 +223,13 @@ export default {
     },
     watch: {
         selectedData: function () {
-            this.data = this.selectedData
+            if (this?.selectedData?._id) {
+                this.data = this?.selectedData
 
-            this.errors = []
-            this.file = null
-            this.$refs.file.value = null
+                this.errors = []
+                this.file = null
+                this.$refs.file.value = null
+            }
         },
     },
     data() {

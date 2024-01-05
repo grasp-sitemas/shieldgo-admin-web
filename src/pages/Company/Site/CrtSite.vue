@@ -203,37 +203,41 @@ export default {
             if (!this.data.client || this.data.client === '') {
                 this.errors.push('client')
             }
-            if (!this.data.address.cep || this.data.address?.cep?.length !== 9) {
-                this.errors.push('cep')
-            }
-            if (!this.data.address.address && this.data.address.address === '') {
-                this.errors.push('address')
-            }
-            if (!this.data.address.number && this.data.address.number === '') {
-                this.errors.push('number')
-            }
-            if (!this.data.address.neighborhood && this.data.address.neighborhood === '') {
-                this.errors.push('neighborhood')
-            }
-            if (!this.data.address.city && this.data.address.city === '') {
-                this.errors.push('city')
-            }
-            if (!this.data.address.state && this.data.address.state === '') {
-                this.errors.push('state')
-            }
+            // if (!this.data.address.cep || this.data.address?.cep?.length !== 9) {
+            //     this.errors.push('cep')
+            // }
+            // if (!this.data.address.address && this.data.address.address === '') {
+            //     this.errors.push('address')
+            // }
+            // if (!this.data.address.number && this.data.address.number === '') {
+            //     this.errors.push('number')
+            // }
+            // if (!this.data.address.neighborhood && this.data.address.neighborhood === '') {
+            //     this.errors.push('neighborhood')
+            // }
+            // if (!this.data.address.city && this.data.address.city === '') {
+            //     this.errors.push('city')
+            // }
+            // if (!this.data.address.state && this.data.address.state === '') {
+            //     this.errors.push('state')
+            // }
 
             if (!this.errors || this.errors.length === 0) {
                 this.isLoading = true
 
-                this.loadGeolocation(
-                    async data => {
-                        await this.save(data)
-                    },
-                    async error => {
-                        this.data.address.name = 'MAIN'
-                        await this.save(error)
-                    },
-                )
+                if (!this.data.address?.cep || this.data.address?.cep?.length !== 9) {
+                    this.save()
+                } else {
+                    this.loadGeolocation(
+                        async data => {
+                            await this.save(data)
+                        },
+                        async error => {
+                            this.data.address.name = 'MAIN'
+                            await this.save(error)
+                        },
+                    )
+                }
             }
         },
         loadGeolocation: function (callbackSuccess, callbackError) {

@@ -17,6 +17,10 @@ const instanceateAddress = (addressObj, geo) => {
 export default {
     init: payload => {
         payload.domain = Endpoints.domain
+
+        if (!payload.data?.address?._id) {
+            payload.clearAddress()
+        }
     },
     methods: {
         inputCep() {
@@ -93,7 +97,7 @@ export default {
             this.$refs.file.value = null
             this.isLoading = false
         },
-        save() {
+        async save() {
             let formData = new FormData()
 
             formData.append('file', this.file)
@@ -184,47 +188,52 @@ export default {
             this.clearForm()
             this.$bvModal.hide('createCompanyModal')
         },
-        checkForm() {
+        async checkForm() {
             this.isLoading = true
 
             if (!this.data.name || this.data.name === '') {
                 this.errors.push('name')
             }
-            if (!this.data.address.cep || this.data.address?.cep?.length !== 9) {
-                this.errors.push('cep')
-            }
-            if (!this.data.address.address && this.data.address.address === '') {
-                this.errors.push('address')
-            }
-            if (!this.data.address.number && this.data.address.number === '') {
-                this.errors.push('number')
-            }
-            if (!this.data.address.neighborhood && this.data.address.neighborhood === '') {
-                this.errors.push('neighborhood')
-            }
-            if (!this.data.address.city && this.data.address.city === '') {
-                this.errors.push('city')
-            }
-            if (!this.data.address.state && this.data.address.state === '') {
-                this.errors.push('state')
-            }
+            // if (!this.data.address.cep || this.data.address?.cep?.length !== 9) {
+            //     this.errors.push('cep')
+            // }
+            // if (!this.data.address.address && this.data.address.address === '') {
+            //     this.errors.push('address')
+            // }
+            // if (!this.data.address.number && this.data.address.number === '') {
+            //     this.errors.push('number')
+            // }
+            // if (!this.data.address.neighborhood && this.data.address.neighborhood === '') {
+            //     this.errors.push('neighborhood')
+            // }
+            // if (!this.data.address.city && this.data.address.city === '') {
+            //     this.errors.push('city')
+            // }
+            // if (!this.data.address.state && this.data.address.state === '') {
+            //     this.errors.push('state')
+            // }
 
             if (!this.data.personType || this.data.personType === '') {
                 delete this.data.personType
             }
 
             if (!this.errors || this.errors.length === 0) {
-                this.loadGeolocation(
-                    async data => {
-                        await this.save(data)
-                        this.isLoading = false
-                    },
-                    async error => {
-                        this.data.address.name = 'MAIN'
-                        await this.save(error)
-                        this.isLoading = false
-                    },
-                )
+                this.isLoading = true
+
+                if (this.data?.address?.cep?.length < 9 || !this.data?.address?.cep) {
+                    delete this.data.address
+                    await this.save()
+                } else {
+                    this.loadGeolocation(
+                        async data => {
+                            await this.save(data)
+                        },
+                        async error => {
+                            this.data.address.name = 'MAIN'
+                            await this.save(error)
+                        },
+                    )
+                }
             } else {
                 this.isLoading = false
             }
@@ -242,7 +251,6 @@ export default {
                         return callbackError(this.$t('string.company.register.address.invalid'))
                     } else if (geoResponse.results.length == 1) {
                         let addressObj = instanceateAddress(state.data.address, geoResponse.results[0])
-
                         if (addressObj) {
                             return callbackSuccess(state.data)
                         } else {

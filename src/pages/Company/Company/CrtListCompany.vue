@@ -20,7 +20,7 @@ export default {
                 `${Endpoints.companies.filter}`,
                 response => {
                     response.results.forEach(item => {
-                        item.address = Common.concatAddress(item.address)
+                        item.fullAddress = Common.concatAddress(item.address)
                     })
 
                     this.items = response.results
@@ -88,8 +88,8 @@ export default {
                 },
                 {
                     label: this.$t('str.table.company.column.address'),
-                    field: 'address',
-                    type: 'address',
+                    field: 'fullAddress',
+                    type: 'text',
                     width: '20%',
                     thClass: 'text-nowrap',
                     tdClass: 'text-nowrap',

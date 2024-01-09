@@ -11,9 +11,17 @@
                             <input type="text" v-model="data.email" class="form-control fs-13px h-45px border-0" :placeholder="$t('str.title.email.address')" id="emailAddress" />
                             <label for="emailAddress" class="d-flex align-items-center text-gray-600 fs-13px">{{ $t('str.title.email.address') }}</label>
                         </div>
-                        <div class="form-floating mb-20px">
-                            <input type="password" v-model="data.password" class="form-control fs-13px h-45px border-0" :placeholder="$t('str.title.password')" />
+
+                        <div class="mb-3">
                             <label for="emailAddress" class="d-flex align-items-center text-gray-600 fs-13px">{{ $t('str.title.password') }}</label>
+
+                            <div class="input-group">
+                                <input v-model="data.password" v-bind:type="showPassword ? 'text' : 'password'" class="form-control fs-13px h-45px border-0" :placeholder="$t('str.title.password')" />
+                                <span class="input-group-text" v-on:click="showPassword = !showPassword">
+                                    <i v-bind:class="showPassword ? 'fas fa-eye' : 'fas fa-eye-slash'"></i>
+                                </span>
+                                <div class="invalid-feedback">{{ $t('str.register.user.password.required') }}</div>
+                            </div>
                         </div>
 
                         <div class="mb-20px">
@@ -67,6 +75,7 @@ export default {
     data() {
         return {
             loading: false,
+            showPassword: false,
             data: {
                 email: null,
                 password: null,

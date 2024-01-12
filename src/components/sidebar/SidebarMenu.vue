@@ -110,11 +110,15 @@ const sidebarMenu = [
                 roles: [ROLES.SUPER_ADMIN_MASTER, ROLES.ADMIN, ROLES.MANAGER, ROLES.AUDITOR],
             },
             {
+                path: '/reports/patrols',
+                title: 'str.sidebar.menu.reports.patrols',
+                roles: [ROLES.SUPER_ADMIN_MASTER, ROLES.ADMIN, ROLES.MANAGER, ROLES.AUDITOR],
+            },
+            {
                 path: '/reports/patrols/completed',
                 title: 'str.sidebar.menu.reports.completed.patrols',
                 roles: [ROLES.SUPER_ADMIN_MASTER, ROLES.ADMIN, ROLES.MANAGER, ROLES.AUDITOR],
             },
-
             {
                 path: '/reports/patrols/incompleted',
                 title: 'str.sidebar.menu.reports.not.completed.patrols',

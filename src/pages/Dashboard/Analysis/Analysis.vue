@@ -101,7 +101,7 @@
         </div>
 
         <div class="row">
-            <div class="col-md-7">
+            <div class="col-md-8">
                 <EventsPerformance
                     :data="eventsPerformance"
                     :locale="userLocale"
@@ -117,12 +117,29 @@
                 />
             </div>
 
-            <div class="col-md-2">
+            <div class="col-md-4">
                 <AverageTimeAttendanceEvent :data="avaregeAttendanceEvent" :title="$t('str.chart.average.time.attendance.events.title')" />
                 <AttendanceEvents :data="eventsAttendance" :title="$t('str.chart.attendance.events.title')" />
             </div>
+        </div>
 
-            <div class="col-md-3">
+        <div class="row">
+            <div class="col-md-8">
+                <EventsPerformanceSubstatus
+                    :data="eventsPerformanceSubstatus"
+                    :locale="userLocale"
+                    :redirect="{
+                        params: {
+                            startDate: filters.startDate,
+                            endDate: filters.endDate,
+                            account: filters.account,
+                            client: filters.client,
+                            site: filters.site,
+                        },
+                    }"
+                />
+            </div>
+            <div class="col-md-4">
                 <ChartTable :title="tableTitle" :total="eventsByType?.totalCount || 0" :items="eventsByType?.countByType || []" :headers="tableHeaders" />
             </div>
         </div>
@@ -138,7 +155,7 @@ import ChartTable from './Components/ChartTable.vue'
 import EventsPerformance from './Components/PerformanceEvent.vue'
 import AverageTimeAttendanceEvent from './Components/AverageTimeAttendanceEvent.vue'
 import AttendanceEvents from './Components/AttendanceEvents.vue'
-
+import EventsPerformanceSubstatus from './Components/PerformanceEventSubstatus.vue'
 Vue.prototype.$registerEvent = new Vue()
 
 export default {
@@ -146,6 +163,7 @@ export default {
         Card,
         ChartTable,
         EventsPerformance,
+        EventsPerformanceSubstatus,
         AverageTimeAttendanceEvent,
         AttendanceEvents,
     },
@@ -170,6 +188,7 @@ export default {
             eventsByType: {},
             eventsPerformance: {},
             avaregeAttendanceEvent: {},
+            eventsPerformanceSubstatus: {},
             eventsAttendance: {},
             isSuperAdminMaster: false,
             tableTitle: this.$t('str.dashboard.events.by.type'),
@@ -198,5 +217,15 @@ export default {
 }
 .caret {
     display: none !important;
+}
+
+.row {
+    display: flex;
+    flex-wrap: wrap;
+}
+.col-md-8,
+.col-md-4 {
+    display: flex;
+    flex-direction: column;
 }
 </style>

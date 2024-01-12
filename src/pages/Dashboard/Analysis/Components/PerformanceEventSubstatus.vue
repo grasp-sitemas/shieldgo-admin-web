@@ -3,15 +3,15 @@
         <div class="card border-0 mb-3 bg-gray-800 text-white">
             <div class="card-body">
                 <div class="mb-3 text-gray-500">
-                    <b>{{ $t('str.msg.analysis.patrol').toUpperCase() }}</b>
+                    <b>{{ $t('str.msg.analysis.finished.patrol').toUpperCase() }}</b>
                 </div>
                 <div class="row">
-                    <div class="col-xl-2 col-3" v-for="(item, index) in chart?.series" :key="index">
+                    <div class="col-xl-3 col-4" v-for="(item, index) in chart?.series" :key="index">
                         <div class="cursor-pointer" @click="handleClick(item)">
                             <h3 class="mb-1">
                                 <span data-animation="number">{{ item.total }}</span>
                             </h3>
-                            <div>{{ $t(item?.name) }}</div>
+                            <div>{{ $t(item.name) }}</div>
                         </div>
                     </div>
                 </div>
@@ -27,7 +27,7 @@
 var pt = require('apexcharts/dist/locales/pt-br.json')
 var en = require('apexcharts/dist/locales/en.json')
 export default {
-    name: 'PerformanceEvent',
+    name: 'PerformanceEventSubstatus',
     watch: {
         data(newData) {
             // sort newData.substatus by name
@@ -80,7 +80,7 @@ export default {
                 total: 0,
                 series: [],
                 options: {
-                    colors: ['#00acac', '#32a932', '#e39900', '#e35f00', '#e30000'],
+                    colors: ['#32a932', '#e39900'],
                     fill: {
                         type: 'solid',
                     },
@@ -159,11 +159,13 @@ export default {
                 if (!params?.site) delete params.site
 
                 switch (item.name) {
-                    case 'Não iniciada(s)':
-                        params.report = 'PATROL_POINTS_NOT_VISITED'
+                    case 'EVENT_STATUS_COMPLETE':
+                        params.report = 'PATROL_POINTS_COMPLETED'
                         this.$router.push({ path: '/reports/patrols/' + JSON.stringify(params) })
                         break
-                    default:
+                    case 'EVENT_STATUS_INCOMPLETE':
+                        params.report = 'PATROL_POINTS_INCOMPLETED'
+                        this.$router.push({ path: '/reports/patrols/' + JSON.stringify(params) })
                         break
                 }
             }

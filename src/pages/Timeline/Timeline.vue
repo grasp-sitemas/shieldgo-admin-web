@@ -71,12 +71,22 @@
                     <option value="">{{ $t('str.register.select.all.placeholder') }}</option>
                     <option value="IN_PROGRESS">{{ $t('str.status.in.progress') }}</option>
                     <option value="ACTIVE">{{ $t('str.status.pending') }}</option>
-                    <option value="FINISHED">{{ $t('str.status.done') }}</option>
+                    <option value="FINISHED">{{ $t('str.status.finished') }}</option>
                     <option value="EXPIRED">{{ $t('str.status.expired') }}</option>
                     <option value="CLOSED_BY_SYSTEM">{{ $t('str.status.closed.by.system') }}</option>
                     <option value="CANCELLED">{{ $t('str.status.cancelled') }}</option>
+                    <option value="COMPLETE">{{ $t('str.status.complete') }}</option>
+                    <option value="INCOMPLETE">{{ $t('str.status.incomplete') }}</option>
                 </select>
             </div>
+            <!-- <div v-if="filters?.status === 'FINISHED'" class="col-md-4 mb-3">
+                <label class="form-label" for="statusField">{{ $t('str.register.substatus.field') }}</label>
+                <select v-model="filters.substatus" @change="filter" class="form-select" id="statusField">
+                    <option value="">{{ $t('str.register.select.all.placeholder') }}</option>
+                    <option value="COMPLETE">{{ $t('str.event.complete') }}</option>
+                    <option value="INCOMPLETE">{{ $t('str.event.incomplete') }}</option>
+                </select>
+            </div> -->
         </div>
         <div>
             <vue-good-table
@@ -161,7 +171,8 @@ export default {
                 account: '',
                 client: '',
                 site: '',
-                status: 'IN_PROGRESS',
+                status: '',
+                substatus: '',
                 startDate: moment().utc(true),
                 endDate: moment().utc(true),
                 isDescSortByStartDate: false,

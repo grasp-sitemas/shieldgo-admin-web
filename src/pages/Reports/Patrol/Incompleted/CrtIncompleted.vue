@@ -5,41 +5,24 @@ import moment from 'moment'
 
 export default {
     init: async payload => {
-        setTimeout(async () => {
-            payload.isSuperAdminMaster = await Common.isSuperAdminMaster(payload)
-            const role = await Common.getSubtype(payload)
+        await payload.initTable()
 
-            await payload.initTable()
-            await payload.initRangeDate()
+        if (!payload.isSuperAdminMaster) {
+            payload.columns.splice(6, 1)
+        }
 
-            if (role === 'SUPER_ADMIN_MASTER') {
-                payload.accounts = await Services.getAccounts(payload)
-            } else if (role === 'ADMIN' || role === 'MANAGER') {
-                payload.clients = await Services.getClients(payload)
-            } else if (role === 'MANAGER' || role === 'OPERATOR' || role === 'AUDITOR') {
-                const client = await Common.getClientId(payload)
-                payload.filters.client = client
-                payload.sites = await Services.getSites(payload)
-            }
+        if (payload.role === 'AUDITOR') {
+            payload.columns.splice(6, 1)
+        }
 
-            if (!payload.isSuperAdminMaster) {
-                payload.columns.splice(6, 1)
-            }
+        payload.jsonFields = payload.JSON_FIELDS_CSV.incompletedPatrolPoints[payload.$i18n.locale].json_fields
+        payload.jsonData = [payload.JSON_FIELDS_CSV.incompletedPatrolPoints[payload.$i18n.locale].json_data]
+        payload.jsonMeta = [payload.JSON_FIELDS_CSV.incompletedPatrolPoints[payload.$i18n.locale].json_meta]
+        payload.filename = payload.JSON_FIELDS_CSV.incompletedPatrolPoints[payload.$i18n.locale].filename
+        payload.jsonTitle = payload.JSON_FIELDS_CSV.incompletedPatrolPoints[payload.$i18n.locale].title
+        payload.pdfHeader = payload.PDF_HEADER[payload.$i18n.locale]
 
-            if (role === 'AUDITOR') {
-                payload.columns.splice(6, 1)
-            }
-
-            payload.jsonFields = payload.JSON_FIELDS_CSV.incompletedPatrolPoints[payload.$i18n.locale].json_fields
-            payload.jsonData = [payload.JSON_FIELDS_CSV.incompletedPatrolPoints[payload.$i18n.locale].json_data]
-            payload.jsonMeta = [payload.JSON_FIELDS_CSV.incompletedPatrolPoints[payload.$i18n.locale].json_meta]
-            payload.filename = payload.JSON_FIELDS_CSV.incompletedPatrolPoints[payload.$i18n.locale].filename
-            payload.jsonTitle = payload.JSON_FIELDS_CSV.incompletedPatrolPoints[payload.$i18n.locale].title
-            payload.pdfHeader = payload.PDF_HEADER[payload.$i18n.locale]
-
-            payload.role = role
-            payload.isLoading = false
-        }, 1000)
+        payload.isLoading = false
     },
     methods: {
         async filter() {
@@ -164,81 +147,8 @@ export default {
         clearFilters: async function () {
             this.errors = []
             this.isLoading = false
-            this.filters = {
-                account: '',
-                client: '',
-                site: '',
-                vigilant: '',
-                startDate: moment().utc(true),
-                endDate: moment().utc(true),
-                report: 'PATROL_POINTS_INCOMPLETED',
-            }
             this.items = []
-            this.initRangeDate()
-            this.filters.account = Common.getAccountId(this)
-        },
-        initRangeDate: async function () {
-            const startDate = moment().utc(true).subtract(0, 'days')
-            const endDate = moment().utc(true)
-            const today = moment().utc(true)
-            const yesterday = moment().utc(true).subtract(1, 'days')
-            const thisMonthStart = moment().utc(true).startOf('month')
-
-            this.dateRange = {
-                opens: 'right',
-                singleDatePicker: false,
-                timePicker: false,
-                timePicker24Hour: false,
-                showWeekNumbers: false,
-                showDropdowns: true,
-                autoApply: true,
-                linkedCalendars: true,
-                closeOnEsc: true,
-                range: {
-                    startDate: startDate,
-                    endDate: endDate,
-                },
-                maxDate: moment().utc(true).format(),
-                sampleLocaleData: {
-                    direction: 'ltr',
-                    format: 'dd/mm/yyyy',
-                    separator: ' - ',
-                    applyLabel: this.$t('str.apply'),
-                    cancelLabel: this.$t('str.cancel'),
-                    weekLabel: 'W',
-                    ranges: {
-                        [this.$t('str.today')]: [today, today],
-                        [this.$t('str.yesterday')]: [yesterday, yesterday],
-                        [this.$t('str.this_month')]: [thisMonthStart, today], // alterado para hoje
-                        [this.$t('str.this_year')]: [moment().utc(true).startOf('year'), today], // alterado para hoje
-                        [this.$t('str.last_month')]: [moment().utc(true).subtract(1, 'month').startOf('month'), moment().utc(true).subtract(1, 'month').endOf('month')],
-                    },
-                    daysOfWeek: [
-                        this.$t('str.abbreviation.sunday'),
-                        this.$t('str.abbreviation.monday'),
-                        this.$t('str.abbreviation.tuesday'),
-                        this.$t('str.abbreviation.wednesday'),
-                        this.$t('str.abbreviation.thursday'),
-                        this.$t('str.abbreviation.friday'),
-                        this.$t('str.abbreviation.saturday'),
-                    ],
-                    monthNames: [
-                        this.$t('str.abbreviation.january'),
-                        this.$t('str.abbreviation.february'),
-                        this.$t('str.abbreviation.march'),
-                        this.$t('str.abbreviation.april'),
-                        this.$t('str.abbreviation.may'),
-                        this.$t('str.abbreviation.june'),
-                        this.$t('str.abbreviation.july'),
-                        this.$t('str.abbreviation.august'),
-                        this.$t('str.abbreviation.september'),
-                        this.$t('str.abbreviation.october'),
-                        this.$t('str.abbreviation.november'),
-                        this.$t('str.abbreviation.december'),
-                    ],
-                    firstDay: 0,
-                },
-            }
+            this.$emit('clearFilters')
         },
         selectItem(params) {
             const data = JSON.parse(JSON.stringify(params.row))

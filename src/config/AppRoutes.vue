@@ -15,6 +15,7 @@ import Login from '../pages/Login/Login.vue'
 import Monitor from '../pages/Monitor/Monitor.vue'
 import PageNotFound from '../pages/PageNotFound/PageNotFound.vue'
 import PatrolPoint from '../pages/Company/PatrolPoint/PatrolPoint.vue'
+import ReportPatrol from '../pages/Reports/Patrol/Patrol/Patrol.vue'
 import PatrolNotVisited from '../pages/Reports/Patrol/NotVisited/NotVisited.vue'
 import PatrolCompleted from '../pages/Reports/Patrol/Completed/Completed.vue'
 import PatrolIncompleted from '../pages/Reports/Patrol/Incompleted/Incompleted.vue'
@@ -243,6 +244,23 @@ const routes = [
         path: '/colaborators',
         name: 'colaborators',
         component: Colaborator,
+        beforeEnter: (_to, _from, next) => {
+            next(checkSession())
+        },
+    },
+    {
+        path: '/reports/patrols',
+        name: 'reports-patrols',
+        component: ReportPatrol,
+        beforeEnter: (_to, _from, next) => {
+            next(checkSession())
+        },
+    },
+    {
+        path: '/reports/patrols/:filterParams',
+        name: 'params-reports-patrols',
+        props: true,
+        component: ReportPatrol,
         beforeEnter: (_to, _from, next) => {
             next(checkSession())
         },

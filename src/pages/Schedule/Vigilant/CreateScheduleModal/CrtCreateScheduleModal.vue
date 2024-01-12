@@ -272,8 +272,10 @@ export default {
                 }
             })
         },
-        updateAppointmentSeries: function () {
+        updateAppointmentSeries: async function () {
             const newData = JSON.parse(JSON.stringify(this.data))
+            const allPatrolPoints = await Services.getPatrolPointsBySite(this, this.data.site)
+
             newData.schedule = newData._id
             delete newData._id
 
@@ -281,12 +283,20 @@ export default {
                 newData.beginDate = moment(this.data?.appointment?.startDate).utc(false).format('YYYY-MM-DD')
             }
 
+            // Marca os pontos de ronda selecionados
+            this.patrolPoints = allPatrolPoints.map(point => ({
+                ...point,
+                vgtSelected: this.data.points.some(selectedPoint => selectedPoint._id === point._id),
+            }))
+
             this.data = newData
             this.updateSchedule = true
             this.selectOptions.enabled = true
         },
         updateAppointmentOccurrence: async function () {
             const newData = JSON.parse(JSON.stringify(this.data))
+            const allPatrolPoints = await Services.getPatrolPointsBySite(this, this.data.site)
+
             newData.schedule = this.data._id
 
             delete newData._id
@@ -300,6 +310,12 @@ export default {
             newData.endHour = this.data?.appointment?.endHour
             newData.timeSlot = this.data?.appointment?.timeSlot
             newData.points = this.data?.appointment?.patrolPoints
+
+            // Marca os pontos de ronda selecionados
+            this.patrolPoints = allPatrolPoints.map(point => ({
+                ...point,
+                vgtSelected: this.data.points.some(selectedPoint => selectedPoint._id === point._id),
+            }))
 
             if (newData.points.length > 0) {
                 this.patrolPoints.forEach(patrolPoint => {
@@ -524,7 +540,7 @@ export default {
             }
             this.selectOptions = {
                 enabled: true,
-                selectOnCheckboxOnly: false,
+                selectOnCheckboxOnly: true,
                 selectionText: this.$t('str.schedule.selected.rows'),
                 clearSelectionText: this.$t('str.schedule.selected.rows.clear'),
                 disableSelectInfo: true,
@@ -564,8 +580,11 @@ export default {
                 this.siteList = await Services.getSitesByClient(this, this.data.client)
 
                 if (this.data._id) {
-                    this.patrolPoints = await Services.getPatrolPointsBySite(this, this.data.site)
-                    this.data.points = this.data?.points || []
+                    // Carrega todos os pontos de ronda
+                    const allPatrolPoints = await Services.getPatrolPointsBySite(this, this.data.site)
+
+                    // Filtra apenas os pontos de ronda que estão no agendamento
+                    this.patrolPoints = allPatrolPoints.filter(point => this.data.points.some(selectedPoint => selectedPoint._id === point._id))
                 }
 
                 if (this.data.points.length > 0) {

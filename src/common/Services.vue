@@ -508,6 +508,10 @@ export default {
         const response = await Request.do(state, 'POST', Request.getDefaultHeader(state), filters, `${Endpoints.charts.eventsPerformance}`)
         return response?.data?.result || {}
     },
+    eventsPerformanceSubstatus: async function (state, filters) {
+        const response = await Request.do(state, 'POST', Request.getDefaultHeader(state), filters, `${Endpoints.charts.eventsPerformanceSubstatus}`)
+        return response?.data?.result || {}
+    },
     attendanceEvent: async function (state, patrolActionId, attendance, siteGroup) {
         const body = {
             patrolActionId: patrolActionId,

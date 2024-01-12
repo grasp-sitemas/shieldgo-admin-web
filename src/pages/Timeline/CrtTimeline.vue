@@ -47,6 +47,12 @@ export default {
                 this.filters.isDescSortByStartDate = false
             }
 
+            if (this.filters.status === 'COMPLETE' || this.filters.status === 'INCOMPLETE') {
+                this.filters.substatus = this.filters.status
+            } else {
+                this.filters.substatus = ''
+            }
+
             this.items = await Services.getEventsByDate(this, this.filters)
             this.isLoading = false
         },

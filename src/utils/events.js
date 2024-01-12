@@ -14,4 +14,4 @@ export const EVENT_STATUS = {
     ARCHIVED: 'ARCHIVED',
 }
 
-export const EVENT_CHART_TYPES = ['SCAN', 'SOS_ALERT', 'INCIDENT']
+export const EVENT_CHART_TYPES = ['FAILURE_PATROL', 'SOS_ALERT', 'INCIDENT']

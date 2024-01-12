@@ -31,6 +31,7 @@ export default {
             this.patrolsChart = await Services.getPatrolsChart(this, this.filters)
             this.eventsByType = await Services.getEventsByType(this, this.filters)
             this.eventsPerformance = await Services.eventsPerformance(this, this.filters)
+            this.eventsPerformanceSubstatus = await Services.eventsPerformanceSubstatus(this, this.filters)
 
             this.avaregeAttendanceEvent = await Services.getAvaregeTimeAttendanceEvent(this, this.filters)
             this.eventsAttendance = await Services.getEventsAttendance(this, this.filters)

@@ -23,6 +23,12 @@
         <div class="menu-item d-flex">
             <a href="javascript:;" class="app-sidebar-minify-btn ms-auto" v-on:click="handleSidebarMinify()"><i class="fa fa-angle-double-left"></i></a>
         </div>
+
+        <div class="menu-footer">
+            <ul class="list-unstyled">
+                <li>{{ 'v' + version }}</li>
+            </ul>
+        </div>
         <!-- END minify-button -->
     </div>
     <!-- end sidebar nav -->
@@ -33,7 +39,7 @@ import SidebarMenu from './SidebarMenu.vue'
 import SidebarNavList from './SidebarNavList.vue'
 import AppOptions from '../../config/AppOptions.vue'
 import Controller from './CrtSidebar.vue'
-
+import { version } from '../../../package.json'
 export default {
     name: 'SidebarNav',
     props: ['scrollTop'],
@@ -45,6 +51,7 @@ export default {
             menus: SidebarMenu,
             appOptions: AppOptions,
             user: null,
+            version: version,
         }
     },
     beforeCreate() {},
@@ -55,3 +62,16 @@ export default {
     methods: Controller.methods,
 }
 </script>
+<style scoped>
+.menu-footer {
+    padding: 10px;
+    text-align: center;
+}
+
+.platform-version {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+</style>

@@ -10,6 +10,9 @@ export default {
         payload.isSuperAdminMaster = await Common.isSuperAdminMaster(payload)
 
         const role = await Common.getSubtype(payload)
+
+        payload.userLocale = payload.$i18n.locale === 'pt' ? 'pt-br' : 'en'
+
         payload.role = role
 
         payload.filters.account = Common.getAccountId(payload)

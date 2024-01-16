@@ -17,7 +17,7 @@
                 </div>
             </div>
             <div class="card-body pe-3 ps-0 py-0">
-                <apexchart ref="chart" type="bar" width="100%" height="210" :options="chart.options" :series="chart.series"></apexchart>
+                <apexchart :key="componentKey" id="chart" ref="chart" type="bar" width="100%" height="210" :options="chart.options" :series="chart.series"></apexchart>
             </div>
         </div>
     </div>
@@ -30,7 +30,8 @@ export default {
     name: 'PerformanceEvent',
     watch: {
         data(newData) {
-            // sort newData.substatus by name
+            this.updatedData = newData
+
             newData.substatus.sort((a, b) => a.name.localeCompare(b.name))
 
             if (newData?.substatus && newData?.substatus?.length > 0) {
@@ -48,16 +49,31 @@ export default {
                     }
                 })
 
-                // Atualiza a série do gráfico.
-                console.log(this.$refs.chart)
                 this.$refs.chart.updateSeries(this.chart.series)
             }
         },
-        locale(newLocale) {
-            this.chart.options.chart.defaultLocale = newLocale
+        locale() {
+            this.chart.options.legend.labels.formatter = seriesName => {
+                return this.$t(seriesName)
+            }
 
-            // Não sei se isso é necessário, mas talvez você queira atualizar as opções também.
-            this.$refs.chart.updateOptions(this.chart.options)
+            this.chart.series = this.updatedData.substatus.map(item => {
+                const data = item.data.map(([date, value]) => ({
+                    x: date.split('-').reverse().join('-'),
+                    y: value,
+                }))
+
+                return {
+                    total: item.total,
+                    name: item.name ? this.$t(item.name) : '',
+                    data: data || [],
+                }
+            })
+
+            // Força a atualização do gráfico
+            this.$refs.chart.updateSeries(this.chart.series)
+
+            this.componentKey += 1
         },
     },
     props: {
@@ -76,6 +92,7 @@ export default {
     },
     data() {
         return {
+            componentKey: 0,
             chart: {
                 total: 0,
                 series: [],
@@ -145,6 +162,7 @@ export default {
                     },
                 },
             },
+            updatedData: {},
         }
     },
     methods: {
@@ -171,4 +189,13 @@ export default {
     },
 }
 </script>
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.apexcharts-legend-text tspan:nth-child(1) {
+    font-weight: lighter;
+    fill: #999;
+}
+
+.apexcharts-legend-text tspan:nth-child(3) {
+    font-weight: bold;
+}
+</style>

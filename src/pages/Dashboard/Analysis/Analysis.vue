@@ -102,8 +102,8 @@
 
         <div class="row">
             <div class="col-md-8">
-                <EventsPerformance
-                    :data="eventsPerformance"
+                <EventsPerformanceSubstatus
+                    :data="eventsPerformanceSubstatus"
                     :locale="userLocale"
                     :redirect="{
                         params: {
@@ -125,8 +125,8 @@
 
         <div class="row">
             <div class="col-md-8">
-                <EventsPerformanceSubstatus
-                    :data="eventsPerformanceSubstatus"
+                <EventsPerformance
+                    :data="eventsPerformance"
                     :locale="userLocale"
                     :redirect="{
                         params: {

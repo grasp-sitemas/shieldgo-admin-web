@@ -1388,5 +1388,21 @@
     "str.event.complete": "Completa(s)",
     "str.event.incomplete": "Incompleta(s)",
     "str.status.complete": "Completa",
-    "str.status.incomplete": "Incompleta"
+    "str.status.incomplete": "Incompleta",
+    "BIWEEKLY": "Quinzenal",
+    "str.report.settings.period.biweekly": "Quinzenal",
+    "str.report.settings.period.weekly": "Semanal",
+    "str.report.settings.period.monthly": "Mensal",
+    "str.helpers.type.reports.patrols": "Rondas",
+    "str.helpers.type.reports.alert.sos": "Alertas de SOS",
+    "str.helpers.type.reports.incidents": "Incidentes",
+    "str.helpers.type.reports.events.not.attended": "Eventos não atendidos",
+    "str.helpers.type.reports.supervision.patrols": "Rondas de supervisão",
+    "str.helpers.type.reports.analysis.patrols.integration": "Análise de rondas - Integração",
+    "REPORT_PATROLS": "Rondas",
+    "REPORT_ALERT_SOS": "Alertas de SOS",
+    "REPORT_INCIDENTS": "Incidentes",
+    "REPORT_EVENTS_NOT_ATTENDED": "Eventos não atendidos",
+    "REPORT_SUPERVISION_PATROLS": "Rondas de supervisão",
+    "REPORT_ANALYSIS_PATROLS_INTEGRATION": "Análise de rondas - Integração"
 }

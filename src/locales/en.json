@@ -1389,5 +1389,21 @@
     "str.event.incomplete": "Incompleted",
     "str.status.complete": "Completed",
     "str.status.incomplete": "Incompleted",
-    "str.register.schedule.frequency.field": "Frequency"
+    "str.register.schedule.frequency.field": "Frequency",
+    "BIWEEKLY": "Biweekly",
+    "str.report.settings.period.biweekly": "Biweekly",
+    "str.report.settings.period.weekly": "Weekly",
+    "str.report.settings.period.monthly": "Monthly",
+    "str.helpers.type.reports.patrols": "Patrols",
+    "str.helpers.type.reports.alert.sos": "SOS alerts",
+    "str.helpers.type.reports.incidents": "Incidents",
+    "str.helpers.type.reports.events.not.attended": "Events not attended",
+    "str.helpers.type.reports.supervision.patrols": "Supervision patrols",
+    "str.helpers.type.reports.analysis.patrols.integration": "Analysis patrols - Integration",
+    "REPORT_PATROLS": "Patrols",
+    "REPORT_ALERT_SOS": "SOS alerts",
+    "REPORT_INCIDENTS": "Incidents",
+    "REPORT_EVENTS_NOT_ATTENDED": "Events not attended",
+    "REPORT_SUPERVISION_PATROLS": "Supervision patrols",
+    "REPORT_ANALYSIS_PATROLS_INTEGRATION": "Analysis patrols - Integration"
 }

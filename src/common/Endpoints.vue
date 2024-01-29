@@ -1,6 +1,6 @@
 <script>
-const domain = 'https://api-hml.shieldgo.com.br'
-// const domain = 'http://localhost:3000'
+// const domain = 'https://api-hml.shieldgo.com.br'
+const domain = 'http://localhost:3000'
 const socketDomain = 'http://localhost:3001'
 // const socketDomain = 'https://ms-worker-shield-d3de0825cf06.herokuapp.com'
 const viaCepDomain = 'https://viacep.com.br/ws/'

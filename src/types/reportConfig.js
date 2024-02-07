@@ -4,5 +4,8 @@ export const reportConfig = {
     dispatchTime: '',
     emails: [],
     period: '',
+    nextDispatchDate: '',
+    weeklyDay: null,
+    monthlyDay: null,
     status: '',
 }

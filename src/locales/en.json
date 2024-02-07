@@ -1405,5 +1405,13 @@
     "REPORT_INCIDENTS": "Incidents",
     "REPORT_EVENTS_NOT_ATTENDED": "Events not attended",
     "REPORT_SUPERVISION_PATROLS": "Supervision patrols",
-    "REPORT_ANALYSIS_PATROLS_INTEGRATION": "Analysis patrols - Integration"
+    "REPORT_ANALYSIS_PATROLS_INTEGRATION": "Analysis patrols - Integration",
+    "str.register.report.settings.weeklyDay.field": "Day of the week",
+    "str.register.report.settings.weeklyDay.required": "Day of the week is required",
+    "str.register.report.settings.biweeklyDay.field": "Day of the week",
+    "str.register.report.settings.biweeklyDay.required": "Day of the week is required",
+    "str.register.report.settings.monthlyDay.field": "Day of the month",
+    "str.register.report.settings.monthlyDay.required": "Day of the month is required",
+    "str.select.placeholder": "Select",
+    "str.table.report.column.next.dispatch.date": "Next dispatch date"
 }

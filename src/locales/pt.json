@@ -1316,8 +1316,8 @@
     "REPORT-SETTINGS": "Configuração de relatório",
     "str.log.domain.report_settings": "Configuração de relatório",
 
-    "str.register.report.period.field": "Período dos dados",
-    "str.register.report.period.required": "Período dos dados é obrigatório",
+    "str.register.report.period.field": "Período",
+    "str.register.report.period.required": "Período é obrigatório",
     "YESTERDAY": "Dia anterior (d-1)",
     "TODAY": "Dia atual (d)",
     "WEEK": "Semanal",
@@ -1330,7 +1330,7 @@
     "str.report.settings.period.year": "Anual",
     "str.report.settings.period.required": "Frequência é obrigatória",
     "str.report.settings.emails.required": "E-mails são obrigatórios",
-    "str.table.report.column.period": "Período dos dados",
+    "str.table.report.column.period": "Período",
     "str.register.user.subtype.field": "Perfil",
     "LOCAL": "Local",
     "LOCAL_GROUP": "Grupo de locais",
@@ -1404,5 +1404,13 @@
     "REPORT_INCIDENTS": "Incidentes",
     "REPORT_EVENTS_NOT_ATTENDED": "Eventos não atendidos",
     "REPORT_SUPERVISION_PATROLS": "Rondas de supervisão",
-    "REPORT_ANALYSIS_PATROLS_INTEGRATION": "Análise de rondas - Integração"
+    "REPORT_ANALYSIS_PATROLS_INTEGRATION": "Análise de rondas - Integração",
+    "str.register.report.settings.weeklyDay.field": "Dia da semana",
+    "str.register.report.settings.weeklyDay.required": "Dia da semana é obrigatório",
+    "str.register.report.settings.biweeklyDay.field": "Dia da semana",
+    "str.register.report.settings.biweeklyDay.required": "Dia da semana é obrigatório",
+    "str.register.report.settings.monthlyDay.field": "Dia do mês",
+    "str.register.report.settings.monthlyDay.required": "Dia do mês é obrigatório",
+    "str.select.placeholder": "Selecione",
+    "str.table.report.column.next.dispatch.date": "Próximo envio"
 }

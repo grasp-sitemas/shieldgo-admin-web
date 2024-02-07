@@ -1412,5 +1412,10 @@
     "str.register.report.settings.monthlyDay.field": "Dia do mês",
     "str.register.report.settings.monthlyDay.required": "Dia do mês é obrigatório",
     "str.select.placeholder": "Selecione",
-    "str.table.report.column.next.dispatch.date": "Próximo envio"
+    "str.table.report.column.next.dispatch.date": "Próximo envio",
+    "str.emailLanguage.field": "Idioma",
+    "str.portugueseBrazil": "Português (Brasil)",
+    "str.english": "Inglês",
+    "str.register.report.settings.emailLanguage.required": "Idioma é obrigatório",
+    "str.table.report.column.email.language": "Idioma"
 }

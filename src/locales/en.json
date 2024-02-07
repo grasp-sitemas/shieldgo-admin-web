@@ -1413,5 +1413,10 @@
     "str.register.report.settings.monthlyDay.field": "Day of the month",
     "str.register.report.settings.monthlyDay.required": "Day of the month is required",
     "str.select.placeholder": "Select",
-    "str.table.report.column.next.dispatch.date": "Next dispatch date"
+    "str.table.report.column.next.dispatch.date": "Next dispatch date",
+    "str.emailLanguage.field": "Language",
+    "str.portugueseBrazil": "Portuguese (Brazil)",
+    "str.english": "English",
+    "str.register.report.settings.emailLanguage.required": "Language is required",
+    "str.table.report.column.email.language": "Language"
 }

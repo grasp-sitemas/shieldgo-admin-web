@@ -11,7 +11,7 @@ export default {
         payload.initTable()
 
         if (!payload.isSuperAdminMaster) {
-            payload.columns.splice(4, 1)
+            payload.columns.splice(5, 1)
 
             const account = await Common.getAccountId(payload)
             payload.filters.account = account
@@ -97,6 +97,15 @@ export default {
                     label: this.$t('str.table.report.column.emails'),
                     field: 'emails',
                     width: '30%',
+                    thClass: 'text-nowrap',
+                    tdClass: 'text-nowrap',
+                    sortable: true,
+                    filterable: true,
+                },
+                {
+                    label: this.$t('str.table.report.column.email.language'),
+                    field: 'emailLanguage',
+                    width: '10%',
                     thClass: 'text-nowrap',
                     tdClass: 'text-nowrap',
                     sortable: true,

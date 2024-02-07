@@ -83,6 +83,22 @@
                     <input type="time" class="form-control" v-model="data.dispatchTime" v-bind:class="checkRequiredField('dispatchTime') ? 'is-invalid' : ''" @focus="removeRequiredField('dispatchTime')" />
                     <div class="invalid-feedback">{{ $t('str.register.report.dispatchTime.required') }}</div>
                 </div>
+
+                <div class="col-md-6 mb-3">
+                    <label for="emailLanguageField" class="form-label">{{ $t('str.emailLanguage.field') }}</label>
+                    <select
+                        v-model="data.emailLanguage"
+                        class="form-select"
+                        id="emailLanguageField"
+                        v-bind:class="checkRequiredField('emailLanguage') ? 'is-invalid' : ''"
+                        @focus="removeRequiredField('emailLanguage')"
+                    >
+                        <option value="">{{ $t('str.register.select.placeholder') }}</option>
+                        <option value="pt-BR">{{ $t('str.portugueseBrazil') }}</option>
+                        <option value="en">{{ $t('str.english') }}</option>
+                    </select>
+                    <div class="invalid-feedback">{{ $t('str.register.report.settings.emailLanguage.required') }}</div>
+                </div>
             </div>
 
             <div class="col-md-12 mb-3">

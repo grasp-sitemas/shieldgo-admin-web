@@ -8,4 +8,5 @@ export const reportConfig = {
     weeklyDay: null,
     monthlyDay: null,
     status: '',
+    emailLanguage: '',
 }

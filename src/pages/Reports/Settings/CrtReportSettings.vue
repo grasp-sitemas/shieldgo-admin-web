@@ -130,6 +130,10 @@ export default {
                 this.errors.push('monthlyDay')
             }
 
+            if (!this.data.emailLanguage) {
+                this.errors.push('emailLanguage')
+            }
+
             if (this.errors.length > 0) return
 
             this.save()

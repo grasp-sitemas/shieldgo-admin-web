@@ -4,7 +4,6 @@
             <h4 class="modal-title">{{ $t('str.breadcrumb.companies') }}</h4>
             <a class="btn-close cursor_pointer" @click="closeModal"></a>
         </template>
-        {{ data }}
         <div>
             <div v-if="data._id" class="row">
                 <div class="col-md-4 mb-3">

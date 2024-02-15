@@ -383,7 +383,7 @@ export default {
                     dataItem.event = event
                 }
 
-                const dateTimezone = moment(dataItem?.type === 'FAILURE_PATROL' ? dataItem?.event?.startDate : dataItem?.date).utc(true)
+                const dateTimezone = moment(dataItem?.date).utc(true)
                 const formattedDate = dateTimezone.format('DD/MM/YYYY')
                 const formattedTime = dateTimezone.format('HH:mm')
 

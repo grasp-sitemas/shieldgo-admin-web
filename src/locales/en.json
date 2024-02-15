@@ -1134,7 +1134,7 @@
     "str.event.filter.failure_patrol": "Failure patrol",
     "FAILURE_PATROL": "Failure patrol",
     "str.event.failure_patrol": "The patrol",
-    "str.event.failure_patrol.description": "was not carried out",
+    "str.event.failure_patrol.description": "was not started",
     "NOT_STARTED": "Not started",
     "INCOMPLETE": "Incomplete",
     "str.msg.patrol": "Patrol",

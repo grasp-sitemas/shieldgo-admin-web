@@ -1128,7 +1128,7 @@
     "str.event.filter.failure_patrol": "Falha de ronda",
     "FAILURE_PATROL": "Falha de ronda",
     "str.event.failure_patrol": "A ronda",
-    "str.event.failure_patrol.description": "não foi realizada",
+    "str.event.failure_patrol.description": "não foi iniciada",
     "NOT_STARTED": "Não iniciada(s)",
     "INCOMPLETE": "Incompleta(s)",
     "str.msg.patrol": "Ronda",

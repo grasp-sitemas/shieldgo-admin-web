@@ -11,7 +11,7 @@ export default {
         payload.isSuperAdminMaster = await Common.isSuperAdminMaster(payload)
         if (payload.isSuperAdminMaster) {
             payload.accounts = await Services.getAccounts(payload)
-        } 
+        }
     },
     methods: {
         save() {
@@ -69,6 +69,16 @@ export default {
                 Common.show(this, 'bottom-right', 'warn', this.$t('str.form.archive.generic.error'))
             }
         },
+        changePeriod() {
+            this.removeRequiredField('weeklyDay')
+            this.removeRequiredField('monthlyDay')
+
+            if (this.data?.period === 'WEEKLY') {
+                this.data.monthlyDay = null
+            } else if (this.data?.period === 'MONTHLY') {
+                this.data.weeklyDay = null
+            }
+        },
         confirmArchive() {
             this.$swal({
                 title: this.$t('str.are.you.sure'),
@@ -92,7 +102,6 @@ export default {
             this.errors = this.errors.filter(item => item !== field)
         },
         checkForm() {
-         
             if (!this.data.account || this.data.account === '') {
                 this.errors.push('account')
             }
@@ -111,12 +120,23 @@ export default {
 
             if (!this.data.emails || this.data.emails?.length === 0) {
                 Common.show(this, 'bottom-right', 'warn', this.$t('str.add.at.least.one.email'))
-                return
             }
 
-            if (!this.errors || this.errors.length === 0) {
-                this.save()
+            if (this.data.period === 'WEEKLY' && (this.data.weeklyDay === undefined || this.data.weeklyDay === null)) {
+                this.errors.push('weeklyDay')
             }
+
+            if (this.data.period === 'MONTHLY' && (this.data.monthlyDay === undefined || this.data.monthlyDay === null)) {
+                this.errors.push('monthlyDay')
+            }
+
+            if (!this.data.emailLanguage) {
+                this.errors.push('emailLanguage')
+            }
+
+            if (this.errors.length > 0) return
+
+            this.save()
         },
         closeModal: function () {
             const state = this
@@ -132,32 +152,33 @@ export default {
         },
         createEmailOption(newEmail) {
             if (newEmail.trim().length === 0) {
-                return;
+                return
             }
 
             this.handleTag(newEmail)
         },
-        handleTag: function(tagArray) {
-            if(!tagArray || tagArray?.length === 0) return
+        handleTag: function (tagArray) {
+            if (!tagArray || tagArray?.length === 0) return
 
-            const newEmail = tagArray[tagArray.length - 1];
+            const newEmail = tagArray[tagArray.length - 1]
 
             if (!this.isValidEmail(newEmail)) {
-                this.data.emails.pop();
-                Common.show(this, 'bottom-right', 'warn', this.$t('str.email.invalid'));
-            } else if (this.isEmailDuplicate(newEmail, tagArray)) { // Passando o tagArray para verificação
-                this.data.emails.pop();
-                Common.show(this, 'bottom-right', 'warn', this.$t('str.email.duplicate'));
+                this.data.emails.pop()
+                Common.show(this, 'bottom-right', 'warn', this.$t('str.email.invalid'))
+            } else if (this.isEmailDuplicate(newEmail, tagArray)) {
+                // Passando o tagArray para verificação
+                this.data.emails.pop()
+                Common.show(this, 'bottom-right', 'warn', this.$t('str.email.duplicate'))
             }
         },
         isEmailDuplicate(email, tagArray) {
             // Verificar se o email aparece mais de uma vez no array
-            const occurrences = tagArray.filter(e => e === email).length;
-            return occurrences > 1; // Se aparecer mais de uma vez, é duplicado
+            const occurrences = tagArray.filter(e => e === email).length
+            return occurrences > 1 // Se aparecer mais de uma vez, é duplicado
         },
         isValidEmail(email) {
-            let regex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
-            return regex.test(email);
+            let regex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/
+            return regex.test(email)
         },
     },
 }

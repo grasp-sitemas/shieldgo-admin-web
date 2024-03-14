@@ -154,11 +154,17 @@ export default {
             }
         },
         initRangeDate: async function () {
-            const startDate = moment().utc(true).subtract(0, 'days')
-            const endDate = moment().utc(true)
-            const today = moment().utc(true)
-            const yesterday = moment().utc(true).subtract(1, 'days')
-            const thisMonthStart = moment().utc(true).startOf('month')
+            const startDate = moment().utc(false).subtract(0, 'days')
+            const endDate = moment().utc(false)
+            const today = moment().utc(false)
+            const yesterday = moment().utc(false).subtract(1, 'days')
+            const thisMonthStart = moment().utc(false).startOf('month')
+
+            console.log('thisMonthStart', thisMonthStart)
+            console.log('today', today)
+            console.log('yesterday', yesterday)
+            console.log('startDate', startDate)
+            console.log('endDate', endDate)
 
             this.dateRange = {
                 opens: 'right',
@@ -174,7 +180,7 @@ export default {
                     startDate: startDate,
                     endDate: endDate,
                 },
-                maxDate: moment().utc(true).format(),
+                maxDate: moment().utcOffset(-3),
                 sampleLocaleData: {
                     direction: 'ltr',
                     format: 'dd/mm/yyyy',

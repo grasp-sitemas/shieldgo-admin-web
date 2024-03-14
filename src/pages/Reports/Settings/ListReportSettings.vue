@@ -59,7 +59,7 @@
                             {{ email }}
                         </p>
                     </span>
-                    <span v-else-if="props.column.field === 'createDate'">
+                    <span v-else-if="props.column.field === 'nextDispatchDate'">
                         {{ formatDate(props.formattedRow[props.column.field], true) }}
                     </span>
                     <span v-else-if="props.column.field === 'status'">
@@ -67,6 +67,9 @@
                     </span>
                     <span v-else-if="props.column.field === 'reportName' || props.column.field === 'period'">
                         {{ $t(props.formattedRow[props.column.field]) }}
+                    </span>
+                    <span v-else-if="props.column.field === 'createDate'">
+                        {{ formatDate(props.formattedRow[props.column.field], true) }}
                     </span>
                     <span v-else>
                         {{ props.formattedRow[props.column.field] }}

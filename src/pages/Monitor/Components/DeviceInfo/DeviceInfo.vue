@@ -17,13 +17,15 @@
         <div class="row">
             <div class="col-md-4">
                 <h6 class="text-decoration-none text-dark m-0">{{ $t('str.device.info.version') }}</h6>
-                <label class="text-opacity-50 small fw-bold">{{ deviceInfo?.version }}</label>
+                <label v-if="deviceInfo?.version" class="text-opacity-50 small fw-bold">{{ deviceInfo?.version }}</label>
+                <label v-else class="text-opacity-50 small fw-bold"> {{ $t('str.msg.noData') }} </label>
             </div>
             <div class="col-md-4">
                 <h6 class="text-decoration-none text-dark m-0">{{ $t('str.device.info.isCharging') }}</h6>
-                <label class="text-opacity-50 small fw-bold">
-                    {{ deviceInfo?.isCharging ? $t('str.msg.yes') : $t('str.msg.no') }}
+                <label v-if="deviceInfo?.isCharging" class="text-opacity-50 small fw-bold">
+                    {{ deviceInfo?.isCharging && $t('str.msg.yes') }}
                 </label>
+                <label v-else class="text-opacity-50 small fw-bold"> {{ $t('str.msg.noData') }} </label>
             </div>
             <div class="col-md-4">
                 <h6 class="text-decoration-none text-dark m-0">{{ $t('str.device.info.ipAddress') }}</h6>

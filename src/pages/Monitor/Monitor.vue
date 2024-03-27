@@ -155,7 +155,7 @@
                         </div>
 
                         <div class="btn-row mb-4" v-if="selectedEvent.type !== 'FAILURE_PATROL'">
-                            <a v-if="selectedEvent?.geolocation" v-on:click="showMap" data-toggle="tooltip" data-container="body" data-title="Map" class="cursor-mouse">
+                            <a v-if="selectedEvent?.geolocation && selectedEvent?.geolocation?.latitude" v-on:click="showMap" data-toggle="tooltip" data-container="body" data-title="Map" class="cursor-mouse">
                                 <i class="fa fa-fw fa-map-marker-alt"></i>
                             </a>
                             <a v-if="selectedEvent?.photoURL && selectedEvent?.photoURL?.length > 0" v-on:click="showPhoto()" data-toggle="tooltip" data-container="body" data-title="Image" class="cursor-mouse">

@@ -1417,5 +1417,9 @@
     "str.portugueseBrazil": "Português (Brasil)",
     "str.english": "Inglês",
     "str.register.report.settings.emailLanguage.required": "Idioma é obrigatório",
-    "str.table.report.column.email.language": "Idioma"
+    "str.table.report.column.email.language": "Idioma",
+    "msg.crash.device.notification": "Impacto detectado",
+    "msg.low.voltage.device.notification": "Bateria fraca",
+    "TAG_RFID_125": "Tag RFID",
+    "str.tag.rfid.option": "Tag RFID"
 }

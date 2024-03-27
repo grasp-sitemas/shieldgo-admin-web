@@ -8,6 +8,7 @@
                         <option value="">{{ $t('str.register.select.placeholder') }}</option>
                         <option value="QRCODE">{{ $t('str.qrcode.option') }}</option>
                         <option value="SUPERVISION">{{ $t('str.supervision.option') }}</option>
+                        <option value="TAG_RFID_125">{{ $t('str.tag.rfid.option') }}</option>
                     </select>
                 </div>
                 <div v-if="isSuperAdminMaster" class="col-md-4 mb-3">

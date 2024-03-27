@@ -418,6 +418,11 @@ export default {
                             Common.show(state, 'top-right', 'warn', state.$t('msg.new.incident.notification'))
                         } else if (type === 'SOS_ALERT') {
                             state.$registerEvent.$emit('soundAlert')
+                        }
+                        if (type === 'CRASH') {
+                            Common.show(state, 'top-right', 'warn', state.$t('msg.crash.device.notification'))
+                        } else if (type === 'LOWVOLTAGE') {
+                            Common.show(state, 'top-right', 'warn', state.$t('msg.low.voltage.device.notification'))
                         } else if (type === 'FAILURE_PATROL') {
                             console.log('FAILURE_PATROL')
                             const subtype = document.data()?.subtype

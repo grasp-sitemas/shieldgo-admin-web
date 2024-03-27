@@ -1418,5 +1418,9 @@
     "str.portugueseBrazil": "Portuguese (Brazil)",
     "str.english": "English",
     "str.register.report.settings.emailLanguage.required": "Language is required",
-    "str.table.report.column.email.language": "Language"
+    "str.table.report.column.email.language": "Language",
+    "msg.crash.device.notification": "Device crash",
+    "msg.low.voltage.device.notification": "Low voltage",
+    "TAG_RFID_125": "Tag RFID",
+    "str.tag.rfid.option": "Tag RFID"
 }

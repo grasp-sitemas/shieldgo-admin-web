@@ -1461,5 +1461,6 @@
     "str.register.equipment.brand.other": "Other",
     "OTHER": "Other",
     "str.register.equipment.guard.field": "Guard",
-    "str.table.equipment.column.guard": "Guard"
+    "str.table.equipment.column.guard": "Guard",
+    "str.table.list.equipments": "List of equipments"
 }

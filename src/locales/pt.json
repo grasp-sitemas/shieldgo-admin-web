@@ -1460,5 +1460,6 @@
     "str.register.equipment.brand.other": "Outra",
     "OTHER": "Outra",
     "str.register.equipment.guard.field": "Vigilante",
-    "str.table.equipment.column.guard": "Vigilante"
+    "str.table.equipment.column.guard": "Vigilante",
+    "str.table.list.equipments": "Lista de equipamentos"
 }

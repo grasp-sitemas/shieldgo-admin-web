@@ -1,6 +1,6 @@
 <template>
     <div>
-        <panel :title="$t('str.table.list.colaborators')" bodyClass="p-0" class="mb-3">
+        <panel :title="$t('str.table.list.equipments')" bodyClass="p-0" class="mb-3">
             <div class="row ms-2 mb-1 mt-3 me-1">
                 <div v-if="isSuperAdminMaster" class="col-md-4 mb-3">
                     <label class="form-label" for="accountField">{{ $t('str.register.guard.groups.account.field') }}</label>

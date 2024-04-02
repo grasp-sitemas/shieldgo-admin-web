@@ -60,28 +60,33 @@ const sidebarMenu = [
         roles: [ROLES.SUPER_ADMIN_MASTER, ROLES.ADMIN, ROLES.MANAGER],
     },
     {
-        path: '/groups',
+        path: '/management',
         icon: 'fa fa-align-left',
-        title: 'str.sidebar.menu.group.management',
+        title: 'str.sidebar.menu.management',
         roles: [ROLES.SUPER_ADMIN_MASTER, ROLES.ADMIN, ROLES.MANAGER],
         children: [
             {
-                path: '/groups/guards',
+                path: '/management/equipments',
+                title: 'str.sidebar.menu.equipaments',
+                roles: [ROLES.SUPER_ADMIN_MASTER, ROLES.ADMIN, ROLES.MANAGER],
+            },
+            {
+                path: '/management/guard-groups',
                 title: 'str.sidebar.menu.guard.groups',
                 roles: [ROLES.SUPER_ADMIN_MASTER, ROLES.ADMIN, ROLES.MANAGER],
             },
             {
-                path: '/groups/sites',
+                path: '/management/site-groups',
                 title: 'str.sidebar.menu.site.groups',
                 roles: [ROLES.SUPER_ADMIN_MASTER, ROLES.ADMIN, ROLES.MANAGER],
             },
             {
-                path: '/groups/clients',
+                path: '/management/client-groups',
                 title: 'str.sidebar.menu.client.groups',
                 roles: [ROLES.SUPER_ADMIN_MASTER, ROLES.ADMIN],
             },
             {
-                path: '/itineraries',
+                path: '/management/itineraries',
                 title: 'str.sidebar.menu.itineraries',
                 roles: [ROLES.SUPER_ADMIN_MASTER, ROLES.ADMIN, ROLES.MANAGER],
             },

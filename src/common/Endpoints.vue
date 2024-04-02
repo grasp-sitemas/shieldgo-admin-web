@@ -77,6 +77,11 @@ export default {
         filter: `${domain}/api/users/reports/filter/v1/`,
         externalFilter: `${domain}/api/users/reports/external/filter/v1/`,
     },
+    equipments: {
+        equipment: `${domain}/api/company/equipments/v1/`,
+        filter: `${domain}/api/company/equipments/filter/v1/`,
+        delete: `${domain}/api/company/equipments/delete/v1/`,
+    },
     companies: {
         company: `${domain}/api/company/v1/`,
         formData: `${domain}/api/company/formdata/v1/`,

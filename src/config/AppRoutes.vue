@@ -39,6 +39,7 @@ import Itinerary from '../pages/Company/Itineraries/ListItineraries.vue'
 import IntegrationLogs from '../pages/Integration/Log/Log.vue'
 import ReportSettings from '../pages/Reports/Settings/ListReportSettings.vue'
 import ReportExternalPatrol from '../pages/Integration/Reports/PerformancePatrol/PerformancePatrol.vue'
+import Equipments from '../pages/Company/Equipment/ListEquipment.vue'
 
 Vue.use(VueSession)
 
@@ -88,7 +89,7 @@ const routes = [
         },
     },
     {
-        path: '/groups/clients',
+        path: '/management/client-groups',
         name: 'client-groups',
         component: ClientGroup,
         beforeEnter: (_to, _from, next) => {
@@ -120,7 +121,7 @@ const routes = [
         },
     },
     {
-        path: '/groups/guards',
+        path: '/management/guard-groups',
         name: 'guard-groups',
         component: GuardGroup,
         beforeEnter: (_to, _from, next) => {
@@ -192,9 +193,17 @@ const routes = [
         },
     },
     {
-        path: '/groups/sites',
+        path: '/management/site-groups',
         name: 'site-groups',
         component: SiteGroup,
+        beforeEnter: (_to, _from, next) => {
+            next(checkSession())
+        },
+    },
+    {
+        path: '/management/equipments',
+        name: 'equipments',
+        component: Equipments,
         beforeEnter: (_to, _from, next) => {
             next(checkSession())
         },

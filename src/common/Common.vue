@@ -118,7 +118,7 @@ export default {
             type,
         })
     },
-    isSuperAdminMaster: state => {
+    isSuperAdminMaster: async state => {
         return state.$session.get('user')?.companyUser?.subtype === 'SUPER_ADMIN_MASTER' ? true : false
     },
     isAdmin: state => {

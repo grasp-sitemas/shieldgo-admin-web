@@ -240,7 +240,7 @@ export default {
             this.data.site = ''
 
             this.sites = await Services.getSitesByClient(this, client)
-            this.vigilants = await Services.getVigilantsByClient(this, client)
+            // this.vigilants = await Services.getVigilantsByClient(this, client)
         },
         changeSite: async function () {
             this.vigilants = await Services.getVigilantsBySite(this, this.data.user)

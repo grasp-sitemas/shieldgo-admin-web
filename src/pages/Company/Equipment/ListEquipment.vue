@@ -80,6 +80,9 @@
                     <span v-else-if="props.column.field === 'type'">
                         <span> {{ $t(props.formattedRow[props.column.field]) }} </span>
                     </span>
+                    <span v-else-if="props.column.field === 'createDate'">
+                        {{ formatDate(props.formattedRow[props.column.field], true) }}
+                    </span>
                     <span v-else>
                         {{ props.formattedRow[props.column.field] }}
                     </span>

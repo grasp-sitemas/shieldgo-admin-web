@@ -32,15 +32,14 @@ export default {
         },
         async handleCheckpointOption(option) {
             this.errors = []
-            if(!this.isSuperAdminMaster){
+            if (!this.isSuperAdminMaster) {
                 this.data.account = await Common.getAccountId(this)
             }
             this.data.client = ''
             this.data.site = ''
-            this.data.type = option;
+            this.data.type = option
         },
         checkForm() {
-
             if (!this.data.account || this.data.account === '') {
                 this.errors.push('account')
             }
@@ -49,11 +48,11 @@ export default {
                 this.errors.push('client')
             }
 
-            if(this.data?.type === 'QRCODE'){
+            if (this.data?.type === 'QRCODE') {
                 if (!this.data.site || this.data.site === '') {
                     this.errors.push(this.$t('site'))
                 }
-            }else{
+            } else {
                 this.data.site = ''
                 this.removeRequiredField('site')
             }
@@ -71,7 +70,7 @@ export default {
 
             const arrayOfData = []
 
-            if(this.data?.type === 'QRCODE'){
+            if (this.data?.type === 'QRCODE') {
                 for (let index = 0; index < this.quantity; index++) {
                     arrayOfData.push({
                         name: '',
@@ -82,7 +81,7 @@ export default {
                         status: this.data.status,
                     })
                 }
-            }else{
+            } else {
                 for (let index = 0; index < this.quantity; index++) {
                     arrayOfData.push({
                         name: '',
@@ -144,11 +143,9 @@ export default {
                 this.sites = []
             } else this.data.account = Common.getAccountId(this)
 
-
             this.isLoading = false
 
             this.$bvModal.hide('checkPointModal')
-
         },
     },
 }

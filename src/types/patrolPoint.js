@@ -23,6 +23,7 @@ export const patrolPoint = {
         lat: '',
         lng: '',
     },
+    patrolPointNumber: null,
     radius: null,
     status: 'ACTIVE',
 }

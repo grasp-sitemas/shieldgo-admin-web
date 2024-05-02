@@ -108,7 +108,7 @@ export default {
     data() {
         return {
             items: [],
-            isLoading: true,
+            isLoading: false,
             data: {},
             isSuperAdminMaster: false,
             roles: ROLES,

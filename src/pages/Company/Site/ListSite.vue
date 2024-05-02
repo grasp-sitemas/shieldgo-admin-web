@@ -64,6 +64,11 @@
                     <span v-else-if="props.column.field === 'client'">
                         {{ props.formattedRow[props.column.field].name }}
                     </span>
+                    <span v-else-if="props.column.field === 'enableFreePatrol'">
+                        <span class="badge" v-bind:class="props.formattedRow[props.column.field] === true ? 'bg-success' : 'bg-warning'">
+                            {{ $t(props.formattedRow[props.column.field] ? 'str.yes' : 'str.no') }}
+                        </span>
+                    </span>
                     <span v-else-if="props.column.field === 'createDate'">
                         {{ formatDate(props.formattedRow[props.column.field], true) }}
                     </span>

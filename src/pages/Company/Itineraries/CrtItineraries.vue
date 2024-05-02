@@ -6,22 +6,22 @@ import Services from '../../../common/Services.vue'
 
 export default {
     init: async payload => {
-        payload.data.account = Common.getAccountId(payload)
-
         payload.initTable()
 
         payload.isSuperAdminMaster = await Common.isSuperAdminMaster(payload)
+        payload.data.account = await Common.getAccountId(payload)
         const role = await Common.getSubtype(payload)
+
         if (role === 'SUPER_ADMIN_MASTER') {
             payload.accounts = await Services.getAccounts(payload)
         } else if (role === 'ADMIN' || role === 'MANAGER') {
             payload.clients = await Services.getClients(payload)
         }
+
         payload.role = role
     },
     methods: {
         async save() {
-           
             try {
                 Request.do(
                     this,
@@ -109,7 +109,7 @@ export default {
                 mode: 'records',
                 perPage: 20,
                 position: 'bottom',
-                perPageDropdown: [10, 20, 50, 100,1000],
+                perPageDropdown: [10, 20, 50, 100, 1000],
                 dropdownAllowAll: false,
                 setCurrentPage: 1,
                 jumpFirstOrLast: true,
@@ -200,12 +200,12 @@ export default {
 
             if (client === '') {
                 this.data.patrolPoints = []
-            }else{
+            } else {
                 const filter = {
                     account: this.data?.account,
                     client: this.data?.client,
                     status: 'ACTIVE',
-                    type: 'SUPERVISION'
+                    type: 'SUPERVISION',
                 }
 
                 this.checkpoints = await Services.getSupervisoryPointByClient(this, filter)
@@ -225,7 +225,7 @@ export default {
             const checkpointsToAdd = this.selectedCheckpoints.filter(item => !this.data.patrolPoints.includes(item))
             this.data.patrolPoints = this.data.patrolPoints.concat(checkpointsToAdd)
 
-            if(this.data.patrolPoints.length > 0){
+            if (this.data.patrolPoints.length > 0) {
                 this.removeRequiredField('checkpoints')
             }
 

@@ -33,8 +33,6 @@ export default {
             payload.filters.client = client
             payload.sites = await Services.getSites(payload)
         }
-
-        payload.filter()
     },
     methods: {
         filter: function () {

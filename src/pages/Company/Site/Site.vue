@@ -44,6 +44,12 @@
                     </select>
                     <div class="invalid-feedback">{{ $t('str.register.site.client.required') }}</div>
                 </div>
+                <div class="col-md-4 align-self-center">
+                    <div class="form-check form-switch">
+                        <input v-model="data.enableFreePatrol" id="toggleEnableFreePatrol" class="form-check-input" type="checkbox" />
+                        <label class="form-check-label ml-1"> {{ $t('str.register.site.enable.free.patrol') }}</label>
+                    </div>
+                </div>
             </div>
 
             <div class="row">

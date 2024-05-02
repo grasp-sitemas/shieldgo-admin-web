@@ -18,11 +18,13 @@ const instanceateAddress = (addressObj, geo) => {
 
 export default {
     init: async payload => {
+        const role = await Common.getSubtype(payload)
+        payload.role = role
+
         payload.data.account = await Common.getAccountId(payload)
-        // await payload.getMe()
 
         payload.isSuperAdminMaster = await Common.isSuperAdminMaster(payload)
-        const role = await Common.getSubtype(payload)
+
         if (role === 'SUPER_ADMIN_MASTER') {
             payload.accounts = await Services.getAccounts(payload)
         } else if (role === 'ADMIN' || role === 'MANAGER') {
@@ -32,7 +34,6 @@ export default {
             payload.data.client = client
             payload.sites = await Services.getSites(payload)
         }
-        payload.role = role
     },
     methods: {
         // async getMe() {
@@ -65,7 +66,7 @@ export default {
 
             if (this.data.radius) this.data.radius = Number(this.data.radius)
 
-            if(this.data?.type === 'SUPERVISION'){
+            if (this.data?.type === 'SUPERVISION') {
                 delete this.data.site
             }
 
@@ -121,14 +122,14 @@ export default {
                 Common.show(this, 'bottom-right', 'warn', this.$t('str.form.archive.generic.error'))
             }
         },
-         openMapModal(row) {
-        // You can do any necessary data processing here before opening the map modal
-        // For example, you can set the relevant data to your component's data properties
-        this.patrolPointItem = row;
+        openMapModal(row) {
+            // You can do any necessary data processing here before opening the map modal
+            // For example, you can set the relevant data to your component's data properties
+            this.patrolPointItem = row
 
-        // Then, show the map modal
-        this.$bvModal.show('mapModal');
-    },
+            // Then, show the map modal
+            this.$bvModal.show('mapModal')
+        },
         confirmArchive() {
             this.$swal({
                 title: this.$t('str.are.you.sure'),
@@ -177,10 +178,10 @@ export default {
             if (!this.errors || this.errors.length === 0) {
                 this.isLoading = true
 
-                if(this.data?.address?.cep?.length < 9 || !this.data?.address?.cep){
+                if (this.data?.address?.cep?.length < 9 || !this.data?.address?.cep) {
                     delete this.data.address
                     await this.save()
-                }else{
+                } else {
                     this.loadGeolocation(
                         async data => {
                             await this.save(data)
@@ -192,7 +193,6 @@ export default {
                     )
                 }
             }
-
         },
         inputCep() {
             if (this.data.address.cep.length === 9) this.loadInfosByCEP()

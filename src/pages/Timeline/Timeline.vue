@@ -11,7 +11,6 @@
                         {{ account.name }}
                     </option>
                 </select>
-
                 <div class="invalid-feedback">{{ $t('str.register.guard.groups.account.required') }}</div>
             </div>
             <div v-if="role === 'SUPER_ADMIN_MASTER' || role === 'ADMIN' || role === 'MANAGER'" class="col-md-4 mb-3">
@@ -71,22 +70,12 @@
                     <option value="">{{ $t('str.register.select.all.placeholder') }}</option>
                     <option value="IN_PROGRESS">{{ $t('str.status.in.progress') }}</option>
                     <option value="ACTIVE">{{ $t('str.status.pending') }}</option>
-                    <option value="FINISHED">{{ $t('str.status.finished') }}</option>
-                    <option value="EXPIRED">{{ $t('str.status.expired') }}</option>
-                    <option value="CLOSED_BY_SYSTEM">{{ $t('str.status.closed.by.system') }}</option>
-                    <option value="CANCELLED">{{ $t('str.status.cancelled') }}</option>
                     <option value="COMPLETE">{{ $t('str.status.complete') }}</option>
                     <option value="INCOMPLETE">{{ $t('str.status.incomplete') }}</option>
+                    <option value="EXPIRED">{{ $t('str.status.expired') }}</option>
+                    <option value="CANCELLED">{{ $t('str.status.cancelled') }}</option>
                 </select>
             </div>
-            <!-- <div v-if="filters?.status === 'FINISHED'" class="col-md-4 mb-3">
-                <label class="form-label" for="statusField">{{ $t('str.register.substatus.field') }}</label>
-                <select v-model="filters.substatus" @change="filter" class="form-select" id="statusField">
-                    <option value="">{{ $t('str.register.select.all.placeholder') }}</option>
-                    <option value="COMPLETE">{{ $t('str.event.complete') }}</option>
-                    <option value="INCOMPLETE">{{ $t('str.event.incomplete') }}</option>
-                </select>
-            </div> -->
         </div>
         <div>
             <vue-good-table
@@ -104,9 +93,7 @@
 
                 <template slot="table-row" slot-scope="props">
                     <span v-if="props.column.field === 'vigilant'"> {{ props.formattedRow[props.column.field]?.firstName }} {{ props.formattedRow[props.column.field]?.lastName }} </span>
-                    <!-- <span v-else-if="props.column.field === 'account' || props.column.field === 'client' || props.column.field === 'site'">
-                        {{ props.formattedRow[props.column.field]?.name }}
-                    </span> -->
+
                     <span v-else-if="props.column.field === 'startDate' || props.column.field === 'endDate'">
                         {{ formatDate(props.formattedRow[props.column.field]) }}
                     </span>

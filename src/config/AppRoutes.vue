@@ -129,7 +129,7 @@ const routes = [
         },
     },
     {
-        path: '/itineraries',
+        path: '/management/itineraries',
         name: 'itineraries',
         component: Itinerary,
         beforeEnter: (_to, _from, next) => {

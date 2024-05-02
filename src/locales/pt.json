@@ -1457,9 +1457,19 @@
     "str.register.equipment.status.inactive": "Inativo",
     "str.register.equipment.type.device-reader": "Leitor",
     "str.register.equipment.type.device-phone": "Celular",
-    "str.register.equipment.brand.other": "Outra",
-    "OTHER": "Outra",
+    "str.register.equipment.brand.other": "Outro",
+    "OTHER": "Outro",
     "str.register.equipment.guard.field": "Vigilante",
     "str.table.equipment.column.guard": "Vigilante",
-    "str.table.list.equipments": "Lista de equipamentos"
+    "str.table.list.equipments": "Lista de equipamentos",
+    "str.tag.rfid.125.option": "Tag RFID",
+    "str.modal.check.points.tag.rfid": "Tag RFID",
+    "str.loading": "Carregando...",
+    "str.register.status.success": "Sucesso",
+    "str.register.status.error": "Erro",
+    "str.table.site.column.enable.free.patrol": "Ronda livre",
+    "str.register.site.enable.free.patrol": "Ronda livre",
+    "str.register.check.point.code.field": "ID",
+    "str.register.check.point.code.placeholder": "Informe o ID",
+    "str.register.check.point.code.required": "ID é obrigatório"
 }

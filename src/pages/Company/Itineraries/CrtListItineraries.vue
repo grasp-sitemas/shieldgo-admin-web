@@ -5,12 +5,14 @@ import Common from '../../../common/Common.vue'
 import Services from '../../../common/Services.vue'
 export default {
     init: async payload => {
+        payload.initTable()
+
         payload.isSuperAdminMaster = await Common.isSuperAdminMaster(payload)
         payload.accounts = await Services.getAccounts(payload)
-        const account = await Common.getAccountId(payload)
 
-        payload.initTable()
+        const account = await Common.getAccountId(payload)
         payload.filters.account = account
+
         if (account) {
             payload.clients = await Services.getClients(payload)
         }

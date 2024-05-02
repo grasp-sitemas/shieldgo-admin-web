@@ -6,7 +6,6 @@
         </template>
 
         <div>
-          
             <div class="row">
                 <div class="col-md-4 mb-3">
                     <label class="form-label" for="subtypeField">{{ $t('str.register.type.field') }}</label>
@@ -17,7 +16,7 @@
                     </select>
                     <div class="invalid-feedback">{{ $t('str.register.colaborator.subtype.required') }}</div>
                 </div>
-                <div  v-if="data?._id" class="col-md-4 mb-3">
+                <div v-if="data?._id" class="col-md-4 mb-3">
                     <label class="form-label" for="statusField">{{ $t('str.register.status.field') }}</label>
                     <select v-model="data.status" class="form-select" id="statusField">
                         <option value="ACTIVE">{{ $t('str.register.status.active') }}</option>

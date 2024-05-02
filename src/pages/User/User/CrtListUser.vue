@@ -7,6 +7,7 @@ import Services from '../../../common/Services.vue'
 export default {
     init: async payload => {
         payload.isSuperAdminMaster = await Common.isSuperAdminMaster(payload)
+        await payload.initTable()
 
         setTimeout(async () => {
             payload.accounts = await Services.getAccounts(payload)
@@ -17,12 +18,9 @@ export default {
                 payload.clients = await Services.getClients(payload)
             }
 
-            payload.initTable()
-
             if (!payload.isSuperAdminMaster) {
                 payload.columns.splice(1, 1)
             }
-            await payload.filter()
         }, 500)
     },
     methods: {

@@ -7,55 +7,32 @@ import Endpoints from '../../common/Endpoints.vue'
 export default {
     init: async payload => {
         try {
-            setTimeout(async () => {
-                payload.domain = Endpoints.domain
+            payload.domain = Endpoints.domain
 
-                payload.user = await payload.$session.get('user')
+            payload.user = await payload.$session.get('user')
+            payload.isSuperAdminMaster = await Common.isSuperAdminMaster(payload)
+            payload.role = await Common.getSubtype(payload)
+            payload.attendancesTypes = await Services.getAttendancesOptionsTypes(payload)
 
-                payload.role = await Common.getSubtype(payload)
+            if (payload.isSuperAdminMaster) {
+                payload.accounts = await Services.getAccounts(payload)
+            } else if (payload.role === 'ADMIN') {
+                payload.clients = await Services.getClients(payload)
+                payload.filters.account = await Common.getAccountId(payload)
+            } else if (payload.role === 'MANAGER') {
+                payload.clients = await Services.getClients(payload)
+                payload.filters.account = await Common.getAccountId(payload)
+                payload.filters.client = await Common.getClientId(payload)
+            } else if (payload.role === 'OPERATOR') {
+                payload.sites = await Services.getSites(payload)
+                payload.filters.account = await Common.getAccountId(payload)
+                payload.filters.client = await Common.getClientId(payload)
+                payload.filters.sites = await Common.getSiteGroupId(payload)
+            }
 
-                payload.isSuperAdminMaster = await Common.isSuperAdminMaster(payload)
-                payload.attendancesTypes = await Services.getAttendancesOptionsTypes(payload)
-
-                if (payload.isSuperAdminMaster) {
-                    payload.accounts = await Services.getAccounts(payload)
-                } else if (payload.role === 'ADMIN') {
-                    payload.clients = await Services.getClients(payload)
-                    payload.filters.account = await Common.getAccountId(payload)
-                } else if (payload.role === 'MANAGER') {
-                    payload.clients = await Services.getClients(payload)
-                    payload.filters.account = await Common.getAccountId(payload)
-                    payload.filters.client = await Common.getClientId(payload)
-                } else if (payload.role === 'OPERATOR') {
-                    payload.sites = await Services.getSites(payload)
-                    payload.filters.account = await Common.getAccountId(payload)
-                    payload.filters.client = await Common.getClientId(payload)
-                    payload.filters.sites = await Common.getSiteGroupId(payload)
-                }
-
-                await payload.selectAllTypes()
-                await payload.filter()
-
-                if (payload?.events?.length > 0) {
-                    const event = JSON.parse(JSON.stringify(payload.events[0]))
-                    payload.selectedEvent = event
-
-                    const filters = {
-                        patrolAction: event?._id,
-                        status: 'ACTIVE',
-                    }
-
-                    payload.isLoadingAttendanceList = true
-                    payload.attendances = await Services.getEventAttendances(payload, filters)
-                    payload.isLoadingAttendanceList = false
-                }
-
-                payload.isLoading = false
-            }, 500)
+            await payload.selectAllTypes()
         } catch (error) {
             console.log(error)
-            payload.isLoading = false
-            payload.isLoadingAttendanceList = false
         }
     },
     methods: {
@@ -78,12 +55,12 @@ export default {
                 this.items = await Services.getPatrolActions(this, this.filters)
                 const events = await this.formatPatrolActions(this.items)
                 this.events = events
+
+                this.isLoadingEvents = false
             } catch (error) {
                 this.isLoadingEvents = false
                 console.log(error)
             }
-
-            this.isLoadingEvents = false
         },
         checkRequiredField(field) {
             return this.errors.includes(field)

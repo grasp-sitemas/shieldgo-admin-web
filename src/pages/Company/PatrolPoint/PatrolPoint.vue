@@ -16,6 +16,19 @@
                                 <option value="ARCHIVED">{{ $t('str.register.status.archived') }}</option>
                             </select>
                         </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label" for="nameField">{{ $t('str.register.check.point.code.field') }}</label>
+                            <input
+                                v-model="data.patrolPointNumber"
+                                class="form-control"
+                                v-bind:class="checkRequiredField('patrolPointNumber') ? 'is-invalid' : ''"
+                                @focus="removeRequiredField('patrolPointNumber')"
+                                type="text"
+                                key="nameField"
+                                :placeholder="$t('str.register.check.point.number.placeholder')"
+                            />
+                            <div class="invalid-feedback">{{ $t('str.register.check.point.number.required') }}</div>
+                        </div>
                     </div>
                     <div class="row">
                         <div class="col-md-6 mb-3">
@@ -23,6 +36,7 @@
                             <select v-model="data.type" class="form-select" id="statusField">
                                 <option value="QRCODE">{{ $t('str.qrcode.option') }}</option>
                                 <option value="SUPERVISION">{{ $t('str.supervision.option') }}</option>
+                                <option value="TAG_RFID_125">{{ $t('str.tag.rfid.125.option') }}</option>
                             </select>
                         </div>
                         <div v-if="isSuperAdminMaster" class="col-md-6 mb-3">
@@ -42,7 +56,7 @@
                             </select>
                             <div class="invalid-feedback">{{ $t('str.register.check.point.account.required') }}</div>
                         </div>
-                        <div v-if="role === 'SUPER_ADMIN_MASTER' || role === 'ADMIN' || role === 'MANAGER'" :class="data?.type === 'QRCODE' ? 'col-md-6 mb-3' : 'col-md-12 mb-3'">
+                        <div v-if="role === 'SUPER_ADMIN_MASTER' || role === 'ADMIN' || role === 'MANAGER'" :class="data?.type === 'QRCODE' || data.type === 'TAG_RFID_125' ? 'col-md-6 mb-3' : 'col-md-12 mb-3'">
                             <label class="form-label" for="clientField">{{ $t('str.register.check.point.client.field') }}</label>
                             <select
                                 v-model="data.client"
@@ -59,7 +73,7 @@
                             </select>
                             <div class="invalid-feedback">{{ $t('str.register.check.point.client.required') }}</div>
                         </div>
-                        <div v-if="data.type === 'QRCODE'" class="col-md-6 mb-3">
+                        <div v-if="data.type === 'QRCODE' || data.type === 'TAG_RFID_125'" class="col-md-6 mb-3">
                             <label class="form-label" for="siteField">{{ $t('str.register.check.point.site.field') }}</label>
                             <select v-model="data.site" class="form-select" v-bind:class="checkRequiredField('site') ? 'is-invalid' : ''" @focus="removeRequiredField('site')" id="siteField">
                                 <option value="">{{ $t('str.register.select.placeholder') }}</option>

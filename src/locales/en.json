@@ -1462,5 +1462,15 @@
     "OTHER": "Other",
     "str.register.equipment.guard.field": "Guard",
     "str.table.equipment.column.guard": "Guard",
-    "str.table.list.equipments": "List of equipments"
+    "str.table.list.equipments": "List of equipments",
+    "str.tag.rfid.125.option": "Tag RFID",
+    "str.modal.check.points.tag.rfid": "Tag RFID",
+    "str.loading": "Loading...",
+    "str.register.status.success": "Success",
+    "str.register.status.error": "Error",
+    "str.table.site.column.enable.free.patrol": "Free patrol",
+    "str.register.site.enable.free.patrol": "Enable free patrol",
+    "str.register.check.point.code.field": "ID",
+    "str.register.check.point.code.placeholder": "Enter the ID",
+    "str.register.check.point.code.required": "ID is required"
 }

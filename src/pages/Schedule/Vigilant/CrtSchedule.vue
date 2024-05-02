@@ -13,7 +13,7 @@ import moment from 'moment'
 
 export default {
     init: async payload => {
-        payload.initCalendar()
+        await payload.initCalendar()
 
         payload.isSuperAdminMaster = await Common.isSuperAdminMaster(payload)
         const role = await Common.getSubtype(payload)
@@ -55,7 +55,7 @@ export default {
         handleLoading(isLoading) {
             this.isLoading = isLoading
         },
-        initCalendar: function () {
+        initCalendar: async function () {
             const language = this.$session.get('user')?.language
             const locale = language === 'pt' ? 'pt-br' : 'en-gb'
 
@@ -83,7 +83,7 @@ export default {
                         this.isLoading = true
                         this.filters.endDate = moment(endStr).utc(true).format()
                         this.filters.startDate = moment(startStr).utc(true).format()
-                        this.getAppointments()
+                        // this.getAppointments()
                         this.lastFetchedMonth = currentMonth
                     }
                 },

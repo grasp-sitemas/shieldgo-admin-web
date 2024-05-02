@@ -7,15 +7,17 @@ import Services from '../../../common/Services.vue'
 export default {
     init: async payload => {
         payload.domain = Endpoints.domain
-        payload.data.account = Common.getAccountId(payload)
 
+        payload.data.account = await Common.getAccountId(payload)
         payload.isSuperAdminMaster = await Common.isSuperAdminMaster(payload)
         const role = await Common.getSubtype(payload)
+
         if (role === 'SUPER_ADMIN_MASTER') {
             payload.accounts = await Services.getAccounts(payload)
         } else if (role === 'ADMIN' || role === 'MANAGER') {
             payload.clients = await Services.getClients(payload)
         }
+
         payload.role = role
     },
     methods: {

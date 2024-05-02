@@ -11,6 +11,8 @@ export default {
         const role = await Common.getSubtype(payload)
         payload.role = role
 
+        payload.initTable()
+
         setTimeout(async () => {
             payload.accounts = await Services.getAccounts(payload)
             const account = await Common.getAccountId(payload)
@@ -26,8 +28,6 @@ export default {
                 payload.sites = await Services.getSites(payload)
             }
 
-            payload.initTable()
-
             if (!payload.isSuperAdminMaster) {
                 payload.columns.splice(2, 1)
             }
@@ -35,7 +35,6 @@ export default {
             if (role === 'AUDITOR') {
                 payload.columns.splice(2, 1)
             }
-            await payload.filter()
         }, 500)
     },
     methods: {

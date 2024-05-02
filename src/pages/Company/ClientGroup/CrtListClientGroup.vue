@@ -5,15 +5,15 @@ import Common from '../../../common/Common.vue'
 import Services from '../../../common/Services.vue'
 export default {
     init: async payload => {
-        payload.filters.account = await Common.getAccountId(payload)
-        payload.isSuperAdminMaster = await Common.isSuperAdminMaster(payload)
+        payload.initTable()
 
-        await payload.initTable()
+        payload.isSuperAdminMaster = await Common.isSuperAdminMaster(payload)
+        payload.accounts = await Services.getAccounts(payload)
+        payload.filters.account = await Common.getAccountId(payload)
+
         if (!payload.isSuperAdminMaster) {
             payload.columns.splice(2, 1)
         }
-
-        payload.filter()
     },
     methods: {
         filter: function () {

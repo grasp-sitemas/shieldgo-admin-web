@@ -14,11 +14,7 @@ export default {
 
         await payload.initTable()
 
-        if (!payload.isSuperAdminMaster) {
-            payload.columns.splice(5, 1)
-        }
-
-        if (role === 'AUDITOR') {
+        if (!payload.isSuperAdminMaster || role === 'AUDITOR') {
             payload.columns.splice(5, 1)
         }
 
@@ -31,7 +27,6 @@ export default {
             payload.filters.client = client
             payload.sites = await Services.getSites(payload)
         }
-        payload.filter()
     },
     methods: {
         async filter() {
@@ -92,14 +87,6 @@ export default {
                     tdClass: 'text-nowrap',
                     thClass: 'text-nowrap',
                 },
-                // {
-                //     label: this.$t('str.table.timeline.column.patrol.points'),
-                //     field: 'patrolPoints',
-                //     width: '20%',
-                //     sortable: true,
-                //     thClass: 'text-nowrap',
-                //     tdClass: 'text-nowrap',
-                // },
                 {
                     label: this.$t('str.table.timeline.column.status'),
                     field: 'status',

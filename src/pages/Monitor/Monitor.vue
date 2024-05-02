@@ -1,8 +1,10 @@
 <template>
-    <div style="min-height: 100vh; background-size: 360px; background-position: right bottom">
+    <div style="min-height: 90vh; background-size: 360px; background-position: right bottom">
         <div class="d-flex align-items-center mb-3">
             <h1 class="page-header mb-0">{{ $t('str.form.title.monitor') }}</h1>
         </div>
+        <hr />
+
         <div class="row">
             <div class="col-md-12 mb-3">
                 <div id="accordion" class="accordion rounded overflow-hidden">
@@ -55,7 +57,8 @@
             </div>
         </div>
 
-        <div v-if="!isLoading && events !== null" class="row">
+        <div v-if="events && events?.length > 0 && !isLoadingEvents" class="row">
+            <!-- has events -->
             <div v-if="events?.length > 0" class="col-xl-4 col-lg-6">
                 <panel :title="$t('str.events.title')">
                     <div class="list-group list-group-flush rounded-bottom overflow-hidden panel-body p-0">
@@ -83,12 +86,8 @@
                     </div>
                 </panel>
             </div>
-            <div v-else class="no-events">
-                <i class="fa fa-exclamation-triangle fa-5x text-white mb-4" />
-                <h3>{{ $t('str.monitor.no.events.title') }}</h3>
-                <p>{{ $t('str.monitor.no.events.description') }}</p>
-            </div>
 
+            <!-- selected event -->
             <div v-if="selectedEvent" class="col-xl-4 col-lg-6">
                 <panel :title="selectedEvent?.failureText + ' ' + $t('str.on') + ' ' + selectedEvent?.formattedDate + ' ' + $t('str.at') + ' ' + selectedEvent?.formattedTime">
                     <div class="result-info">
@@ -218,6 +217,7 @@
                 </panel>
             </div>
 
+            <!-- select attendance event -->
             <div class="col-xl-4 col-lg-6 panel-attendance-body p-0" v-if="selectedEvent?.attendance?.isAttendance">
                 <panel :title="$t('str.event.attendance')">
                     <div v-if="selectedEvent?.attendance?.operator?._id === user._id && selectedEvent?.attendance?.status === 'IN_PROGRESS'" class="result-info overflow-hidden">
@@ -296,8 +296,17 @@
 
             <gritterNotify v-if="operatorWithoutGroup" :title="$t('str.operator.without.sites.title')" :text="$t('str.operator.without.sites.text')" @after-close="operatorWithoutGroup = false" />
         </div>
-        <div v-else class="center-spinner">
-            <i class="fas fa-spinner fa-spin" />
+        <div v-else>
+            <div class="no-events">
+                <div v-if="isLoadingEvents">
+                    <i class="fas fa-spinner fa-spin" />
+                </div>
+                <div v-else>
+                    <i class="fa fa-exclamation-triangle fa-5x text-white mb-4" />
+                    <h3>{{ $t('str.monitor.no.events.title') }}</h3>
+                    <p>{{ $t('str.monitor.no.events.description') }}</p>
+                </div>
+            </div>
         </div>
 
         <notifications group="top-right" position="top right" :speed="1000" />
@@ -337,7 +346,7 @@ export default {
     },
     data() {
         return {
-            isLoading: true,
+            isLoading: false,
             isLoadingEvents: false,
             isLoadingSendAttendanceButton: false,
             isLoadingAttendanceEventButton: false,
@@ -350,7 +359,7 @@ export default {
             clients: [],
             sites: [],
             items: [],
-            events: null,
+            events: [],
             user: null,
             role: null,
             attendances: [],
@@ -608,11 +617,7 @@ img {
 }
 
 .center-spinner {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100%;
-    margin-top: 22%;
+    margin-bottom: 20px;
 }
 
 .list-group-selected {

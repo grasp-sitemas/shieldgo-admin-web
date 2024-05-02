@@ -5,8 +5,9 @@ import Common from '../../../common/Common.vue'
 import Services from '../../../common/Services.vue'
 export default {
     init: async payload => {
-        payload.filters.account = await Common.getAccountId(payload)
         await payload.initTable()
+
+        payload.filters.account = await Common.getAccountId(payload)
         if (!payload.isSuperAdminMaster) {
             payload.columns.splice(5, 1)
         }
@@ -14,8 +15,6 @@ export default {
         if (payload?.role === 'AUDITOR') {
             payload.columns.splice(3, 1)
         }
-
-        payload.filter()
     },
     methods: {
         filter: function () {
@@ -101,7 +100,7 @@ export default {
                 {
                     label: this.$t('str.table.check.point.column.code'),
                     field: 'patrolPointCode',
-                    width: '5%',
+                    width: '10%',
                     sortable: true,
                     firstSortType: 'desc',
                     thClass: 'text-nowrap',
@@ -124,25 +123,10 @@ export default {
                     thClass: 'text-nowrap',
                     tdClass: 'text-nowrap',
                 },
-                // {
-                //     label: this.$t('str.table.check.point.column.geolocation'),
-                //     field: 'geolocation',
-                //     width: '5%',
-                //     thClass: 'text-nowrap',
-                //     tdClass: 'text-nowrap',
-                // },
-                // {
-                //     label: this.$t('str.table.check.point.column.radius'),
-                //     field: 'radius',
-                //     width: '5%',
-                //     sortable: true,
-                //     thClass: 'text-nowrap',
-                //     tdClass: 'text-nowrap',
-                // },
                 {
                     label: this.$t('str.table.check.point.column.account'),
                     field: 'account',
-                    width: '10%',
+                    width: '15%',
                     thClass: 'text-nowrap',
                     tdClass: 'text-nowrap',
                     sortable: true,

@@ -5,12 +5,17 @@ import Common from '../../../common/Common.vue'
 import Services from '../../../common/Services.vue'
 export default {
     init: async payload => {
+        payload.domain = Endpoints.domain
+
+        await payload.initTable()
+
         payload.isSuperAdminMaster = await Common.isSuperAdminMaster(payload)
         payload.accounts = await Services.getAccounts(payload)
         payload.filters.account = await Common.getAccountId(payload)
-        payload.initTable()
-        payload.filter()
-        payload.domain = Endpoints.domain
+
+        if (!payload.isSuperAdminMaster) {
+            payload.columns.splice(1, 1)
+        }
     },
     methods: {
         filter: function () {
@@ -138,11 +143,6 @@ export default {
                 ofLabel: this.$t('str.table.pagination.of.label.page'),
                 pageLabel: this.$t('str.table.pagination.page'),
                 allLabel: this.$t('str.table.pagination.all.label'),
-            }
-
-            //remove account column if not super admin
-            if (!this.isSuperAdminMaster) {
-                this.columns.splice(1, 1)
             }
         },
         formatDate: Common.formatDateAndTime,

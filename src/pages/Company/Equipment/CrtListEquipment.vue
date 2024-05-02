@@ -26,8 +26,6 @@ export default {
         if (!payload.isSuperAdminMaster) {
             payload.columns.splice(3, 1)
         }
-
-        await payload.filter()
     },
     methods: {
         filter: function () {

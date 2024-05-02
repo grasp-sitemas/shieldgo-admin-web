@@ -6,6 +6,8 @@ import Services from '../../../common/Services.vue'
 
 export default {
     init: async payload => {
+        await payload.initTable()
+
         const role = await Common.getSubtype(payload)
         payload.role = role
 
@@ -18,8 +20,13 @@ export default {
             payload.clients = await Services.getClients(payload)
         }
 
-        payload.initTable()
-        payload.filter()
+        if (!payload.isSuperAdminMaster) {
+            payload.columns.splice(1, 1)
+        }
+
+        if (payload.role === 'AUDITOR') {
+            payload.columns.splice(1, 1)
+        }
     },
     methods: {
         changeAccount: async function () {
@@ -86,7 +93,7 @@ export default {
                 {
                     label: this.$t('str.table.site.column.name'),
                     field: 'name',
-                    width: '30%',
+                    width: '15%',
                     thClass: 'text-nowrap',
                     tdClass: 'text-nowrap',
                     sortable: true,
@@ -112,6 +119,7 @@ export default {
                     filterable: true,
                     sortFn: Common.sortClientFn,
                 },
+
                 {
                     label: this.$t('str.table.site.column.address'),
                     field: 'address',
@@ -124,9 +132,18 @@ export default {
                     sortFn: Common.sortAddressFn,
                 },
                 {
+                    label: this.$t('str.table.site.column.enable.free.patrol'),
+                    field: 'enableFreePatrol',
+                    width: '10%',
+                    thClass: 'text-nowrap',
+                    tdClass: 'text-nowrap',
+                    sortable: true,
+                    filterable: true,
+                },
+                {
                     label: this.$t('str.table.site.column.owner'),
                     field: 'owner',
-                    width: '10%',
+                    width: '15%',
                     thClass: 'text-nowrap',
                     tdClass: 'text-nowrap',
                     sortable: true,
@@ -135,7 +152,7 @@ export default {
                 {
                     label: this.$t('str.table.site.column.creat.at'),
                     field: 'createDate',
-                    width: '5%',
+                    width: '10%',
                     tdClass: 'text-nowrap',
                     thClass: 'text-nowrap',
                     sortable: true,
@@ -144,7 +161,7 @@ export default {
                 {
                     label: this.$t('str.table.site.column.status'),
                     field: 'status',
-                    width: '5%',
+                    width: '10%',
                     tdClass: 'text-nowrap',
                     thClass: 'text-nowrap',
                     sortable: false,
@@ -168,15 +185,6 @@ export default {
                 ofLabel: this.$t('str.table.pagination.of.label.page'),
                 pageLabel: this.$t('str.table.pagination.page'),
                 allLabel: this.$t('str.table.pagination.all.label'),
-            }
-
-            //remove account column if not super admin
-            if (!this.isSuperAdminMaster) {
-                this.columns.splice(1, 1)
-            }
-
-            if (this.role === 'AUDITOR') {
-                this.columns.splice(1, 1)
             }
         },
         formatDate: Common.formatDateAndTime,

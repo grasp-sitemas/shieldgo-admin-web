@@ -6,33 +6,31 @@
         </template>
         <div class="container_card_options">
             <label class="option_item">
-                <input
-                    :checked="data.type === 'QRCODE'"
-                    @change="handleCheckpointOption('QRCODE')"
-                    type="radio"
-                    class="checkbox"
-                />
-                <div :class="{'option_inner': true, 'qrcode': data.type === 'QRCODE'}">
+                <input :checked="data.type === 'QRCODE'" @change="handleCheckpointOption('QRCODE')" type="radio" class="checkbox" />
+                <div :class="{ option_inner: true, qrcode: data.type === 'QRCODE' }">
                     <div class="tickmark"></div>
                     <i class="fa-solid fa-qrcode fa-3x" />
                     <div class="name">{{ $t('str.modal.check.points.qr.code') }}</div>
                 </div>
             </label>
             <label class="option_item">
-                <input
-                    :checked="data.type === 'SUPERVISION'"
-                    @change="handleCheckpointOption('SUPERVISION')"
-                    type="radio"
-                    class="checkbox"
-                />
-                <div :class="{'option_inner': true, 'qrcode': data.type === 'SUPERVISION'}">
+                <input :checked="data.type === 'SUPERVISION'" @change="handleCheckpointOption('SUPERVISION')" type="radio" class="checkbox" />
+                <div :class="{ option_inner: true, qrcode: data.type === 'SUPERVISION' }">
                     <div class="tickmark"></div>
                     <i class="fas fa-user-shield fa-3x"></i>
                     <div class="name">{{ $t('str.modal.check.points.supervision') }}</div>
                 </div>
             </label>
+            <label class="option_item">
+                <input :checked="data.type === 'TAG_RFID_125'" @change="handleCheckpointOption('TAG_RFID_125')" type="radio" class="checkbox" />
+                <div :class="{ option_inner: true, qrcode: data.type === 'TAG_RFID_125' }">
+                    <div class="tickmark"></div>
+                    <i class="fas fa-tags fa-3x"></i>
+                    <div class="name">{{ $t('str.modal.check.points.tag.rfid') }}</div>
+                </div>
+            </label>
         </div>
-        <div v-if="data.type === 'QRCODE' || data.type === 'SUPERVISION'" class="mt-4">
+        <div v-if="data.type === 'QRCODE' || data.type === 'SUPERVISION' || data.type === 'TAG_RFID_125'" class="mt-4">
             <div class="row">
                 <div v-if="isSuperAdminMaster" class="col-md-6 mt-3">
                     <label class="form-label" for="accountField">{{ $t('str.register.incident.account.field') }}</label>
@@ -68,7 +66,7 @@
                     </select>
                     <div class="invalid-feedback">{{ $t('str.register.incident.client.required') }}</div>
                 </div>
-                <div v-if="data.type === 'QRCODE'" class="col-md-6 mt-3">
+                <div v-if="data.type === 'QRCODE' || data.type === 'TAG_RFID_125'" class="col-md-6 mt-3">
                     <label class="form-label" for="siteField">{{ $t('str.register.incident.site.field') }}</label>
                     <select v-model="data.site" class="form-select" v-bind:class="checkRequiredField('site') ? 'is-invalid' : ''" @focus="removeRequiredField('site')" id="siteField">
                         <option value="">{{ $t('str.register.select.placeholder') }}</option>
@@ -78,7 +76,7 @@
                     </select>
                     <div class="invalid-feedback">{{ $t('str.register.incident.site.required') }}</div>
                 </div>
-                <div  class="col-md-6 mt-3">
+                <div class="col-md-6 mt-3">
                     <label class="form-label" for="quantityField">{{ $t('str.register.check.point.quantity.field') }}</label>
                     <input
                         v-model="quantity"

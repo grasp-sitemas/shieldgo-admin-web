@@ -5,11 +5,15 @@ import Common from '../../../common/Common.vue'
 import Services from '../../../common/Services.vue'
 export default {
     init: async payload => {
+        payload.initTable()
+
         payload.isSuperAdminMaster = await Common.isSuperAdminMaster(payload)
         payload.accounts = await Services.getAccounts(payload)
+
         const account = await Common.getAccountId(payload)
-        payload.initTable()
+
         payload.filters.account = account
+
         if (account) {
             payload.clients = await Services.getClients(payload)
         }
@@ -17,11 +21,9 @@ export default {
         if (!payload.isSuperAdminMaster) {
             payload.columns.splice(2, 1)
         }
-
-        payload.filter()
     },
     methods: {
-        filter: function () {
+        filter: async function () {
             this.isLoading = true
             this.items = []
 
@@ -146,6 +148,7 @@ export default {
             }
         },
         changeAccount: async function () {
+            this.isLoadingClients = true
             const account = this.filters.account
 
             this.sites = []
@@ -155,8 +158,11 @@ export default {
             this.filter()
 
             this.clients = await Services.getClientsByAccount(this, account)
+
+            this.isLoadingClients = false
         },
         changeClient: async function () {
+            this.isLoadingSites = true
             const client = this.filters.client
 
             if (client === '') {
@@ -164,8 +170,9 @@ export default {
             }
 
             this.filter()
-
             this.sites = await Services.getSitesByClient(this, client)
+
+            this.isLoadingSites = false
         },
         changeSite: function () {
             this.filter()

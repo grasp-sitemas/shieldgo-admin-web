@@ -21,4 +21,5 @@ export const site = {
     },
     type: 'SITE',
     status: 'ACTIVE',
+    enableFreePatrol: false,
 }

@@ -49,6 +49,10 @@ export default {
             }
 
             this.items = await Services.getEventsByDate(this, this.filters)
+
+            // remove items with status 'ARCHIVED' status
+            this.items = this.items.filter(item => item.status !== 'ARCHIVED')
+
             this.isLoading = false
         },
         async initTable() {

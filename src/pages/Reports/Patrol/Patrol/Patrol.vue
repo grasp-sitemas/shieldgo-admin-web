@@ -2,17 +2,26 @@
     <div>
         <h1 class="page-header">{{ $t('str.sidebar.menu.reports.patrols.description') }}</h1>
         <hr />
-        <div v-if="!isLoading">
+        <div>
             <div class="row">
                 <div v-if="isSuperAdminMaster" class="col-md-4 mb-3">
                     <label class="form-label" for="accountField">{{ $t('str.register.user.account.field') }}</label>
-                    <select v-model="filters.account" @change="changeAccount" class="form-select" id="accountField">
+                    <select
+                        v-model="filters.account"
+                        @change="changeAccount"
+                        class="form-select"
+                        v-bind:class="checkRequiredField('account') ? 'is-invalid' : ''"
+                        @focus="removeRequiredField('account')"
+                        id="accountField"
+                    >
                         <option value="">{{ $t('str.register.select.placeholder') }}</option>
                         <option v-for="account in accounts" :value="account._id" :key="account._id">
                             {{ account.name }}
                         </option>
                     </select>
+                    <div class="invalid-feedback">{{ $t('str.register.site.account.required') }}</div>
                 </div>
+
                 <div v-if="role === 'SUPER_ADMIN_MASTER' || role === 'ADMIN' || role === 'MANAGER'" class="col-md-4 mb-3">
                     <label class="form-label" for="clientField">{{ $t('str.register.guard.groups.client.field') }}</label>
                     <select v-model="filters.client" @change="changeClient" class="form-select" id="clientField">
@@ -74,7 +83,14 @@
 
                 <div class="col-md-4 mb-3">
                     <label class="form-label" for="reportTypeField">{{ $t('str.reports.type.field') }}</label>
-                    <select v-model="filters.report" class="form-select" v-bind:class="checkRequiredField('report') ? 'is-invalid' : ''" @focus="removeRequiredField('report')" id="reportTypeField">
+                    <select
+                        v-model="filters.report"
+                        @change="changeReportType"
+                        class="form-select"
+                        v-bind:class="checkRequiredField('report') ? 'is-invalid' : ''"
+                        @focus="removeRequiredField('report')"
+                        id="reportTypeField"
+                    >
                         <option value="">{{ $t('str.select') }}</option>
                         <option v-for="reportType in reports" :value="reportType._id" :key="reportType._id">
                             {{ $t(reportType.name) }}
@@ -84,14 +100,65 @@
                 </div>
             </div>
 
-            <div class="row">
-                <Completed v-if="filters.report === 'PATROL_POINTS_COMPLETED'" @clearFilters="clearFilters" :filterParams="filters" :isSuperAdminMaster="isSuperAdminMaster" :role="role" />
-                <Incompleted v-else-if="filters.report === 'PATROL_POINTS_INCOMPLETED'" @clearFilters="clearFilters" :filterParams="filters" :isSuperAdminMaster="isSuperAdminMaster" :role="role" />
-                <NotVisited v-else-if="filters.report === 'PATROL_POINTS_NOT_VISITED'" @clearFilters="clearFilters" :filterParams="filters" :isSuperAdminMaster="isSuperAdminMaster" :role="role" />
+            <div class="row" v-if="filters.report?.length > 0">
+                <div class="col-md-12 mt-3 mb-2 text-center">
+                    <button @click="checkFilters" type="submit" class="btn btn-primary w-200px me-10px is-loading mb-1">
+                        <i v-if="isSearchLoading" class="fas fa-spinner fa-pulse"></i>
+                        {{ $t('str.generate.report') }}
+                    </button>
+                    <button @click="clearFilters" type="submit" class="btn btn-default w-200px me-10px mb-1">
+                        {{ $t('str.clear.fields') }}
+                    </button>
+                </div>
             </div>
-        </div>
-        <div v-else class="center-spinner">
-            <i class="fas fa-spinner fa-spin" />
+
+            <div class="row">
+                <Completed
+                    v-if="filters.report === patrolReportTypes.PATROL_POINTS_COMPLETED"
+                    @clearFilters="clearFilters"
+                    :filterParams="filters"
+                    :isSuperAdminMaster="isSuperAdminMaster"
+                    :role="role"
+                    :items="items"
+                    :reportItems="reportItems"
+                />
+                <Incompleted
+                    v-else-if="filters.report === patrolReportTypes.PATROL_POINTS_INCOMPLETED"
+                    @clearFilters="clearFilters"
+                    :filterParams="filters"
+                    :isSuperAdminMaster="isSuperAdminMaster"
+                    :role="role"
+                    :items="items"
+                    :reportItems="reportItems"
+                />
+                <NotVisited
+                    v-else-if="filters.report === patrolReportTypes.PATROL_POINTS_NOT_VISITED"
+                    @clearFilters="clearFilters"
+                    :filterParams="filters"
+                    :isSuperAdminMaster="isSuperAdminMaster"
+                    :role="role"
+                    :items="items"
+                    :reportItems="reportItems"
+                />
+                <AllPatrol
+                    v-else-if="filters.report === patrolReportTypes.ALL_PATROLS"
+                    @clearFilters="clearFilters"
+                    :filterParams="filters"
+                    :isSuperAdminMaster="isSuperAdminMaster"
+                    :role="role"
+                    :items="items"
+                    :reportItems="reportItems"
+                />
+                <AlonePatrol
+                    v-else-if="filters.report === patrolReportTypes.ALONE_PATROLS"
+                    @clearFilters="clearFilters"
+                    :filterParams="filters"
+                    :isSuperAdminMaster="isSuperAdminMaster"
+                    :role="role"
+                    :items="items"
+                    :reportItems="reportItems"
+                />
+            </div>
         </div>
     </div>
 </template>
@@ -105,6 +172,7 @@ import { JSON_FIELDS_CSV } from './Utils/jsonFieldsCsv'
 import { PDF_HEADER } from './Utils/jsonFieldsPdf'
 import { REPORT_PATROL_TYPES } from '../../../../utils/constants'
 import Services from '../../../../common/Services'
+import { REPORT_PATROL_TYPE_LIST } from '../../../../utils/constants'
 Vue.prototype.$registerEvent = new Vue()
 
 export default {
@@ -113,6 +181,8 @@ export default {
         Completed: () => import('../Completed/Completed.vue'),
         Incompleted: () => import('../Incompleted/Incompleted.vue'),
         NotVisited: () => import('../NotVisited/NotVisited.vue'),
+        AllPatrol: () => import('../AllPatrol/AllPatrol.vue'),
+        AlonePatrol: () => import('../AlonePatrol/AlonePatrol.vue'),
     },
     data() {
         return {
@@ -125,11 +195,11 @@ export default {
             reportItems: [],
             paginationOptions: {},
             fields: [],
-            isLoading: true,
             isSearchLoading: false,
             dateRange: DATE_RANGE_CONFIG,
             role: '',
             reports: REPORT_PATROL_TYPES,
+            patrolReportTypes: REPORT_PATROL_TYPE_LIST,
             filters: {
                 account: '',
                 client: '',
@@ -137,7 +207,7 @@ export default {
                 vigilant: '',
                 startDate: moment().utc(true).format('YYYY-MM-DD'),
                 endDate: moment().utc(true).format('YYYY-MM-DD'),
-                report: '',
+                report: 'ALL_PATROLS',
             },
             isSuperAdminMaster: false,
             JSON_FIELDS_CSV: JSON_FIELDS_CSV,

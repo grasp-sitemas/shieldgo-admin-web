@@ -1,6 +1,6 @@
 <template>
     <div>
-        <h1 class="page-header">{{ $t('str.form.title.timeline') }}</h1>
+        <h1 class="page-header">{{ $t('str.form.title.timeline.free.patrols') }}</h1>
         <hr />
         <div class="row">
             <div v-if="isSuperAdminMaster" class="col-md-4 mb-3">
@@ -69,10 +69,7 @@
                 <select v-model="filters.status" @change="filter" class="form-select" id="statusField">
                     <option value="">{{ $t('str.register.select.all.placeholder') }}</option>
                     <option value="IN_PROGRESS">{{ $t('str.status.in.progress') }}</option>
-                    <option value="ACTIVE">{{ $t('str.status.pending') }}</option>
-                    <option value="COMPLETE">{{ $t('str.status.complete') }}</option>
-                    <option value="INCOMPLETE">{{ $t('str.status.incomplete') }}</option>
-                    <option value="EXPIRED">{{ $t('str.status.expired') }}</option>
+                    <option value="FINISHED">{{ $t('str.status.finished.patrol') }}</option>
                     <option value="CANCELLED">{{ $t('str.status.cancelled') }}</option>
                 </select>
             </div>
@@ -107,10 +104,6 @@
                                     ? 'bg-success'
                                     : props.formattedRow[props.column.field] === 'FINISHED'
                                     ? 'bg-green'
-                                    : props.formattedRow[props.column.field] === 'EXPIRED'
-                                    ? 'bg-danger'
-                                    : props.formattedRow[props.column.field] === 'CLOSED_BY_SYSTEM'
-                                    ? 'bg-warning'
                                     : props.formattedRow[props.column.field] === 'CANCELLED'
                                     ? 'bg-indigo'
                                     : 'bg-dark'
@@ -133,7 +126,7 @@
 
 <script>
 import moment from 'moment'
-import Controller from './CrtTimeline.vue'
+import Controller from './CrtTimelineFreePatrol.vue'
 import InfoItemModal from './InfoItemModal/InfoItemModal.vue'
 import Vue from 'vue'
 Vue.prototype.$registerEvent = new Vue()
@@ -159,11 +152,8 @@ export default {
                 client: '',
                 site: '',
                 status: '',
-                substatus: '',
                 startDate: moment().utc(true),
                 endDate: moment().utc(true),
-                isDescSortByStartDate: false,
-                isSortByStartDate: true,
             },
             selectedItem: null,
             isSuperAdminMaster: false,

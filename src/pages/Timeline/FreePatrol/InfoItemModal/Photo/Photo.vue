@@ -1,6 +1,6 @@
 <template>
-    <b-modal id="signatureModal" :hide-header="true" :hide-footer="true" size="m" class="modal-message">
-        <img v-if="signatureURL && signatureURL !== 'https://'" v-bind:src="`${domain}${signatureURL}`" alt="image" class="mw-100 d-block" />
+    <b-modal id="photoModal" :hide-header="true" :hide-footer="true" size="m" class="modal-message">
+        <img v-if="photoURL && photoURL !== 'https://'" v-bind:src="`${domain}${photoURL}`" alt="image" class="mw-100 d-block" />
         <div v-else class="text-center">
             <label>{{ $t('str.no.load.image') }}</label>
         </div>
@@ -8,17 +8,17 @@
 </template>
 
 <script>
-import Endpoints from '../../../../common/Endpoints.vue'
+import Endpoints from '../../../../../common/Endpoints.vue'
 export default {
     props: ['data'],
     watch: {
         data: function () {
-            this.signatureURL = this.data?.row?.medias?.signature
+            this.photoURL = this.data?.row?.medias?.photo
         },
     },
     data() {
         return {
-            signatureURL: {},
+            photoURL: {},
             domain: Endpoints.domain,
         }
     },

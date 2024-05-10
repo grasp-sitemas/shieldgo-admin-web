@@ -3,6 +3,7 @@ import VueX from 'vuex'
 import routes from './config/AppRoutes'
 import { MAPS } from './envs'
 // plugins
+import initSentry from './sentryInit'
 import i18n from './i18n'
 import VueRouter from 'vue-router'
 import VueBootstrap from 'bootstrap-vue'
@@ -11,7 +12,6 @@ import VueInsProgressBar from 'vue-ins-progress-bar'
 import VueEventCalendar from 'vue-event-calendar'
 import VueSparkline from 'vue-sparklines'
 import * as VueGoogleMaps from 'vue2-google-maps'
-import * as Sentry from '@sentry/vue'
 import Vueditor from '@agametov/vueditor'
 import VueHljs from 'vue-hljs'
 import hljs from 'highlight.js'
@@ -33,6 +33,7 @@ import VueTheMask from 'vue-the-mask'
 import { LMap, LTileLayer, LMarker } from 'vue2-leaflet'
 import { LDrawToolbar } from 'vue2-leaflet-draw-toolbar'
 import JsonExcel from 'vue-json-excel'
+
 // plugins css
 import '@fortawesome/fontawesome-free/css/all.min.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
@@ -51,6 +52,7 @@ import 'vue2-daterange-picker/dist/vue2-daterange-picker.css'
 import 'sweetalert2/dist/sweetalert2.min.css'
 import 'vue-custom-scrollbar/dist/vueScrollbar.css'
 import 'leaflet/dist/leaflet.css'
+
 // color admin css
 import './scss/vue.scss'
 import 'bootstrap-social/bootstrap-social.css'
@@ -99,26 +101,10 @@ Vue.component('l-marker', LMarker)
 Vue.component('l-draw-toolbar', LDrawToolbar)
 Vue.component('downloadExcel', JsonExcel)
 
+initSentry(Vue)
+
 const router = new VueRouter({
     routes,
-})
-
-Sentry.init({
-    Vue,
-    dsn: 'https://a44764b5b56cf95646d4530e57c48c1c@o4507014507986944.ingest.us.sentry.io/4507020099649536',
-    integrations: [
-        Sentry.browserTracingIntegration(),
-        Sentry.replayIntegration({
-            maskAllText: false,
-            blockAllMedia: false,
-        }),
-    ],
-    tracesSampleRate: 1.0, //  Capture 100% of the transactions
-    // Set 'tracePropagationTargets' to control for which URLs distributed tracing should be enabled
-    tracePropagationTargets: ['localhost', 'api-hml.shieldgo.com.br', 'api-gateway-shield.herokuapp.com'],
-    // Session Replay
-    replaysSessionSampleRate: 0.1, // This sets the sample rate at 10%. You may want to change it to 100% while in development and then sample at a lower rate in production.
-    replaysOnErrorSampleRate: 1.0, // If you're not already sampling the entire session, change the sample rate to 100% when sampling sessions where errors occur.
 })
 
 new Vue({

@@ -1,11 +1,8 @@
 <script>
-// const domain = 'https://api-hml.shieldgo.com.br'
-const domain = 'https://api-gateway-shield.herokuapp.com'
+const domain = process.env.VUE_APP_API_DOMAIN
 // const domain = 'http://localhost:3000'
-const socketDomain = 'http://localhost:3001'
-// const socketDomain = 'https://ms-worker-shield-d3de0825cf06.herokuapp.com'
+const socketDomain = 'http://localhost:3001' // Ajuste conforme necessário
 const viaCepDomain = 'https://viacep.com.br/ws/'
-
 export default {
     domain: domain,
     socketDomain: socketDomain,
@@ -39,6 +36,9 @@ export default {
             filter: `${domain}/api/users/attendances/filter/v1/`,
             attendance: `${domain}/api/users/attendances/v1/`,
         },
+    },
+    patrols: {
+        freePatrols: `${domain}/api/users/patrols/free/v1/`,
     },
     charts: {
         patrols: `${domain}/api/users/charts/patrols/v1/`,

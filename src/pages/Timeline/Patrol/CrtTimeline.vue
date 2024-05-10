@@ -1,6 +1,6 @@
 <script>
-import Common from '../../common/Common.vue'
-import Services from '../../common/Services.vue'
+import Common from '../../../common/Common.vue'
+import Services from '../../../common/Services.vue'
 import moment from 'moment'
 
 export default {

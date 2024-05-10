@@ -2,59 +2,33 @@
     <b-modal no-close-on-backdrop id="infoItemModal" :hide-footer="true" size="xl" class="modal-message">
         <template slot="modal-header">
             <h5 class="modal-title">
-                {{ `${$t('str.modal.create.timeline.item.info.title')}: ${data?.name}` }}
+                {{ $t('str.modal.timeline.free.patrols.title') }}
             </h5>
 
             <span
                 class="badge align-badge"
                 v-bind:class="
-                    data.status === 'ACTIVE'
-                        ? 'bg-blue'
-                        : data.status === 'IN_PROGRESS'
-                        ? 'bg-success'
-                        : data.status === 'FINISHED'
-                        ? 'bg-info'
-                        : data.status === 'EXPIRED'
-                        ? 'bg-danger'
-                        : data.status === 'CLOSED_BY_SYSTEM'
-                        ? 'bg-warning'
-                        : data.status === 'CANCELLED'
-                        ? 'bg-indigo'
-                        : 'bg-dark'
+                    data.status === 'ACTIVE' ? 'bg-blue' : data.status === 'IN_PROGRESS' ? 'bg-success' : data.status === 'FINISHED' ? 'bg-info' : data.status === 'CANCELLED' ? 'bg-indigo' : 'bg-dark'
                 "
             >
                 {{ $t(getStatusName(data.status)) }}
             </span>
 
             <a class="btn-close cursor_pointer" @click="$bvModal.hide('infoItemModal')"></a>
-
-            <!-- <p class="timeline-closed-by-system-position" v-if="data?.closedBySystemDate">{{ $t('str.closed.by.system.date.label') + ': ' + formatDate(data.closedBySystemDate) }}</p> -->
         </template>
 
         <div class="row">
             <div class="col-md-4">
                 <dt class="text-dark">{{ $t('str.timeline.item.vigilant') }}</dt>
-                <dd>{{ data.vigilant?.firstName }} {{ data.vigilant?.lastName }}</dd>
+                <dd>{{ data.vigilant?.fullName }}</dd>
             </div>
-            <div class="col-md-2">
+            <div class="col-md-4">
                 <dt class="text-dark">{{ $t('str.timeline.item.starts.in') }}</dt>
                 <dd>{{ data.startDate }}</dd>
             </div>
-            <div class="col-md-2">
+            <div class="col-md-4">
                 <dt class="text-dark">{{ $t('str.timeline.item.ends.in') }}</dt>
-                <dd>{{ data.endDate }}</dd>
-            </div>
-
-            <div class="col-md-2">
-                <dt class="text-dark">{{ $t('str.timeline.item.patrol.points') }}</dt>
-                {{ data?.patrolPoints?.length }} {{ $t('str.timeline.item.points.name') }} <br />
-            </div>
-
-            <div class="col-md-2">
-                <a v-on:click="showPatrolPoints()" class="btn btn-xs btn-gray fs-10px ps-2 pe-2 mt-1">
-                    <i class="fas fa-qrcode" />
-                    {{ $t('str.timeline.item.patrol.points.view') }}
-                </a>
+                <dd>{{ data.endDate ? data.endDate : ' -' }}</dd>
             </div>
         </div>
 
@@ -105,21 +79,18 @@
         <Signature :data="patrolActionItem" />
         <Sound :data="patrolActionItem" />
         <DeviceInfo :data="patrolActionItem" />
-        <PatrolPoints :patrolPoints="patrolPoints" />
         <notifications group="bottom-right" position="bottom right" :speed="500" />
     </b-modal>
 </template>
 
 <script>
 import Controller from './CrtInfoItemModal.vue'
-import moment from 'moment'
-import Services from '../../../common/Services.vue'
+import Services from '../../../../common/Services.vue'
 import Map from './Map/Map.vue'
 import Photo from './Photo/Photo.vue'
 import Signature from './Signature/Signature.vue'
 import Sound from './Sound/Sound.vue'
 import DeviceInfo from './DeviceInfo/DeviceInfo.vue'
-import PatrolPoints from './PatrolPoints/PatrolPoints.vue'
 export default {
     components: {
         Map,
@@ -127,7 +98,6 @@ export default {
         Signature,
         Sound,
         DeviceInfo,
-        PatrolPoints,
     },
     props: {
         selectedItem: {
@@ -141,22 +111,21 @@ export default {
     },
     watch: {
         selectedItem: async function () {
-            this.data = this.selectedItem
-
-            const startDate = moment(this.data.startDate).utc()
-            const endDate = moment(this.data.endDate).utc()
-            this.data.startDate = startDate.format('DD/MM/YYYY - HH:mm')
-            this.data.endDate = endDate.format('DD/MM/YYYY - HH:mm')
+            if (this.isLoading) return
 
             this.isLoading = true
 
+            this.data = this.selectedItem
+
+            this.data.startDate = this.formatDate(this.data.startDate)
+            this.data.endDate = this.formatDate(this.data.endDate)
+
             const filters = {
-                status: 'ACTIVE',
                 vigilant: this.data?.vigilant?._id,
-                event: this.data?._id,
+                patrol: this.data?._id,
             }
 
-            const resultPatrolAction = await Services.getPatrolActionsByEvent(this, filters)
+            const resultPatrolAction = await Services.getPatrolActionsByPatrol(this, filters)
             const patrolActions = resultPatrolAction?.filter(patrolAction => patrolAction?.type !== 'FAILURE_PATROL') // remove actions failure_patrol
 
             const formattedPatrolActions = patrolActions?.map(patrolAction => {

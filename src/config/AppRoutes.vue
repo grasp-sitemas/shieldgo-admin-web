@@ -26,7 +26,8 @@ import SiteGroup from '../pages/Company/SiteGroup/ListSiteGroup.vue'
 import Sites from '../pages/Company/Site/ListSite.vue'
 import VigilantSchedule from '../pages/Schedule/Vigilant/Schedule.vue'
 import SupervisorySchedule from '../pages/Schedule/Supervisory/Schedule.vue'
-import Timeline from '../pages/Timeline/Timeline.vue'
+import Timeline from '../pages/Timeline/Patrol/Timeline.vue'
+import TimelineFreePatrol from '../pages/Timeline/FreePatrol/TimelineFreePatrol.vue'
 import User from '../pages/User/User/ListUser.vue'
 import Colaborator from '../pages/User/Colaborator/ListColaborator.vue'
 import sosAlert from '../pages/Reports/PanicAlert/PanicAlert.vue'
@@ -225,18 +226,35 @@ const routes = [
         },
     },
     {
-        path: '/timeline',
-        name: 'timeline',
+        path: '/timeline/schedule-patrols',
+        name: 'timeline-schedule-patrols',
         component: Timeline,
         beforeEnter: (_to, _from, next) => {
             next(checkSession())
         },
     },
     {
-        path: '/timeline/:filterParams',
-        name: 'timeline',
+        path: '/timeline/schedule-patrols/:filterParams',
+        name: 'timeline-schedule-patrols-params',
         props: true,
         component: Timeline,
+        beforeEnter: (_to, _from, next) => {
+            next(checkSession())
+        },
+    },
+    {
+        path: '/timeline/free-patrols',
+        name: 'timeline-free-patrols',
+        component: TimelineFreePatrol,
+        beforeEnter: (_to, _from, next) => {
+            next(checkSession())
+        },
+    },
+    {
+        path: '/timeline/free-patrols/:filterParams',
+        name: 'timeline-free-patrols-params',
+        props: true,
+        component: TimelineFreePatrol,
         beforeEnter: (_to, _from, next) => {
             next(checkSession())
         },

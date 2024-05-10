@@ -66,7 +66,7 @@
                 :subtitle="$t('str.dashboard.view.details')"
                 background="#338fe2"
                 :redirect="{
-                    name: '/timeline/',
+                    name: '/timeline/schedule-patrols/',
                     params: {
                         startDate: filters.startDate,
                         endDate: filters.endDate,
@@ -84,7 +84,7 @@
                 :subtitle="$t('str.dashboard.view.details')"
                 background="#49b6d5"
                 :redirect="{
-                    name: '/timeline/',
+                    name: '/timeline/schedule-patrols/',
                     params: {
                         startDate: filters.startDate,
                         endDate: filters.endDate,

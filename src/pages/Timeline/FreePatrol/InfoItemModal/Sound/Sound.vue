@@ -8,7 +8,7 @@
 </template>
 
 <script>
-import Endpoints from '../../../../common/Endpoints.vue'
+import Endpoints from '../../../../../common/Endpoints.vue'
 export default {
     props: ['data'],
     watch: {

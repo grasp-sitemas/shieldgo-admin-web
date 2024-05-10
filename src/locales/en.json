@@ -1472,5 +1472,15 @@
     "str.register.site.enable.free.patrol": "Enable free patrol",
     "str.register.check.point.code.field": "ID",
     "str.register.check.point.code.placeholder": "Enter the ID",
-    "str.register.check.point.code.required": "ID is required"
+    "str.register.check.point.code.required": "ID is required",
+    "str.report.settings.patrol_type.all": "Complete, incomplete and not visited patrols",
+    "str.report.settings.patrol_type.alone_patrol": "Alone patrols",
+    "str.vigilant": "Guard",
+    "str.sidebar.menu.timeline.patrols": "Patrols",
+    "str.sidebar.menu.timeline.free.patrols": "Free patrols",
+    "str.status.finished.patrol": "Finished",
+    "str.form.title.timeline.scheduled.patrols": "Timeline - Scheduled patrols",
+    "str.form.title.timeline.free.patrols": "Timeline - Free patrols",
+    "str.sidebar.menu.timeline.schedule.patrols": "Scheduled patrols",
+    "str.modal.timeline.free.patrols.title": "Free patrol"
 }

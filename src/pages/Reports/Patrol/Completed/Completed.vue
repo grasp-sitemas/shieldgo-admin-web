@@ -1,47 +1,30 @@
 <template>
     <div>
-        <div v-if="!isLoading">
-            <div class="row">
-                <div class="col-md-12 mt-3 mb-2 text-center">
-                    <button @click="filter" type="submit" class="btn btn-primary w-200px me-10px is-loading mb-1">
-                        <i v-if="isSearchLoading" class="fas fa-spinner fa-pulse"></i>
-                        {{ $t('str.generate.report') }}
-                    </button>
-                    <button @click="clearFilters" type="submit" class="btn btn-default w-200px me-10px mb-1">
-                        {{ $t('str.clear.fields') }}
-                    </button>
-                </div>
+        <div class="row">
+            <div class="col-md-12 mb-3 d-inline-flex">
+                <CsvDownload class="me-2" v-show="items?.length > 0" :jsonFields="jsonFields" :jsonData="items" :jsonMeta="jsonMeta" :filename="filename" :jsonTitle="jsonTitle" />
+                <XlsDownload class="me-2" v-show="items?.length > 0" :jsonFields="jsonFields" :jsonData="items" :jsonMeta="jsonMeta" :filename="filename" :jsonTitle="jsonTitle" />
+                <PdfDownload v-show="items?.length > 0" :pdfHeader="pdfHeader" :jsonData="reportItems" :filename="filename" :jsonTitle="jsonTitle" />
             </div>
+        </div>
 
-            <div class="row">
-                <div class="col-md-12 mb-3 d-inline-flex">
-                    <CsvDownload class="me-2" v-show="items?.length > 0" :jsonFields="jsonFields" :jsonData="items" :jsonMeta="jsonMeta" :filename="filename" :jsonTitle="jsonTitle" />
-                    <XlsDownload class="me-2" v-show="items?.length > 0" :jsonFields="jsonFields" :jsonData="items" :jsonMeta="jsonMeta" :filename="filename" :jsonTitle="jsonTitle" />
-                    <PdfDownload v-show="items?.length > 0" :pdfHeader="pdfHeader" :jsonData="reportItems" :filename="filename" :jsonTitle="jsonTitle" />
-                </div>
+        <vue-good-table
+            :columns="columns"
+            :rows="items"
+            :totalRows="items?.length"
+            :search-options="{ enabled: false, placeholder: $t('str.table.search.in.this.table') }"
+            :pagination-options="paginationOptions"
+        >
+            <div slot="emptystate" class="vgt-center-align vgt-text-disabled">
+                <i v-if="isLoading" class="fas fa-spinner fa-spin" />
+                <span v-if="!isLoading && items?.length === 0">{{ $t('str.table.subtitle.no.data') }}</span>
             </div>
-
-            <vue-good-table
-                :columns="columns"
-                :rows="items"
-                :totalRows="items?.length"
-                :search-options="{ enabled: false, placeholder: $t('str.table.search.in.this.table') }"
-                :pagination-options="paginationOptions"
-            >
-                <div slot="emptystate" class="vgt-center-align vgt-text-disabled">
-                    <i v-if="isLoading" class="fas fa-spinner fa-spin" />
-                    <span v-if="!isLoading && items?.length === 0">{{ $t('str.table.subtitle.no.data') }}</span>
-                </div>
-                <template slot="table-row" slot-scope="props">
-                    <span>
-                        {{ props.formattedRow[props.column.field] }}
-                    </span>
-                </template>
-            </vue-good-table>
-        </div>
-        <div v-else class="center-spinner">
-            <i class="fas fa-spinner fa-spin" />
-        </div>
+            <template slot="table-row" slot-scope="props">
+                <span>
+                    {{ props.formattedRow[props.column.field] }}
+                </span>
+            </template>
+        </vue-good-table>
     </div>
 </template>
 
@@ -62,7 +45,7 @@ export default {
         XlsDownload,
         PdfDownload,
     },
-    props: ['filterParams', 'role', 'isSuperAdminMaster'],
+    props: ['isLoading', 'filterParams', 'role', 'isSuperAdminMaster', 'items', 'reportItems'],
     watch: {
         filterParams: {
             handler: function (val) {
@@ -75,17 +58,8 @@ export default {
     },
     data() {
         return {
-            accounts: [],
-            clients: [],
-            sites: [],
-            vigilants: [],
-            errors: [],
-            items: [],
-            reportItems: [],
             paginationOptions: {},
             fields: [],
-            isLoading: true,
-            isSearchLoading: false,
             filters: {},
             JSON_FIELDS_CSV: JSON_FIELDS_CSV,
             PDF_HEADER: PDF_HEADER,

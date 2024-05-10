@@ -1,14 +1,15 @@
 {
     "name": "shield-admin-web",
-    "version": "2.4.1",
+    "version": "2.5.0",
     "private": true,
     "description": "",
     "author": {
         "name": "Thiago Simon"
     },
     "scripts": {
-        "serve": "vue-cli-service serve",
-        "build": "vue-cli-service build",
+        "serve": "vue-cli-service serve --mode development",
+        "build:dev": "vue-cli-service build --mode development",
+        "build": "vue-cli-service build --mode production",
         "lint": "vue-cli-service lint",
         "app:restart": "rm -rf node_modules package.lock && npm install --save && npm run serve",
         "app:start": "yarn serve",

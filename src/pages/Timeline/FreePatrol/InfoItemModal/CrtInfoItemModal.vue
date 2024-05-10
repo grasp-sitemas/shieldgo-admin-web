@@ -1,8 +1,9 @@
 <script>
-import Common from '../../../common/Common.vue'
-import Endpoints from '../../../common/Endpoints.vue'
-import Request from '../../../common/Request.vue'
+import Common from '../../../../common/Common.vue'
+import Endpoints from '../../../../common/Endpoints.vue'
+import Request from '../../../../common/Request.vue'
 import Vue from 'vue'
+
 Vue.prototype.$registerEvent = new Vue()
 
 export default {
@@ -147,9 +148,6 @@ export default {
         },
         showDeviceInfo() {
             this.$bvModal.show('deviceInfoModal')
-        },
-        showPatrolPoints() {
-            this.$bvModal.show('patrolPointsModal')
         },
         getStatusName: Common.getEventStatusName,
         formatDate: Common.formatDateAndTime,

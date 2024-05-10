@@ -1,7 +1,7 @@
 <script>
 const domain = process.env.VUE_APP_API_DOMAIN
 // const domain = 'http://localhost:3000'
-const socketDomain = 'http://localhost:3001' // Ajuste conforme necessário
+const socketDomain = 'http://localhost:3001'
 const viaCepDomain = 'https://viacep.com.br/ws/'
 export default {
     domain: domain,

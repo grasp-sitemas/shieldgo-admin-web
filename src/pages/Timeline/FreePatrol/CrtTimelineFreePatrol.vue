@@ -1,6 +1,6 @@
 <script>
-import Common from '../../common/Common.vue'
-import Services from '../../common/Services.vue'
+import Common from '../../../common/Common.vue'
+import Services from '../../../common/Services.vue'
 import moment from 'moment'
 
 export default {
@@ -33,35 +33,12 @@ export default {
             this.isLoading = true
             this.items = []
 
-            // if status is expired the set isDescSortByStartDate to true
-            if (this.filters.status === 'EXPIRED' || this.filters.status === 'DONE') {
-                this.filters.isDescSortByStartDate = true
-                this.filters.isSortByStartDate = false
-            } else {
-                this.filters.isSortByStartDate = true
-                this.filters.isDescSortByStartDate = false
-            }
+            this.items = await Services.getFreePatrols(this, this.filters)
 
-            if (this.filters.status === 'COMPLETE' || this.filters.status === 'INCOMPLETE') {
-                this.filters.substatus = this.filters.status
-            } else {
-                this.filters.substatus = ''
-            }
-
-            this.items = await Services.getEventsByDate(this, this.filters)
             this.isLoading = false
         },
         async initTable() {
             this.columns = [
-                {
-                    label: this.$t('str.table.timeline.column.name'),
-                    field: 'name',
-                    width: '10%',
-                    sortable: true,
-                    firstSortType: 'desc',
-                    thClass: 'text-nowrap',
-                    tdClass: 'text-nowrap',
-                },
                 {
                     label: this.$t('str.table.timeline.column.vigilant'),
                     field: 'vigilant',

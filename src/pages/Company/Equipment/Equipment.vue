@@ -123,14 +123,6 @@ export default {
 
             const data = JSON.parse(JSON.stringify(this.selectedData))
 
-            if (data.account) {
-                this.clients = await Services.getClientsByAccount(this, data.account)
-            }
-
-            if (data.client) {
-                this.sites = await Services.getSitesByClient(this, data.client)
-            }
-
             if (!data?.brand) {
                 data.brand = ''
             }
@@ -146,6 +138,14 @@ export default {
             // }
 
             this.data = data
+
+            if (data.account) {
+                this.clients = await Services.getClientsByAccount(this, data.account)
+            }
+
+            if (data.client) {
+                this.sites = await Services.getSitesByClient(this, data.client)
+            }
         },
         accountList: async function () {
             this.accounts = this.accountList

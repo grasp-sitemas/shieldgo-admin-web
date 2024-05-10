@@ -31,8 +31,15 @@ const sidebarMenu = [
     { path: '/companies', icon: 'fa fa-building', title: 'str.sidebar.menu.companies', roles: [ROLES.SUPER_ADMIN_MASTER] },
     { path: '/clients', active: false, icon: 'fa fa-user-tie', title: 'str.sidebar.menu.clients', roles: [ROLES.SUPER_ADMIN_MASTER, ROLES.ADMIN] },
     { path: '/sites', icon: 'fa fa-sitemap', title: 'str.sidebar.menu.sites', roles: [ROLES.SUPER_ADMIN_MASTER, ROLES.ADMIN, ROLES.MANAGER, ROLES.AUDITOR] },
-    { path: '/patrol-points', icon: 'fa fa-road', title: 'str.sidebar.menu.patrol.points', roles: [ROLES.SUPER_ADMIN_MASTER, ROLES.ADMIN, ROLES.MANAGER, ROLES.OPERATOR, ROLES.AUDITOR] },
     { path: '/incidents', icon: 'fa fa-person-burst', title: 'str.sidebar.menu.incidents', roles: [ROLES.SUPER_ADMIN_MASTER, ROLES.ADMIN, ROLES.MANAGER, ROLES.AUDITOR] },
+    { path: '/users', icon: 'fa fa-users', title: 'str.sidebar.menu.users', roles: [ROLES.SUPER_ADMIN_MASTER, ROLES.ADMIN, ROLES.MANAGER] },
+    {
+        path: '/colaborators',
+        icon: 'fa fa-person-military-pointing',
+        title: 'str.sidebar.menu.colaborators',
+        roles: [ROLES.SUPER_ADMIN_MASTER, ROLES.ADMIN, ROLES.MANAGER],
+    },
+    { path: '/patrol-points', icon: 'fa fa-road', title: 'str.sidebar.menu.patrol.points', roles: [ROLES.SUPER_ADMIN_MASTER, ROLES.ADMIN, ROLES.MANAGER, ROLES.OPERATOR, ROLES.AUDITOR] },
     {
         path: '/schedules',
         icon: 'fa fa-calendar',
@@ -51,14 +58,25 @@ const sidebarMenu = [
             },
         ],
     },
-    { path: '/timeline', icon: 'fa fa-bars-staggered', title: 'str.sidebar.menu.timeline', roles: [ROLES.SUPER_ADMIN_MASTER, ROLES.ADMIN, ROLES.MANAGER, ROLES.OPERATOR, ROLES.AUDITOR] },
-    { path: '/users', icon: 'fa fa-users', title: 'str.sidebar.menu.users', roles: [ROLES.SUPER_ADMIN_MASTER, ROLES.ADMIN, ROLES.MANAGER] },
     {
-        path: '/colaborators',
-        icon: 'fa fa-person-military-pointing',
-        title: 'str.sidebar.menu.colaborators',
-        roles: [ROLES.SUPER_ADMIN_MASTER, ROLES.ADMIN, ROLES.MANAGER],
+        path: '/timeline',
+        icon: 'fa fa-bars-staggered',
+        title: 'str.sidebar.menu.timeline',
+        roles: [ROLES.SUPER_ADMIN_MASTER, ROLES.ADMIN, ROLES.MANAGER, ROLES.OPERATOR, ROLES.AUDITOR],
+        children: [
+            {
+                path: '/timeline/schedule-patrols',
+                title: 'str.sidebar.menu.timeline.schedule.patrols',
+                roles: [ROLES.SUPER_ADMIN_MASTER, ROLES.ADMIN, ROLES.MANAGER, ROLES.OPERATOR, ROLES.AUDITOR],
+            },
+            {
+                path: '/timeline/free-patrols',
+                title: 'str.sidebar.menu.timeline.free.patrols',
+                roles: [ROLES.SUPER_ADMIN_MASTER, ROLES.ADMIN, ROLES.MANAGER, ROLES.OPERATOR, ROLES.AUDITOR],
+            },
+        ],
     },
+    // { path: '/timeline', icon: 'fa fa-bars-staggered', title: 'str.sidebar.menu.timeline', roles: [ROLES.SUPER_ADMIN_MASTER, ROLES.ADMIN, ROLES.MANAGER, ROLES.OPERATOR, ROLES.AUDITOR] },
     {
         path: '/management',
         icon: 'fa fa-align-left',
@@ -119,21 +137,6 @@ const sidebarMenu = [
                 title: 'str.sidebar.menu.reports.patrols',
                 roles: [ROLES.SUPER_ADMIN_MASTER, ROLES.ADMIN, ROLES.MANAGER, ROLES.AUDITOR],
             },
-            // {
-            //     path: '/reports/patrols/completed',
-            //     title: 'str.sidebar.menu.reports.completed.patrols',
-            //     roles: [ROLES.SUPER_ADMIN_MASTER, ROLES.ADMIN, ROLES.MANAGER, ROLES.AUDITOR],
-            // },
-            // {
-            //     path: '/reports/patrols/incompleted',
-            //     title: 'str.sidebar.menu.reports.not.completed.patrols',
-            //     roles: [ROLES.SUPER_ADMIN_MASTER, ROLES.ADMIN, ROLES.MANAGER, ROLES.AUDITOR],
-            // },
-            // {
-            //     path: '/reports/patrols/not-visited',
-            //     title: 'str.sidebar.menu.reports.patrols.not-visited',
-            //     roles: [ROLES.SUPER_ADMIN_MASTER, ROLES.ADMIN, ROLES.MANAGER, ROLES.AUDITOR],
-            // },
             {
                 path: '/reports/supervision-patrol',
                 title: 'str.sidebar.menu.reports.supervision.patrol',

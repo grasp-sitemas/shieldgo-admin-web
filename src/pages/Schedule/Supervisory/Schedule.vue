@@ -36,8 +36,12 @@
             </div>
         </div>
 
-        <CreateScheduleModal  :role="role" :selectedAppointment="selectedAppointment" :selectedDate="selectedDate" :accounts="accounts" :clients="clients" :isSuperAdminMaster="isSuperAdminMaster" />
+        <CreateScheduleModal :role="role" :selectedAppointment="selectedAppointment" :selectedDate="selectedDate" :accounts="accounts" :clients="clients" :isSuperAdminMaster="isSuperAdminMaster" />
         <FullCalendar :events="appointments" :options="calendarOptions"></FullCalendar>
+
+        <div v-if="isLoading" class="spinner-overlay">
+            <b-spinner label="Carregando..." style="width: 2rem; height: 2rem" type="border" variant="primary" />
+        </div>
     </div>
 </template>
 
@@ -62,6 +66,7 @@ export default {
             accounts: [],
             clients: [],
             sites: [],
+            isLoading: false,
             originalAppointments: [],
             selectedAppointment: {},
             lastFetchedMonth: null,
@@ -97,3 +102,15 @@ export default {
     },
 }
 </script>
+<style scoped>
+.spinner-overlay {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+</style>

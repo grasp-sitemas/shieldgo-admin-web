@@ -1,7 +1,7 @@
 <script>
 import Common from '../../../common/Common.vue'
 import Services from '../../../common/Services.vue'
-import '@fullcalendar/core/vdom' // solves problem with Vite
+import '@fullcalendar/core/vdom'
 import dayGridPlugin from '@fullcalendar/daygrid'
 import timeGridPlugin from '@fullcalendar/timegrid'
 import interactionPlugin from '@fullcalendar/interaction'
@@ -34,12 +34,24 @@ export default {
     },
     methods: {
         async getAppointments() {
-            const appointments = await Services.getAppointmentsByDate(this, this.filters)
-            this.originalAppointments = appointments
-            const formattedAppointments = await this.formatAppointments(appointments)
-            this.appointments = formattedAppointments ? formattedAppointments : []
-            this.calendarOptions.events = this.appointments
-            this.isLoading = false
+            this.isLoading = true
+
+            try {
+                const appointmentsPromise = Services.getAppointmentsByDate(this, this.filters)
+
+                const results = await Promise.all([appointmentsPromise])
+
+                const appointments = results[0]
+                this.originalAppointments = appointments
+
+                const formattedAppointments = await this.formatAppointments(appointments)
+                this.appointments = formattedAppointments ? formattedAppointments : []
+                this.calendarOptions.events = this.appointments
+            } catch (error) {
+                console.error('Erro ao buscar ou processar os agendamentos:', error)
+            } finally {
+                this.isLoading = false
+            }
         },
         formatAppointments: async function (appointments) {
             const formattedAppointments = []
@@ -51,9 +63,6 @@ export default {
                 })
             })
             return formattedAppointments
-        },
-        handleLoading(isLoading) {
-            this.isLoading = isLoading
         },
         initCalendar: async function () {
             const language = this.$session.get('user')?.language
@@ -80,10 +89,8 @@ export default {
                 datesSet: ({ startStr, endStr }) => {
                     const currentMonth = moment(startStr).month()
                     if (this.lastFetchedMonth !== currentMonth) {
-                        this.isLoading = true
                         this.filters.endDate = moment(endStr).utc(true).format()
                         this.filters.startDate = moment(startStr).utc(true).format()
-                        // this.getAppointments()
                         this.lastFetchedMonth = currentMonth
                     }
                 },
@@ -97,7 +104,7 @@ export default {
                 events: this.schedules ? this.schedules : [],
                 views: {
                     timeGrid: {
-                        eventLimit: 6, // adjust to 6 only for timeGridWeek/timeGridDay
+                        eventLimit: 6,
                     },
                 },
             }

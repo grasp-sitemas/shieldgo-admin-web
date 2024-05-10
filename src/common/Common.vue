@@ -184,7 +184,7 @@ export default {
         }
     },
     formatDateAndTime(date, utc = false) {
-        return moment(date).utc(utc).format('DD/MM/YYYY HH:mm:ss')
+        return date ? moment(date).utc(utc).format('DD/MM/YYYY - HH:mm:ss') : ''
     },
     checkCPF: str => {
         /* eslint-disable */

@@ -1,13 +1,12 @@
 <script>
 import Common from '../../../../common/Common.vue'
 import Services from '../../../../common/Services.vue'
-import moment from 'moment'
 
 export default {
     init: async payload => {
         await payload.initTable()
 
-        if (!payload.isSuperAdminMaster) {
+        if (!payload.isSuperAdminMaster || payload.role === 'AUDITOR') {
             payload.columns.splice(5, 1)
         }
 
@@ -17,8 +16,6 @@ export default {
         payload.filename = payload.JSON_FIELDS_CSV.notVisitedPatrolPoint[payload.$i18n.locale].filename
         payload.jsonTitle = payload.JSON_FIELDS_CSV.notVisitedPatrolPoint[payload.$i18n.locale].title
         payload.pdfHeader = payload.PDF_HEADER[payload.$i18n.locale]
-
-        payload.isLoading = false
     },
     methods: {
         async filter() {
@@ -120,59 +117,6 @@ export default {
                 pageLabel: this.$t('str.table.pagination.page'),
                 allLabel: this.$t('str.table.pagination.all.label'),
             }
-        },
-        clearFilters: async function () {
-            this.errors = []
-            this.isLoading = false
-            this.items = []
-            this.$emit('clearFilters')
-        },
-        updateRangeDate: function (start, end) {
-            const startDate = moment(start).utc(true).subtract(0, 'days')
-            const endDate = moment(end).utc(true)
-
-            this.dateRange.range = {
-                startDate: startDate,
-                endDate: endDate,
-            }
-        },
-        selectItem(params) {
-            const data = JSON.parse(JSON.stringify(params.row))
-
-            delete data.vgt_id
-            delete data.originalIndex
-
-            this.selectedItem = data
-            this.$bvModal.show('infoItemModal')
-        },
-        changeAccount: async function () {
-            const account = this.filters.account
-
-            if (account === '') {
-                this.filters.client = ''
-                this.filters.site = ''
-            }
-            this.clients = await Services.getClientsByAccount(this, account)
-        },
-        changeClient: async function () {
-            const client = this.filters.client
-
-            if (this.filters.site && this.filters.site !== '') {
-                this.filters.site = ''
-            }
-
-            this.sites = await Services.getSitesByClient(this, client)
-            this.vigilants = await Services.getVigilantsByClient(this, client)
-        },
-        changeSite: async function () {
-            if (this.filters.vigilant && this.filters.vigilant !== '') {
-                this.filters.vigilant = ''
-            }
-            this.vigilants = await Services.getVigilantsBySite(this, this.filters.site)
-        },
-        updateValues(d) {
-            this.filters.startDate = new Date(d.startDate)
-            this.filters.endDate = new Date(d.endDate)
         },
         getStatusName: Common.getEventStatusName,
         formatDate: Common.formatDateAndTime,

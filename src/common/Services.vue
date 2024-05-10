@@ -3,6 +3,8 @@ import Endpoints from './Endpoints.vue'
 import Request from './Request.vue'
 import moment from 'moment'
 import { EVENT_CHART_TYPES } from '../utils/events'
+import { REPORT_PATROL_TYPE_LIST } from '../utils/constants'
+
 export default {
     getMe: async function (state) {
         const response = await Request.do(state, 'GET', Request.getDefaultHeader(state), {}, `${Endpoints.systemUsers.getMe}`)
@@ -456,6 +458,10 @@ export default {
         const response = await Request.do(state, 'POST', Request.getDefaultHeader(state), filters, `${Endpoints.charts.eventsByType}`)
         return response?.data?.result || {}
     },
+    getFreePatrols: async function (state, filters) {
+        const response = await Request.do(state, 'POST', Request.getDefaultHeader(state), filters, `${Endpoints.patrols.freePatrols}`)
+        return response?.data?.results || []
+    },
     getFormattedEventsByDate: async function (state, filters) {
         const response = await Request.do(state, 'POST', Request.getDefaultHeader(state), filters, `${Endpoints.events.filter}`)
         const results = response?.data?.results
@@ -483,6 +489,10 @@ export default {
     usernameAlreadyExists: async function (state, username) {
         const response = await Request.do(state, 'GET', Request.getDefaultHeader(state), {}, `${Endpoints.systemUsers.checkUsernameExist}${username}`)
         return response?.data?.result || null
+    },
+    getPatrolActionsByPatrol: async function (state, filters) {
+        const response = await Request.do(state, 'POST', Request.getDefaultHeader(state), filters, `${Endpoints.patrolActions.filter}`)
+        return response?.data?.results || []
     },
     getPatrolActionsByEvent: async function (state, filters) {
         const response = await Request.do(state, 'POST', Request.getDefaultHeader(state), filters, `${Endpoints.patrolActions.filter}`)
@@ -579,6 +589,111 @@ export default {
                 }, [])
                 return [...acc, ...items]
             }, [])
+            return {
+                tableItems: flattenedItems,
+                reportItems: results,
+            }
+        }
+
+        return []
+    },
+    mergeArrays: async function (completed, incompleted, notVisited) {
+        // Inicializando variáveis para garantir que sempre tenhamos um objeto válido
+        const defaultObj = { name: 'Default Name', address: 'Default Address', schedules: [] }
+
+        // Verificar se há pelo menos um item em cada array antes de tentar acessar a posição 0
+        const safeGetFirst = array => (array && array.length > 0 ? array[0] : defaultObj)
+
+        const firstCompleted = safeGetFirst(completed)
+        const firstIncompleted = safeGetFirst(incompleted)
+        const firstNotVisited = safeGetFirst(notVisited)
+
+        // Construindo o array com dados unificados
+        const array = [
+            {
+                name: firstCompleted.name || firstIncompleted.name || firstNotVisited.name,
+                address: firstCompleted.address || firstIncompleted.address || firstNotVisited.address,
+                schedules: [...(firstCompleted.schedules || []), ...(firstIncompleted.schedules || []), ...(firstNotVisited.schedules || [])],
+            },
+        ]
+        return array
+    },
+
+    searchAllPatrols: async function (state, filters) {
+        const response = await Request.do(state, 'POST', Request.getDefaultHeader(state), filters, `${Endpoints.reports.filter}`)
+        const results = response?.data?.results
+
+        if (results) {
+            const { completed, incompleted, notVisited } = results
+            const processResults = resultArray => {
+                return resultArray.reduce((acc, item) => {
+                    const items = item.schedules.reduce((acc, schedule) => {
+                        return [
+                            ...acc,
+                            ...schedule?.items.reduce((acc, i) => {
+                                return [
+                                    ...acc,
+                                    ...i?.actions.map(action => ({
+                                        patrolPoint: action.patrolPoint?.name,
+                                        event: schedule.name,
+                                        vigilant: i.vigilant,
+                                        scannedDate: action.date ? moment(action.date).utc(false).format('DD/MM/YYYY HH:mm:ss') : '',
+                                        account: item.name,
+                                        client: i.client,
+                                        site: i.site,
+                                        startDate: moment(i.startDate).utc(false).format('DD/MM/YYYY HH:mm:ss'),
+                                        endDate: moment(i.endDate).utc(false).format('DD/MM/YYYY HH:mm:ss'),
+                                        frequency: schedule.frequency,
+                                    })),
+                                ]
+                            }, []),
+                        ]
+                    }, [])
+                    return [...acc, ...items]
+                }, [])
+            }
+
+            const tableItems = [...processResults(completed || []), ...processResults(incompleted || []), ...processResults(notVisited || [])]
+
+            let unifiedArray = await this.mergeArrays(completed, incompleted, notVisited)
+            console.log('unifiedArray', unifiedArray)
+
+            return {
+                tableItems: tableItems,
+                reportItems: unifiedArray,
+            }
+        }
+
+        return { tableItems: [], reportItems: {} }
+    },
+    searchAlonePatrols: async function (state, filters) {
+        const response = await Request.do(state, 'POST', Request.getDefaultHeader(state), filters, `${Endpoints.reports.filter}`)
+        const results = response?.data?.results
+
+        if (results?.length > 0) {
+            const flattenedItems = results.reduce((acc, item) => {
+                const items = item.patrols.reduce((acc, patrol) => {
+                    const patrolItems = patrol.items.map(i => ({
+                        _id: i._id,
+                        patrolPoint: i.name,
+                        vigilant: i.vigilant,
+                        scannedDate: i.date,
+                        startDate: patrol.startDate,
+                        endDate: patrol.endDate,
+                        account: i.account,
+                        client: i.client,
+                        site: i.site,
+                        status: i.status,
+                        latitude: i.geolocation.latitude,
+                        longitude: i.geolocation.longitude,
+                        deviceId: i.deviceInfo.deviceId,
+                    }))
+
+                    return [...acc, ...patrolItems]
+                }, [])
+                return [...acc, ...items]
+            }, [])
+
             return {
                 tableItems: flattenedItems,
                 reportItems: results,
@@ -756,12 +871,16 @@ export default {
     },
     filterReports: async function (state, filters) {
         switch (filters?.report) {
-            case 'PATROL_POINTS_COMPLETED':
+            case REPORT_PATROL_TYPE_LIST.PATROL_POINTS_COMPLETED:
                 return this.searchPatrols(state, filters)
-            case 'PATROL_POINTS_NOT_VISITED':
+            case REPORT_PATROL_TYPE_LIST.PATROL_POINTS_INCOMPLETED:
                 return this.searchPatrols(state, filters)
-            case 'PATROL_POINTS_INCOMPLETED':
+            case REPORT_PATROL_TYPE_LIST.PATROL_POINTS_NOT_VISITED:
                 return this.searchPatrols(state, filters)
+            case REPORT_PATROL_TYPE_LIST.ALL_PATROLS:
+                return this.searchAllPatrols(state, filters)
+            case REPORT_PATROL_TYPE_LIST.ALONE_PATROLS:
+                return this.searchAlonePatrols(state, filters)
 
             default:
                 break

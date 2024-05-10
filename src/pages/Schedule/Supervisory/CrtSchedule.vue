@@ -13,7 +13,7 @@ import moment from 'moment'
 
 export default {
     init: async payload => {
-        payload.initCalendar()
+        await payload.initCalendar()
 
         payload.isSuperAdminMaster = await Common.isSuperAdminMaster(payload)
         const role = await Common.getSubtype(payload)
@@ -31,19 +31,29 @@ export default {
                 payload.sites = await Services.getSites(payload)
             }
         }
-
-        payload.getAppointments()
     },
-
     methods: {
         async getAppointments() {
-            const appointments = await Services.getAppointmentsByDate(this, this.filters)
-            this.originalAppointments = appointments
-            const formattedAppointments = await this.formatAppointments(appointments)
-            this.appointments = formattedAppointments ? formattedAppointments : []
-            this.calendarOptions.events = this.appointments
+            this.isLoading = true
+
+            try {
+                const appointmentsPromise = Services.getAppointmentsByDate(this, this.filters)
+
+                const results = await Promise.all([appointmentsPromise])
+
+                const appointments = results[0]
+                this.originalAppointments = appointments
+
+                const formattedAppointments = await this.formatAppointments(appointments)
+                this.appointments = formattedAppointments ? formattedAppointments : []
+                this.calendarOptions.events = this.appointments
+            } catch (error) {
+                console.error('Erro ao buscar ou processar os agendamentos:', error)
+            } finally {
+                this.isLoading = false
+            }
         },
-        formatAppointments: function (appointments) {
+        formatAppointments: async function (appointments) {
             const formattedAppointments = []
             appointments.forEach(appointment => {
                 formattedAppointments.push({
@@ -54,7 +64,7 @@ export default {
             })
             return formattedAppointments
         },
-        initCalendar: function () {
+        initCalendar: async function () {
             const language = this.$session.get('user')?.language
             const locale = language === 'pt' ? 'pt-br' : 'en-gb'
 
@@ -79,10 +89,8 @@ export default {
                 datesSet: ({ startStr, endStr }) => {
                     const currentMonth = moment(startStr).month()
                     if (this.lastFetchedMonth !== currentMonth) {
-                        this.isLoading = true
                         this.filters.endDate = moment(endStr).utc(true).format()
                         this.filters.startDate = moment(startStr).utc(true).format()
-                        this.getAppointments()
                         this.lastFetchedMonth = currentMonth
                     }
                 },
@@ -96,7 +104,7 @@ export default {
                 events: this.schedules ? this.schedules : [],
                 views: {
                     timeGrid: {
-                        eventLimit: 6, // adjust to 6 only for timeGridWeek/timeGridDay
+                        eventLimit: 6,
                     },
                 },
             }
@@ -128,7 +136,6 @@ export default {
             const selectedAppointment = await Services.getScheduleById(this, filters)
             selectedAppointment.appointment = appointment
             this.selectedAppointment = selectedAppointment
-            console.log(this.selectedAppointment)
 
             this.$bvModal.show('createScheduleModal')
         },
@@ -140,7 +147,7 @@ export default {
                 this.filters.site = ''
             }
             this.getAppointments()
-            this.clients = await Services.getClientsByAccount(this, account)
+            this.clients = Services.getClientsByAccount(this, account)
         },
         changeClient: async function () {
             const client = this.filters.client
@@ -150,7 +157,7 @@ export default {
             }
 
             this.getAppointments()
-            this.sites = await Services.getSitesByClient(this, client)
+            this.sites = Services.getSitesByClient(this, client)
         },
         changeSite: async function () {
             this.getAppointments()

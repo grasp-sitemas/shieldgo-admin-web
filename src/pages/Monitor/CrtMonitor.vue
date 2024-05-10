@@ -360,7 +360,7 @@ export default {
                     dataItem.event = event
                 }
 
-                const dateTimezone = moment(dataItem?.date).utc(true)
+                const dateTimezone = moment(dataItem?.date).utc(false)
                 const formattedDate = dateTimezone.format('DD/MM/YYYY')
                 const formattedTime = dateTimezone.format('HH:mm')
 

@@ -13,7 +13,7 @@
                         : data.status === 'IN_PROGRESS'
                         ? 'bg-success'
                         : data.status === 'FINISHED'
-                        ? 'bg-info'
+                        ? 'bg-green'
                         : data.status === 'EXPIRED'
                         ? 'bg-danger'
                         : data.status === 'CLOSED_BY_SYSTEM'
@@ -27,8 +27,6 @@
             </span>
 
             <a class="btn-close cursor_pointer" @click="$bvModal.hide('infoItemModal')"></a>
-
-            <!-- <p class="timeline-closed-by-system-position" v-if="data?.closedBySystemDate">{{ $t('str.closed.by.system.date.label') + ': ' + formatDate(data.closedBySystemDate) }}</p> -->
         </template>
 
         <div class="row">

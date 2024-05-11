@@ -1482,5 +1482,6 @@
     "str.form.title.timeline.scheduled.patrols": "Timeline - Scheduled patrols",
     "str.form.title.timeline.free.patrols": "Timeline - Free patrols",
     "str.sidebar.menu.timeline.schedule.patrols": "Scheduled patrols",
-    "str.modal.timeline.free.patrols.title": "Free patrol"
+    "str.modal.timeline.free.patrols.title": "Free patrol",
+    "str.event.failure_patrol.scheduled.at.description": "scheduled for"
 }

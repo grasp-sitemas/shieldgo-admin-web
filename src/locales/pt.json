@@ -767,7 +767,7 @@
     "ÏN_PROGRESS": "Em andamento",
     "str.status.done": "Realizado",
     "str.status.canceled": "Cancelado",
-    "str.status.expired": "Vencido",
+    "str.status.expired": "Vencida",
     "str.status.pendent": "Pendente",
     "str.status.finished": "Finalizado",
     "str.status.pending": "Pendente",
@@ -826,9 +826,9 @@
     "str.timeline.item.status": "Status",
     "str.event.status.active": "Ativo",
     "str.event.status.canceled": "Cancelado",
-    "str.event.status.done": "Realizado",
-    "str.event.status.expired": "Vencido",
-    "str.event.status.finished": "Realizado",
+    "str.event.status.done": "Realizada",
+    "str.event.status.expired": "Vencida",
+    "str.event.status.finished": "Realizada",
     "str.event.status.pendent": "Pendente",
     "MULTIMEDIA": "Multimídia",
     "SCAN": "Leitura(s)",
@@ -1131,6 +1131,7 @@
     "FAILURE_PATROL": "Falha de ronda",
     "str.event.failure_patrol": "A ronda",
     "str.event.failure_patrol.description": "não foi iniciada",
+    "str.event.failure_patrol.scheduled.at.description": "programada para",
     "NOT_STARTED": "Não iniciada(s)",
     "INCOMPLETE": "Incompleta(s)",
     "str.msg.patrol": "Ronda",
@@ -1481,5 +1482,6 @@
     "str.form.title.timeline.free.patrols": "Linha do tempo - Rondas livres",
     "str.form.title.timeline.scheduled.patrols": "Linha do tempo - Rondas agendadas",
     "str.sidebar.menu.timeline.schedule.patrols": "Rondas agendadas",
-    "str.modal.timeline.free.patrols.title": "Ronda livre"
+    "str.modal.timeline.free.patrols.title": "Ronda livre",
+    "str.site.report.title": "Local"
 }

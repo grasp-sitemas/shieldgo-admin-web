@@ -33,9 +33,6 @@
                 </select>
                 <div class="invalid-feedback">{{ $t('str.register.guard.groups.site.required') }}</div>
             </div>
-        </div>
-
-        <div class="row">
             <div class="col-md-4 mb-3">
                 <label class="form-label" for="statusField">{{ $t('str.range.date.field') }}</label>
                 <date-range-picker
@@ -69,11 +66,12 @@
                 <select v-model="filters.status" @change="filter" class="form-select" id="statusField">
                     <option value="">{{ $t('str.register.select.all.placeholder') }}</option>
                     <option value="IN_PROGRESS">{{ $t('str.status.in.progress') }}</option>
-                    <option value="FINISHED">{{ $t('str.status.finished.patrol') }}</option>
+                    <option value="FINISHED">{{ $t('str.event.status.done') }}</option>
                     <option value="CANCELLED">{{ $t('str.status.cancelled') }}</option>
                 </select>
             </div>
         </div>
+
         <div>
             <vue-good-table
                 :columns="columns"

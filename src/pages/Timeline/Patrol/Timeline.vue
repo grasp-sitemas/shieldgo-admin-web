@@ -33,9 +33,7 @@
                 </select>
                 <div class="invalid-feedback">{{ $t('str.register.guard.groups.site.required') }}</div>
             </div>
-        </div>
 
-        <div class="row">
             <div class="col-md-4 mb-3">
                 <label class="form-label" for="statusField">{{ $t('str.range.date.field') }}</label>
                 <date-range-picker
@@ -77,6 +75,7 @@
                 </select>
             </div>
         </div>
+
         <div>
             <vue-good-table
                 :columns="columns"

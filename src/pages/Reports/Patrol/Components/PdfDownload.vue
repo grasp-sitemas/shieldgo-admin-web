@@ -68,18 +68,12 @@ export default {
 
                 items.forEach(item => {
                     item.actions.forEach(action => {
-                        const startDate = moment(item?.startDate).utc(false).format('DD/MM/YYYY HH:mm:ss')
-                        const endDate = moment(item?.endDate).utc(false).format('DD/MM/YYYY HH:mm:ss')
                         const scannedDate = action?.date ? moment(action?.date).utc(false).format('DD/MM/YYYY HH:mm:ss') : ' '
 
                         const newItem = {
                             patrolPoint: action?.patrolPoint?.name ? String(action.patrolPoint.name) : ' ',
-                            vigilant: item.vigilant ? String(item.vigilant) : ' ',
-                            startDate: String(startDate),
-                            endDate: String(endDate),
                             scannedDate: String(scannedDate),
-                            client: String(item.client),
-                            site: String(item.site),
+                            vigilant: item.vigilant ? String(item.vigilant) : ' ',
                         }
                         results.push(newItem)
                     })
@@ -139,7 +133,7 @@ export default {
                         const beginDate = moment(schedule.beginDate).utc(false).format('DD/MM/YYYY HH:mm:ss')
                         const endDate = moment(schedule.endDate).utc(false).format('DD/MM/YYYY HH:mm:ss')
 
-                        doc.text(this.$t('str.description') + ': ' + String(schedule.name), 5, y)
+                        doc.text(this.$t('str.site.report.title') + ': ' + String(schedule.name), 5, y)
                         y += 4
                         doc.text(this.$t('str.begins.in') + ': ' + String(beginDate), 5, y)
                         y += 4

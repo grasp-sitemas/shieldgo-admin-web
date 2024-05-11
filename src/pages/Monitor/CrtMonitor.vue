@@ -312,23 +312,32 @@ export default {
                 }
 
                 if (dataItem?.failurePatrolType) {
+                    const dateTimezone = moment(dataItem?.event?.startDate).utc(false)
+                    const formattedDate = dateTimezone.format('DD/MM/YYYY')
+                    const formattedTime = dateTimezone.format('HH:mm')
+
                     switch (dataItem.failurePatrolType) {
                         case 'NOT_STARTED':
                             {
                                 dataItem.failureText = this.$t('str.msg.not.started.patrol')
-                                dataItem.description += this.$t('str.event.failure_patrol.description') + ' '
+                                dataItem.description += this.$t('str.event.failure_patrol.scheduled.at.description') + ' '
+
+                                dataItem.description += formattedDate + ' - ' + formattedTime + ' ' + this.$t('str.event.failure_patrol.description')
                             }
                             break
                         case 'INCOMPLETE':
                             {
                                 dataItem.failureText = this.$t('str.msg.incomplete.patrol')
-                                dataItem.description += this.$t('str.event.incomplete_patrol.description') + ' '
+                                dataItem.description += this.$t('str.event.failure_patrol.scheduled.at.description') + ' '
+                                dataItem.description += formattedDate + ' - ' + formattedTime + ' ' + this.$t('str.event.incomplete_patrol.description')
                             }
+
                             break
                         case 'EXPIRED':
                             {
                                 dataItem.failureText = this.$t('str.msg.expired.patrol')
-                                dataItem.description += this.$t('str.event.expired_patrol.description') + ' '
+                                dataItem.description += this.$t('str.event.failure_patrol.scheduled.at.description') + ' '
+                                dataItem.description += formattedDate + ' - ' + formattedTime + ' ' + this.$t('str.event.expired_patrol.description')
                             }
                             break
                         default:
@@ -360,13 +369,21 @@ export default {
                     dataItem.event = event
                 }
 
-                const dateTimezone = moment(dataItem?.date).utc(false)
+                let dateToUse = dataItem.date
+                if (dataItem.failurePatrolType === 'NOT_STARTED' && dataItem?.event?.startDate) {
+                    dateToUse = dataItem.event.startDate
+                }
+
+                const dateTimezone = moment(dateToUse).utc(false)
                 const formattedDate = dateTimezone.format('DD/MM/YYYY')
                 const formattedTime = dateTimezone.format('HH:mm')
 
                 dataItem.formattedDate = formattedDate
                 dataItem.formattedTime = formattedTime
-                dataItem.description += ' ' + this.$t('str.event.on') + ' ' + formattedDate + ' - ' + formattedTime
+
+                if (dataItem?.failurePatrolType) {
+                    dataItem.description += ' ' + this.$t('str.event.on') + ' ' + formattedDate + ' - ' + formattedTime
+                }
 
                 formatData.push(dataItem)
             })

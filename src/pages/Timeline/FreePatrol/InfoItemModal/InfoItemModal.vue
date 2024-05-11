@@ -5,12 +5,7 @@
                 {{ $t('str.modal.timeline.free.patrols.title') }}
             </h5>
 
-            <span
-                class="badge align-badge"
-                v-bind:class="
-                    data.status === 'ACTIVE' ? 'bg-blue' : data.status === 'IN_PROGRESS' ? 'bg-success' : data.status === 'FINISHED' ? 'bg-info' : data.status === 'CANCELLED' ? 'bg-indigo' : 'bg-dark'
-                "
-            >
+            <span class="badge align-badge" v-bind:class="data.status === 'IN_PROGRESS' ? 'bg-success' : data.status === 'FINISHED' ? 'bg-green' : data.status === 'CANCELLED' ? 'bg-indigo' : 'bg-dark'">
                 {{ $t(getStatusName(data.status)) }}
             </span>
 

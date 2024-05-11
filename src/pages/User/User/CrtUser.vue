@@ -38,9 +38,13 @@ export default {
         inputCep() {
             if (this.data.address.cep.length === 9) this.loadInfosByCEP()
         },
-        changeAssignmentType() {
+        changeAssignmentTypeByLocal() {
             this.data.site = ''
             this.data.siteGroup = ''
+        },
+        changeAssignmentTypeByClient() {
+            this.data.client = ''
+            this.data.clientGroup = ''
         },
         clearCep() {
             const cep = this.data?.address?.cep
@@ -215,6 +219,9 @@ export default {
                 this.errors = this.errors.filter(item => item !== field)
             }
         },
+        click() {
+            alert('click')
+        },
         async checkForm() {
             if (this.isLoading) return
 
@@ -224,6 +231,44 @@ export default {
 
             if (!this.data.account || this.data.account === '') {
                 this.errors.push('account')
+            }
+
+            if (this.data?.companyUser?.subtype === 'AUDITOR' || this.data?.companyUser?.subtype === 'OPERATOR') {
+                if (!this.data.client || this.data.client === '') {
+                    this.errors.push('client')
+                }
+            }
+
+            if (this.data?.companyUser?.subtype === 'AUDITOR' || this.data?.companyUser?.subtype === 'OPERATOR') {
+                if (!this.assignmentType || this.assignmentType === '') {
+                    this.errors.push('assignmentType')
+                }
+
+                if (this.assignmentType === 'LOCAL_GROUP' && (!this.data.siteGroup || this.data.siteGroup === '')) {
+                    this.errors.push('siteGroup')
+                }
+
+                if (!this.data.client || this.data.client === '') {
+                    this.errors.push('client')
+                }
+
+                if (this.assignmentType === 'LOCAL' && (!this.data.site || this.data.site === '')) {
+                    this.errors.push('site')
+                }
+            }
+
+            if (this.data?.companyUser?.subtype === 'MANAGER') {
+                if (this.assignmentType === 'CLIENT' && (!this.data.client || this.data.client === '')) {
+                    this.errors.push('client')
+                }
+
+                if (!this.assignmentType || this.assignmentType === '') {
+                    this.errors.push('assignmentType')
+                }
+
+                if (this.assignmentType === 'CLIENT_GROUP' && (!this.data.clientGroup || this.data.clientGroup === '')) {
+                    this.errors.push('clientGroup')
+                }
             }
 
             if (!this.data.firstName || this.data.firstName === '') {
@@ -248,6 +293,7 @@ export default {
 
             if (!this.errors || this.errors.length === 0) {
                 this.isLoading = true
+
                 const resEmail = await Services.emailAlreadyExists(this, this.data.email)
                 if ((resEmail.alreadyExist && !this.data._id) || (resEmail.alreadyExist && this.data._id && resEmail._id !== this.data._id)) {
                     Common.show(this, 'bottom-right', 'warn', this.$t('str.email.already.in.use'))
@@ -276,9 +322,11 @@ export default {
                 this.loadGeolocation(
                     async data => {
                         await this.save(data)
+                        console.log(data)
                     },
                     async error => {
                         this.data.address.name = 'MAIN'
+                        console.log(error)
                         await this.save(error)
                     },
                 )
@@ -342,10 +390,16 @@ export default {
             if (role === 'ADMIN') {
                 this.data.client = ''
                 this.data.site = ''
+                this.data.siteGroup = ''
+                this.data.clientGroup = ''
                 this.removeRequiredField('client')
                 this.removeRequiredField('site')
+                this.removeRequiredField('siteGroup')
+                this.removeRequiredField('clientGroup')
             } else if (role === 'MANAGER' || role === 'OPERATOR' || role === 'AUDITOR') {
                 this.data.site = ''
+                this.data.siteGroup = ''
+                this.removeRequiredField('siteGroup')
                 this.removeRequiredField('site')
             }
 
@@ -353,9 +407,6 @@ export default {
                 if (role === 'MANAGER') {
                     this.clientGroups = await Services.getClientGroupsByAccount(this, this.data.account)
                 }
-                //  else if (role === 'OPERATOR' || role === 'AUDITOR') {
-                //     this.siteGroups = await Services.getSiteGroupsByAccount(this, this.data.account)
-                // }
             }
         },
         async changeClientGroup() {

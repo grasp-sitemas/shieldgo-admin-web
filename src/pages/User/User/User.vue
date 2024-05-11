@@ -70,23 +70,77 @@
                     <div class="invalid-feedback">{{ $t('str.register.user.client.required') }}</div>
                 </div>
 
-                <div v-if="data.companyUser.subtype === 'OPERATOR' || data.companyUser.subtype === 'AUDITOR' || data.companyUser.subtype === 'MANAGER'" class="col-md-4 mb-3">
+                <div class="col-md-4 mb-3" v-if="data.companyUser.subtype === 'OPERATOR' || data.companyUser.subtype === 'AUDITOR' || data.companyUser.subtype === 'MANAGER'">
                     <label class="form-label d-block mb-3">Tipo de atribuição</label>
-                    <div v-if="data.companyUser.subtype === 'OPERATOR' || data.companyUser.subtype === 'AUDITOR'" class="form-check form-check-inline">
-                        <input :disabled="!data.client" @change="changeAssignmentType" class="form-check-input" type="radio" v-model="assignmentType" value="LOCAL_GROUP" id="groupLocal" />
+
+                    <!-- local and local group -->
+                    <div
+                        v-if="data.companyUser.subtype === 'OPERATOR' || data.companyUser.subtype === 'AUDITOR'"
+                        v-on:click="removeRequiredField('assignmentTypeLocalGroup')"
+                        class="form-check form-check-inline"
+                    >
+                        <input
+                            :disabled="!data.client"
+                            @change="changeAssignmentTypeByLocal"
+                            class="form-check-input form-control"
+                            type="radio"
+                            v-model="assignmentType"
+                            value="LOCAL_GROUP"
+                            id="groupLocal"
+                            v-bind:class="checkRequiredField('assignmentTypeLocalGroup') ? 'is-invalid' : ''"
+                            @focus="removeRequiredField('assignmentTypeLocalGroup')"
+                        />
                         <label class="form-check-label" for="groupLocal">{{ $t('LOCAL_GROUP') }}</label>
+                        <div class="invalid-feedback">{{ $t('str.register.user.siteGroup.required') }}</div>
                     </div>
-                    <div v-if="data.companyUser.subtype === 'OPERATOR' || data.companyUser.subtype === 'AUDITOR'" class="form-check form-check-inline">
-                        <input :disabled="!data.client" @change="changeAssignmentType" class="form-check-input" type="radio" v-model="assignmentType" value="LOCAL" id="local" />
+                    <div v-if="data.companyUser.subtype === 'OPERATOR' || data.companyUser.subtype === 'AUDITOR'" v-on:click="removeRequiredField('assignmentTypeLocal')" class="form-check form-check-inline">
+                        <input
+                            :disabled="!data.client"
+                            @change="changeAssignmentTypeByLocal"
+                            class="form-check-input"
+                            type="radio"
+                            v-model="assignmentType"
+                            value="LOCAL"
+                            id="local"
+                            v-bind:class="checkRequiredField('assignmentTypeLocal') ? 'is-invalid' : ''"
+                            @focus="removeRequiredField('assignmentTypeLocal')"
+                        />
                         <label class="form-check-label" for="local">{{ $t('LOCAL') }}</label>
+                        <div class="invalid-feedback">{{ $t('str.register.user.site.required') }}</div>
                     </div>
-                    <div v-if="data.companyUser.subtype === 'MANAGER'" class="form-check form-check-inline">
-                        <input :disabled="!data.account" @change="changeAssignmentType" class="form-check-input" type="radio" v-model="assignmentType" value="CLIENT_GROUP" id="groupClient" />
+
+                    <!-- client and client group -->
+                    <div v-if="data.companyUser.subtype === 'MANAGER'" class="form-check form-check-inline" v-on:click="removeRequiredField('assignmentTypeClientGroup')">
+                        <input
+                            :disabled="!data.account"
+                            @change="changeAssignmentTypeByClient"
+                            class="form-check-input"
+                            v-on:click="removeRequiredField('assignmentTypeClientGroup')"
+                            type="radio"
+                            v-model="assignmentType"
+                            value="CLIENT_GROUP"
+                            id="groupClient"
+                            v-bind:class="checkRequiredField('assignmentTypeClientGroup') ? 'is-invalid' : ''"
+                            @focus="removeRequiredField('assignmentTypeClientGroup')"
+                        />
                         <label class="form-check-label" for="groupClient">{{ $t('CLIENT_GROUP') }}</label>
+                        <div class="invalid-feedback">{{ $t('str.register.user.clientGroup.required') }}</div>
                     </div>
-                    <div v-if="data.companyUser.subtype === 'MANAGER'" class="form-check form-check-inline">
-                        <input :disabled="!data.account" @change="changeAssignmentType" class="form-check-input" type="radio" v-model="assignmentType" value="CLIENT" id="client" />
+                    <div v-if="data.companyUser.subtype === 'MANAGER'" class="form-check form-check-inline" v-on:click="removeRequiredField('assignmentTypeClient')">
+                        <input
+                            :disabled="!data.account"
+                            @change="changeAssignmentTypeByClient"
+                            class="form-check-input"
+                            v-on:click="removeRequiredField('assignmentType')"
+                            type="radio"
+                            v-model="assignmentType"
+                            value="CLIENT"
+                            id="client"
+                            v-bind:class="checkRequiredField('assignmentTypeClient') ? 'is-invalid' : ''"
+                            @focus="removeRequiredField('assignmentTypeClient')"
+                        />
                         <label class="form-check-label" for="client">{{ $t('CLIENT') }}</label>
+                        <div class="invalid-feedback">{{ $t('str.register.user.client.required') }}</div>
                     </div>
                 </div>
 
@@ -192,7 +246,6 @@
                     <label class="form-label">{{ $t('str.register.user.email.field') }}</label>
                     <input
                         class="form-control"
-                        :autocomplete="'username'"
                         v-bind:class="checkRequiredField('email') ? 'is-invalid' : ''"
                         @focus="removeRequiredField('email')"
                         v-model="data.email"
@@ -206,7 +259,6 @@
                     <div class="input-group">
                         <input
                             class="form-control"
-                            :autocomplete="'new-password'"
                             v-bind:class="checkRequiredField('password') ? 'is-invalid' : ''"
                             @focus="removeRequiredField('password')"
                             v-model="data.password"

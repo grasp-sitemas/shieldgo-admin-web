@@ -110,7 +110,8 @@ export default {
         return res.test(email)
     },
     show(vue, group, type, title) {
-        const text = `${vue.$t('str.date.subtitle')}: ${new Date().toLocaleString('pt-br')}`
+        const date = moment().utc(true).format('DD/MM/YYYY - HH:mm:ss')
+        const text = `${vue.$t('str.date.subtitle')}: ${date}`
         vue.$notify({
             group,
             title,

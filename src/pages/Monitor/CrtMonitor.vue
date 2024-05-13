@@ -285,6 +285,15 @@ export default {
                             dataItem.icon = 'fa fa-qrcode'
                         }
                         break
+
+                    case 'CANCEL_PATROL':
+                        {
+                            dataItem.description += this.$t('str.event.cancel_patrol')
+                            dataItem.tag = 'badge bg-indigo text-white me-1'
+                            dataItem.icon = 'fa fa-ban'
+                        }
+                        break
+
                     case 'FAILURE_PATROL':
                         {
                             dataItem.description += this.$t('str.event.failure_patrol')
@@ -297,13 +306,6 @@ export default {
 
                             dataItem.tag = 'badge dark-orange me-1'
                             dataItem.icon = 'fa fa-exclamation-triangle'
-                        }
-                        break
-                    case 'CANCEL_PATROL':
-                        {
-                            dataItem.description += this.$t('str.event.cancel_patrol')
-                            dataItem.tag = 'badge bg-indigo text-white me-1'
-                            dataItem.icon = 'fa fa-ban'
                         }
                         break
 
@@ -381,9 +383,7 @@ export default {
                 dataItem.formattedDate = formattedDate
                 dataItem.formattedTime = formattedTime
 
-                if (dataItem?.failurePatrolType) {
-                    dataItem.description += ' ' + this.$t('str.event.on') + ' ' + formattedDate + ' - ' + formattedTime
-                }
+                dataItem.description += ' ' + this.$t('str.event.on') + ' ' + formattedDate + ' - ' + formattedTime
 
                 formatData.push(dataItem)
             })

@@ -16,6 +16,28 @@ export default {
         }
     },
     methods: {
+        isValidBeginDate(event) {
+            const dateString = event?.target?.value
+
+            if (dateString.length > 10) {
+                this.data.beginDate = dateString.substring(0, 10)
+            }
+
+            if (dateString.length === 10) {
+                this.data.beginDate = dateString
+            }
+        },
+        isValidEndDate(event) {
+            const dateString = event?.target?.value
+
+            if (dateString.length > 10) {
+                this.data.endDate = dateString.substring(0, 10)
+            }
+
+            if (dateString.length === 10) {
+                this.data.endDate = dateString
+            }
+        },
         checkRequiredField(field) {
             return this.errors.includes(field)
         },
@@ -23,12 +45,12 @@ export default {
             this.errors = this.errors.filter(item => item !== field)
         },
         createRoute: async function () {
-            if(!this.data?.points) return
+            if (!this.data?.points) return
 
             this.$bvModal.show('createItineraryModal')
         },
         loadRoute: async function () {
-            if(!this.data?.points) return
+            if (!this.data?.points) return
 
             this.$bvModal.show('itineraryListModal')
         },
@@ -206,10 +228,7 @@ export default {
 
                 if (this.updateSchedule) {
                     await this.update()
-                }
-                else
-                if (this.updateAppointment) {
-                 
+                } else if (this.updateAppointment) {
                     await this.updateOccurrence()
                 } else {
                     await this.save()
@@ -270,7 +289,6 @@ export default {
 
             this.data = newData
             this.updateSchedule = true
-       
         },
         updateAppointmentOccurrence: async function () {
             const newData = JSON.parse(JSON.stringify(this.data))
@@ -294,7 +312,6 @@ export default {
 
             this.data = newData
             this.updateAppointment = true
-       
         },
         confirmArchive() {
             this.$swal({
@@ -338,17 +355,17 @@ export default {
             this.$registerEvent.$emit('cancelAppointment')
         },
         selectItineraryRow(row) {
-            this.selectedItinerary = row; // Define a linha selecionada
+            this.selectedItinerary = row // Define a linha selecionada
         },
         clearItinerarySelection() {
-            this.selectedItinerary = null; // Limpa a seleção da linha
+            this.selectedItinerary = null // Limpa a seleção da linha
         },
         updateSelectedItinerary(selectedRow) {
-            this.selectedItinerary = selectedRow; // Atualiza a linha selecionada na primeira modal
+            this.selectedItinerary = selectedRow // Atualiza a linha selecionada na primeira modal
             this.data.points = selectedRow?.patrolPoints // Atualiza os pontos do itinerário na segunda modal
         },
         clearCheckPoints() {
-            this.data.points = []; // Limpa a lista de pontos
+            this.data.points = [] // Limpa a lista de pontos
         },
         changeFrequency: function () {
             this.data.frequencyYear = {
@@ -488,7 +505,6 @@ export default {
                     thClass: 'text-nowrap',
                     tdClass: 'text-nowrap',
                 },
-               
             ]
         },
         showMap() {
@@ -498,26 +514,24 @@ export default {
             this.patrolPointItem = item
         },
         removeRow(row) {
-            if(this.updateAppointment || this.updateSchedule || !this.data._id) {
-
+            if (this.updateAppointment || this.updateSchedule || !this.data._id) {
                 const index = row?.originalIndex
 
                 if (index !== -1) {
                     this.data.points.splice(index, 1)
                 }
             }
-            
         },
         clearList() {
-            this.data.points = []; // Limpa a lista de pontos
+            this.data.points = [] // Limpa a lista de pontos
         },
         addPatrolPoints() {
             for (const selectedPoint of this.selectedPatrolPoints) {
                 if (!this.data.points.some(point => point === selectedPoint)) {
-                    this.data.points.push(selectedPoint);
+                    this.data.points.push(selectedPoint)
                 }
             }
-            this.selectedPatrolPoints = []; // Limpar seleção após adicionar
+            this.selectedPatrolPoints = [] // Limpar seleção após adicionar
         },
         async initSelectedAppointment() {
             this.isLoading = true

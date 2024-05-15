@@ -137,6 +137,11 @@
                         @focus="clearErrorDate('beginDate')"
                         id="beginDateField"
                         :placeholder="$t('str.register.schedule.starts.in.placeholder')"
+                        @change="isValidBeginDate"
+                        min="2021-01-01"
+                        max="2100-12-31"
+                        pattern="[0-9]{4}-[0-9]{2}-[0-9]{2}"
+                        required
                     />
                     <div class="invalid-feedback">{{ $t('str.register.schedule.starts.in.required') }}</div>
                 </div>
@@ -152,6 +157,11 @@
                         @focus="clearErrorDate('endDate')"
                         id="endDateField"
                         :placeholder="$t('str.register.schedule.ends.in.placeholder')"
+                        @change="isValidEndDate"
+                        min="2021-01-01"
+                        max="2100-12-31"
+                        pattern="[0-9]{4}-[0-9]{2}-[0-9]{2}"
+                        required
                     />
                     <div class="invalid-feedback">{{ $t('str.register.schedule.ends.in.required') }}</div>
                 </div>
@@ -356,6 +366,7 @@
         <div v-else class="center-spinner">
             <i class="fas fa-spinner fa-spin" />
         </div>
+        <notifications group="bottom-right" position="bottom right" :speed="500" />
     </b-modal>
 </template>
 

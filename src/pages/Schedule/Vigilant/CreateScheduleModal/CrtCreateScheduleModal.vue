@@ -22,6 +22,28 @@ export default {
         removeRequiredField(field) {
             this.errors = this.errors.filter(item => item !== field)
         },
+        isValidBeginDate(event) {
+            const dateString = event?.target?.value
+
+            if (dateString.length > 10) {
+                this.data.beginDate = dateString.substring(0, 10)
+            }
+
+            if (dateString.length === 10) {
+                this.data.beginDate = dateString
+            }
+        },
+        isValidEndDate(event) {
+            const dateString = event?.target?.value
+
+            if (dateString.length > 10) {
+                this.data.endDate = dateString.substring(0, 10)
+            }
+
+            if (dateString.length === 10) {
+                this.data.endDate = dateString
+            }
+        },
         changeAccount: async function () {
             this.sites = []
             this.data.client = ''

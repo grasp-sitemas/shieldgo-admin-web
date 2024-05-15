@@ -6,7 +6,6 @@
                 <span v-if="!data?._id && !updateAppointment && !updateSchedule">{{ $t('str.modal.schedule.new') }}</span>
                 <span v-else-if="updateSchedule">{{ $t('str.modal.schedule.title.edit.serie') }}</span>
                 <span v-else-if="updateAppointment">{{ $t('str.modal.schedule.title.edit.ocurrence') }}</span>
-
             </h4>
             <span v-if="data?.status === 'ARCHIVED'" class="m-2 badge bg-danger rounded-5 cursor_pointer f-right"
                 ><a>{{ $t('str.modal.schedule.status.archived') }}</a></span
@@ -51,7 +50,6 @@
                     </select>
                     <div class="invalid-feedback">{{ $t('str.register.incident.client.required') }}</div>
                 </div>
-               
             </div>
 
             <div class="row">
@@ -70,7 +68,6 @@
                     <div class="invalid-feedback">{{ $t('str.register.schedule.name.required') }}</div>
                 </div>
             </div>
-           
 
             <div class="row">
                 <div class="col-md-4 mb-3">
@@ -102,6 +99,11 @@
                         @focus="removeRequiredField('beginDate')"
                         id="beginDateField"
                         :placeholder="$t('str.register.schedule.starts.in.placeholder')"
+                        @change="isValidBeginDate"
+                        min="2021-01-01"
+                        max="2100-12-31"
+                        pattern="[0-9]{4}-[0-9]{2}-[0-9]{2}"
+                        required
                     />
                     <div class="invalid-feedback">{{ $t('str.register.schedule.starts.in.required') }}</div>
                 </div>
@@ -117,6 +119,11 @@
                         @focus="removeRequiredField('endDate')"
                         id="endDateField"
                         :placeholder="$t('str.register.schedule.ends.in.placeholder')"
+                        @change="isValidEndDate"
+                        min="2021-01-01"
+                        max="2100-12-31"
+                        pattern="[0-9]{4}-[0-9]{2}-[0-9]{2}"
+                        required
                     />
                     <div class="invalid-feedback">{{ $t('str.register.schedule.ends.in.required') }}</div>
                 </div>
@@ -241,21 +248,20 @@
                 </div>
             </div>
 
-        
-            <div style="display: flex;" class="mb-2">
+            <div style="display: flex" class="mb-2">
                 <label class="form-label mt-1 mr-1" for="patrolPointsTable">{{ $t('str.register.schedule.add.patrol.points.table') }}</label>
-                <hr style="flex-grow: 1; margin-left: 10px;"/>
+                <hr style="flex-grow: 1; margin-left: 10px" />
             </div>
 
-
             <div class="row">
-                            
                 <div class="col-md-10 mb-3">
                     <label class="form-label" for="vigilantsField">{{ $t('str.register.schedule.invited.patrol.points.field') }}</label>
                     <span v-show="!data._id" @click="removeAllPatrolPoints()" disabled class="badge bg-dark rounded-5 cursor_pointer f-right badge-ml-5">{{
                         $t('str.register.schedule.remove.all.patrol.points.label')
                     }}</span>
-                    <span v-show="!data._id" @click="selectAllPatrolPoints()" disabled class="badge bg-dark rounded-5 cursor_pointer f-right">{{ $t('str.register.schedule.select.all.patrol.points.label') }}</span>
+                    <span v-show="!data._id" @click="selectAllPatrolPoints()" disabled class="badge bg-dark rounded-5 cursor_pointer f-right">{{
+                        $t('str.register.schedule.select.all.patrol.points.label')
+                    }}</span>
                     <v-select
                         taggable
                         multiple
@@ -278,7 +284,6 @@
                         {{ $t('str.patrol.points.add.button') }}
                     </button>
                 </div>
-           
             </div>
 
             <vue-good-table
@@ -289,7 +294,6 @@
                 :lineNumbers="true"
                 @on-row-click="selectItem"
             >
-
                 <div slot="emptystate" class="vgt-center-align vgt-text-disabled">{{ $t('str.table.subtitle.no.data') }}</div>
                 <template slot="table-row" slot-scope="props">
                     <span v-if="props.column.field === 'type'">
@@ -306,23 +310,29 @@
                     </span>
                 </template>
             </vue-good-table>
-            
-            <div class="align-right mt-3 mb-2" style="text-align: right;">
-                <button 
-                    v-if="(data.points?.length > 0 && (updateAppointment || updateSchedule)) || (!data._id && data.points?.length > 0)" 
-                    @click="clearCheckPoints()" class="btn btn-primary" type="button" style="margin-right: 10px;" >
+
+            <div class="align-right mt-3 mb-2" style="text-align: right">
+                <button
+                    v-if="(data.points?.length > 0 && (updateAppointment || updateSchedule)) || (!data._id && data.points?.length > 0)"
+                    @click="clearCheckPoints()"
+                    class="btn btn-primary"
+                    type="button"
+                    style="margin-right: 10px"
+                >
                     <i class="fas fa-eraser"></i>
                     {{ $t('str.btn.clear.table') }}
                 </button>
-                <button 
-                    v-if="(data.points?.length > 0 && (updateAppointment || updateSchedule)) || (!data._id && data.points?.length > 0)" 
-                    @click="createRoute()" class="btn btn-primary" type="button" style="margin-right: 10px;" >
+                <button
+                    v-if="(data.points?.length > 0 && (updateAppointment || updateSchedule)) || (!data._id && data.points?.length > 0)"
+                    @click="createRoute()"
+                    class="btn btn-primary"
+                    type="button"
+                    style="margin-right: 10px"
+                >
                     <i class="fas fa-route"></i>
                     {{ $t('str.patrol.points.create.route.button') }}
                 </button>
-                <button 
-                    v-if="(updateAppointment || updateSchedule) || !data._id" 
-                    @click="loadRoute()" class="btn btn-primary" type="button" >
+                <button v-if="updateAppointment || updateSchedule || !data._id" @click="loadRoute()" class="btn btn-primary" type="button">
                     <i class="fas fa-upload"></i>
                     {{ $t('str.patrol.points.load.route.button') }}
                 </button>
@@ -368,20 +378,13 @@
 
             <notifications group="bottom-right" position="bottom right" :speed="500" />
             <Map :data="patrolPointItem" />
-            <ItineraryModal
-                :account="data.account"
-                :client="data.client"
-                :patrolPoints="data.points"
-            />
-            <ItineraryListModal :itineraryList="itineraries" 
-                @selected-row="updateSelectedItinerary($event)"
-            />
+            <ItineraryModal :account="data.account" :client="data.client" :patrolPoints="data.points" />
+            <ItineraryListModal :itineraryList="itineraries" @selected-row="updateSelectedItinerary($event)" />
         </div>
         <div v-else class="center-spinner">
             <i class="fas fa-spinner fa-spin" />
         </div>
         <notifications group="bottom-right" position="bottom right" :speed="500" />
-
     </b-modal>
 </template>
 
@@ -401,7 +404,7 @@ export default {
     components: {
         Map,
         ItineraryModal,
-        ItineraryListModal
+        ItineraryListModal,
     },
     props: {
         selectedDate: {
@@ -487,7 +490,6 @@ export default {
         state.$registerEvent.$on('refreshItinerary', async function () {
             state.itineraries = await Services.getItinerariesByClient(state, state.data?.client)
         })
-
     },
 }
 </script>
@@ -501,8 +503,8 @@ export default {
     margin-bottom: 30%;
 }
 .table-container {
-  max-height: 320px;
-  overflow-y: auto;
+    max-height: 320px;
+    overflow-y: auto;
 }
 
 .icon-cell {

@@ -68,6 +68,12 @@
                 <GuardsPerformance :title="$t('str.chart.guards.performance.title')" :data="guardsPerformance" :locale="userLocale" />
             </div>
         </div>
+
+        <div v-if="isLoading" class="spinner-overlay">
+            <b-spinner label="Carregando..." style="width: 2rem; height: 2rem" type="border" variant="primary" />
+        </div>
+
+        <notifications group="top-right" position="top right" :speed="1000" />
     </div>
 </template>
 
@@ -129,5 +135,15 @@ export default {
 }
 .caret {
     display: none !important;
+}
+.spinner-overlay {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 </style>

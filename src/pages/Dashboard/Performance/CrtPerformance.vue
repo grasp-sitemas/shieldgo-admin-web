@@ -22,16 +22,33 @@ export default {
             payload.filters.client = client
             payload.sites = await Services.getSites(payload)
         }
-
-        await payload.filter()
     },
     methods: {
         async filter() {
-            this.isLoading = true
-            this.localsPerformance = await Services.localsPerformance(this, this.filters)
-            this.guardsPerformance = await Services.guardsPerformance(this, this.filters)
+            if (this.isLoading) return
 
-            this.isLoading = false
+            if (this.role === 'SUPER_ADMIN_MASTER' && !this.filters.account) {
+                Common.show(this, 'top-right', 'warn', this.$t('str.charts.select.account.required'))
+                return
+            }
+
+            this.clearCharts()
+            this.isLoading = true
+
+            try {
+                const [localsPerformance, guardsPerformance] = await Promise.all([Services.localsPerformance(this, this.filters), Services.guardsPerformance(this, this.filters)])
+
+                this.localsPerformance = localsPerformance
+                this.guardsPerformance = guardsPerformance
+            } catch (error) {
+                console.error('Error loading charts data:', error)
+            } finally {
+                this.isLoading = false
+            }
+        },
+        clearCharts() {
+            this.localsPerformance = []
+            this.guardsPerformance = []
         },
         async updateValues(d) {
             this.filters.startDate = moment(d.startDate).utc(true)

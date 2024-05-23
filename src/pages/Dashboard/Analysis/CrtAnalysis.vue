@@ -6,7 +6,6 @@ import moment from 'moment'
 export default {
     init: async payload => {
         await payload.initRangeDate()
-
         payload.isSuperAdminMaster = await Common.isSuperAdminMaster(payload)
 
         const role = await Common.getSubtype(payload)
@@ -25,21 +24,48 @@ export default {
             payload.filters.client = client
             payload.sites = await Services.getSites(payload)
         }
-
-        await payload.filter()
     },
     methods: {
         async filter() {
+            if (this.isLoading) return
+
+            if (this.role === 'SUPER_ADMIN_MASTER' && !this.filters.account) {
+                Common.show(this, 'top-right', 'warn', this.$t('str.charts.select.account.required'))
+                return
+            }
+
+            this.clearCharts()
             this.isLoading = true
-            this.patrolsChart = await Services.getPatrolsChart(this, this.filters)
-            this.eventsByType = await Services.getEventsByType(this, this.filters)
-            this.eventsPerformance = await Services.eventsPerformance(this, this.filters)
-            this.eventsPerformanceSubstatus = await Services.eventsPerformanceSubstatus(this, this.filters)
 
-            this.avaregeAttendanceEvent = await Services.getAvaregeTimeAttendanceEvent(this, this.filters)
-            this.eventsAttendance = await Services.getEventsAttendance(this, this.filters)
+            try {
+                const [patrolsChart, eventsByType, eventsPerformance, eventsPerformanceSubstatus, avaregeAttendanceEvent, eventsAttendance] = await Promise.all([
+                    Services.getPatrolsChart(this, this.filters),
+                    Services.getEventsByType(this, this.filters),
+                    Services.eventsPerformance(this, this.filters),
+                    Services.eventsPerformanceSubstatus(this, this.filters),
+                    Services.getAvaregeTimeAttendanceEvent(this, this.filters),
+                    Services.getEventsAttendance(this, this.filters),
+                ])
 
-            this.isLoading = false
+                this.patrolsChart = patrolsChart
+                this.eventsByType = eventsByType
+                this.eventsPerformance = eventsPerformance
+                this.eventsPerformanceSubstatus = eventsPerformanceSubstatus
+                this.avaregeAttendanceEvent = avaregeAttendanceEvent
+                this.eventsAttendance = eventsAttendance
+            } catch (error) {
+                console.error('Error loading charts data:', error)
+            } finally {
+                this.isLoading = false
+            }
+        },
+        clearCharts() {
+            this.patrolsChart = {}
+            this.eventsByType = {}
+            this.eventsPerformance = {}
+            this.eventsPerformanceSubstatus = {}
+            this.avaregeAttendanceEvent = {}
+            this.eventsAttendance = {}
         },
         async updateValues(d) {
             this.filters.startDate = moment(d.startDate).utc(true)

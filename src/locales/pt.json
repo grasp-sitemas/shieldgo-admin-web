@@ -1483,5 +1483,6 @@
     "str.form.title.timeline.scheduled.patrols": "Linha do tempo - Rondas agendadas",
     "str.sidebar.menu.timeline.schedule.patrols": "Rondas agendadas",
     "str.modal.timeline.free.patrols.title": "Ronda livre",
-    "str.site.report.title": "Local"
+    "str.site.report.title": "Local",
+    "str.charts.select.account.required": "Selecionar a empresa é obrigatório"
 }

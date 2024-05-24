@@ -26,6 +26,7 @@
 <script>
 var pt = require('apexcharts/dist/locales/pt-br.json')
 var en = require('apexcharts/dist/locales/en.json')
+
 export default {
     name: 'PerformanceEventSubstatus',
     props: ['data', 'redirect', 'locale'],
@@ -33,16 +34,14 @@ export default {
         data(newData) {
             this.updatedData = newData
 
-            newData.substatus.sort((a, b) => a.name.localeCompare(b.name))
-
-            if (newData?.substatus && newData?.substatus?.length > 0) {
+            if (newData?.substatus && newData.substatus.length > 0) {
+                newData.substatus.sort((a, b) => a.name.localeCompare(b.name))
                 this.chart.total = newData.total
                 this.chart.series = newData.substatus.map(item => {
                     const data = item.data.map(([date, value]) => ({
                         x: date.split('-').reverse().join('-'),
                         y: value,
                     }))
-
                     return {
                         total: item.total,
                         name: item.name ? this.$t(item.name) : '',
@@ -58,23 +57,23 @@ export default {
                 return this.$t(seriesName)
             }
 
-            this.chart.series = this.updatedData.substatus.map(item => {
-                const data = item.data.map(([date, value]) => ({
-                    x: date.split('-').reverse().join('-'),
-                    y: value,
-                }))
+            if (this.updatedData?.substatus && this.updatedData.substatus.length > 0) {
+                this.chart.series = this.updatedData.substatus.map(item => {
+                    const data = item.data.map(([date, value]) => ({
+                        x: date.split('-').reverse().join('-'),
+                        y: value,
+                    }))
+                    return {
+                        total: item.total,
+                        name: item.name ? this.$t(item.name) : '',
+                        data: data || [],
+                    }
+                })
 
-                return {
-                    total: item.total,
-                    name: item.name ? this.$t(item.name) : '',
-                    data: data || [],
-                }
-            })
-
-            // Força a atualização do gráfico
-            this.$refs.chart.updateSeries(this.chart.series)
-
-            this.componentKey += 1
+                // Força a atualização do gráfico
+                this.$refs.chart.updateSeries(this.chart.series)
+                this.componentKey += 1
+            }
         },
     },
     data() {
@@ -158,9 +157,7 @@ export default {
 
             if (params) {
                 if (!params?.account) delete params.account
-
                 if (!params?.client) delete params.client
-
                 if (!params?.site) delete params.site
 
                 switch (item.name) {
@@ -178,6 +175,7 @@ export default {
     },
 }
 </script>
+
 <style lang="scss" scoped>
 .apexcharts-legend-text tspan:nth-child(1) {
     font-weight: lighter;

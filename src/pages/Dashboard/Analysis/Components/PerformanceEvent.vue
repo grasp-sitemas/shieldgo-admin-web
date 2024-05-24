@@ -3,15 +3,15 @@
         <div class="card border-0 mb-3 bg-gray-800 text-white">
             <div class="card-body">
                 <div class="mb-3 text-gray-500">
-                    <b>{{ $t('str.msg.analysis.patrol').toUpperCase() }}</b>
+                    <b>{{ $t('str.msg.analysis.finished.patrol').toUpperCase() }}</b>
                 </div>
                 <div class="row">
-                    <div class="col-xl-2 col-3" v-for="(item, index) in chart?.series" :key="index">
+                    <div class="col-xl-3 col-4" v-for="(item, index) in chart?.series" :key="index">
                         <div class="cursor-pointer" @click="handleClick(item)">
                             <h3 class="mb-1">
                                 <span data-animation="number">{{ item.total }}</span>
                             </h3>
-                            <div>{{ $t(item?.name) }}</div>
+                            <div>{{ $t(item.name) }}</div>
                         </div>
                     </div>
                 </div>
@@ -26,30 +26,28 @@
 <script>
 var pt = require('apexcharts/dist/locales/pt-br.json')
 var en = require('apexcharts/dist/locales/en.json')
+
 export default {
     name: 'PerformanceEvent',
+    props: ['data', 'redirect', 'locale'],
     watch: {
         data(newData) {
-            this.updatedData = newData
-
-            newData.substatus.sort((a, b) => a.name.localeCompare(b.name))
-
-            if (newData?.substatus && newData?.substatus?.length > 0) {
+            if (newData?.substatus && newData.substatus.length > 0) {
+                this.updatedData = newData
+                newData.substatus.sort((a, b) => a.name.localeCompare(b.name))
                 this.chart.total = newData.total
                 this.chart.series = newData.substatus.map(item => {
                     const data = item.data.map(([date, value]) => ({
                         x: date.split('-').reverse().join('-'),
                         y: value,
                     }))
-
                     return {
                         total: item.total,
                         name: item.name ? this.$t(item.name) : '',
                         data: data || [],
                     }
                 })
-
-                this.$refs.chart.updateSeries(this.chart.series)
+                this.updateChartSeries()
             }
         },
         locale() {
@@ -57,47 +55,31 @@ export default {
                 return this.$t(seriesName)
             }
 
-            this.chart.series = this.updatedData.substatus.map(item => {
-                const data = item.data.map(([date, value]) => ({
-                    x: date.split('-').reverse().join('-'),
-                    y: value,
-                }))
-
-                return {
-                    total: item.total,
-                    name: item.name ? this.$t(item.name) : '',
-                    data: data || [],
-                }
-            })
-
-            // Força a atualização do gráfico
-            this.$refs.chart.updateSeries(this.chart.series)
-
-            this.componentKey += 1
-        },
-    },
-    props: {
-        data: {
-            type: Object,
-            default: () => {},
-        },
-        redirect: {
-            type: Object,
-            default: () => ({}),
-        },
-        locale: {
-            type: String,
-            default: 'pt-br',
+            if (this.updatedData?.substatus && this.updatedData.substatus.length > 0) {
+                this.chart.series = this.updatedData.substatus.map(item => {
+                    const data = item.data.map(([date, value]) => ({
+                        x: date.split('-').reverse().join('-'),
+                        y: value,
+                    }))
+                    return {
+                        total: item.total,
+                        name: item.name ? this.$t(item.name) : '',
+                        data: data ? data : [],
+                    }
+                })
+                this.updateChartSeries()
+            }
         },
     },
     data() {
         return {
             componentKey: 0,
+            updatedData: {},
             chart: {
                 total: 0,
                 series: [],
                 options: {
-                    colors: ['#00acac', '#32a932', '#e39900', '#e35f00', '#e30000'],
+                    colors: ['#6fb2eb', '#8753de', '#db1d04', '#32a931', '#26acac'],
                     fill: {
                         type: 'solid',
                     },
@@ -162,26 +144,32 @@ export default {
                     },
                 },
             },
-            updatedData: {},
         }
     },
     methods: {
+        updateChartSeries() {
+            this.$nextTick(() => {
+                if (this.$refs.chart) {
+                    this.$refs.chart.updateSeries(this.chart.series)
+                }
+            })
+        },
         handleClick(item) {
             const params = this.redirect.params
 
             if (params) {
                 if (!params?.account) delete params.account
-
                 if (!params?.client) delete params.client
-
                 if (!params?.site) delete params.site
 
                 switch (item.name) {
-                    case 'Não iniciada(s)':
-                        params.report = 'PATROL_POINTS_NOT_VISITED'
+                    case 'EVENT_STATUS_COMPLETE':
+                        params.report = 'PATROL_POINTS_COMPLETED'
                         this.$router.push({ path: '/reports/patrols/' + JSON.stringify(params) })
                         break
-                    default:
+                    case 'EVENT_STATUS_INCOMPLETE':
+                        params.report = 'PATROL_POINTS_INCOMPLETED'
+                        this.$router.push({ path: '/reports/patrols/' + JSON.stringify(params) })
                         break
                 }
             }
@@ -189,6 +177,7 @@ export default {
     },
 }
 </script>
+
 <style lang="scss" scoped>
 .apexcharts-legend-text tspan:nth-child(1) {
     font-weight: lighter;

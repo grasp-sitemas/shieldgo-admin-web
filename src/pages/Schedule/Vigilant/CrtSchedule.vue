@@ -34,35 +34,41 @@ export default {
     },
     methods: {
         async getAppointments() {
+            if (this.isLoading) return
+
+            if (this.role === 'SUPER_ADMIN_MASTER' && !this.filters.account) {
+                Common.show(this, 'top-right', 'warn', this.$t('str.charts.select.account.required'))
+                return
+            }
+
             this.isLoading = true
 
             try {
-                const appointmentsPromise = Services.getAppointmentsByDate(this, this.filters)
+                // Utilizando Promise.all para potencial futura expansão de chamadas simultâneas
+                const [appointments] = await Promise.all([Services.getAppointmentsByDate(this, this.filters)])
 
-                const results = await Promise.all([appointmentsPromise])
-
-                const appointments = results[0]
                 this.originalAppointments = appointments
 
-                const formattedAppointments = await this.formatAppointments(appointments)
-                this.appointments = formattedAppointments ? formattedAppointments : []
+                // Função para formatar os compromissos declarada dentro do escopo de getAppointments
+                const formatAppointments = appointments => {
+                    return appointments.reduce((formatted, appointment) => {
+                        formatted.push({
+                            id: appointment._id,
+                            title: appointment.name,
+                            start: appointment.startDate,
+                        })
+                        return formatted
+                    }, [])
+                }
+
+                // Chamando a função de formatação
+                this.appointments = formatAppointments(appointments)
                 this.calendarOptions.events = this.appointments
             } catch (error) {
                 console.error('Erro ao buscar ou processar os agendamentos:', error)
             } finally {
                 this.isLoading = false
             }
-        },
-        formatAppointments: async function (appointments) {
-            const formattedAppointments = []
-            appointments.forEach(appointment => {
-                formattedAppointments.push({
-                    id: appointment._id,
-                    title: appointment.name,
-                    start: appointment.startDate,
-                })
-            })
-            return formattedAppointments
         },
         initCalendar: async function () {
             const language = this.$session.get('user')?.language

@@ -42,6 +42,8 @@
         <div v-if="isLoading" class="spinner-overlay">
             <b-spinner label="Carregando..." style="width: 2rem; height: 2rem" type="border" variant="primary" />
         </div>
+
+        <notifications group="top-right" position="top right" :speed="1000" />
     </div>
 </template>
 

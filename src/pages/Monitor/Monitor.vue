@@ -393,6 +393,7 @@ export default {
                 endDate: moment().utc(true).format(),
             },
             isSuperAdminMaster: false,
+            subscribes: [],
         }
     },
     methods: Controller.methods,
@@ -420,7 +421,11 @@ export default {
         // subscribe notifications snapshot in array of sites ids
         if (siteIds && siteIds?.length > 0) {
             siteIds.forEach(site => {
-                onSnapshot(doc(db, 'notifications', site), async document => {
+                const unsubscribeNotifications = onSnapshot(doc(db, 'notifications', site), async document => {
+                    console.log('id', document.id)
+                    console.log('data', document.data())
+                    console.log('ref', document.ref)
+                    console.log('metadata', document.metadata)
                     const type = document.data()?.type
                     if (type && type.length > 0) {
                         if (type === 'INCIDENT') {
@@ -453,8 +458,9 @@ export default {
                         await state.filter()
                     }
                 })
+                state.subscribes.push(unsubscribeNotifications)
 
-                onSnapshot(doc(db, 'updatedMedias', site), async document => {
+                const unsubscribeUpdatedMedias = onSnapshot(doc(db, 'updatedMedias', site), async document => {
                     const patrolAction = document.data()?.patrolAction
                     const type = document.data()?.type
 
@@ -470,11 +476,12 @@ export default {
                     }
                     await deleteDoc(doc(db, 'updatedMedias', site))
                 })
+                state.subscribes.push(unsubscribeUpdatedMedias)
             })
         }
 
         if (siteGroupId) {
-            onSnapshot(doc(db, 'updateAttendanceEventReport', siteGroupId), async document => {
+            const unsubscribeAttendanceEventReport = onSnapshot(doc(db, 'updateAttendanceEventReport', siteGroupId), async document => {
                 const patrolActionId = document.data()?.patrolActionId
                 if (patrolActionId === state.selectedEvent?._id) {
                     const patrolAction = document.data()?.patrolActionId
@@ -486,8 +493,9 @@ export default {
                     await deleteDoc(doc(db, 'updateAttendanceEventReport', siteGroupId))
                 }
             })
+            state.subscribes.push(unsubscribeAttendanceEventReport)
 
-            onSnapshot(doc(db, 'updateCloseAttendanceEvent', siteGroupId), async document => {
+            const unsubscribeCloseAttendanceEvent = onSnapshot(doc(db, 'updateCloseAttendanceEvent', siteGroupId), async document => {
                 const patrolActionId = document.data()?.patrolActionId
                 if (patrolActionId) {
                     await state.filter()
@@ -498,8 +506,9 @@ export default {
                     await deleteDoc(doc(db, 'updateCloseAttendanceEvent', siteGroupId))
                 }
             })
+            state.subscribes.push(unsubscribeCloseAttendanceEvent)
 
-            onSnapshot(doc(db, 'updateAttendanceEvent', siteGroupId), async document => {
+            const unsubscribeAttendanceEvent = onSnapshot(doc(db, 'updateAttendanceEvent', siteGroupId), async document => {
                 if (document?.data()?.attendance) {
                     const attendance = JSON.parse(document.data()?.attendance)
                     const operator = JSON.parse(document.data()?.operator)
@@ -512,7 +521,11 @@ export default {
                     await deleteDoc(doc(db, 'updateAttendanceEvent', siteGroupId))
                 }
             })
+            state.subscribes.push(unsubscribeAttendanceEvent)
         }
+    },
+    beforeDestroy() {
+        this.subscribes.forEach(unsubscribe => unsubscribe())
     },
 }
 </script>

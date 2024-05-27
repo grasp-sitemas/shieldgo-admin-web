@@ -44,26 +44,10 @@ export default {
             this.isLoading = true
 
             try {
-                // Utilizando Promise.all para potencial futura expansão de chamadas simultâneas
-                const [appointments] = await Promise.all([Services.getAppointmentsByDate(this, this.filters)])
+                const [items] = await Promise.all([Services.getAppointmentsByDate(this, this.filters)])
 
-                this.originalAppointments = appointments
-
-                // Função para formatar os compromissos declarada dentro do escopo de getAppointments
-                const formatAppointments = appointments => {
-                    return appointments.reduce((formatted, appointment) => {
-                        formatted.push({
-                            id: appointment._id,
-                            title: appointment.name,
-                            start: appointment.startDate,
-                        })
-                        return formatted
-                    }, [])
-                }
-
-                // Chamando a função de formatação
-                this.appointments = formatAppointments(appointments)
-                this.calendarOptions.events = this.appointments
+                this.appointments = items
+                this.calendarOptions.events = items
             } catch (error) {
                 console.error('Erro ao buscar ou processar os agendamentos:', error)
             } finally {
@@ -72,6 +56,7 @@ export default {
         },
         initCalendar: async function () {
             const language = this.$session.get('user')?.language
+
             const locale = language === 'pt' ? 'pt-br' : 'en-gb'
 
             this.calendarOptions = {
@@ -107,7 +92,7 @@ export default {
                 selectMirror: true,
                 dayMaxEvents: true,
                 themeSystem: 'bootstrap',
-                events: this.schedules ? this.schedules : [],
+                events: [],
                 views: {
                     timeGrid: {
                         eventLimit: 6,
@@ -126,16 +111,12 @@ export default {
             this.selectedDate = moment(arg.dateStr).utc(false).format('YYYY-MM-DD')
             this.$bvModal.show('createScheduleModal')
         },
-        getAppintmentById: function (id) {
-            return this.originalAppointments.find(appointment => appointment._id === id)
-        },
         handleEventClick: async function (arg) {
-            const appointment = this.getAppintmentById(arg.event.id)
-
+            const appointment = this.appointments.find(appointment => appointment.id === arg?.event?.id)
             const filters = {
-                account: appointment?.account?._id,
-                client: appointment?.client?._id,
-                site: appointment?.site?._id,
+                account: appointment?.account,
+                client: appointment?.client,
+                site: appointment?.site,
                 schedule: appointment?.schedule,
             }
 

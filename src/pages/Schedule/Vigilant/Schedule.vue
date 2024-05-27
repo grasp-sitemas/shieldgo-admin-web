@@ -69,7 +69,6 @@ export default {
             clients: [],
             sites: [],
             isLoading: false,
-            originalAppointments: [],
             selectedAppointment: {},
             lastFetchedMonth: null,
             filters: {
@@ -80,6 +79,7 @@ export default {
                 startDate: moment().utc(true).format(),
                 endDate: moment().endOf('month').utc(true).format(),
                 isSortByStartDate: true,
+                isFullCalendar: true,
             },
             role: '',
             isSuperAdminMaster: false,

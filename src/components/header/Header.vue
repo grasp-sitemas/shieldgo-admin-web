@@ -119,7 +119,9 @@ export default {
 
             setTimeout(() => {
                 var audio = new Audio(require('../../assets/sound/alarm.mp3'))
-                audio.play()
+                audio.play().catch(error => {
+                    console.error('Audio play failed:', error)
+                })
             }, 1000)
         })
     },

@@ -80,7 +80,7 @@ export default {
                     const currentMonth = moment(startStr).month()
                     if (this.lastFetchedMonth !== currentMonth) {
                         this.filters.endDate = moment(endStr).utc(true).format()
-                        this.filters.startDate = moment(startStr).utc(true).format()
+                        this.filters.startDate = moment().utc(true).format()
                         this.lastFetchedMonth = currentMonth
                     }
                 },

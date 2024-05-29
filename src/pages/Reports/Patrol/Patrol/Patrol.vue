@@ -68,6 +68,7 @@
                         :showDropdowns="dateRange.showDropdowns"
                         :autoApply="dateRange.autoApply"
                         v-model="dateRange.range"
+                        :max-date="dateRange.maxDate"
                         @update="updateValues"
                         :linkedCalendars="dateRange.linkedCalendars"
                         :date-range="dateRange"
@@ -160,6 +161,7 @@
                 />
             </div>
         </div>
+        <notifications group="top-right" position="top right" :speed="1000" />
     </div>
 </template>
 

@@ -60,6 +60,7 @@
                         :showDropdowns="dateRange.showDropdowns"
                         :autoApply="dateRange.autoApply"
                         v-model="dateRange.range"
+                        :max-date="dateRange.maxDate"
                         @update="updateValues"
                         :linkedCalendars="dateRange.linkedCalendars"
                         :date-range="dateRange"
@@ -119,12 +120,6 @@
                         </span>
                     </span>
 
-                    <!-- <span v-else-if="props.column.field === 'incidents'">
-                        <p class="m-0 p-0" v-for="(item, index) in props.formattedRow[props.column.field]" :key="index">
-                            {{ item.name }}
-                        </p>
-                    </span> -->
-
                     <span v-else-if="props.column.field === 'event'">
                         {{ props.formattedRow[props.column.field].name }}
                     </span>
@@ -162,6 +157,7 @@
             <i class="fas fa-spinner fa-spin" />
         </div>
         <Map :data="selectedItem" />
+        <notifications group="top-right" position="top right" :speed="1000" />
     </div>
 </template>
 

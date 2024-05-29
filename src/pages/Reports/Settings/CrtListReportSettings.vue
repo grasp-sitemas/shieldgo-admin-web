@@ -5,11 +5,11 @@ import Common from '../../../common/Common.vue'
 import Services from '../../../common/Services.vue'
 export default {
     init: async payload => {
-        payload.isSuperAdminMaster = await Common.isSuperAdminMaster(payload)
-        payload.reportNames = await Services.getReportNamesTypes(payload)
-
+        payload.reportNames = Services.getReportNamesTypes(payload)
+        payload.role = Common.getSubtype(payload)
         payload.initTable()
 
+        payload.isSuperAdminMaster = await Common.isSuperAdminMaster(payload)
         if (!payload.isSuperAdminMaster) {
             payload.columns.splice(5, 1)
 
@@ -18,11 +18,16 @@ export default {
         } else {
             payload.accounts = await Services.getAccounts(payload)
         }
-
-        payload.filter()
     },
     methods: {
         filter: function () {
+            if (this.isLoading) return
+
+            if (this.role === 'SUPER_ADMIN_MASTER' && !this.filters.account) {
+                Common.show(this, 'top-right', 'warn', this.$t('str.charts.select.account.required'))
+                return
+            }
+
             this.isLoading = true
             this.items = []
 
@@ -84,15 +89,6 @@ export default {
                     sortable: true,
                     filterable: true,
                 },
-                // {
-                //     label: this.$t('str.table.report.column.time'),
-                //     field: 'dispatchTime',
-                //     width: '10%',
-                //     thClass: 'text-nowrap',
-                //     tdClass: 'text-nowrap',
-                //     sortable: true,
-                //     filterable: true,
-                // },
                 {
                     label: this.$t('str.table.report.column.emails'),
                     field: 'emails',

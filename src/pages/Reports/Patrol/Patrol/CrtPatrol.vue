@@ -25,6 +25,11 @@ export default {
         async filter() {
             if (this.isSearchLoading) return
 
+            if (this.role === 'SUPER_ADMIN_MASTER' && !this.filters.account) {
+                Common.show(this, 'top-right', 'warn', this.$t('str.charts.select.account.required'))
+                return
+            }
+
             this.isSearchLoading = true
             this.items = []
 
@@ -179,11 +184,11 @@ export default {
             this.vigilants = await Services.getVigilantsBySite(this, this.filters.site)
         },
         updateValues(d) {
-            this.filters.startDate = new Date(d.startDate)
-            this.filters.endDate = new Date(d.endDate)
+            this.filters.startDate = moment(d.startDate).utc(true)
+            this.filters.endDate = moment(d.endDate).utc(true)
         },
+        formatDate: Common.formatDate,
         getStatusName: Common.getEventStatusName,
-        formatDate: Common.formatDateAndTime,
     },
 }
 </script>

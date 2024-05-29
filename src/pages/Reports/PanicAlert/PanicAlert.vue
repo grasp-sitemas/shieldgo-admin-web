@@ -60,6 +60,30 @@
                         :showDropdowns="dateRange.showDropdowns"
                         :autoApply="dateRange.autoApply"
                         v-model="dateRange.range"
+                        :max-date="dateRange.maxDate"
+                        @update="updateValues"
+                        :linkedCalendars="dateRange.linkedCalendars"
+                        :date-range="dateRange"
+                        :locale="dateRange.locale"
+                    >
+                        <template v-slot:input="filters">
+                            <i class="fa fa-calendar fa-fw text-white text-opacity-50 ms-n1"></i>
+                            {{ formatDate(filters.startDate) }} - {{ formatDate(filters.endDate) }}
+                            <b class="caret ms-1 opacity-5"></b>
+                        </template>
+                    </date-range-picker>
+                    <!-- <date-range-picker
+                        ref="picker"
+                        class="form-select btn btn-dark me-2"
+                        :opens="dateRange.opens"
+                        :locale-data="dateRange.sampleLocaleData"
+                        :singleDatePicker="dateRange.singleDatePicker"
+                        :timePicker="dateRange.timePicker"
+                        :timePicker24Hour="dateRange.timePicker24Hour"
+                        :showWeekNumbers="dateRange.showWeekNumbers"
+                        :showDropdowns="dateRange.showDropdowns"
+                        :autoApply="dateRange.autoApply"
+                        v-model="dateRange.range"
                         @update="updateValues"
                         :linkedCalendars="dateRange.linkedCalendars"
                         :date-range="dateRange"
@@ -70,7 +94,7 @@
                             {{ new Date(filters.startDate).toLocaleDateString('pt-br') }} - {{ new Date(filters.endDate).toLocaleDateString('pt-br') }}
                             <b class="caret ms-1 opacity-5"></b>
                         </template>
-                    </date-range-picker>
+                    </date-range-picker> -->
                 </div>
 
                 <div class="col-md-4 mt-3 mb-2 text-center">
@@ -157,6 +181,7 @@
             <i class="fas fa-spinner fa-spin" />
         </div>
         <Map :data="selectedItem" />
+        <notifications group="top-right" position="top right" :speed="1000" />
     </div>
 </template>
 

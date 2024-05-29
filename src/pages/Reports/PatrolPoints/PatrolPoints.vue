@@ -72,6 +72,7 @@
         <div v-else class="center-spinner">
             <i class="fas fa-spinner fa-spin" />
         </div>
+        <notifications group="top-right" position="top right" :speed="1000" />
     </div>
 </template>
 

@@ -45,8 +45,12 @@ export default {
     methods: {
         async filter() {
             if (!this.isSearchLoading) {
-                this.items = []
+                if (this.role === 'SUPER_ADMIN_MASTER' && !this.filters.account) {
+                    Common.show(this, 'top-right', 'warn', this.$t('str.charts.select.account.required'))
+                    return
+                }
 
+                this.items = []
                 this.isSearchLoading = true
 
                 const results = await Services.missedCall(this, this.filters)
@@ -295,11 +299,11 @@ export default {
             this.vigilants = await Services.getVigilantsBySite(this, this.filters.site)
         },
         updateValues(d) {
-            this.filters.startDate = new Date(d.startDate)
-            this.filters.endDate = new Date(d.endDate)
+            this.filters.startDate = moment(d.startDate).utc(true)
+            this.filters.endDate = moment(d.endDate).utc(true)
         },
+        formatDate: Common.formatDate,
         getStatusName: Common.getEventStatusName,
-        formatDate: Common.formatDateAndTime,
     },
 }
 </script>

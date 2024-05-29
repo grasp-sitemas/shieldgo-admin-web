@@ -31,10 +31,17 @@ export default {
 
             payload.role = role
             payload.isLoading = false
-        }, 1000)
+        }, 700)
     },
     methods: {
         async filter() {
+            if (this.isSearchLoading) return
+
+            if (this.role === 'SUPER_ADMIN_MASTER' && !this.filters.account) {
+                Common.show(this, 'top-right', 'warn', this.$t('str.charts.select.account.required'))
+                return
+            }
+
             this.isSearchLoading = true
             this.items = []
 
@@ -116,30 +123,6 @@ export default {
                     thClass: 'text-nowrap',
                     tdClass: 'text-nowrap',
                 },
-                // {
-                //     label: this.$t('str.table.reports.column.account'),
-                //     field: 'account',
-                //     width: '15%',
-                //     sortable: true,
-                //     thClass: 'text-nowrap',
-                //     tdClass: 'text-nowrap',
-                // },
-                // {
-                //     label: this.$t('str.table.reports.column.client'),
-                //     field: 'client',
-                //     width: '15%',
-                //     sortable: true,
-                //     thClass: 'text-nowrap',
-                //     tdClass: 'text-nowrap',
-                // },
-                // {
-                //     label: this.$t('str.table.reports.column.site'),
-                //     field: 'site',
-                //     width: '15%',
-                //     sortable: true,
-                //     thClass: 'text-nowrap',
-                //     tdClass: 'text-nowrap',
-                // },
             ]
 
             this.paginationOptions = {
@@ -284,11 +267,11 @@ export default {
             this.vigilants = await Services.getSupervisorsBySite(this, this.filters.site)
         },
         updateValues(d) {
-            this.filters.startDate = new Date(d.startDate)
-            this.filters.endDate = new Date(d.endDate)
+            this.filters.startDate = moment(d.startDate).utc(true)
+            this.filters.endDate = moment(d.endDate).utc(true)
         },
+        formatDate: Common.formatDate,
         getStatusName: Common.getEventStatusName,
-        formatDate: Common.formatDateAndTime,
     },
 }
 </script>

@@ -78,7 +78,7 @@
             </vue-good-table>
         </panel>
         <ReportSettingsModal :selectedData="data" :reportNames="reportNames" :items="items" :accounts="accounts" />
-        <notifications group="bottom-right" position="bottom right" :speed="500" />
+        <notifications group="top-right" position="top right" :speed="1000" />
     </div>
 </template>
 
@@ -99,6 +99,7 @@ export default {
             items: [],
             isLoading: false,
             data: {},
+            role: '',
             filters: {
                 account: '',
                 reportName: '',

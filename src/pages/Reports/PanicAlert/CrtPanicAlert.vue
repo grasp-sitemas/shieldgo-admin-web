@@ -6,11 +6,12 @@ import moment from 'moment'
 export default {
     init: async payload => {
         setTimeout(async () => {
+            await payload.initRangeDate()
+
             payload.isSuperAdminMaster = await Common.isSuperAdminMaster(payload)
             const role = await Common.getSubtype(payload)
 
             await payload.initTable()
-            await payload.initRangeDate()
 
             if (role === 'SUPER_ADMIN_MASTER') {
                 payload.accounts = await Services.getAccounts(payload)
@@ -45,8 +46,12 @@ export default {
     methods: {
         async filter() {
             if (!this.isSearchLoading) {
-                this.isSearchLoading = true
+                if (this.role === 'SUPER_ADMIN_MASTER' && !this.filters.account) {
+                    Common.show(this, 'top-right', 'warn', this.$t('str.charts.select.account.required'))
+                    return
+                }
 
+                this.isSearchLoading = true
                 this.items = []
 
                 const results = await Services.sosAlerts(this, this.filters)
@@ -284,11 +289,11 @@ export default {
             this.vigilants = await Services.getVigilantsBySite(this, this.filters.site)
         },
         updateValues(d) {
-            this.filters.startDate = new Date(d.startDate)
-            this.filters.endDate = new Date(d.endDate)
+            this.filters.startDate = moment(d.startDate).utc(true)
+            this.filters.endDate = moment(d.endDate).utc(true)
         },
+        formatDate: Common.formatDate,
         getStatusName: Common.getEventStatusName,
-        formatDate: Common.formatDateAndTime,
     },
 }
 </script>

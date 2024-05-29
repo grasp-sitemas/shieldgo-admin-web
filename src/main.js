@@ -52,7 +52,6 @@ import 'vue2-daterange-picker/dist/vue2-daterange-picker.css'
 import 'sweetalert2/dist/sweetalert2.min.css'
 import 'vue-custom-scrollbar/dist/vueScrollbar.css'
 import 'leaflet/dist/leaflet.css'
-
 // color admin css
 import './scss/vue.scss'
 import 'bootstrap-social/bootstrap-social.css'

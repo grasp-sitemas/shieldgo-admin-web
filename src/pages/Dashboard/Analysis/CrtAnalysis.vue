@@ -67,10 +67,10 @@ export default {
             this.avaregeAttendanceEvent = {}
             this.eventsAttendance = {}
         },
-        updateValues(d) {
+        async updateValues(d) {
             this.filters.startDate = moment(d.startDate).utc(true)
             this.filters.endDate = moment(d.endDate).utc(true)
-            this.filter()
+            await this.filter()
         },
         initRangeDate: async function () {
             const startDate = moment().utc(true).subtract(0, 'days')

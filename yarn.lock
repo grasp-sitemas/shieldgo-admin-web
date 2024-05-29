@@ -11311,7 +11311,7 @@ vue-the-mask@^0.11.1:
   resolved "https://registry.yarnpkg.com/vue-the-mask/-/vue-the-mask-0.11.1.tgz#91ee01008354ae57bccc79bb61b65f32d971d9d5"
   integrity sha512-UquSfnSWejD0zAfcD+3jJ1chUAkOAyoxya9Lxh9acCRtrlmGcAIvd0cQYraWqKenbuZJUdum+S174atv2AuEHQ==
 
-vue2-daterange-picker@^0.6.7:
+vue2-daterange-picker@^0.6.8:
   version "0.6.8"
   resolved "https://registry.yarnpkg.com/vue2-daterange-picker/-/vue2-daterange-picker-0.6.8.tgz#a4dc804f94003bca8644a9eb8b93a1c2e46a7a1b"
   integrity sha512-8/YnxpInyYgjfpffxMP06UaPFYEiXATMq2WcO568fv5BNJQNffMQoBCswwxcma4exW+FrbqQUWQCdTRPtKDrNw==

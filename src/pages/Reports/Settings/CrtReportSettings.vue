@@ -2,16 +2,10 @@
 import Endpoints from '../../../common/Endpoints.vue'
 import Request from '../../../common/Request.vue'
 import Common from '../../../common/Common.vue'
-import Services from '../../../common/Services.vue'
 
 export default {
     init: async payload => {
-        payload.data.account = Common.getAccountId(payload)
-
-        payload.isSuperAdminMaster = await Common.isSuperAdminMaster(payload)
-        if (payload.isSuperAdminMaster) {
-            payload.accounts = await Services.getAccounts(payload)
-        }
+        payload.data.account = await Common.getAccountId(payload)
     },
     methods: {
         save() {

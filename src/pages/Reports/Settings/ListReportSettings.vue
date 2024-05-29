@@ -77,7 +77,7 @@
                 </template>
             </vue-good-table>
         </panel>
-        <ReportSettingsModal :selectedData="data" :reportNames="reportNames" :items="items" :accounts="accounts" />
+        <ReportSettingsModal :selectedData="data" :reportNames="reportNames" :items="items" :accounts="accounts" :isSuperAdminMaster="isSuperAdminMaster" />
         <notifications group="top-right" position="top right" :speed="1000" />
     </div>
 </template>

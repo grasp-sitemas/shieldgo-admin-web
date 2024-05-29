@@ -134,7 +134,7 @@ export default {
                 this.filters.site = ''
             }
             this.getAppointments()
-            this.clients = Services.getClientsByAccount(this, account)
+            this.clients = await Services.getClientsByAccount(this, account)
         },
         changeClient: async function () {
             const client = this.filters.client
@@ -144,7 +144,7 @@ export default {
             }
 
             this.getAppointments()
-            this.sites = Services.getSitesByClient(this, client)
+            this.sites = await Services.getSitesByClient(this, client)
         },
         changeSite: async function () {
             this.getAppointments()

@@ -4,17 +4,18 @@ import Request from '../../../common/Request.vue'
 import Common from '../../../common/Common.vue'
 import Services from '../../../common/Services.vue'
 export default {
-    init: async payload => {
-        payload.reportNames = Services.getReportNamesTypes(payload)
-        payload.role = Common.getSubtype(payload)
+    async init(payload) {
         payload.initTable()
 
-        payload.isSuperAdminMaster = await Common.isSuperAdminMaster(payload)
+        const [reportNames, role, isSuperAdminMaster] = await Promise.all([Services.getReportNamesTypes(payload), Common.getSubtype(payload), Common.isSuperAdminMaster(payload)])
+
+        payload.reportNames = reportNames
+        payload.role = role
+        payload.isSuperAdminMaster = isSuperAdminMaster
+
         if (!payload.isSuperAdminMaster) {
             payload.columns.splice(5, 1)
-
-            const account = await Common.getAccountId(payload)
-            payload.filters.account = account
+            payload.filters.account = await Common.getAccountId(payload)
         } else {
             payload.accounts = await Services.getAccounts(payload)
         }

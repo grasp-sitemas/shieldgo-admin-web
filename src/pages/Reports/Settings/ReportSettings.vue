@@ -145,6 +145,14 @@ export default {
             type: Array,
             default: () => [],
         },
+        isSuperAdminMaster: {
+            type: Boolean,
+            default: false,
+        },
+        accounts: {
+            type: Array,
+            default: () => [],
+        },
     },
     watch: {
         selectedData: async function () {
@@ -165,16 +173,15 @@ export default {
     },
     data() {
         return {
+            errors: [],
             domain: null,
             isLoading: false,
-            errors: [],
-            accounts: [],
             valuekey: 0,
-            isSuperAdminMaster: false,
             newStatus: '',
             data: JSON.parse(JSON.stringify(reportConfig)),
             reportConfigObj: JSON.parse(JSON.stringify(reportConfig)),
             periods: REPORT_SETTINGS_PERIODS,
+            monthlyDays: Array.from({ length: 31 }, (_, i) => ({ value: i + 1, text: i + 1 })),
             weeklyDays: [
                 { value: 0, text: this.$t('str.sunday') },
                 { value: 1, text: this.$t('str.monday') },
@@ -184,7 +191,6 @@ export default {
                 { value: 5, text: this.$t('str.friday') },
                 { value: 6, text: this.$t('str.saturday') },
             ],
-            monthlyDays: Array.from({ length: 31 }, (_, i) => ({ value: i + 1, text: i + 1 })),
         }
     },
     created() {

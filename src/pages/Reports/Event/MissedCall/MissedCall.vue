@@ -89,7 +89,7 @@
                 <div class="col-md-12 mb-3 d-inline-flex">
                     <CsvDownload class="me-2" v-show="csvItems?.length > 0" :jsonFields="jsonFields" :jsonData="csvItems" :jsonMeta="jsonMeta" :filename="filename" :jsonTitle="jsonTitle" />
                     <XlsDownload class="me-2" v-show="csvItems?.length > 0" :jsonFields="jsonFields" :jsonData="csvItems" :jsonMeta="jsonMeta" :filename="filename" :jsonTitle="jsonTitle" />
-                    <PdfDownload v-show="items?.length > 0" :pdfHeader="pdfHeader" :jsonData="reportItems" :filename="filename" :jsonTitle="pdfTitle" />
+                    <PdfDownload v-show="items?.length > 0" :pdfHeader="pdfHeader" :jsonData="reportItems" :filename="filename" :jsonTitle="pdfTitle" :logoURL="logoURL" />
                 </div>
             </div>
             <vue-good-table
@@ -172,6 +172,7 @@ import Map from '../../Components/Map.vue'
 import Vue from 'vue'
 import { JSON_FIELDS_CSV } from './Utils/jsonFieldsCsv'
 import { PDF_HEADER } from './Utils/jsonFieldsPdf'
+import Endpoints from '../../../../common/Endpoints.vue'
 
 Vue.prototype.$registerEvent = new Vue()
 
@@ -188,6 +189,8 @@ export default {
             clients: [],
             sites: [],
             vigilants: [],
+            domain: Endpoints.domain,
+            logoURL: '',
             errors: [],
             items: [],
             reportItems: [],

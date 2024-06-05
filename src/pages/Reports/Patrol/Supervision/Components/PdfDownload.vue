@@ -1,6 +1,6 @@
 <template>
     <div>
-        <button type="submit" class="btn btn-primary is-loading" v-on:click="viewPDF">
+        <button type="submit" class="btn btn-primary" v-on:click="viewPDF">
             <i v-if="isLoading" class="fas fa-spinner fa-pulse" />
             PDF
         </button>
@@ -10,6 +10,7 @@
 <script>
 import moment from 'moment'
 import jsPDF from 'jspdf'
+
 export default {
     props: {
         jsonData: {
@@ -52,6 +53,10 @@ export default {
             type: String,
             default: '',
         },
+        logoURL: {
+            type: String,
+            default: '',
+        },
     },
     watch: {
         jsonData() {
@@ -76,126 +81,130 @@ export default {
     methods: {
         async downloadPDF() {
             this.isLoading = true
+            const doc = new jsPDF({ orientation: 'p', unit: 'mm', format: 'a4' })
+            let y = 10
 
-            let items = this.data
+            // Adicionar logo se existir
+            if (this.logoURL) {
+                const imgData = await this.loadImageWithWhiteBackground(this.logoURL)
+                const imgProps = doc.getImageProperties(imgData)
+                const imgWidth = 40 // Largura fixa para o logotipo
+                const imgHeight = (imgProps.height * imgWidth) / imgProps.width // Altura proporcional
+                const x = (doc.internal.pageSize.getWidth() - imgWidth) / 2 // Centralizar horizontalmente
+                doc.addImage(imgData, 'PNG', x, y, imgWidth, imgHeight)
+                y += imgHeight + 10 // Adicionar margem após a imagem
+            }
 
-            var doc = new jsPDF({ orientation: 'p', unit: 'mm', format: 'a4' })
+            // Título
+            doc.setFont('helvetica', 'bold')
+            doc.setFontSize(16)
+            doc.text(this.title.toUpperCase(), 105, y, { align: 'center' })
+            y += 5
 
-            // doc.addFileToVFS('arial-unicode-ms-normal.ttf', font)
-            // doc.addFont('arial-unicode-ms-normal.ttf', 'arial-unicode-ms', 'normal')
-            // doc.setFont('arial-unicode-ms')
+            // Data de geração
+            doc.setFontSize(10)
+            doc.setFont('helvetica', 'normal')
+            doc.text('Gerado em: ' + moment().format('DD/MM/YYYY HH:mm:ss'), 105, y, { align: 'center' })
+            y += 10
 
-            let headers = createHeaders(this.headers)
+            const startDate = this.periodStart ? moment(this.periodStart).utc(false).format('DD/MM/YYYY') : ' '
+            const endDate = this.periodEnd ? moment(this.periodEnd).utc(false).format('DD/MM/YYYY') : ' '
+            const account = this.jsonInfo.account
+            const address = this.jsonInfo.accountAddress
 
-            function generateData(items, state) {
+            doc.setFont('helvetica', 'bold')
+            doc.text(account?.toUpperCase(), 15, y)
+            y += 5
+            doc.setFont('helvetica', 'normal')
+            doc.text(`${address?.address}, ${address?.number}, ${address?.neighborhood}, ${address?.cep}, ${address?.city}, ${address?.state}`, 15, y)
+            y += 10
+
+            doc.text(`${this.$t('str.supervisor')}: ${this.supervisor}`, 15, y) // supervisor
+            doc.text(`${this.$t('str.total.visits')}: ${this.totalVisits}/${this.data.length}`, 110, y) // total visits
+
+            y += 5
+
+            doc.text(`${this.$t('str.period')}: ${startDate} - ${endDate}`, 15, y)
+            y += 5
+
+            // Linha separadora
+            y += 2
+            doc.setDrawColor(200) // Cor cinza
+            doc.setLineWidth(0.5) // Espessura da linha
+            doc.line(15, y, 200, y)
+            y += 8
+
+            async function generateData(items, state) {
                 const results = []
-
-                items.forEach(item => {
+                for (const item of items) {
                     const newItem = {
                         read: item.read ? state.$t('str.visited') : state.$t('str.not.visited'),
                         scanDate: item?.scanDate ? String(item.scanDate) : ' ',
                         name: String(item.name).toUpperCase(),
                     }
-
                     results.push(newItem)
-                })
+                }
                 return results
             }
 
-            function createHeaders(keys) {
-                const result = []
-                for (let i = 0; i < keys?.length; i += 1) {
-                    result.push({
-                        id: keys[i]._id,
-                        name: keys[i]._id,
-                        prompt: keys[i].name,
-                        width: 45,
-                        align: 'left',
-                        padding: 0,
-                    })
-                }
-                return result
-            }
+            const data = await generateData(this.data, this)
+            doc.autoTable({
+                startY: y,
+                head: [this.headers.map(header => header.name)],
+                body: data.map(item => Object.values(item)),
+                theme: 'striped',
+                styles: { font: 'helvetica', fontSize: 8, fontStyle: 'normal' },
+                headStyles: {
+                    fillColor: [128, 128, 128],
+                    textColor: 255,
+                    fontStyle: 'bold',
+                },
+                columnStyles: {
+                    0: { fontStyle: 'normal' },
+                    1: { fontStyle: 'normal' },
+                },
+                didDrawPage: dataArg => {
+                    y = dataArg.cursor.y + 10 // Update y after drawing the table
+                },
+            })
 
-            try {
-                doc.setFont('Arial', 'bold')
-                doc.setFontSize(14)
-                doc.setTextColor(0, 0, 0)
-
-                let y = 20
-                doc.text(this.jsonTitle.toUpperCase(), 15, y)
-                y += 10
-
-                doc.setFontSize(12)
-                doc.setFont('arial', 'normal')
-                doc.text(this.$t('str.generated.on') + ': ' + moment().utc(true).format('DD/MM/YYYY HH:mm:ss'), 15, y)
-                y += 5
-
-                const account = this.jsonInfo.account
-                const address = this.jsonInfo.accountAddress
-
-                doc.setFont('arial', 'bold')
-                doc.text(account?.toUpperCase(), 15, y)
-                y += 5
-                doc.setFont('arial', 'normal')
-                doc.text(address?.address + ', ' + address?.number + ', ' + address?.neighborhood + ', ' + address?.cep + ', ' + address?.city + ', ' + address?.state, 15, y)
-                y += 10
-
-                doc.text(`${this.$t('str.supervisor')}: ${this.supervisor}`, 15, y) // supervisor
-                doc.text(`${this.$t('str.total.visits')}: ${this.totalVisits}/${items.length}`, 110, y) // total visits
-
-                y += 5
-
-                doc.text(`${this.$t('str.period')}: ${this.periodStart} - ${this.periodEnd}`, 15, y)
-                y += 5
-
-                y += 10
-
-                let data = await generateData(items, this)
-                doc.table(15, y, data, headers, { autoSize: true, fontSize: 8, fontFamily: 'arial-unicode-ms', printHeaders: true, margin: { top: 0, left: 0, right: 0, bottom: 0 } })
-
-                y += 10
-
-                this.isLoading = false
-
-                return new Promise(resolve => {
-                    const pdfData = doc.output('blob')
-                    resolve(pdfData)
-                })
-            } catch (error) {
-                this.isLoading = false
-                console.log(error)
-            }
+            this.isLoading = false
+            return new Promise(resolve => {
+                const pdfData = doc.output('blob')
+                resolve(pdfData)
+            })
         },
         async viewPDF() {
             try {
-                this.isLoading = true
                 const pdfData = await this.downloadPDF()
-                this.isLoading = false
-
-                // Crie uma URL a partir do Blob
                 const pdfURL = URL.createObjectURL(pdfData)
-
-                // Defina as propriedades da janela pop-up
-                const width = window.innerWidth * 0.8
-                const height = window.innerHeight * 0.8
-                const left = (window.innerWidth - width) / 2
-                const top = (window.innerHeight - height) / 2
-                const windowFeatures = `width=${width},height=${height},left=${left},top=${top},scrollbars=yes,toolbar=yes,menubar=no,location=no,status=yes`
-
-                // Abra uma nova janela pop-up com o PDF
-                const previewWindow = window.open(pdfURL, '_blank', windowFeatures)
-
-                // Adicione um listener para fechar a janela pop-up quando o documento for impresso ou o usuário cancelar
-                if (previewWindow) {
-                    previewWindow.print = function () {
-                        previewWindow.close()
-                    }
-                }
+                window.open(pdfURL, '_blank')
             } catch (error) {
                 this.isLoading = false
-                console.error(error)
+                console.error('Error while generating PDF:', error)
             }
+        },
+        async loadImageWithWhiteBackground(url) {
+            return new Promise((resolve, reject) => {
+                const img = new Image()
+                img.crossOrigin = 'Anonymous'
+                img.onload = () => {
+                    const canvas = document.createElement('canvas')
+                    const ctx = canvas.getContext('2d')
+                    canvas.width = img.width
+                    canvas.height = img.height
+
+                    // Preencher o fundo com branco
+                    ctx.fillStyle = '#FFFFFF'
+                    ctx.fillRect(0, 0, canvas.width, canvas.height)
+
+                    // Desenhar a imagem sobre o fundo branco
+                    ctx.drawImage(img, 0, 0)
+                    resolve(canvas.toDataURL('image/png'))
+                }
+                img.onerror = () => reject(new Error('Failed to load image'))
+                img.src = url
+            })
         },
     },
 }

@@ -45,7 +45,7 @@ export const JSON_FIELDS_CSV = {
                     },
                 ],
             ],
-            pdfTitle: 'Alertas de SOS',
+            pdfTitle: 'Relatório de alertas de SOS',
             title: 'Alertas de SOS - ' + 'Relatório gerado em: ' + moment().format('DD/MM/YYYY') + ' às ' + moment().format('HH:mm:ss'),
             filename: 'alertas_sos_' + moment().format('DD/MM/YYYY'),
         },

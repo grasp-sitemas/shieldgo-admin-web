@@ -72,29 +72,6 @@
                             <b class="caret ms-1 opacity-5"></b>
                         </template>
                     </date-range-picker>
-                    <!-- <date-range-picker
-                        ref="picker"
-                        class="form-select btn btn-dark me-2"
-                        :opens="dateRange.opens"
-                        :locale-data="dateRange.sampleLocaleData"
-                        :singleDatePicker="dateRange.singleDatePicker"
-                        :timePicker="dateRange.timePicker"
-                        :timePicker24Hour="dateRange.timePicker24Hour"
-                        :showWeekNumbers="dateRange.showWeekNumbers"
-                        :showDropdowns="dateRange.showDropdowns"
-                        :autoApply="dateRange.autoApply"
-                        v-model="dateRange.range"
-                        @update="updateValues"
-                        :linkedCalendars="dateRange.linkedCalendars"
-                        :date-range="dateRange"
-                        :locale="dateRange.locale"
-                    >
-                        <template v-slot:input="filters">
-                            <i class="fa fa-calendar fa-fw text-white text-opacity-50 ms-n1"></i>
-                            {{ new Date(filters.startDate).toLocaleDateString('pt-br') }} - {{ new Date(filters.endDate).toLocaleDateString('pt-br') }}
-                            <b class="caret ms-1 opacity-5"></b>
-                        </template>
-                    </date-range-picker> -->
                 </div>
 
                 <div class="col-md-4 mt-3 mb-2 text-center">
@@ -107,12 +84,11 @@
                     </button>
                 </div>
             </div>
-
             <div class="row">
                 <div class="col-md-12 mb-3 d-inline-flex">
                     <CsvDownload class="me-2" v-show="csvItems?.length > 0" :jsonFields="jsonFields" :jsonData="csvItems" :jsonMeta="jsonMeta" :filename="filename" :jsonTitle="jsonTitle" />
                     <XlsDownload class="me-2" v-show="csvItems?.length > 0" :jsonFields="jsonFields" :jsonData="csvItems" :jsonMeta="jsonMeta" :filename="filename" :jsonTitle="jsonTitle" />
-                    <PdfDownload v-show="items?.length > 0" :pdfHeader="pdfHeader" :jsonData="reportItems" :filename="filename" :jsonTitle="pdfTitle" />
+                    <PdfDownload class="me-2" v-show="items?.length > 0" :pdfHeader="pdfHeader" :jsonData="reportItems" :filename="filename" :jsonTitle="pdfTitle" :logoURL="logoURL" />
                 </div>
             </div>
 
@@ -189,6 +165,7 @@
 import moment from 'moment'
 import Controller from './CrtPanicAlert.vue'
 import { DATE_RANGE_CONFIG } from '../../../utils/date'
+import Endpoints from '../../../common/Endpoints.vue'
 import CsvDownload from './Components/CsvDownload.vue'
 import XlsDownload from './Components/XlsDownload.vue'
 import PdfDownload from './Components/PdfDownload.vue'
@@ -211,6 +188,8 @@ export default {
             clients: [],
             sites: [],
             vigilants: [],
+            domain: Endpoints.domain,
+            logoURL: '',
             errors: [],
             items: [],
             reportItems: [],

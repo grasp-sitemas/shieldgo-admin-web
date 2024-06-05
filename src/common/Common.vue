@@ -1,5 +1,6 @@
 <script>
 const moment = require('moment')
+const { domain } = require('./Endpoints.vue').default
 
 export default {
     camelize: text => {
@@ -196,6 +197,14 @@ export default {
         /* eslint-disable */
         var re = /^\d{2}\.\d{3}\.\d{3}\/\d{4}\-\d{2}$/
         return re.test(str)
+    },
+    getAccountLogoURL: async function (state, account) {
+        if (account) {
+            return account.logoURL ? `${domain}${account.logoURL}` : ''
+        }
+
+        const user = state.$session.get('user')
+        return user?.account?.logoURL ? `${domain}${user.account.logoURL}` : ''
     },
 }
 </script>

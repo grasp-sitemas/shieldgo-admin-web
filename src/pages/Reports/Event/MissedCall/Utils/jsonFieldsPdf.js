@@ -1,38 +1,38 @@
 export const PDF_HEADER = {
     pt: [
         {
-            _id: 'date',
-            name: 'Data',
+            datakey: 'date',
+            title: 'Data',
         },
         {
-            _id: 'vigilant',
-            name: 'Vigilante',
+            datakey: 'vigilant',
+            title: 'Vigilante',
         },
         {
-            _id: 'type',
-            name: 'Tipo',
+            datakey: 'type',
+            title: 'Tipo',
         },
         {
-            _id: 'notes',
-            name: 'Notas',
+            datakey: 'notes',
+            title: 'Notas',
         },
     ],
     en: [
         {
-            _id: 'date',
-            name: 'Date',
+            datakey: 'date',
+            title: 'Date',
         },
         {
-            _id: 'vigilant',
-            name: 'Vigilant',
+            datakey: 'vigilant',
+            title: 'Vigilant',
         },
         {
-            _id: 'type',
-            name: 'Type',
+            datakey: 'type',
+            title: 'Type',
         },
         {
-            _id: 'notes',
-            name: 'Notes',
+            datakey: 'notes',
+            title: 'Notes',
         },
     ],
 }

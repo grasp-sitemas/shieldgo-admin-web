@@ -122,6 +122,7 @@
                     :role="role"
                     :items="items"
                     :reportItems="reportItems"
+                    :logoURL="logoURL"
                 />
                 <Incompleted
                     v-else-if="filters.report === patrolReportTypes.PATROL_POINTS_INCOMPLETED"
@@ -131,6 +132,7 @@
                     :role="role"
                     :items="items"
                     :reportItems="reportItems"
+                    :logoURL="logoURL"
                 />
                 <NotVisited
                     v-else-if="filters.report === patrolReportTypes.PATROL_POINTS_NOT_VISITED"
@@ -140,6 +142,7 @@
                     :role="role"
                     :items="items"
                     :reportItems="reportItems"
+                    :logoURL="logoURL"
                 />
                 <AllPatrol
                     v-else-if="filters.report === patrolReportTypes.ALL_PATROLS"
@@ -149,6 +152,7 @@
                     :role="role"
                     :items="items"
                     :reportItems="reportItems"
+                    :logoURL="logoURL"
                 />
                 <AlonePatrol
                     v-else-if="filters.report === patrolReportTypes.ALONE_PATROLS"
@@ -158,6 +162,7 @@
                     :role="role"
                     :items="items"
                     :reportItems="reportItems"
+                    :logoURL="logoURL"
                 />
             </div>
         </div>
@@ -166,10 +171,11 @@
 </template>
 
 <script>
+import Vue from 'vue'
 import moment from 'moment'
 import Controller from './CrtPatrol.vue'
 import { DATE_RANGE_CONFIG } from '../../../../utils/date'
-import Vue from 'vue'
+import Endpoints from '../../../../common/Endpoints.vue'
 import { JSON_FIELDS_CSV } from './Utils/jsonFieldsCsv'
 import { PDF_HEADER } from './Utils/jsonFieldsPdf'
 import { REPORT_PATROL_TYPES } from '../../../../utils/constants'
@@ -192,6 +198,8 @@ export default {
             clients: [],
             sites: [],
             vigilants: [],
+            domain: Endpoints.domain,
+            logoURL: '',
             errors: [],
             items: [],
             reportItems: [],

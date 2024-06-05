@@ -33,6 +33,10 @@ export default {
             type: String,
             default: '',
         },
+        logoURL: {
+            type: String,
+            default: '',
+        },
     },
     watch: {
         jsonData() {
@@ -56,16 +60,28 @@ export default {
         async downloadPDF() {
             this.isLoading = true
             const doc = new jsPDF({ orientation: 'p', unit: 'mm', format: 'a4' })
+            let y = 10
+
+            // Adicionar logo se existir
+            if (this.logoURL) {
+                const imgData = await this.loadImageWithWhiteBackground(this.logoURL)
+                const imgProps = doc.getImageProperties(imgData)
+                const imgWidth = 40 // Largura fixa para o logotipo
+                const imgHeight = (imgProps.height * imgWidth) / imgProps.width // Altura proporcional
+                const x = (doc.internal.pageSize.getWidth() - imgWidth) / 2 // Centralizar horizontalmente
+                doc.addImage(imgData, 'PNG', x, y, imgWidth, imgHeight)
+                y += imgHeight + 10 // Adicionar margem após a imagem
+            }
 
             doc.setFont('helvetica', 'bold')
             doc.setFontSize(16)
-            doc.text(this.title.toUpperCase(), 105, 20, { align: 'center' })
+            doc.text(this.title.toUpperCase(), 105, y, { align: 'center' })
 
-            let y = 30
+            y += 5
 
             doc.setFontSize(10)
             doc.setFont('helvetica', 'normal')
-            doc.text('Gerado em: ' + moment().format('DD/MM/YYYY HH:mm:ss'), 105, 25, { align: 'center' })
+            doc.text('Gerado em: ' + moment().format('DD/MM/YYYY HH:mm:ss'), 105, y, { align: 'center' })
             y += 10
 
             this.jsonData.forEach((item, index) => {
@@ -143,6 +159,28 @@ export default {
                 this.isLoading = false
                 console.error('Error while generating PDF:', error)
             }
+        },
+        async loadImageWithWhiteBackground(url) {
+            return new Promise((resolve, reject) => {
+                const img = new Image()
+                img.crossOrigin = 'Anonymous'
+                img.onload = () => {
+                    const canvas = document.createElement('canvas')
+                    const ctx = canvas.getContext('2d')
+                    canvas.width = img.width
+                    canvas.height = img.height
+
+                    // Preencher o fundo com branco
+                    ctx.fillStyle = '#FFFFFF'
+                    ctx.fillRect(0, 0, canvas.width, canvas.height)
+
+                    // Desenhar a imagem sobre o fundo branco
+                    ctx.drawImage(img, 0, 0)
+                    resolve(canvas.toDataURL('image/png'))
+                }
+                img.onerror = () => reject(new Error('Failed to load image'))
+                img.src = url
+            })
         },
     },
 }

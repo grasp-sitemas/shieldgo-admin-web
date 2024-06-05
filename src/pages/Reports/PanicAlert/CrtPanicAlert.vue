@@ -5,43 +5,44 @@ import moment from 'moment'
 
 export default {
     init: async payload => {
-        setTimeout(async () => {
-            await payload.initRangeDate()
+        await Promise.all([payload.initRangeDate(), payload.initTable()])
 
-            payload.isSuperAdminMaster = await Common.isSuperAdminMaster(payload)
-            const role = await Common.getSubtype(payload)
+        payload.columns = payload.columns || []
 
-            await payload.initTable()
+        const [isSuperAdminMaster, role] = await Promise.all([Common.isSuperAdminMaster(payload), Common.getSubtype(payload)])
 
-            if (role === 'SUPER_ADMIN_MASTER') {
-                payload.accounts = await Services.getAccounts(payload)
-            } else if (role === 'ADMIN' || role === 'MANAGER') {
-                payload.clients = await Services.getClients(payload)
-            } else if (role === 'MANAGER' || role === 'OPERATOR' || role === 'AUDITOR') {
-                const client = await Common.getClientId(payload)
-                payload.filters.client = client
-                payload.sites = await Services.getSites(payload)
-            }
+        payload.isSuperAdminMaster = isSuperAdminMaster
+        payload.role = role
 
-            if (!payload.isSuperAdminMaster) {
+        if (role === 'SUPER_ADMIN_MASTER') {
+            payload.accounts = await Services.getAccounts(payload)
+        } else if (role === 'ADMIN' || role === 'MANAGER') {
+            const [clients, logoURL] = await Promise.all([Services.getClients(payload), Common.getAccountLogoURL(payload)])
+            payload.clients = clients
+            payload.logoURL = logoURL
+            payload.filters.account = Common.getAccountId(payload)
+        } else if (['MANAGER', 'OPERATOR', 'AUDITOR'].includes(role)) {
+            const client = await Common.getClientId(payload)
+            payload.filters.client = client
+            payload.sites = await Services.getSites(payload)
+        }
+
+        if (!isSuperAdminMaster || role === 'AUDITOR') {
+            if (payload.columns.length > 4) {
                 payload.columns.splice(4, 1)
             }
+        }
 
-            if (role === 'AUDITOR') {
-                payload.columns.splice(4, 1)
-            }
+        const localeData = payload.JSON_FIELDS_CSV.sosAlert[payload.$i18n.locale]
+        payload.jsonFields = localeData.json_fields
+        payload.jsonData = [localeData.json_data]
+        payload.jsonMeta = [localeData.json_meta]
+        payload.filename = localeData.filename
+        payload.jsonTitle = localeData.title
+        payload.pdfTitle = localeData.pdfTitle
+        payload.pdfHeader = payload.PDF_HEADER[payload.$i18n.locale]
 
-            payload.jsonFields = payload.JSON_FIELDS_CSV.sosAlert[payload.$i18n.locale].json_fields
-            payload.jsonData = [payload.JSON_FIELDS_CSV.sosAlert[payload.$i18n.locale].json_data]
-            payload.jsonMeta = [payload.JSON_FIELDS_CSV.sosAlert[payload.$i18n.locale].json_meta]
-            payload.filename = payload.JSON_FIELDS_CSV.sosAlert[payload.$i18n.locale].filename
-            payload.jsonTitle = payload.JSON_FIELDS_CSV.sosAlert[payload.$i18n.locale].title
-            payload.pdfTitle = payload.JSON_FIELDS_CSV.sosAlert[payload.$i18n.locale].pdfTitle
-            payload.pdfHeader = payload.PDF_HEADER[payload.$i18n.locale]
-
-            payload.role = role
-            payload.isLoading = false
-        }, 1000)
+        payload.isLoading = false
     },
     methods: {
         async filter() {
@@ -270,6 +271,7 @@ export default {
                 this.filters.client = ''
                 this.filters.site = ''
             }
+            this.logoURL = await Common.getAccountLogoURL(this, account)
             this.clients = await Services.getClientsByAccount(this, account)
         },
         changeClient: async function () {

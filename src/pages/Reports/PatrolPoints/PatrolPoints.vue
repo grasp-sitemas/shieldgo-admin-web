@@ -48,7 +48,7 @@
 
             <div class="row">
                 <div class="col-md-12 mb-3 d-inline-flex">
-                    <PdfDownload v-show="items?.length > 0" :pdfHeader="pdfHeader" :jsonData="reportItems" :filename="filename" :jsonTitle="jsonTitle" />
+                    <PdfDownload v-show="items?.length > 0" :pdfHeader="pdfHeader" :jsonData="reportItems" :filename="filename" :jsonTitle="jsonTitle" :logoURL="logoURL" />
                 </div>
             </div>
 
@@ -84,6 +84,7 @@ import PdfDownload from './Components/PdfDownload.vue'
 import Vue from 'vue'
 import { JSON_FIELDS_CSV } from './Utils/jsonFieldsCsv'
 import { PDF_HEADER } from './Utils/jsonFieldsPdf'
+import Endpoints from '../../../common/Endpoints.vue'
 
 Vue.prototype.$registerEvent = new Vue()
 
@@ -97,6 +98,8 @@ export default {
             clients: [],
             sites: [],
             vigilants: [],
+            domain: Endpoints.domain,
+            logoURL: '',
             errors: [],
             items: [],
             reportItems: [],

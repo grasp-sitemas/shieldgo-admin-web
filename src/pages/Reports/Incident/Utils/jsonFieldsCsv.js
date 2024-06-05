@@ -49,7 +49,7 @@ export const JSON_FIELDS_CSV = {
                     },
                 ],
             ],
-            pdfTitle: 'Incidentes',
+            pdfTitle: 'Relatório de Incidentes',
             title: 'Relatório de incidentes - ' + 'Gerado em: ' + moment().format('DD/MM/YYYY') + ' às ' + moment().format('HH:mm:ss'),
             filename: 'incidentes_' + moment().format('DD/MM/YYYY'),
         },

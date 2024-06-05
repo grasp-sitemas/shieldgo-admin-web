@@ -1,7 +1,7 @@
 <template>
     <div>
-        <button type="submit" class="btn btn-primary is-loading" v-on:click="viewPDF">
-            <i v-if="isLoading" class="fas fa-spinner fa-pulse" />
+        <button type="submit" class="btn btn-primary" @click="viewPDF">
+            <i v-if="isLoading" class="fas fa-spinner fa-pulse"></i>
             PDF
         </button>
     </div>
@@ -10,6 +10,8 @@
 <script>
 import moment from 'moment'
 import jsPDF from 'jspdf'
+import 'jspdf-autotable'
+
 export default {
     props: {
         jsonData: {
@@ -28,7 +30,7 @@ export default {
             type: String,
             default: '',
         },
-        reportName: {
+        logoURL: {
             type: String,
             default: '',
         },
@@ -39,7 +41,6 @@ export default {
             this.title = this.jsonTitle
             this.headers = this.pdfHeader
             this.name = this.filename + '.pdf'
-            this.report = this.reportName
         },
     },
     data() {
@@ -48,145 +49,126 @@ export default {
             data: [],
             title: '',
             headers: [],
-            meta: [],
             name: '',
-            report: '',
         }
     },
     methods: {
         async downloadPDF() {
             this.isLoading = true
-            let items = this.data
-            let y = 25
+            const doc = new jsPDF({ orientation: 'p', unit: 'mm', format: 'a4' })
+            let y = 10
 
-            var doc = new jsPDF({ orientation: 'l', unit: 'mm', format: 'a4' })
-
-            let headers = createHeaders(this.headers)
-
-            function generateData(items, state) {
-                const results = []
-
-                items.forEach(item => {
-                    const newItem = {
-                        _id: String(item._id),
-                        account: String(item.account),
-                        client: String(item.client),
-                        site: String(item.site),
-                        vigilant: String(item.vigilant),
-                        date: String(item.date),
-                        event: item?.event ? String(item.event?.name) : ' ',
-                        deviceInfo: item.deviceInfo ? String(item.deviceInfo?.brand) + ' - ' + String(item.deviceInfo?.model) : ' ',
-                        isAttendance: item?.attendance?.isAttendance ? state.$t('str.yes') : state.$t('str.no'),
-                        attendanceStatus: item?.attendance?.status ? state.$t(item.attendance.status) : ' ',
-                        operator: item?.attendance?.operator ? String(item?.attendance?.operator) : ' ',
-                        openedDate: item?.attendance?.openedDate ? moment(item?.attendance?.openedDate).utc(false).format('DD/MM/YYYY HH:mm:ss') : ' ',
-                        closedDate: item?.attendance?.closedDate ? moment(item?.attendance?.closedDate).utc(false).format('DD/MM/YYYY HH:mm:ss') : ' ',
-                    }
-
-                    results.push(newItem)
-                })
-                return results
+            // Adicionar logo se existir
+            if (this.logoURL) {
+                const imgData = await this.loadImageWithWhiteBackground(this.logoURL)
+                const imgProps = doc.getImageProperties(imgData)
+                const imgWidth = 40 // Largura fixa para o logotipo
+                const imgHeight = (imgProps.height * imgWidth) / imgProps.width // Altura proporcional
+                const x = (doc.internal.pageSize.getWidth() - imgWidth) / 2 // Centralizar horizontalmente
+                doc.addImage(imgData, 'PNG', x, y, imgWidth, imgHeight)
+                y += imgHeight + 10 // Adicionar margem após a imagem
             }
 
-            function createHeaders(keys) {
-                const result = []
-                for (let i = 0; i < keys.length; i += 1) {
-                    result.push({
-                        id: keys[i]._id,
-                        name: keys[i]._id,
-                        prompt: keys[i].name,
-                        width: 45,
-                        align: 'left',
-                        padding: 0,
+            // Título
+            doc.setFont('helvetica', 'bold')
+            doc.setFontSize(16)
+            doc.text(this.title.toUpperCase(), 105, y, { align: 'center' })
+            y += 10
+
+            // Data de geração
+            doc.setFontSize(10)
+            doc.setFont('helvetica', 'normal')
+            doc.text('Gerado em: ' + moment().format('DD/MM/YYYY HH:mm:ss'), 105, y, { align: 'center' })
+            y += 10
+
+            // Processar cada item no jsonData
+            this.jsonData.forEach((item, index) => {
+                if (index > 0) {
+                    doc.addPage()
+                    y = 25
+                }
+
+                doc.setFontSize(12)
+                doc.text(item?.account ? item.account.toUpperCase() : ' ', 15, y)
+                y += 6
+
+                doc.setFontSize(10)
+                const addressParts = [item.address?.address, item.address?.number, item.address?.neighborhood, item.address?.city, item.address?.state].filter(part => part) // Remove partes undefined ou null
+                const address = addressParts.join(', ')
+                doc.text(address, 15, y)
+                y += 10
+
+                let formattedList = []
+
+                for (let k = 0; k < item.items.length; k++) {
+                    const subItem = item.items[k]
+                    formattedList.push({
+                        client: subItem.client,
+                        site: subItem.site,
+                        vigilant: subItem.vigilant,
+                        date: moment(subItem.date).format('DD/MM/YYYY HH:mm:ss'),
+                        deviceInfo: `${subItem.deviceInfo?.brand || ''} - ${subItem.deviceInfo?.model || ''}`,
+                        isAttendance: subItem?.attendance?.isAttendance ? 'Sim' : 'Não',
                     })
                 }
-                return result
-            }
 
-            try {
-                doc.setFont('helvetica', 'bold')
-                doc.text(this.title.toUpperCase(), 5, 10)
-
-                doc.setTextColor('#161B22')
-                doc.setFont('helvetica', 'normal')
-                doc.setFontSize(8)
-
-                doc.text(this.$t('str.generated.on') + ': ' + moment().utc(true).format('DD/MM/YYYY HH:mm:ss'), 5, 15)
-
-                for (let i = 0; i < items.length; i++) {
-                    let item = items[i]
-
-                    if (i > 0) {
-                        doc.addPage('a4', 'l')
-                        y = 25
-                    }
-
-                    doc.setFontSize(12)
-                    doc.setFont('helvetica', 'bold')
-                    doc.text(String(item.account).toUpperCase(), 5, y)
-                    y += 4
-
-                    doc.setFontSize(8)
-                    doc.setFont('helvetica', 'normal')
-
-                    const totalAlerts = this.$t('str.total.alerts') + ': ' + item?.items?.length
-                    const textWidth = (doc.getStringUnitWidth(totalAlerts) * doc.internal.getFontSize()) / doc.internal.scaleFactor
-                    const textOffset = doc.internal.pageSize.width - textWidth
-                    doc.text(totalAlerts, textOffset - 15, y)
-
-                    const address = item.address.address + ', ' + item.address.number + ', ' + item.address.neighborhood + ', ' + item.address.city + ' - ' + item.address.state
-                    doc.text(address, 5, y)
-
-                    y += 10
-
-                    doc.setFontSize(6)
-
-                    let data = await generateData(item.items, this)
-                    doc.table(5, y, data, headers, { autoSize: true, fontSize: 6, printHeaders: true, margin: { top: 0, left: 0, right: 0, bottom: 0 } })
-
-                    y += 10
-                }
-
-                this.isLoading = false
-
-                return new Promise(resolve => {
-                    const pdfData = doc.output('blob')
-                    resolve(pdfData)
+                doc.autoTable({
+                    startY: y,
+                    head: [this.headers.map(header => header.title)],
+                    body: formattedList.map(item => Object.values(item)),
+                    theme: 'striped',
+                    styles: { font: 'helvetica', fontSize: 8, fontStyle: 'normal' },
+                    headStyles: {
+                        fillColor: [128, 128, 128],
+                        textColor: 255,
+                        fontStyle: 'bold',
+                    },
+                    columnStyles: {
+                        0: { fontStyle: 'normal' },
+                        1: { fontStyle: 'normal' },
+                    },
+                    didDrawPage: dataArg => {
+                        y = dataArg.cursor.y + 10 // Update y after drawing the table
+                    },
                 })
-            } catch (error) {
-                this.isLoading = false
-                console.log(error)
-            }
+
+                y = doc.lastAutoTable.finalY + 10
+            })
+
+            this.isLoading = false
+            return doc.output('blob')
         },
         async viewPDF() {
             try {
-                this.isLoading = true
                 const pdfData = await this.downloadPDF()
-                this.isLoading = false
-
-                // Crie uma URL a partir do Blob
                 const pdfURL = URL.createObjectURL(pdfData)
-
-                // Defina as propriedades da janela pop-up
-                const width = window.innerWidth * 0.8
-                const height = window.innerHeight * 0.8
-                const left = (window.innerWidth - width) / 2
-                const top = (window.innerHeight - height) / 2
-                const windowFeatures = `width=${width},height=${height},left=${left},top=${top},scrollbars=yes,toolbar=yes,menubar=no,location=no,status=yes`
-
-                // Abra uma nova janela pop-up com o PDF
-                const previewWindow = window.open(pdfURL, '_blank', windowFeatures)
-
-                // Adicione um listener para fechar a janela pop-up quando o documento for impresso ou o usuário cancelar
-                if (previewWindow) {
-                    previewWindow.print = function () {
-                        previewWindow.close()
-                    }
-                }
+                window.open(pdfURL, '_blank')
             } catch (error) {
                 this.isLoading = false
-                console.error(error)
+                console.error('Error while generating PDF:', error)
             }
+        },
+        async loadImageWithWhiteBackground(url) {
+            return new Promise((resolve, reject) => {
+                const img = new Image()
+                img.crossOrigin = 'Anonymous'
+                img.onload = () => {
+                    const canvas = document.createElement('canvas')
+                    const ctx = canvas.getContext('2d')
+                    canvas.width = img.width
+                    canvas.height = img.height
+
+                    // Preencher o fundo com branco
+                    ctx.fillStyle = '#FFFFFF'
+                    ctx.fillRect(0, 0, canvas.width, canvas.height)
+
+                    // Desenhar a imagem sobre o fundo branco
+                    ctx.drawImage(img, 0, 0)
+                    resolve(canvas.toDataURL('image/png'))
+                }
+                img.onerror = () => reject(new Error('Failed to load image'))
+                img.src = url
+            })
         },
     },
 }

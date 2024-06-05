@@ -5,17 +5,24 @@ import moment from 'moment'
 
 export default {
     init: async payload => {
-        payload.isSuperAdminMaster = await Common.isSuperAdminMaster(payload)
-        payload.role = await Common.getSubtype(payload)
+        await Promise.all([payload.initRangeDate()])
 
-        payload.initRangeDate()
+        payload.columns = payload.columns || []
 
+        const [isSuperAdminMaster, role] = await Promise.all([Common.isSuperAdminMaster(payload), Common.getSubtype(payload)])
+
+        payload.isSuperAdminMaster = isSuperAdminMaster
+        payload.role = role
         payload.filters.startDate = moment().utc(false)
-        if (payload.role === 'SUPER_ADMIN_MASTER') {
+
+        if (role === 'SUPER_ADMIN_MASTER') {
             payload.accounts = await Services.getAccounts(payload)
-        } else if (payload.role === 'ADMIN' || payload.role === 'MANAGER') {
-            payload.clients = await Services.getClients(payload)
-        } else if (payload.role === 'MANAGER' || payload.role === 'OPERATOR' || payload.role === 'AUDITOR') {
+        } else if (role === 'ADMIN' || role === 'MANAGER') {
+            const [clients, logoURL] = await Promise.all([Services.getClients(payload), Common.getAccountLogoURL(payload)])
+            payload.clients = clients
+            payload.logoURL = logoURL
+            payload.filters.account = Common.getAccountId(payload)
+        } else if (['MANAGER', 'OPERATOR', 'AUDITOR'].includes(role)) {
             const client = await Common.getClientId(payload)
             payload.filters.client = client
             payload.sites = await Services.getSites(payload)
@@ -165,6 +172,7 @@ export default {
                 this.filters.client = ''
                 this.filters.site = ''
             }
+            this.logoURL = await Common.getAccountLogoURL(this, account)
             this.clients = await Services.getClientsByAccount(this, account)
         },
         changeClient: async function () {

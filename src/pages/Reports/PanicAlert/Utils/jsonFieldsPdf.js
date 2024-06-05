@@ -1,86 +1,26 @@
 export const PDF_HEADER = {
     pt: [
-        {
-            _id: 'client',
-            name: 'Cliente',
-        },
-        {
-            _id: 'site',
-            name: 'Local',
-        },
-        {
-            _id: 'vigilant',
-            name: 'Vigilante',
-        },
-        {
-            _id: 'date',
-            name: 'Data',
-        },
-        {
-            _id: 'deviceInfo',
-            name: 'Dispositivo',
-        },
-        {
-            _id: 'isAttendance',
-            name: 'Atendido',
-        },
-        {
-            _id: 'attendanceStatus',
-            name: 'Status',
-        },
-        {
-            _id: 'operator',
-            name: 'Operador',
-        },
-        {
-            _id: 'openedDate',
-            name: 'Abertura',
-        },
-        {
-            _id: 'closedDate',
-            name: 'Fechamento',
-        },
+        { datakey: 'client', title: 'Cliente' },
+        { datakey: 'site', title: 'Local' },
+        { datakey: 'vigilant', title: 'Vigilante' },
+        { datakey: 'date', title: 'Data' },
+        { datakey: 'deviceInfo', title: 'Dispositivo' },
+        { datakey: 'isAttendance', title: 'Atendido' },
+        // { datakey: 'attendanceStatus', title: 'Status' },
+        // { datakey: 'operator', title: 'Operador' },
+        // { datakey: 'openedDate', title: 'Abertura' },
+        // { datakey: 'closedDate', title: 'Fechamento' },
     ],
     en: [
-        {
-            _id: 'client',
-            name: 'Client',
-        },
-        {
-            _id: 'site',
-            name: 'Local',
-        },
-        {
-            _id: 'vigilant',
-            name: 'Vigilant',
-        },
-        {
-            _id: 'date',
-            name: 'Date',
-        },
-        {
-            _id: 'deviceInfo',
-            name: 'Device',
-        },
-        {
-            _id: 'isAttendance',
-            name: 'Attendance',
-        },
-        {
-            _id: 'attendanceStatus',
-            name: 'Status',
-        },
-        {
-            _id: 'operator',
-            name: 'Operator',
-        },
-        {
-            _id: 'openedDate',
-            name: 'Opened',
-        },
-        {
-            _id: 'closedDate',
-            name: 'Closed',
-        },
+        { datakey: 'client', title: 'Client' },
+        { datakey: 'site', title: 'Site' },
+        { datakey: 'vigilant', title: 'Vigilant' },
+        { datakey: 'date', title: 'Date' },
+        { datakey: 'deviceInfo', title: 'Device' },
+        { datakey: 'isAttendance', title: 'Attendance' },
+        // { datakey: 'attendanceStatus', title: 'Status' },
+        // { datakey: 'operator', title: 'Operator' },
+        // { datakey: 'openedDate', title: 'Opened' },
+        // { datakey: 'closedDate', title: 'Closed' },
     ],
 }

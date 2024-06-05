@@ -32,6 +32,10 @@ export default {
             type: String,
             default: '',
         },
+        logoURL: {
+            type: String,
+            default: '',
+        },
     },
     watch: {
         jsonData() {

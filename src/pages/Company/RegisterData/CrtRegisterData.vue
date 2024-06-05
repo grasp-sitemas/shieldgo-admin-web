@@ -121,7 +121,7 @@ export default {
                 'get',
                 Request.getDefaultHeader(this),
                 {},
-                `${Endpoints.systemUsers.getMe}`,
+                `${Endpoints.systemUsers.companyUser.getMe}`,
                 response => {
                     if (response) {
                         const result = response?.result
@@ -135,6 +135,8 @@ export default {
                         } else if (role === 'OPERATOR') {
                             this.data = result?.site
                         }
+
+                        alert(JSON.stringify(this.data))
 
                         const address = this.data?.address
                         if (!address?.cep) {

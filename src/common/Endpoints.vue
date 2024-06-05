@@ -65,6 +65,7 @@ export default {
         ListUserByType: `${domain}/api/users/bytype/v1/`,
         companyUser: {
             search: `${domain}/api/users/system/search/companyuser/v1/`,
+            getMe: `${domain}/api/users/system/companyuser/me/v1`,
         },
         customerUser: {
             search: `${domain}/api/users/system/search/customeruser/v1/`,

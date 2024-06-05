@@ -113,6 +113,7 @@
                         :filename="filename"
                         :jsonInfo="jsonInfo"
                         :jsonTitle="jsonTitle"
+                        :logoURL="logoURL"
                     />
                 </div>
             </div>
@@ -160,6 +161,7 @@ import Vue from 'vue'
 import { JSON_FIELDS_CSV } from './Utils/jsonFieldsCsv'
 import { PDF_HEADER } from './Utils/jsonFieldsPdf'
 import Services from '../../../../common/Services.vue'
+import Endpoints from '../../../../common/Endpoints.vue'
 
 Vue.prototype.$registerEvent = new Vue()
 
@@ -176,6 +178,8 @@ export default {
             clients: [],
             sites: [],
             vigilants: [],
+            domain: Endpoints.domain,
+            logoURL: '',
             errors: [],
             items: [],
             paginationOptions: {},
@@ -199,12 +203,12 @@ export default {
             isSuperAdminMaster: false,
             JSON_FIELDS_CSV: JSON_FIELDS_CSV,
             PDF_HEADER: PDF_HEADER,
-            jsonFields: JSON_FIELDS_CSV.supervizionPatrol.pt.json_fields,
-            jsonData: [JSON_FIELDS_CSV.supervizionPatrol.pt.json_data],
-            jsonMeta: [JSON_FIELDS_CSV.supervizionPatrol.pt.json_meta],
+            jsonFields: JSON_FIELDS_CSV.supervisionPatrol.pt.json_fields,
+            jsonData: [JSON_FIELDS_CSV.supervisionPatrol.pt.json_data],
+            jsonMeta: [JSON_FIELDS_CSV.supervisionPatrol.pt.json_meta],
             jsonInfo: {},
-            filename: JSON_FIELDS_CSV.supervizionPatrol.pt.filename,
-            jsonTitle: JSON_FIELDS_CSV.supervizionPatrol.pt.title,
+            filename: JSON_FIELDS_CSV.supervisionPatrol.pt.filename,
+            jsonTitle: JSON_FIELDS_CSV.supervisionPatrol.pt.title,
             pdfHeader: PDF_HEADER.pt,
         }
     },
@@ -254,11 +258,11 @@ export default {
         state.$registerEvent.$on('changeLanguage', function () {
             state.initTable()
             state.initRangeDate()
-            state.jsonFields = JSON_FIELDS_CSV.supervizionPatrol[state.$i18n.locale].json_fields
-            state.jsonData = [JSON_FIELDS_CSV.supervizionPatrol[state.$i18n.locale].json_data]
-            state.jsonMeta = [JSON_FIELDS_CSV.supervizionPatrol[state.$i18n.locale].json_meta]
-            state.filename = JSON_FIELDS_CSV.supervizionPatrol[state.$i18n.locale].filename
-            state.jsonTitle = JSON_FIELDS_CSV.supervizionPatrol[state.$i18n.locale].title
+            state.jsonFields = JSON_FIELDS_CSV.supervisionPatrol[state.$i18n.locale].json_fields
+            state.jsonData = [JSON_FIELDS_CSV.supervisionPatrol[state.$i18n.locale].json_data]
+            state.jsonMeta = [JSON_FIELDS_CSV.supervisionPatrol[state.$i18n.locale].json_meta]
+            state.filename = JSON_FIELDS_CSV.supervisionPatrol[state.$i18n.locale].filename
+            state.jsonTitle = JSON_FIELDS_CSV.supervisionPatrol[state.$i18n.locale].title
             state.pdfHeader = PDF_HEADER[state.$i18n.locale]
         })
     },

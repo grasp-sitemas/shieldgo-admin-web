@@ -1,7 +1,7 @@
 import moment from 'moment'
 
 export const JSON_FIELDS_CSV = {
-    supervizionPatrol: {
+    supervisionPatrol: {
         pt: {
             json_fields: {
                 Status: 'read',

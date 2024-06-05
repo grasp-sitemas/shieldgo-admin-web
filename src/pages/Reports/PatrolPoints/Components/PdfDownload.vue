@@ -1,6 +1,6 @@
 <template>
     <div>
-        <button type="submit" class="btn btn-primary is-loading" v-on:click="viewPDF">
+        <button type="submit" class="btn btn-primary" v-on:click="viewPDF">
             <i v-if="isLoading" class="fas fa-spinner fa-pulse" />
             PDF
         </button>
@@ -10,6 +10,8 @@
 <script>
 import jsPDF from 'jspdf'
 import QRCode from 'qrcode'
+import moment from 'moment'
+
 export default {
     props: {
         jsonData: {
@@ -29,6 +31,10 @@ export default {
             default: '',
         },
         reportName: {
+            type: String,
+            default: '',
+        },
+        logoURL: {
             type: String,
             default: '',
         },
@@ -60,7 +66,7 @@ export default {
             let items = this.data
             var doc = new jsPDF({ orientation: 'p', unit: 'mm', format: 'a4' })
 
-            function generateData(items) {
+            async function generateData(items) {
                 const results = []
                 for (let i = 0; i < items.length; i++) {
                     const newItem = {
@@ -74,17 +80,46 @@ export default {
                 return results
             }
 
-            try {
-                let x = 10 // posição inicial do x
-                let y = 20 // posição inicial do y
+            async function addHeader(doc, y) {
+                // Adicionar logo se existir
+                if (this.logoURL) {
+                    const imgData = await this.loadImageWithWhiteBackground(this.logoURL)
+                    const imgProps = doc.getImageProperties(imgData)
+                    const imgWidth = 40 // Largura fixa para o logotipo
+                    const imgHeight = (imgProps.height * imgWidth) / imgProps.width // Altura proporcional
+                    const x = (doc.internal.pageSize.getWidth() - imgWidth) / 2 // Centralizar horizontalmente
+                    doc.addImage(imgData, 'PNG', x, y, imgWidth, imgHeight)
+                    y += imgHeight + 10 // Adicionar margem após a imagem
+                }
 
+                // Título
+                doc.setFont('helvetica', 'bold')
+                doc.setFontSize(16)
+                doc.text(this.title.toUpperCase(), 105, y, { align: 'center' })
+                y += 5
+
+                // Data de geração
+                doc.setFontSize(10)
+                doc.setFont('helvetica', 'normal')
+                doc.text('Gerado em: ' + moment().format('DD/MM/YYYY HH:mm:ss'), 105, y, { align: 'center' })
+                y += 10
+
+                return y
+            }
+
+            let x = 10 // posição inicial do x
+            let y = 10 // posição inicial do y
+
+            // Adicionar cabeçalho na primeira página
+            y = await addHeader.call(this, doc, y)
+
+            try {
                 let data = await generateData(items, this)
 
                 for (let i = 0; i < data.length; i++) {
                     if (i !== 0 && i % 30 === 0) {
-                        // Agora verifica se são 25 QRCodes para uma nova página
                         doc.addPage()
-                        y = 20
+                        y = 10 // Iniciar y a 10 para páginas subsequentes
                         x = 10
                     }
 
@@ -144,8 +179,30 @@ export default {
                 }
             } catch (error) {
                 this.isLoading = false
-                console.error(error)
+                console.error('Error while generating PDF:', error)
             }
+        },
+        async loadImageWithWhiteBackground(url) {
+            return new Promise((resolve, reject) => {
+                const img = new Image()
+                img.crossOrigin = 'Anonymous'
+                img.onload = () => {
+                    const canvas = document.createElement('canvas')
+                    const ctx = canvas.getContext('2d')
+                    canvas.width = img.width
+                    canvas.height = img.height
+
+                    // Preencher o fundo com branco
+                    ctx.fillStyle = '#FFFFFF'
+                    ctx.fillRect(0, 0, canvas.width, canvas.height)
+
+                    // Desenhar a imagem sobre o fundo branco
+                    ctx.drawImage(img, 0, 0)
+                    resolve(canvas.toDataURL('image/png'))
+                }
+                img.onerror = () => reject(new Error('Failed to load image'))
+                img.src = url
+            })
         },
     },
 }

@@ -10,9 +10,6 @@
                         <div v-if="role !== 'OPERATOR'" class="menu-caret ms-auto"></div>
                     </div>
                     <small>{{ $t(this?.user?.companyUser?.subtype) }}</small>
-                    <!-- <div v-if="role === 'OPERATOR'" class="ms-auto">
-                        <small>{{ $t('str.sidebar.menu.site.group') }}: {{ this?.user?.siteGroup?.name }}</small>
-                    </div> -->
                 </div>
             </a>
         </div>
@@ -24,31 +21,6 @@
                     <div class="menu-text">{{ $t(menu.title) }}</div>
                 </a>
             </div>
-
-            <!-- <a href="#/settings" class="menu-link">
-                    <div class="menu-icon"><i class="fa fa-cog"></i></div>
-                    <div class="menu-text">{{ $t('str.sidebar.menu.settings') }}</div>
-                </a>
-            </div>
-            <div class="menu-item">
-                <a href="#/register-data" class="menu-link">
-                    <div class="menu-icon"><i class="fa fa-pencil-alt"></i></div>
-                    <div class="menu-text">{{ $t('str.sidebar.menu.register.data') }}</div>
-                </a>
-            </div>
-            <div class="menu-item">
-                <a href="#/actions-log" class="menu-link">
-                    <div class="menu-icon"><i class="fa fa-file-contract"></i></div>
-                    <div class="menu-text">{{ $t('str.sidebar.menu.actions.log') }}</div>
-                </a>
-            </div> -->
-            <!-- <div class="menu-item pb-5px">
-                <a href="javascript:;" class="menu-link">
-                    <div class="menu-icon"><i class="fa fa-question-circle"></i></div>
-                    <div class="menu-text">Helps</div>
-                </a>
-            </div> -->
-            <!-- <div class="menu-divider m-0"></div> -->
         </div>
     </div>
 </template>

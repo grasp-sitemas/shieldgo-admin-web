@@ -20,7 +20,15 @@
                 <span v-if="!isLoading && items?.length === 0">{{ $t('str.table.subtitle.no.data') }}</span>
             </div>
             <template slot="table-row" slot-scope="props">
-                <span>
+                <span v-if="props.column.field === 'status'">
+                    <span
+                        class="badge"
+                        v-bind:class="props.formattedRow[props.column.field] === 'COMPLETED_EVENT' ? 'bg-success' : props.formattedRow[props.column.field] === 'INCOMPLETED_EVENT' ? 'bg-warning' : 'bg-danger'"
+                    >
+                        {{ $t(props.formattedRow[props.column.field]) }}
+                    </span>
+                </span>
+                <span v-else>
                     {{ props.formattedRow[props.column.field] }}
                 </span>
             </template>
@@ -32,7 +40,7 @@
 import Controller from './CrtAllPatrol.vue'
 import CsvDownload from '../Components/CsvDownload.vue'
 import XlsDownload from '../Components/XlsDownload.vue'
-import PdfDownload from '../Components/PdfDownload.vue'
+import PdfDownload from './Components/PdfDownload.vue'
 import Vue from 'vue'
 import { JSON_FIELDS_CSV } from './Utils/jsonFieldsCsv'
 import { PDF_HEADER } from './Utils/jsonFieldsPdf'
@@ -75,6 +83,7 @@ export default {
     methods: Controller.methods,
     async created() {
         await Controller.init(this)
+        console.log('this', this.reportItems)
     },
 }
 </script>

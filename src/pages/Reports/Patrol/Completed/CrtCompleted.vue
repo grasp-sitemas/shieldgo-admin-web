@@ -27,6 +27,8 @@ export default {
             this.items = results?.tableItems
             this.reportItems = results?.reportItems
 
+            console.log('reportItems', this.reportItems)
+
             this.isSearchLoading = false
         },
         async initTable() {

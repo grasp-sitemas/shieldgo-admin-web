@@ -35,7 +35,7 @@ export const JSON_FIELDS_CSV = {
                     },
                 ],
             ],
-            title: 'Rondas concluídas - Pontos de ronda visitados',
+            title: 'Relatório de Rondas concluídas',
             filename: 'rondas_concluidas_' + moment().format('DD/MM/YYYY'),
         },
         en: {

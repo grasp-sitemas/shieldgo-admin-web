@@ -6,7 +6,7 @@ export default {
         await payload.initTable()
 
         if (!payload.isSuperAdminMaster || payload.role === 'AUDITOR') {
-            payload.columns.splice(6, 1)
+            payload.columns.splice(7, 1)
         }
 
         payload.jsonFields = payload.JSON_FIELDS_CSV.incompletedPatrolPoints[payload.$i18n.locale].json_fields
@@ -19,6 +19,15 @@ export default {
     methods: {
         async initTable() {
             this.columns = [
+                {
+                    label: this.$t('str.table.reports.column.status'),
+                    field: 'status',
+                    width: '5%',
+                    sortable: true,
+                    firstSortType: 'desc',
+                    thClass: 'text-nowrap',
+                    tdClass: 'text-nowrap',
+                },
                 {
                     label: this.$t('str.table.reports.column.patrolPoint'),
                     field: 'patrolPoint',

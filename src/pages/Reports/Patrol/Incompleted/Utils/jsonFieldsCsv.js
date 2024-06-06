@@ -35,7 +35,7 @@ export const JSON_FIELDS_CSV = {
                     },
                 ],
             ],
-            title: 'Rondas incompletas - Pontos visitados e não visitados',
+            title: 'Relatório de Rondas incompletas',
             filename: 'rondas_incompletas_' + moment().format('YYYY-MM-DD'),
         },
         en: {

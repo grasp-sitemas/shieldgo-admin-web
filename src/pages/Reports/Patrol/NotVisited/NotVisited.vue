@@ -32,7 +32,7 @@
 import Controller from './CrtNotVisited.vue'
 import CsvDownload from '../Components/CsvDownload.vue'
 import XlsDownload from '../Components/XlsDownload.vue'
-import PdfDownload from '../Components/PdfDownload.vue'
+import PdfDownload from './Components/PdfDownload.vue'
 import Vue from 'vue'
 import { JSON_FIELDS_CSV } from './Utils/jsonFieldsCsv'
 import { PDF_HEADER } from './Utils/jsonFieldsPdf'

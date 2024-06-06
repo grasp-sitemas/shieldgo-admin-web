@@ -107,47 +107,53 @@ export default {
                     const startDate = moment(schedule.beginDate).format('DD/MM/YYYY HH:mm:ss')
                     const endDate = moment(schedule.endDate).format('DD/MM/YYYY HH:mm:ss')
 
-                    doc.text(`Início: ${startDate} | Término: ${endDate}`, 15, y)
+                    doc.text(`Agenda: ${schedule.name} / Início: ${startDate} | Término: ${endDate}`, 15, y)
                     y += 6
-                    doc.text(`Vigilante: ${schedule?.vigilant ? schedule.vigilant : ' '}`, 15, y)
-                    y += 6
-
-                    let data = []
 
                     for (let k = 0; k < schedule.items.length; k++) {
                         const patrolItem = schedule.items[k]
+                        const eventStartDate = moment(patrolItem.startDate).format('DD/MM/YYYY HH:mm:ss')
+                        const eventEndDate = moment(patrolItem.endDate).format('DD/MM/YYYY HH:mm:ss')
 
-                        for (let l = 0; l < patrolItem.actions.length; l++) {
-                            const action = patrolItem.actions[l]
-                            const patrolPointName = action.patrolPoint?.name || ' '
-                            const scannedDate = action.date ? moment(action.date).format('DD/MM/YYYY HH:mm:ss') : ' '
+                        doc.text(`Evento: ${eventStartDate} | Fim: ${eventEndDate}`, 15, y)
+                        y += 6
 
-                            data.push([patrolPointName, scannedDate])
+                        let data = []
+
+                        for (let l = 0; l < patrolItem.points.length; l++) {
+                            const point = patrolItem.points[l]
+                            data.push([point, patrolItem.client, patrolItem.site])
                         }
+
+                        doc.autoTable({
+                            startY: y,
+                            head: [['Ponto de Patrulha', 'Cliente', 'Site']],
+                            body: data,
+                            theme: 'striped',
+                            styles: { font: 'helvetica', fontSize: 8, fontStyle: 'normal' },
+                            headStyles: {
+                                fillColor: [128, 128, 128],
+                                textColor: 255,
+                                fontStyle: 'bold',
+                            },
+                            columnStyles: {
+                                0: { fontStyle: 'normal' },
+                                1: { fontStyle: 'normal' },
+                                2: { fontStyle: 'normal' },
+                            },
+                            didDrawCell: data => {
+                                if (data.cell.section === 'body' && data.row.index === data.table.body.length - 1) {
+                                    y = data.cell.y + data.cell.height + 10
+                                }
+                            },
+                        })
+
+                        y += 10 // Spacing after each event
                     }
-
-                    doc.autoTable({
-                        startY: y,
-                        head: [['Ponto de Patrulha', 'Data de Leitura']],
-                        body: data,
-                        theme: 'striped',
-                        styles: { font: 'helvetica', fontSize: 8, fontStyle: 'normal' },
-                        headStyles: {
-                            fillColor: [128, 128, 128],
-                            textColor: 255,
-                            fontStyle: 'bold',
-                        },
-                        columnStyles: {
-                            0: { fontStyle: 'normal' },
-                            1: { fontStyle: 'normal' },
-                        },
-                        didDrawPage: dataArg => {
-                            y = dataArg.cursor.y + 10 // Update y after drawing the table
-                        },
-                    })
-
-                    y += 10 // Spacing after each schedule
                 }
+
+                doc.text(`Total de rondas não realizadas: ${item.schedules.reduce((acc, schedule) => acc + schedule.items.length, 0)}`, 15, y)
+                y += 10
             }
 
             this.isLoading = false

@@ -597,6 +597,43 @@ export default {
 
         return []
     },
+
+    searchMissedPatrols: async function (state, filters) {
+        const response = await Request.do(state, 'POST', Request.getDefaultHeader(state), filters, `${Endpoints.reports.filter}`)
+        const results = response?.data?.results
+
+        if (results?.length > 0) {
+            const flattenedItems = results.reduce((acc, item) => {
+                const schedules = item.schedules.reduce((acc, schedule) => {
+                    const items = schedule?.items.reduce((acc, i) => {
+                        const points = i.points.map(point => ({
+                            patrolPoint: point,
+                            event: schedule.name,
+                            vigilant: schedule.vigilant,
+                            scannedDate: '', // Nenhuma data de escaneamento fornecida na nova estrutura
+                            account: item.name,
+                            client: i.client,
+                            site: i.site,
+                            startDate: moment(i.startDate).utc(false).format('DD/MM/YYYY HH:mm:ss'),
+                            endDate: moment(i.endDate).utc(false).format('DD/MM/YYYY HH:mm:ss'),
+                            frequency: schedule.frequency,
+                        }))
+                        return [...acc, ...points]
+                    }, [])
+                    return [...acc, ...items]
+                }, [])
+                return [...acc, ...schedules]
+            }, [])
+
+            return {
+                tableItems: flattenedItems,
+                reportItems: results,
+            }
+        }
+
+        return []
+    },
+
     mergeArrays: async function (completed, incompleted, notVisited) {
         // Inicializando variáveis para garantir que sempre tenhamos um objeto válido
         const defaultObj = { name: 'Default Name', address: 'Default Address', schedules: [] }
@@ -618,49 +655,84 @@ export default {
         ]
         return array
     },
-
-    searchAllPatrols: async function (state, filters) {
+    async searchAllPatrols(state, filters) {
         const response = await Request.do(state, 'POST', Request.getDefaultHeader(state), filters, `${Endpoints.reports.filter}`)
         const results = response?.data?.results
 
+        async function processResults(resultArray, status) {
+            return resultArray.reduce((acc, item) => {
+                const items = item.schedules.reduce((acc, schedule) => {
+                    const newItems = schedule?.items.reduce((acc, i) => {
+                        const actions = i?.actions.map(action => ({
+                            patrolPoint: action.patrolPoint?.name,
+                            event: schedule.name,
+                            vigilant: i.vigilant,
+                            scannedDate: action.date ? moment(action.date).utc(false).format('DD/MM/YYYY HH:mm:ss') : '',
+                            account: item.name,
+                            client: i.client,
+                            site: i.site,
+                            startDate: moment(i.startDate).utc(false).format('DD/MM/YYYY HH:mm:ss'),
+                            endDate: moment(i.endDate).utc(false).format('DD/MM/YYYY HH:mm:ss'),
+                            frequency: schedule.frequency,
+                            status: status,
+                        }))
+                        return acc.concat(actions)
+                    }, [])
+                    return acc.concat(newItems)
+                }, [])
+                return acc.concat(items)
+            }, [])
+        }
+
+        async function processMissedResults(resultArray, status) {
+            return resultArray.reduce((acc, item) => {
+                const items = item.schedules.reduce((acc, schedule) => {
+                    const newItems = schedule?.items.reduce((acc, i) => {
+                        const points = i?.points.map(point => ({
+                            patrolPoint: point,
+                            event: schedule.name,
+                            vigilant: schedule.vigilant,
+                            scannedDate: '',
+                            account: item.name,
+                            client: i.client,
+                            site: i.site,
+                            startDate: moment(i.startDate).utc(false).format('DD/MM/YYYY HH:mm:ss'),
+                            endDate: moment(i.endDate).utc(false).format('DD/MM/YYYY HH:mm:ss'),
+                            frequency: schedule.frequency,
+                            status: status,
+                        }))
+                        return acc.concat(points)
+                    }, [])
+                    return acc.concat(newItems)
+                }, [])
+                return acc.concat(items)
+            }, [])
+        }
+
         if (results) {
             const { completed, incompleted, notVisited } = results
-            const processResults = resultArray => {
-                return resultArray.reduce((acc, item) => {
-                    const items = item.schedules.reduce((acc, schedule) => {
-                        return [
-                            ...acc,
-                            ...schedule?.items.reduce((acc, i) => {
-                                return [
-                                    ...acc,
-                                    ...i?.actions.map(action => ({
-                                        patrolPoint: action.patrolPoint?.name,
-                                        event: schedule.name,
-                                        vigilant: i.vigilant,
-                                        scannedDate: action.date ? moment(action.date).utc(false).format('DD/MM/YYYY HH:mm:ss') : '',
-                                        account: item.name,
-                                        client: i.client,
-                                        site: i.site,
-                                        startDate: moment(i.startDate).utc(false).format('DD/MM/YYYY HH:mm:ss'),
-                                        endDate: moment(i.endDate).utc(false).format('DD/MM/YYYY HH:mm:ss'),
-                                        frequency: schedule.frequency,
-                                    })),
-                                ]
-                            }, []),
-                        ]
-                    }, [])
-                    return [...acc, ...items]
-                }, [])
+
+            let tableItems = []
+
+            const completedItems = await processResults.call(this, completed, 'COMPLETED_EVENT')
+            const incompletedItems = await processResults.call(this, incompleted, 'INCOMPLETED_EVENT')
+            const notVisitedItems = await processMissedResults(notVisited, 'MISSED_EVENT')
+
+            if (completedItems && completedItems.length > 0) {
+                tableItems = [...completedItems]
             }
 
-            const tableItems = [...processResults(completed || []), ...processResults(incompleted || []), ...processResults(notVisited || [])]
+            if (incompletedItems && incompletedItems.length > 0) {
+                tableItems = [...tableItems, ...incompletedItems]
+            }
 
-            let unifiedArray = await this.mergeArrays(completed, incompleted, notVisited)
-            console.log('unifiedArray', unifiedArray)
+            if (notVisitedItems && notVisitedItems.length > 0) {
+                tableItems = [...tableItems, ...notVisitedItems]
+            }
 
             return {
                 tableItems: tableItems,
-                reportItems: unifiedArray,
+                reportItems: results,
             }
         }
 
@@ -876,7 +948,7 @@ export default {
             case REPORT_PATROL_TYPE_LIST.PATROL_POINTS_INCOMPLETED:
                 return this.searchPatrols(state, filters)
             case REPORT_PATROL_TYPE_LIST.PATROL_POINTS_NOT_VISITED:
-                return this.searchPatrols(state, filters)
+                return this.searchMissedPatrols(state, filters)
             case REPORT_PATROL_TYPE_LIST.ALL_PATROLS:
                 return this.searchAllPatrols(state, filters)
             case REPORT_PATROL_TYPE_LIST.ALONE_PATROLS:

@@ -18,7 +18,8 @@ const instanceateAddress = (addressObj, geo) => {
 export default {
     init: async payload => {
         payload.domain = Endpoints.domain
-        await payload.getMe()
+
+        payload.getMe()
     },
     methods: {
         inputCep() {
@@ -136,8 +137,6 @@ export default {
                             this.data = result?.site
                         }
 
-                        alert(JSON.stringify(this.data))
-
                         const address = this.data?.address
                         if (!address?.cep) {
                             this.data.address = {
@@ -152,6 +151,8 @@ export default {
                                 gia: '',
                             }
                         }
+
+                        this.$session.set('user', result)
 
                         this.isLoading = false
                     }

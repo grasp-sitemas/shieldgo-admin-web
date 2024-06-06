@@ -33,7 +33,7 @@ export const JSON_FIELDS_CSV = {
                     },
                 ],
             ],
-            title: 'Rondas não realizadas - Pontos de ronda não visitados',
+            title: 'Relatório de Rondas não realizadas',
             filename: 'rondas_nao_realizadas_' + moment().format('DD/MM/YYYY'),
         },
         en: {

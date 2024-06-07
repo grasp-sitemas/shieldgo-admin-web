@@ -6,7 +6,7 @@
                     <b>{{ $t('str.msg.analysis.finished.patrol').toUpperCase() }}</b>
                 </div>
                 <div class="row">
-                    <div class="col-xl-3 col-4" v-for="(item, index) in chart?.series" :key="index">
+                    <div class="col-md-2" v-for="(item, index) in chart?.series" :key="index">
                         <div class="cursor-pointer" @click="handleClick(item)">
                             <h3 class="mb-1">
                                 <span data-animation="number">{{ item.total }}</span>
@@ -92,7 +92,7 @@ export default {
                         position: 'top',
                         horizontalAlign: 'right',
                         offsetY: 15,
-                        offsetX: 500,
+                        offsetX: 0,
                         labels: {
                             colors: '#fff',
                         },
@@ -137,7 +137,7 @@ export default {
                             },
                         },
                         padding: {
-                            top: -40,
+                            top: 10,
                             right: 3,
                             bottom: 0,
                             left: 10,
@@ -177,6 +177,10 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.apexcharts-legend {
+    position: initial !important;
+}
+
 .apexcharts-legend-text tspan:nth-child(1) {
     font-weight: lighter;
     fill: #999;
@@ -184,5 +188,27 @@ export default {
 
 .apexcharts-legend-text tspan:nth-child(3) {
     font-weight: bold;
+}
+
+.apexcharts-legend.apexcharts-align-right .apexcharts-legend-series,
+.apexcharts-legend.apexcharts-align-left .apexcharts-legend-series {
+    display: inline-block;
+}
+
+.apexcharts-legend-series {
+    cursor: pointer;
+    line-height: normal;
+    display: flex;
+    align-items: center;
+}
+
+.apexcharts-legend-series span {
+    margin-right: 5px; /* Ajuste a margem entre os itens da legenda */
+}
+
+.apexcharts-legend.apx-legend-position-top,
+.apexcharts-legend.apx-legend-position-bottom {
+    flex-wrap: wrap;
+    justify-content: flex-start; /* Alinhe as legendas para o início para evitar sobreposição */
 }
 </style>

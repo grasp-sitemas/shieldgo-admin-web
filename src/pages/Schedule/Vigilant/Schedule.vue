@@ -42,7 +42,6 @@
         <div v-if="isLoading" class="spinner-overlay">
             <b-spinner label="Carregando..." style="width: 2rem; height: 2rem" type="border" variant="primary" />
         </div>
-
         <notifications group="top-right" position="top right" :speed="1000" />
     </div>
 </template>
@@ -94,12 +93,17 @@ export default {
             state.changeLanguage()
         })
         state.$registerEvent.$on('refreshSchedule', function () {
-            state.getAppointments()
+            if (state.filters.account) {
+                state.getAppointments()
+            }
         })
         state.$registerEvent.$on('cancelAppointment', function () {
-            state.getAppointments()
+            Common.show(state, 'top-right', 'success', state.$t('str.form.archive.success'))
             state.$bvModal.hide('createScheduleModal')
-            Common.show(state, 'bottom-right', 'success', state.$t('str.form.archive.success'))
+
+            if (state.filters.account) {
+                state.getAppointments()
+            }
         })
     },
 }

@@ -377,9 +377,8 @@ export default {
         cancelAppointmentSeries: async function () {
             const filters = {
                 schedule: this.data._id,
-                startDate: this?.appointment?.startDate ? this.appointment.startDate : '',
+                startDate: moment().utc(true).format(),
             }
-
             await Services.cancelAppointmentSeries(this, filters)
 
             this.$registerEvent.$emit('cancelAppointment')
@@ -391,8 +390,9 @@ export default {
                 appointment: this.data.appointment,
             }
             await Services.cancelAppointmentOccurrence(this, filters)
-            this.isLoading = false
             this.$registerEvent.$emit('cancelAppointment')
+
+            this.isLoading = false
         },
         changeFrequency: function () {
             this.data.frequencyYear = {

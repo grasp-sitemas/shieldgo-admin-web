@@ -28,7 +28,6 @@ export default {
             if (role === 'MANAGER' || role === 'AUDITOR') {
                 const client = await Common.getClientId(payload)
                 payload.filters.client = client
-                payload.sites = await Services.getSites(payload)
             }
         }
     },
@@ -116,7 +115,6 @@ export default {
             const filters = {
                 account: appointment?.account,
                 client: appointment?.client,
-                site: appointment?.site,
                 schedule: appointment?.schedule,
             }
 
@@ -131,22 +129,11 @@ export default {
 
             if (account === '') {
                 this.filters.client = ''
-                this.filters.site = ''
             }
             this.getAppointments()
             this.clients = await Services.getClientsByAccount(this, account)
         },
         changeClient: async function () {
-            const client = this.filters.client
-
-            if (client === '') {
-                this.filters.site = ''
-            }
-
-            this.getAppointments()
-            this.sites = await Services.getSitesByClient(this, client)
-        },
-        changeSite: async function () {
             this.getAppointments()
         },
     },

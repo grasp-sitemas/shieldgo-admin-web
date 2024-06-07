@@ -337,9 +337,8 @@ export default {
         cancelAppointmentSeries: async function () {
             const filters = {
                 schedule: this.data._id,
-                startDate: this?.appointment?.startDate ? this.appointment.startDate : '',
+                startDate: moment().utc(true).format(),
             }
-
             await Services.cancelAppointmentSeries(this, filters)
 
             this.$registerEvent.$emit('cancelAppointment')

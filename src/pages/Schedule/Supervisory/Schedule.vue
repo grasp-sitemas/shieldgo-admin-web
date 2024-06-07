@@ -24,16 +24,6 @@
                 </select>
                 <div class="invalid-feedback">{{ $t('str.register.guard.groups.client.required') }}</div>
             </div>
-            <div class="col-md-4 mb-3">
-                <label class="form-label" for="siteField">{{ $t('str.register.guard.groups.site.field') }}</label>
-                <select v-model="filters.site" @change="changeSite" class="form-select" id="siteField">
-                    <option value="">{{ $t('str.register.select.placeholder') }}</option>
-                    <option v-for="site in sites" :value="site._id" :key="site._id">
-                        {{ site.name }}
-                    </option>
-                </select>
-                <div class="invalid-feedback">{{ $t('str.register.guard.groups.site.required') }}</div>
-            </div>
         </div>
 
         <CreateScheduleModal :role="role" :selectedAppointment="selectedAppointment" :selectedDate="selectedDate" :accounts="accounts" :clients="clients" :isSuperAdminMaster="isSuperAdminMaster" />
@@ -67,14 +57,12 @@ export default {
             appointments: [],
             accounts: [],
             clients: [],
-            sites: [],
             isLoading: false,
             selectedAppointment: {},
             lastFetchedMonth: null,
             filters: {
                 account: '',
                 client: '',
-                site: '',
                 category: 'SUPERVISORY_PATROL',
                 startDate: moment().startOf('month').utc(true).format(),
                 endDate: moment().endOf('month').utc(true).format(),
@@ -94,12 +82,17 @@ export default {
             state.changeLanguage()
         })
         state.$registerEvent.$on('refreshSchedule', function () {
-            state.getAppointments()
+            if (state.filters.account) {
+                state.getAppointments()
+            }
         })
         state.$registerEvent.$on('cancelAppointment', function () {
-            state.getAppointments()
+            Common.show(state, 'top-right', 'success', state.$t('str.form.archive.success'))
             state.$bvModal.hide('createScheduleModal')
-            Common.show(state, 'bottom-right', 'success', state.$t('str.form.archive.success'))
+
+            if (state.filters.account) {
+                state.getAppointments()
+            }
         })
     },
 }

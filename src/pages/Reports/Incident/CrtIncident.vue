@@ -305,6 +305,10 @@ export default {
             this.selectedItem = data
             this.$bvModal.show('soundModal')
         },
+        getLogoAccount: async function (id, accounts) {
+            const account = accounts.find(account => account._id === id)
+            return account && account.logoURL ? `${domain}${account.logoURL}` : ''
+        },
         changeAccount: async function () {
             const account = this.filters.account
 
@@ -312,7 +316,8 @@ export default {
                 this.filters.client = ''
                 this.filters.site = ''
             }
-            this.logoURL = await Common.getAccountLogoURL(this, account)
+
+            this.logoURL = await this.getLogoAccount(account, this.accounts)
             this.clients = await Services.getClientsByAccount(this, account)
         },
         changeClient: async function () {

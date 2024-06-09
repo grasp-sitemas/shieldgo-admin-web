@@ -329,7 +329,7 @@ import Photo from './Components/Photo/Photo.vue'
 import Signature from './Components/Signature/Signature.vue'
 import Sound from './Components/Sound/Sound.vue'
 import DeviceInfo from './Components/DeviceInfo/DeviceInfo.vue'
-import db from '../../firebaseInit.js'
+import { db } from '../../firebaseInit.js'
 import { doc, onSnapshot, deleteDoc } from 'firebase/firestore'
 
 import moment from 'moment'

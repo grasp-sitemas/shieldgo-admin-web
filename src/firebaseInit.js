@@ -1,5 +1,6 @@
 import { initializeApp } from 'firebase/app'
 import { getFirestore } from 'firebase/firestore'
+import { getRemoteConfig, fetchAndActivate } from 'firebase/remote-config'
 
 // Initialize Firebase
 const firebaseConfig = {
@@ -25,7 +26,30 @@ const firebaseConfig = {
 
 const environment = process.env.VUE_APP_IS_PRODUCTION === 'true' ? 'prd' : 'hml'
 
+// Initialize Firebase
 const app = initializeApp(firebaseConfig[environment])
+
+// Firestore
 const db = getFirestore(app)
 
-export default db
+// Remote Config
+const remoteConfig = getRemoteConfig(app)
+remoteConfig.settings.minimumFetchIntervalMillis = 3600000
+remoteConfig.defaultConfig = {
+    google_play_store_url: 'https://play.google.com/store/apps/details?id=com.shieldgo.app&hl=pt_BR',
+}
+
+// Fetch and activate remote config
+fetchAndActivate(remoteConfig)
+    .then(() => {
+        console.log('Remote Config fetched and activated')
+    })
+    .catch(err => {
+        console.error('Error fetching and activating remote config:', err)
+    })
+
+console.log('Firebase initialized:', app)
+console.log('Firestore initialized:', db)
+console.log('Remote Config initialized:', remoteConfig)
+
+export { db, remoteConfig }

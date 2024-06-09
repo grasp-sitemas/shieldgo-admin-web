@@ -2,12 +2,15 @@
 import Endpoints from '../../common/Endpoints.vue'
 import Request from '../../common/Request.vue'
 import Common from '../../common/Common.vue'
+import { getFeatureFlag } from '../../utils/remoteConfig'
 
 export default {
-    init: payload => {
+    init: async payload => {
         window.location.href = '?#'
         const browserLanguage = navigator.language === 'en-US' ? 'en' : navigator.language === 'pt-BR' ? 'pt' : 'pt'
         payload.$i18n.locale = payload.$session.get('user')?.language || payload.$session.get('language') || browserLanguage || 'pt'
+
+        payload.googlePlayURL = await getFeatureFlag('google_play_store_url')
     },
     methods: {
         checkForm: function () {
@@ -16,12 +19,12 @@ export default {
             }
 
             if (!this.data?.email) {
-                Common.show(this, 'bottom-right', 'warn', this.$t('str.login.email.required'))
+                Common.show(this, 'top-right', 'warn', this.$t('str.login.email.required'))
                 return false
             }
 
             if (!this.data?.password) {
-                Common.show(this, 'bottom-right', 'warn', this.$t('str.login.password.required'))
+                Common.show(this, 'top-right', 'warn', this.$t('str.login.password.required'))
                 return false
             }
 
@@ -59,7 +62,7 @@ export default {
                                     this.$i18n.locale = language
                                     this.$router.push({ path: routeToNavigate })
                                 } else {
-                                    Common.show(this, 'bottom-right', 'error', this.$t('response.user.invalid.subtype'))
+                                    Common.show(this, 'top-right', 'error', this.$t('response.user.invalid.subtype'))
                                 }
                             }
                         },
@@ -67,15 +70,15 @@ export default {
                             let res = error?.response?.data || {}
                             if (res && res.status === 500) {
                                 if (res.messageId === 'response.user.password.incorrect') {
-                                    Common.show(this, 'bottom-right', 'error', this.$t('response.user.password.invalid'))
+                                    Common.show(this, 'top-right', 'error', this.$t('response.user.password.invalid'))
                                 } else {
-                                    Common.show(this, 'bottom-right', 'warn', this.$t('str.login.error'))
+                                    Common.show(this, 'top-right', 'warn', this.$t('str.login.error'))
                                 }
                             } else if (res && res.status === 401) {
                                 if (res.messageId === 'response.user.archived') {
-                                    Common.show(this, 'bottom-right', 'error', this.$t('response.login.user.archived'))
+                                    Common.show(this, 'top-right', 'error', this.$t('response.login.user.archived'))
                                 } else if (res.messageId === 'response.company.archived') {
-                                    Common.show(this, 'bottom-right', 'error', this.$t('response.login.company.archived'))
+                                    Common.show(this, 'top-right', 'error', this.$t('response.login.company.archived'))
                                 }
                             }
                             this.loading = false
@@ -83,7 +86,7 @@ export default {
                     )
                 } catch (err) {
                     this.loading = false
-                    Common.show(this, 'bottom-right', 'warn', this.$t('str.login.error'))
+                    Common.show(this, 'top-right', 'warn', this.$t('str.login.error'))
                     console.log(err)
                 }
             }

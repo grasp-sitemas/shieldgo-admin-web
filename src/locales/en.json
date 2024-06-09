@@ -1487,5 +1487,13 @@
     "str.charts.select.account.required": "Select the account is required",
     "COMPLETED_EVENT": "Completed",
     "INCOMPLETED_EVENT": "Incomplete",
-    "MISSED_EVENT": "Missed"
+    "MISSED_EVENT": "Missed",
+    "str.footer.copy.right": "Copyright",
+    "str.footer.all.rights.reserved": "All rights reserved",
+    "str.footer.developed.by": "Developed by",
+    "str.footer.shield.go": "ShieldGo",
+    "str.footer.visit": "Visit",
+    "str.footer.link": "https://shieldgo.com.br",
+    "str.footer.link.text": "shieldgo.com.br",
+    "str.footer.privacy.policy": "Privacy Policy"
 }

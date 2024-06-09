@@ -1,5 +1,9 @@
 <template>
     <div class="background-image">
+        <div class="language-selector">
+            <span class="flag-icon flag-icon-br" @click="changeLanguage('pt')" title="Português"></span>
+            <span class="flag-icon flag-icon-us" @click="changeLanguage('en')" title="English"></span>
+        </div>
         <div class="login login-v2 fw-bold">
             <div class="login-container">
                 <div class="login-header">
@@ -9,21 +13,25 @@
                     <form v-on:submit="signIn">
                         <div class="form-floating mb-20px">
                             <input type="text" v-model="data.email" class="form-control fs-13px h-45px border-0" :placeholder="$t('str.title.email.address')" id="emailAddress" />
-                            <label for="emailAddress" class="d-flex align-items-center text-gray-600 fs-13px">{{ $t('str.title.email.address') }}</label>
+                            <label for="emailAddress" class="d-flex align-items-center text-gray-600 fs-13px">
+                                {{ $t('str.title.email.address') }}
+                            </label>
                         </div>
-
-                        <div class="mb-3">
-                            <label for="emailAddress" class="d-flex align-items-center text-gray-600 fs-13px">{{ $t('str.title.password') }}</label>
-
-                            <div class="input-group">
-                                <input v-model="data.password" v-bind:type="showPassword ? 'text' : 'password'" class="form-control fs-13px h-45px border-0" :placeholder="$t('str.title.password')" />
-                                <span class="input-group-text" v-on:click="showPassword = !showPassword">
-                                    <i v-bind:class="showPassword ? 'fas fa-eye' : 'fas fa-eye-slash'"></i>
-                                </span>
-                                <div class="invalid-feedback">{{ $t('str.register.user.password.required') }}</div>
-                            </div>
+                        <div class="form-floating mb-20px position-relative">
+                            <input
+                                v-model="data.password"
+                                v-bind:type="showPassword ? 'text' : 'password'"
+                                class="form-control fs-13px h-45px border-0"
+                                :placeholder="$t('str.title.password')"
+                                id="passwordField"
+                            />
+                            <label for="passwordField" class="d-flex align-items-center text-gray-600 fs-13px">
+                                {{ $t('str.title.password') }}
+                            </label>
+                            <span class="password-toggle" v-on:click="togglePassword">
+                                <i v-bind:class="showPassword ? 'fas fa-eye' : 'fas fa-eye-slash'"></i>
+                            </span>
                         </div>
-
                         <div class="mb-20px">
                             <button type="submit" class="btn btn-primary d-block w-100 h-45px btn-lg">
                                 <i v-if="loading" class="fas fa-spinner fa-spin" />
@@ -31,26 +39,32 @@
                             </button>
                         </div>
                     </form>
-                    <!-- <div class="text-gray-500">
-                        {{ $t('str.not.member.yet') + ' ' + $t('str.click') }}
-                        <a href="javascript:;" class="text-white">{{ $t('str.here') }}</a> {{ $t('str.to.register') }}
-                    </div> -->
                     <div class="text-gray-500 text-center mt-10px">
                         <a v-b-modal.recoveryPassword class="text-white">{{ $t('str.recovery.password') }}</a>
                     </div>
                 </div>
                 <div class="footer-content text-center mt-20 mt-5">
-                    <a href="https://play.google.com/store/apps/details?id=com.shieldgo.app&hl=pt_BR" target="_blank">
-                        <img src="../../assets/images/googleplay.png" target alt="Google play" width="140" />
+                    <a :href="googlePlayURL" target="_blank">
+                        <img src="../../assets/images/googleplay.png" alt="Google play" width="140" />
                     </a>
                     |
-                    <a href="https://admin.shieldgo.com.br/?#/privacy-policy" target="_blank" class="text-white">Política de Privacidade</a>
+                    <a href="https://admin.shieldgo.com.br/?#/privacy-policy" target="_blank" class="text-white"> {{ $t('str.footer.privacy.policy') }}</a>
                 </div>
             </div>
         </div>
-
         <RecoveryPassword :email="data.email" />
-        <notifications group="bottom-right" position="bottom right" :speed="500" />
+        <notifications group="top-right" position="top right" :speed="500" />
+
+        <footer class="footer">
+            <p>© {{ new Date().getFullYear() }} {{ $t('str.footer.copy.right') }}. {{ $t('str.footer.all.rights.reserved') }}</p>
+            <p>
+                {{ $t('str.footer.developed.by') }}
+                <a :href="$t('str.footer.link')" target="_blank" class="footer-link"
+                    ><strong>{{ $t('str.footer.shield.go') }}</strong></a
+                >
+                <a :href="$t('str.footer.link')" target="_blank" class="footer-link"></a>
+            </p>
+        </footer>
     </div>
 </template>
 
@@ -76,6 +90,7 @@ export default {
         return {
             loading: false,
             showPassword: false,
+            googlePlayURL: null,
             data: {
                 email: null,
                 password: null,
@@ -85,32 +100,108 @@ export default {
             },
         }
     },
-    methods: Controller.methods,
+    methods: {
+        ...Controller.methods,
+        togglePassword() {
+            this.showPassword = !this.showPassword
+        },
+        changeLanguage(lang) {
+            this.$i18n.locale = lang
+        },
+    },
 }
 </script>
+
 <style lang="scss" scoped>
+.language-selector {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+}
+.language-selector .flag-icon {
+    font-size: 24px;
+    cursor: pointer;
+    margin: 0 5px;
+}
 .background-image {
-    background-image: url('../../assets/images/bg-glass.png') !important;
+    background-color: #000 !important;
 }
 .login-header {
     place-content: center !important;
 }
-
 .footer-content {
     margin-top: 20px;
     padding: 10px;
-    color: #fff; /* Ajuste a cor conforme necessário */
+    color: #fff;
 }
-
 .footer-content a {
     text-decoration: none;
-    color: #fff; /* Ajuste a cor conforme necessário */
+    color: #fff;
     margin: 0 10px;
 }
-
 .footer-content {
     padding: 10px 0;
+}
+.login.login-v2 .login-container {
+    background-color: #1d1c20;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+    padding: 20px;
+}
+.position-relative {
+    position: relative;
+}
+.password-toggle {
+    position: absolute;
+    top: 50%;
+    right: 15px;
+    transform: translateY(-50%);
+    cursor: pointer;
+}
+.password-toggle i {
+    color: #6c757d;
+}
+.form-floating label {
+    transition: color 0.2s, transform 0.2s;
+}
+.form-floating input:focus ~ label,
+.form-floating input:not(:placeholder-shown) ~ label {
+    color: #007bff;
+    transform: translateY(-10px) scale(0.85);
+}
+.footer-content {
+    margin-top: 20px;
+    padding: 10px;
     color: #fff;
-    /* Remova a margin-top para que o conteúdo do rodapé fique mais próximo do formulário de login */
+    text-align: center;
+}
+.footer-content a {
+    text-decoration: none;
+    color: #fff;
+    margin: 0 10px;
+}
+.footer {
+    background-color: #1d1c20;
+    color: #fff;
+    padding: 20px 0;
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    text-align: center;
+}
+.footer .container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.footer p {
+    margin: 0;
+}
+.footer-link {
+    color: #fff;
+    text-decoration: none;
+}
+.footer-link:hover {
+    text-decoration: underline;
 }
 </style>

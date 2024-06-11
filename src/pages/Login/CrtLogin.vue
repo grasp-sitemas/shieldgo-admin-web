@@ -127,13 +127,11 @@ export default {
                 },
                 error => {
                     let res = error.response
-                    console.log(!res.status == 200)
                     if (res && res.status != 200) {
                         this.titleToast = 'Aviso'
 
                         this.messageToast = this.$t('string.msg.change.password.email.invalid')
                     }
-                    console.log(JSON.stringify(res))
                 },
             )
         },

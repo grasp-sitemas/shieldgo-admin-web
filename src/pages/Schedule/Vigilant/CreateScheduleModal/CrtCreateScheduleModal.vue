@@ -80,6 +80,39 @@ export default {
                 this.data.vigilants = []
             }
         },
+        async save() {
+            if (!this.isSaveLoading) {
+                this.isSaveLoading = true
+
+                try {
+                    Request.do(
+                        this,
+                        this.data._id ? 'put' : 'post',
+                        Request.getDefaultHeader(this),
+                        this.data,
+                        `${Endpoints.schedules.v2.schedule}`,
+                        async response => {
+                            if (response.status === 200) {
+                                this.isSaveLoading = false
+                                this.$registerEvent.$emit('refreshSchedule')
+                                await this.closeModal()
+                            }
+                        },
+                        error => {
+                            this.isLoading = false
+                            this.isSaveLoading = false
+                            Common.show(this, 'bottom-right', 'warn', this.data._id ? this.$t('str.form.update.generic.error') : this.$t('str.form.save.generic.error'))
+                            console.log(error)
+                        },
+                    )
+                } catch (error) {
+                    this.isLoading = false
+                    this.isSaveLoading = false
+                    Common.show(this, 'bottom-right', 'warn', this.data._id ? this.$t('str.form.update.generic.error') : this.$t('str.form.save.generic.error'))
+                    console.log(error)
+                }
+            }
+        },
         async update() {
             if (!this.isSaveLoading) {
                 this.isSaveLoading = true
@@ -122,39 +155,6 @@ export default {
                         Request.getDefaultHeader(this),
                         this.data,
                         `${Endpoints.appointments.updateOccurrence}`,
-                        async response => {
-                            if (response.status === 200) {
-                                this.isSaveLoading = false
-                                this.$registerEvent.$emit('refreshSchedule')
-                                await this.closeModal()
-                            }
-                        },
-                        error => {
-                            this.isLoading = false
-                            this.isSaveLoading = false
-                            Common.show(this, 'bottom-right', 'warn', this.data._id ? this.$t('str.form.update.generic.error') : this.$t('str.form.save.generic.error'))
-                            console.log(error)
-                        },
-                    )
-                } catch (error) {
-                    this.isLoading = false
-                    this.isSaveLoading = false
-                    Common.show(this, 'bottom-right', 'warn', this.data._id ? this.$t('str.form.update.generic.error') : this.$t('str.form.save.generic.error'))
-                    console.log(error)
-                }
-            }
-        },
-        async save() {
-            if (!this.isSaveLoading) {
-                this.isSaveLoading = true
-
-                try {
-                    Request.do(
-                        this,
-                        this.data._id ? 'put' : 'post',
-                        Request.getDefaultHeader(this),
-                        this.data,
-                        `${Endpoints.schedules.schedule}`,
                         async response => {
                             if (response.status === 200) {
                                 this.isSaveLoading = false
@@ -639,9 +639,6 @@ export default {
                 console.log(error)
             }
         },
-    },
-    checkEnableInput: function () {
-        return this.data._id ? true : false
     },
 }
 </script>

@@ -143,6 +143,14 @@ export default {
         update: `${domain}/api/schedules/update/v1/`,
         supervisorySchedule: `${domain}/api/schedules/supervisory/v1/`,
         supervisoryUpdate: `${domain}/api/schedules/supervisory/update/v1/`,
+        v2: {
+            filter: `${domain}/api/schedules/filter/v2/`,
+            schedule: `${domain}/api/schedules/v2/`,
+            delete: `${domain}/api/schedules/delete/v2/`,
+            update: `${domain}/api/schedules/update/v2/`,
+            supervisorySchedule: `${domain}/api/schedules/supervisory/v2/`,
+            supervisoryUpdate: `${domain}/api/schedules/supervisory/update/v2/`,
+        },
     },
     cep: {
         find: `${viaCepDomain}`,

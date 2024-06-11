@@ -41,15 +41,9 @@ remoteConfig.defaultConfig = {
 
 // Fetch and activate remote config
 fetchAndActivate(remoteConfig)
-    .then(() => {
-        console.log('Remote Config fetched and activated')
-    })
+    .then(() => {})
     .catch(err => {
         console.error('Error fetching and activating remote config:', err)
     })
-
-console.log('Firebase initialized:', app)
-console.log('Firestore initialized:', db)
-console.log('Remote Config initialized:', remoteConfig)
 
 export { db, remoteConfig }

@@ -91,7 +91,6 @@ export default {
                     }
                 }
             }
-            console.log('------')
         },
         applyMenuRole: function (state) {
             const role = state?.user?.companyUser?.subtype

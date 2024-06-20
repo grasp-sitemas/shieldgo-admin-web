@@ -5,7 +5,7 @@
             <span class="flag-icon flag-icon-us" @click="changeLanguage('en')" title="English"></span>
         </div>
         <div class="login login-v2 fw-bold">
-            <div class="login-container">
+            <div class="login-container mb-lg-5">
                 <div class="login-header">
                     <img src="../../assets/images/logo.png" alt="ShieldGo" width="150" />
                 </div>
@@ -43,27 +43,29 @@
                         <a v-b-modal.recoveryPassword class="text-white">{{ $t('str.recovery.password') }}</a>
                     </div>
                 </div>
-                <div class="footer-content text-center mt-20 mt-5">
-                    <a :href="googlePlayURL" target="_blank">
-                        <img src="../../assets/images/googleplay.png" alt="Google play" width="140" />
-                    </a>
-                    |
-                    <a href="https://admin.shieldgo.com.br/?#/privacy-policy" target="_blank" class="text-white"> {{ $t('str.footer.privacy.policy') }}</a>
-                </div>
             </div>
         </div>
         <RecoveryPassword :email="data.email" />
         <notifications group="top-right" position="top right" :speed="500" />
 
         <footer class="footer">
-            <p>© {{ new Date().getFullYear() }} {{ $t('str.footer.copy.right') }}. {{ $t('str.footer.all.rights.reserved') }}</p>
-            <p>
-                {{ $t('str.footer.developed.by') }}
-                <a :href="$t('str.footer.link')" target="_blank" class="footer-link"
-                    ><strong>{{ $t('str.footer.shield.go') }}</strong></a
-                >
-                <a :href="$t('str.footer.link')" target="_blank" class="footer-link"></a>
-            </p>
+            <div class="footer-column">
+                <a :href="googlePlayURL" target="_blank">
+                    <img src="../../assets/images/googleplay.png" alt="Google play" width="140" />
+                </a>
+            </div>
+            <div class="footer-column text-center">
+                <p>© {{ new Date().getFullYear() }} {{ $t('str.footer.copy.right') }}. {{ $t('str.footer.all.rights.reserved') }}</p>
+                <p>
+                    {{ $t('str.footer.developed.by') }}
+                    <a :href="$t('str.footer.link')" target="_blank" class="footer-link"
+                        ><strong>{{ $t('str.footer.shield.go') }}</strong></a
+                    >
+                </p>
+            </div>
+            <div class="footer-column text-right">
+                <a href="https://admin.shieldgo.com.br/?#/privacy-policy" target="_blank" class="text-white"> {{ $t('str.footer.privacy.policy') }}</a>
+            </div>
         </footer>
     </div>
 </template>
@@ -129,6 +131,41 @@ export default {
 .login-header {
     place-content: center !important;
 }
+
+.footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
+    background-color: #333; /* Ajuste a cor de fundo conforme necessário */
+    color: #fff; /* Ajuste a cor do texto conforme necessário */
+    height: 60px; /* Ajuste a altura conforme necessário */
+    padding-left: 10% !important;
+    padding-right: 10% !important;
+}
+
+.footer-column {
+    flex: 1;
+    text-align: center;
+}
+
+.footer-column:first-child {
+    text-align: left;
+}
+
+.footer-column:last-child {
+    text-align: right;
+}
+
+.footer a {
+    color: #fff; /* Ajuste a cor dos links conforme necessário */
+    text-decoration: none;
+}
+
+.footer a:hover {
+    text-decoration: underline;
+}
+
 .footer-content {
     margin-top: 20px;
     padding: 10px;
@@ -183,11 +220,16 @@ export default {
 .footer {
     background-color: #1d1c20;
     color: #fff;
-    padding: 20px 0;
+    padding: 15px 0;
     position: absolute;
     bottom: 0;
     width: 100%;
     text-align: center;
+
+    p {
+        margin: 0;
+        font-size: 10px;
+    }
 }
 .footer .container {
     display: flex;

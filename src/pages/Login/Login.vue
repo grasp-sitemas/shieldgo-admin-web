@@ -48,23 +48,27 @@
         <RecoveryPassword :email="data.email" />
         <notifications group="top-right" position="top right" :speed="500" />
 
-        <footer class="footer">
-            <div class="footer-column">
-                <a :href="googlePlayURL" target="_blank">
-                    <img src="../../assets/images/googleplay.png" alt="Google play" width="140" />
-                </a>
-            </div>
-            <div class="footer-column text-center">
-                <p>© {{ new Date().getFullYear() }} {{ $t('str.footer.copy.right') }}. {{ $t('str.footer.all.rights.reserved') }}</p>
-                <p>
-                    {{ $t('str.footer.developed.by') }}
-                    <a :href="$t('str.footer.link')" target="_blank" class="footer-link"
-                        ><strong>{{ $t('str.footer.shield.go') }}</strong></a
-                    >
-                </p>
-            </div>
-            <div class="footer-column text-right">
-                <a href="https://admin.shieldgo.com.br/?#/privacy-policy" target="_blank" class="text-white"> {{ $t('str.footer.privacy.policy') }}</a>
+        <footer class="footer w-100">
+            <div class="container align-items-center w-100">
+                <div class="row f-content">
+                    <div class="col-md-4">
+                        <a :href="googlePlayURL" target="_blank">
+                            <img src="../../assets/images/googleplay.png" alt="Google play" width="140" />
+                        </a>
+                    </div>
+                    <div class="col-md-4">
+                        <p>© {{ new Date().getFullYear() }} {{ $t('str.footer.copy.right') }}. {{ $t('str.footer.all.rights.reserved') }}</p>
+                        <p>
+                            {{ $t('str.footer.developed.by') }}
+                            <a :href="$t('str.footer.link')" target="_blank" class="footer-link"
+                                ><strong>{{ $t('str.footer.shield.go') }}</strong></a
+                            >
+                        </p>
+                    </div>
+                    <div class="col-md-4">
+                        <a href="https://admin.shieldgo.com.br/?#/privacy-policy" target="_blank" class="text-white"> {{ $t('str.footer.privacy.policy') }}</a>
+                    </div>
+                </div>
             </div>
         </footer>
     </div>
@@ -170,15 +174,16 @@ export default {
     margin-top: 20px;
     padding: 10px;
     color: #fff;
+    justify-content: space-between;
+    align-items: center;
 }
+
 .footer-content a {
     text-decoration: none;
     color: #fff;
     margin: 0 10px;
 }
-.footer-content {
-    padding: 10px 0;
-}
+
 .login.login-v2 .login-container {
     background-color: #1d1c20;
     border-radius: 10px;
@@ -232,7 +237,6 @@ export default {
     }
 }
 .footer .container {
-    display: flex;
     justify-content: space-between;
     align-items: center;
 }
@@ -245,5 +249,20 @@ export default {
 }
 .footer-link:hover {
     text-decoration: underline;
+}
+.container {
+    max-width: 100%;
+}
+.f-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    a {
+        color: #fff;
+        text-decoration: none;
+    }
+}
+.mb-lg-5 {
+    margin-bottom: 4rem !important;
 }
 </style>

@@ -1,0 +1,10 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+    name: shieldgo-admin-web
+    description: Aplicação web da plataforma ShieldGo em Vue2.
+spec:
+    type: website
+    lifecycle: production
+    owner: team-shieldgo
+    system: shieldgo-system

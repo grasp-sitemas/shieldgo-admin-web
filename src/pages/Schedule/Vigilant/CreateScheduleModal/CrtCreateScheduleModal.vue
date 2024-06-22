@@ -90,7 +90,7 @@ export default {
                         this.data._id ? 'put' : 'post',
                         Request.getDefaultHeader(this),
                         this.data,
-                        `${Endpoints.schedules.v2.schedule}`,
+                        `${Endpoints.schedules.schedule}`,
                         async response => {
                             if (response.status === 200) {
                                 this.isSaveLoading = false

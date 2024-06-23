@@ -1495,5 +1495,9 @@
     "str.footer.visit": "Visit",
     "str.footer.link": "https://shieldgo.com.br",
     "str.footer.link.text": "shieldgo.com.br",
-    "str.footer.privacy.policy": "Privacy Policy"
+    "str.footer.privacy.policy": "Privacy Policy",
+    "str.register.company.logo.crop": "Select the area of the image to keep",
+    "str.btn.crop": "Crop Image",
+    "str.register.user.photo.hint": "Click to change the photo",
+    "str.register.user.photo.crop": "Crop Image"
 }

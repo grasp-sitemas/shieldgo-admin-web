@@ -1497,5 +1497,7 @@
     "str.footer.link.text": "ShieldGo",
     "str.footer.privacy.policy": "Política de privacidade",
     "str.register.company.logo.crop": "Selecione a área da imagem que deseja manter",
-    "str.btn.crop": "Recortar"
+    "str.btn.crop": "Recortar",
+    "str.register.user.photo.hint": "Selecione uma imagem para o perfil",
+    "str.register.user.photo.crop": "Recorte a imagem"
 }

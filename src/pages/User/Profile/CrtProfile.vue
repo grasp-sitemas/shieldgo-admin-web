@@ -2,6 +2,8 @@
 import Endpoints from '../../../common/Endpoints.vue'
 import Request from '../../../common/Request.vue'
 import Common from '../../../common/Common.vue'
+import Cropper from 'cropperjs'
+import 'cropperjs/dist/cropper.css'
 
 const instanceateAddress = (addressObj, geo) => {
     addressObj.name = 'MAIN'
@@ -124,9 +126,12 @@ export default {
         },
         save() {
             let formData = new FormData()
-
-            formData.append('file', this.file)
+            if (this.previewImage) {
+                const file = this.dataURLtoFile(this.previewImage, 'photo.png')
+                formData.append('file', file)
+            }
             formData.append('jsonData', JSON.stringify(this.data))
+
             try {
                 Request.do(
                     this,
@@ -217,8 +222,64 @@ export default {
                 },
             )
         },
-        handleFileUpload() {
-            this.file = this.$refs.file.files[0]
+        onFileChange(e) {
+            const file = e.target.files[0]
+            if (file && (file.type === 'image/png' || file.type === 'image/jpeg')) {
+                const reader = new FileReader()
+                reader.onload = event => {
+                    this.cropperImage = event.target.result
+                    this.showCropper = true
+                    this.$nextTick(() => {
+                        const image = this.$refs.image
+                        this.cropper = new Cropper(image, {
+                            aspectRatio: 1 / 2,
+                            viewMode: 1,
+                            autoCropArea: 1,
+                            responsive: true,
+                            scalable: true,
+                            zoomable: true,
+                            movable: true,
+                            minContainerWidth: 300,
+                            minContainerHeight: 600,
+                            minCanvasWidth: 300,
+                            minCanvasHeight: 600,
+                        })
+                    })
+                }
+                reader.readAsDataURL(file)
+            } else {
+                e.target.value = null
+            }
+        },
+        cropImage() {
+            if (this.cropper) {
+                const canvas = this.cropper.getCroppedCanvas({
+                    width: 100,
+                    height: 200,
+                })
+                this.previewImage = canvas.toDataURL()
+                this.showCropper = false
+                this.cropper.destroy()
+                this.cropper = null
+            }
+        },
+        closeCropper() {
+            if (this.cropper) {
+                this.cropper.destroy()
+                this.cropper = null
+            }
+            this.showCropper = false
+        },
+        dataURLtoFile(dataurl, filename) {
+            const arr = dataurl.split(',')
+            const mime = arr[0].match(/:(.*?);/)[1]
+            const bstr = atob(arr[1])
+            let n = bstr.length
+            const u8arr = new Uint8Array(n)
+            while (n--) {
+                u8arr[n] = bstr.charCodeAt(n)
+            }
+            return new File([u8arr], filename, { type: mime })
         },
     },
 }

@@ -3,16 +3,6 @@
         <panel :title="$t('str.user.profile.title')">
             <form>
                 <fieldset>
-                    <div v-if="data._id" class="row">
-                        <div class="col-md-4 mb-3">
-                            <label class="form-label" for="statusField">{{ $t('str.register.status.field') }}</label>
-                            <select disabled v-model="data.status" class="form-select" id="statusField">
-                                <option value="ACTIVE">{{ $t('str.register.status.active') }}</option>
-                                <option value="ARCHIVED">{{ $t('str.register.status.archived') }}</option>
-                            </select>
-                        </div>
-                    </div>
-
                     <div class="row">
                         <div class="col-md-6 mb-3">
                             <label class="form-label" for="firstNameField">{{ $t('str.register.user.first.name.field') }}</label>
@@ -119,13 +109,34 @@
                             <div class="col-md-4 mb-3">
                                 <label class="form-label" for="numberField">{{ $t('str.register.user.perfil.photo.field') }}</label>
 
-                                <div v-if="data?.photoURL && data.photoURL !== 'https://'" class="d-flex">
+                                <div v-if="previewImage || (data?.photoURL && data.photoURL !== 'https://')" class="d-flex">
                                     <a class="w-lg-250px w-250px">
-                                        <img crossorigin="anonymous" v-bind:src="`${domain}${data.photoURL}`" class="mw-100 rounded" />
+                                        <img crossorigin="anonymous" :src="previewImage || `${domain}${data.photoURL}`" class="mw-100 rounded" width="100" height="200" />
                                     </a>
                                 </div>
 
-                                <input type="file" accept="image/*" id="file" ref="file" v-on:change="handleFileUpload()" class="form-control" />
+                                <input type="file" accept="image/*" id="file" ref="file" @change="onFileChange" class="form-control" />
+                                <div class="form-text text-muted">{{ $t('str.register.user.photo.hint') }}</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div v-if="showCropper" class="modal" tabindex="-1" role="dialog" style="display: block">
+                        <div class="modal-dialog modal-lg" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title">{{ $t('str.register.user.photo.crop') }}</h5>
+                                    <button type="button" class="btn-close" aria-label="Close" @click="closeCropper"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <div class="cropper-container">
+                                        <img ref="image" :src="cropperImage" class="img-fluid" />
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn w-25 btn-primary" @click="cropImage">{{ $t('str.btn.crop') }}</button>
+                                    <button type="button" class="btn w-25 btn-secondary" @click="closeCropper">{{ $t('str.btn.cancel') }}</button>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -147,6 +158,7 @@
 </template>
 
 <script>
+import 'cropperjs/dist/cropper.css'
 import Controller from './CrtProfile.vue'
 import { STATES } from '../../../utils/states.js'
 export default {
@@ -155,6 +167,10 @@ export default {
             states: STATES,
             domain: null,
             file: null,
+            previewImage: null,
+            cropper: null,
+            cropperImage: null,
+            showCropper: false,
             isLoading: true,
             isProcessing: false,
             errors: [],
@@ -188,3 +204,58 @@ export default {
     },
 }
 </script>
+<style scoped>
+.modal {
+    display: block;
+    background: rgba(0, 0, 0, 0.5);
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1050;
+}
+
+.modal-dialog {
+    max-width: 50%;
+}
+
+.modal-content {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    background-clip: padding-box;
+    border: 1px solid rgba(0, 0, 0, 0.2);
+    border-radius: 0.3rem;
+    outline: 0;
+    overflow: hidden;
+}
+
+.modal-header,
+.modal-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1rem;
+    border-top-left-radius: 0.3rem;
+    border-top-right-radius: 0.3rem;
+    place-content: center;
+}
+
+.modal-header .btn-close {
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+}
+
+.cropper-container {
+    max-height: 50vh;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+</style>

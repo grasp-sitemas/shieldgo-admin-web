@@ -55,7 +55,7 @@
                 <b-nav-item-dropdown right menu-class="me-1" class="navbar-item navbar-user dropdown" toggle-class="navbar-link dropdown-toggle d-flex align-items-center" no-caret>
                     <template slot="button-content">
                         <div class="image image-icon bg-gray-800 text-gray-600">
-                            <img v-if="this.user?.photoURL && this.user.photoURL !== 'https://'" crossorigin="anonymous" v-bind:src="`${domain}${this.user?.photoURL}`" alt="" />
+                            <img v-if="this.user?.photoURL && this.user.photoURL !== 'https://'" crossorigin="anonymous" class="profile-image" v-bind:src="`${domain}${this.user?.photoURL}`" alt="" />
                             <i v-else class="fa fa-user"></i>
                         </div>
                         <span class="d-none d-md-inline">{{ `${this.user?.firstName} ${this.user?.lastName}` }}</span>
@@ -130,3 +130,9 @@ export default {
     },
 }
 </script>
+<style scoped>
+.app-header .navbar-user img {
+    height: 35px !important;
+    width: max-content !important;
+}
+</style>

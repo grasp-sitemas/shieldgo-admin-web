@@ -1495,5 +1495,7 @@
     "str.footer.visit": "Visite",
     "str.footer.link": "https://shieldgo.com.br",
     "str.footer.link.text": "ShieldGo",
-    "str.footer.privacy.policy": "Política de privacidade"
+    "str.footer.privacy.policy": "Política de privacidade",
+    "str.register.company.logo.crop": "Selecione a área da imagem que deseja manter",
+    "str.btn.crop": "Recortar"
 }

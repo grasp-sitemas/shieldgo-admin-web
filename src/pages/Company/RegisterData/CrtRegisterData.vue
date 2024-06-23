@@ -2,6 +2,7 @@
 import Endpoints from '../../../common/Endpoints.vue'
 import Request from '../../../common/Request.vue'
 import Common from '../../../common/Common.vue'
+import Cropper from 'cropperjs'
 
 const instanceateAddress = (addressObj, geo) => {
     addressObj.name = 'MAIN'
@@ -165,9 +166,16 @@ export default {
         },
         save() {
             let formData = new FormData()
-
-            formData.append('file', this.file)
+            if (this.previewImage) {
+                const file = this.dataURLtoFile(this.previewImage, 'logo.png')
+                formData.append('file', file)
+            }
             formData.append('jsonData', JSON.stringify(this.data))
+
+            // let formData = new FormData()
+
+            // formData.append('file', this.file)
+            // formData.append('jsonData', JSON.stringify(this.data))
             try {
                 Request.do(
                     this,
@@ -271,7 +279,106 @@ export default {
             )
         },
         handleFileUpload() {
-            this.file = this.$refs.file.files[0]
+            const file = this.$refs.file.files[0]
+            if (file && (file.type === 'image/png' || file.type === 'image/jpeg')) {
+                this.file = file
+
+                const reader = new FileReader()
+                reader.onload = event => {
+                    const img = new Image()
+                    img.src = event.target.result
+                    img.onload = () => {
+                        const canvas = document.createElement('canvas')
+                        const ctx = canvas.getContext('2d')
+                        const targetSize = 180 // set target size
+                        canvas.width = targetSize
+                        canvas.height = targetSize
+
+                        let width = img.width
+                        let height = img.height
+                        let offsetX = 0
+                        let offsetY = 0
+
+                        if (width > height) {
+                            height = targetSize
+                            width = (img.width / img.height) * targetSize
+                            offsetX = (targetSize - width) / 2
+                        } else {
+                            width = targetSize
+                            height = (img.height / img.width) * targetSize
+                            offsetY = (targetSize - height) / 2
+                        }
+
+                        ctx.fillStyle = '#ffffff'
+                        ctx.fillRect(0, 0, targetSize, targetSize)
+                        ctx.drawImage(img, offsetX, offsetY, width, height)
+
+                        this.previewImage = canvas.toDataURL(file.type)
+                    }
+                }
+                reader.readAsDataURL(file)
+            } else {
+                this.$refs.file.value = null
+            }
+        },
+        onFileChange(e) {
+            const file = e.target.files[0]
+            if (file && (file.type === 'image/png' || file.type === 'image/jpeg')) {
+                const reader = new FileReader()
+                reader.onload = event => {
+                    this.cropperImage = event.target.result
+                    this.showCropper = true
+                    this.$nextTick(() => {
+                        const image = this.$refs.image
+                        this.cropper = new Cropper(image, {
+                            aspectRatio: 2 / 1,
+                            viewMode: 1,
+                            autoCropArea: 1,
+                            responsive: true,
+                            scalable: true,
+                            zoomable: true,
+                            movable: true,
+                            minContainerWidth: 300,
+                            minContainerHeight: 150,
+                            minCanvasWidth: 300,
+                            minCanvasHeight: 150,
+                        })
+                    })
+                }
+                reader.readAsDataURL(file)
+            } else {
+                e.target.value = null
+            }
+        },
+        cropImage() {
+            if (this.cropper) {
+                const canvas = this.cropper.getCroppedCanvas({
+                    width: 200,
+                    height: 100,
+                })
+                this.previewImage = canvas.toDataURL()
+                this.showCropper = false
+                this.cropper.destroy()
+                this.cropper = null
+            }
+        },
+        closeCropper() {
+            if (this.cropper) {
+                this.cropper.destroy()
+                this.cropper = null
+            }
+            this.showCropper = false
+        },
+        dataURLtoFile(dataurl, filename) {
+            const arr = dataurl.split(',')
+            const mime = arr[0].match(/:(.*?);/)[1]
+            const bstr = atob(arr[1])
+            let n = bstr.length
+            const u8arr = new Uint8Array(n)
+            while (n--) {
+                u8arr[n] = bstr.charCodeAt(n)
+            }
+            return new File([u8arr], filename, { type: mime })
         },
     },
 }

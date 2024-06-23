@@ -5765,6 +5765,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"cropperjs@npm:^1.6.2":
+  version: 1.6.2
+  resolution: "cropperjs@npm:1.6.2"
+  checksum: 287d3fd3adcd76253f9514ec086eb48e028d655157af08e2833c96e468fbe6076790d17ca67c3cea42179602118495cd991262e899a0092dcbf4fd3f79390a5f
+  languageName: node
+  linkType: hard
+
 "cross-spawn@npm:^5.0.1":
   version: 5.1.0
   resolution: "cross-spawn@npm:5.1.0"
@@ -13520,6 +13527,7 @@ __metadata:
     chart.js: ^2.9.4
     chartjs-plugin-datalabels: ^1.0.0
     core-js: ^3.19.2
+    cropperjs: ^1.6.2
     dom-to-image: ^2.6.0
     eslint: ^6.8.0
     eslint-plugin-vue: ^7.11.1

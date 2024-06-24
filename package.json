@@ -14,6 +14,7 @@
         "serve": "vue-cli-service serve --mode development",
         "build:dev": "vue-cli-service build --mode development",
         "build": "vue-cli-service build --mode production",
+        "postbuild": "cp -r .well-known dist/",
         "lint": "vue-cli-service lint",
         "app:restart": "rm -rf node_modules package.lock && npm install --save && npm run serve",
         "app:start": "yarn serve",

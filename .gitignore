@@ -1,5 +1,6 @@
-.DS_Store
 node_modules
+DS_Store
+.yarn/*
 /dist
 
 # local env files
@@ -20,6 +21,3 @@ yarn-error.log*
 *.sln
 *.sw*
 
-# Local Netlify folder
-.netlify
- .yarn

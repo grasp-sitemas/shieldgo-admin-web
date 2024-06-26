@@ -246,6 +246,7 @@ export default {
             items: [],
             reportItems: [],
             csvItems: [],
+            columns: [],
             priorities: PRIORITY_INCIDENTS_FILTER_TYPES,
             paginationOptions: {},
             fields: [],

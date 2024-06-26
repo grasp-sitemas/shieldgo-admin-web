@@ -9,28 +9,24 @@
             </download-excel>
         </div>
         <h6 class="label">{{ $t('str.patrol.point.performance.list') }}</h6>
-        <div class="table-container">
-            <table class="table">
-                <thead class="thead-dark border-1">
-                    <tr class="form-header">
-                        <th class="form-label">{{ $t('str.patrol.point.performance.begin.time') }}</th>
-                        <th class="form-label">{{ $t('str.patrol.point.performance.site.name') }}</th>
-                        <th class="form-label">{{ $t('str.patrol.point.performance.patrol.time') }}</th>
-                        <th class="form-label">{{ $t('str.patrol.point.performance.dept.name') }}</th>
-                        <th class="form-label">{{ $t('str.patrol.point.performance.status') }}</th>
-                    </tr>
-                </thead>
-                <tbody class="tbody">
-                    <tr class="form-body" v-for="(item, index) in sortedPatrolPoints" :key="index" :style="{ backgroundColor: item?.Status == 'Não visitado' ? '#f8d7da' : '#d4edda' }">
-                        <td class="form-td-label">{{ item?.BeginTime }}</td>
-                        <td class="form-td-label">{{ item?.SiteName }}</td>
-                        <td class="form-td-label">{{ item?.PatrolTime }}</td>
-                        <td class="form-td-label">{{ item?.DeptName }}</td>
-                        <td class="form-td-label">{{ item?.Status }}</td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
+
+        <vue-good-table
+            :columns="columns"
+            :rows="sortedPatrolPoints"
+            :totalRows="sortedPatrolPoints?.length"
+            :search-options="{ enabled: false, placeholder: $t('str.table.search.in.this.table') }"
+            :pagination-options="paginationOptions"
+        >
+            <div slot="emptystate" class="vgt-center-align vgt-text-disabled">
+                <i v-if="isLoading" class="fas fa-spinner fa-spin" />
+                <span v-if="!isLoading && sortedPatrolPoints?.length === 0">{{ $t('str.table.subtitle.no.data') }}</span>
+            </div>
+            <template slot="table-row" slot-scope="props">
+                <span>
+                    {{ props.formattedRow[props.column.field] }}
+                </span>
+            </template>
+        </vue-good-table>
     </div>
 </template>
 
@@ -41,7 +37,9 @@ import { JSON_FIELDS_CSV } from '../../Utils/jsonFieldsCsv'
 export default {
     props: ['items', 'account', 'periodStart', 'periodEnd'],
     watch: {
-        items() {},
+        items() {
+            this.initTable()
+        },
     },
     data() {
         return {
@@ -53,18 +51,34 @@ export default {
             filename: JSON_FIELDS_CSV.events.pt.filename,
             jsonTitle: JSON_FIELDS_CSV.events.pt.title,
             csvItems: [],
+            columns: [],
+            isLoading: false,
+            paginationOptions: {
+                enabled: true,
+                mode: 'records',
+                perPage: 15,
+                position: 'bottom',
+                perPageDropdown: [15, 50, 100, 200, 500, 1000, 5000, 10000],
+                dropdownAllowAll: false,
+                setCurrentPage: 1,
+                jumpFirstOrLast: true,
+                firstLabel: this.$t('str.table.pagination.first.page'),
+                lastLabel: this.$t('str.table.pagination.last.page'),
+                nextLabel: this.$t('str.table.pagination.next.page'),
+                prevLabel: this.$t('str.table.pagination.prev.page'),
+                rowsPerPageLabel: this.$t('str.table.pagination.rows.per.page.lavel'),
+                ofLabel: this.$t('str.table.pagination.of.label.page'),
+                pageLabel: this.$t('str.table.pagination.page'),
+                allLabel: this.$t('str.table.pagination.all.label'),
+            },
         }
     },
-    components: {},
     async created() {
-        const state = this
-        state.$registerEvent.$on('changeLanguage', function () {
-            state.jsonFields = JSON_FIELDS_CSV.events[state.$i18n.locale].json_fields
-            state.jsonData = [JSON_FIELDS_CSV.events[state.$i18n.locale].json_data]
-            state.jsonMeta = [JSON_FIELDS_CSV.events[state.$i18n.locale].json_meta]
-            state.filename = JSON_FIELDS_CSV.events[state.$i18n.locale].filename
-            state.jsonTitle = JSON_FIELDS_CSV.events[state.$i18n.locale].title
-        })
+        this.$root.$on('changeLanguage', this.changeLanguage)
+        this.initTable()
+    },
+    beforeDestroy() {
+        this.$root.$off('changeLanguage', this.changeLanguage)
     },
     methods: {
         fetchData() {
@@ -78,20 +92,68 @@ export default {
             ]
             return this.sortedPatrolPoints
         },
+        initTable() {
+            this.columns = [
+                {
+                    label: this.$t('str.patrol.point.performance.begin.time'),
+                    field: 'BeginTime',
+                    width: '10%',
+                    sortable: true,
+                    thClass: 'text-nowrap',
+                    tdClass: 'text-nowrap',
+                },
+                {
+                    label: this.$t('str.patrol.point.performance.site.name'),
+                    field: 'SiteName',
+                    width: '10%',
+                    sortable: true,
+                    thClass: 'text-nowrap',
+                    tdClass: 'text-nowrap',
+                },
+                {
+                    label: this.$t('str.patrol.point.performance.patrol.time'),
+                    field: 'PatrolTime',
+                    width: '10%',
+                    sortable: true,
+                    thClass: 'text-nowrap',
+                    tdClass: 'text-nowrap',
+                },
+                {
+                    label: this.$t('str.patrol.point.performance.dept.name'),
+                    field: 'DeptName',
+                    width: '10%',
+                    sortable: true,
+                    thClass: 'text-nowrap',
+                    tdClass: 'text-nowrap',
+                },
+                {
+                    label: this.$t('str.patrol.point.performance.status'),
+                    field: 'Status',
+                    width: '10%',
+                    sortable: true,
+                    thClass: 'text-nowrap',
+                    tdClass: 'text-nowrap',
+                },
+            ]
+        },
+        changeLanguage() {
+            this.jsonFields = JSON_FIELDS_CSV.events[this.$i18n.locale].json_fields
+            this.jsonData = [JSON_FIELDS_CSV.events[this.$i18n.locale].json_data]
+            this.jsonMeta = [JSON_FIELDS_CSV.events[this.$i18n.locale].json_meta]
+            this.filename = JSON_FIELDS_CSV.events[this.$i18n.locale].filename
+            this.jsonTitle = JSON_FIELDS_CSV.events[this.$i18n.locale].title
+        },
     },
     computed: {
         sortedPatrolPoints() {
-            if (!this.items) return
-
-            return [...this.items].map(item => {
-                return {
-                    BeginTime: item.BeginTime ? moment(item?.BeginTime).utc(false).format('DD/MM/YYYY HH:mm:ss') : 'N/A',
-                    SiteName: item.SiteName,
-                    PatrolTime: item.PatrolTime ? moment(item?.PatrolTime).utc(false).format('DD/MM/YYYY HH:mm:ss') : 'N/A',
-                    DeptName: item.DeptName,
-                    Status: this.$t(item.Status),
-                }
-            })
+            if (!this.items) return []
+            return this.items.map(item => ({
+                BeginTime: item.BeginTime ? moment(item.BeginTime).utc(false).format('DD/MM/YYYY HH:mm:ss') : 'N/A',
+                SiteName: item.SiteName,
+                PatrolTime: item.PatrolTime ? moment(item.PatrolTime).utc(false).format('DD/MM/YYYY HH:mm:ss') : 'N/A',
+                DeptName: item.DeptName,
+                Status: this.$t(item.Status),
+            }))
         },
     },
 }

@@ -36,6 +36,7 @@
                         :showDropdowns="dateRange.showDropdowns"
                         :autoApply="dateRange.autoApply"
                         v-model="dateRange.range"
+                        :max-date="dateRange.maxDate"
                         @update="updateValues"
                         :linkedCalendars="dateRange.linkedCalendars"
                         :date-range="dateRange"
@@ -60,7 +61,7 @@
             </div>
 
             <div v-if="(items || dailyItems) && !isSearchLoading">
-                <PdfDownload :items="items" :dailyItems="dailyItems" :periodStart="filters.startDate" :periodEnd="filters.endDate" />
+                <PdfDownload :summary="summary" :items="items" :dailyItems="dailyItems" :periodStart="filters.startDate" :periodEnd="filters.endDate" />
             </div>
             <div v-else-if="isLoading || isSearchLoading" class="center-spinner">
                 <i class="fas fa-spinner fa-spin" />
@@ -90,9 +91,10 @@ export default {
             companies: [],
             sites: [],
             errors: [],
-            companyLegacy: {},
-            items: null,
+            summary: null,
             dailyItems: null,
+            items: null,
+            companyLegacy: {},
             reportItems: [],
             csvItems: [],
             paginationOptions: {},
@@ -102,6 +104,7 @@ export default {
             isSearchLoading: false,
             dateRange: DATE_RANGE_CONFIG,
             role: '',
+            userLocale: 'pt-br',
             selectedCompany: {
                 _id: '',
             },
@@ -110,11 +113,11 @@ export default {
             },
             filters: {
                 report: 'EXTERNAL_PERFORMANCE_PATROLS',
-                startDate: moment().utc(true),
-                endDate: moment().utc(true),
                 sqlLegacyBase: '',
                 companyLegacyId: '',
                 searchAllPatrolPerform: true,
+                startDate: moment().utc(true),
+                endDate: moment().utc(true),
             },
             isSuperAdminMaster: false,
         }
@@ -126,7 +129,7 @@ export default {
     async created() {
         const state = this
         state.$registerEvent.$on('changeLanguage', function () {
-            state.initTable()
+            state.userLocale = state.$i18n.locale === 'pt' ? 'pt-br' : 'en'
             state.initRangeDate()
         })
     },

@@ -37,6 +37,7 @@ export default {
 
             const readSitesData = this.item.map(day => day.ReadSites)
             const unreadSitesData = this.item.map(day => day.UnreadSites)
+            const totalSitesData = this.item.map(day => day.TotalSites)
 
             const datasets = [
                 {
@@ -55,13 +56,13 @@ export default {
                 },
             ]
 
-            return { dates, datasets }
+            return { dates, datasets, totalSitesData }
         },
         createChart() {
             if (!this.item) return
 
             const ctx = this.$refs.dailyPatrolPointDataChart.getContext('2d')
-            const { dates, datasets } = this.processData()
+            const { dates, datasets, totalSitesData } = this.processData()
 
             this.chart = new Chart(ctx, {
                 type: 'line',
@@ -107,7 +108,7 @@ export default {
                     },
                     title: {
                         display: true,
-                        text: this.$t('str.daily.patrol.points.data'),
+                        text: this.$t('str.daily.patrol.points.data') + `: ${totalSitesData}`,
                         fontColor: '#FFFFFF', // Cor do título
                     },
                     legend: {

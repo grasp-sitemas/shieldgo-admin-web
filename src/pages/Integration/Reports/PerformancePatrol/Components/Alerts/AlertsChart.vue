@@ -30,12 +30,12 @@ export default {
             const ctx = this.$refs.alertsChart.getContext('2d')
 
             const data = {
-                labels: ['Alertas de SOS', 'Alertas de Bateria Baixa'],
+                labels: [this.$t('str.chart.sos.alert'), this.$t('str.chart.low.battery.alert'), this.$t('str.chart.crash.alert')],
                 datasets: [
                     {
-                        data: [this.item.SOSAlerts, this.item.LowBatteryAlerts],
-                        backgroundColor: ['rgba(255, 99, 132, 0.9)', 'rgba(255, 206, 86, 0.9)'],
-                        borderColor: ['rgba(255, 99, 132, 1)', 'rgba(255, 206, 86, 1)'],
+                        data: [this.item.sosAlerts, this.item.lowBatteryAlerts, this.item.crashAlerts],
+                        backgroundColor: ['rgba(75, 192, 192, 0.9)', 'rgba(255, 99, 132, 0.9)', 'rgba(255, 206, 86, 0.9)'],
+                        borderColor: ['rgba(75, 192, 192, 1)', 'rgba(255, 99, 132, 1)', 'rgba(255, 206, 86, 1)'],
                         borderWidth: 1,
                     },
                 ],
@@ -49,7 +49,7 @@ export default {
                     maintainAspectRatio: false,
                     title: {
                         display: true,
-                        text: `${this.$t('str.total.alerts')}: ${this.item.TotalAlerts}`,
+                        text: `${this.$t('str.total.alerts')}: ${this.item.totalAlerts}`,
                         fontColor: '#FFFFFF',
                     },
                     legend: {

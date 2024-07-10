@@ -8,6 +8,8 @@ export default {
         payload.isSuperAdminMaster = Common.isSuperAdminMaster(payload)
         payload.initRangeDate()
 
+        payload.userLocale = payload.$i18n.locale === 'pt' ? 'pt-br' : 'en'
+
         if (payload.isSuperAdminMaster) {
             try {
                 payload.companies = await Services.getExternalCompanies(payload)
@@ -54,8 +56,9 @@ export default {
                 const result = await Services.externalAnalysisPatrol(this, this.filters)
 
                 if (result) {
-                    this.items = result?.summary
+                    this.summary = result?.summary
                     this.dailyItems = result?.daily
+                    this.items = result?.items
                 }
 
                 this.isSearchLoading = false
@@ -79,9 +82,9 @@ export default {
             this.sites = []
             this.filters = {
                 report: 'EXTERNAL_DAILY_PERFORMANCE_PATROLS',
+                searchAllPatrolPerform: true,
                 startDate: moment().utc(true),
                 endDate: moment().utc(true),
-                searchAllPatrolPerform: true,
             }
             this.items = null
             this.dailyItems = null

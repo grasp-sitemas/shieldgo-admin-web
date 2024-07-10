@@ -33,7 +33,7 @@ export default {
                 labels: [this.$t('str.chart.patrol.points.performance.read'), this.$t('str.chart.patrol.points.performance.unread')],
                 datasets: [
                     {
-                        data: [this.item.ArrivedCount, this.item.NotArrivedCount],
+                        data: [this.item.arrivedCount, this.item.notArrivedCount],
                         backgroundColor: [
                             'rgba(75, 192, 192, 0.9)', // Cor para "Leituras"
                             'rgba(255, 99, 132, 0.9)', // Cor para "Não Leituras"
@@ -52,7 +52,7 @@ export default {
                     maintainAspectRatio: false,
                     title: {
                         display: true,
-                        text: `${this.$t('str.patrol.points.total')}: ${this.item.TotalSites}`,
+                        text: `${this.$t('str.patrol.points.total')}: ${this.item.totalSites}`,
                         fontColor: '#FFFFFF', // Cor do título
                     },
                     legend: {

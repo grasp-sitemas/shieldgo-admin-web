@@ -35,7 +35,14 @@
                 <div v-if="step === 1">
                     <div class="col-md-12">
                         <label class="form-label">{{ $t('str.recovery.password.email.field') }}</label>
-                        <input class="form-control" v-model="data.email" type="text" :placeholder="$t('str.recovery.password.email.placeholder')" />
+                        <input
+                            autocomplete="off"
+                            type="text"
+                            class="form-control"
+                            v-model="data.email"
+                            :placeholder="$t('str.recovery.password.email.placeholder')"
+                            @keydown.enter="handleGenerateCodePassword"
+                        />
                     </div>
                     <div class="text-center mt-20px">
                         <button :disabled="!isValidEmail(data.email)" @click="handleGenerateCodePassword" type="submit" class="btn btn-primary w-200px me-10px is-loading">
@@ -44,17 +51,28 @@
                         </button>
                     </div>
                 </div>
+
                 <div v-if="step === 2" class="row">
                     <div class="col-md-12 mb-3">
                         <label class="form-label" for="codeField">{{ $t('str.recovery.password.code.field') }}</label>
-                        <input type="text" id="codeField" v-mask="'XXXXXXXX'" @input="transformUpperCase" v-model="data.code" class="form-control" :placeholder="$t('str.recovery.password.code.placeholder')" />
+                        <input
+                            autocomplete="off"
+                            type="text"
+                            id="codeField"
+                            v-mask="'XXXXXXXX'"
+                            @input="transformUpperCase"
+                            v-model="data.code"
+                            class="form-control"
+                            :placeholder="$t('str.recovery.password.code.placeholder')"
+                        />
                     </div>
                     <div class="col-md-12 mb-3">
-                        <label class="form-label">{{ $t('str.recovery.password.newpassword.field') }}</label>
+                        <label class="form-label" for="passwordInput">{{ $t('str.recovery.password.newpassword.field') }}</label>
                         <div class="input-group">
                             <input
+                                autocomplete="new-password"
+                                id="passwordInput"
                                 class="form-control"
-                                autocomplete="off"
                                 v-model="data.password"
                                 v-bind:type="showPassword ? 'text' : 'password'"
                                 :placeholder="$t('str.recovery.password.newpassword.placeholder')"
@@ -65,12 +83,13 @@
                         </div>
                     </div>
                     <div class="col-md-12 mb-4">
-                        <label class="form-label">{{ $t('str.recovery.password.confirm.newpassword.field') }}</label>
+                        <label class="form-label" for="confirmPasswordInput">{{ $t('str.recovery.password.confirm.newpassword.field') }}</label>
                         <div class="input-group">
                             <input
+                                autocomplete="new"
+                                id="confirmPasswordInput"
                                 class="form-control"
                                 v-model="data.passwordConfirm"
-                                autocomplete="off"
                                 v-bind:type="showConfirmPassword ? 'text' : 'password'"
                                 :placeholder="$t('str.recovery.password.newpassword.placeholder')"
                             />
@@ -125,8 +144,8 @@ export default {
         }
     },
     methods: Controller.methods,
+    created() {
+        document.body.classList.add('dark-mode')
+    },
 }
 </script>
-
-<style>
-</style>

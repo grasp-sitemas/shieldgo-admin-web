@@ -211,7 +211,6 @@ export default {
             state.userLocale = state.$i18n.locale === 'pt' ? 'pt-br' : 'en'
         })
     },
-    computed: {},
 }
 </script>
 <style lang="scss" scoped>

@@ -21,7 +21,12 @@ export default {
             }
         },
         handleGenerateCodePassword: function () {
+            if (this.isLoading) {
+                return
+            }
+
             this.isLoading = true
+
             Request.do(
                 this,
                 'post',

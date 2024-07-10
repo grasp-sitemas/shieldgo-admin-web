@@ -6,7 +6,7 @@
 
         <div class="row">
             <div class="col-md-6">
-                <PatrolDataChart ref="patrolDataChart" :item="items?.patrolData" />
+                <PatrolDataChart ref="patrolDataChart" :item="summary?.patrolData" />
             </div>
             <div class="col-md-6">
                 <DailyPatrolDataChart ref="dailyPatrolDataChart" :item="dailyItems?.dailyPatrolData" />
@@ -15,7 +15,7 @@
 
         <div class="row mt-xl-5">
             <div class="col-md-6">
-                <AlertsChart ref="alertsChart" :item="items?.alertData?.alertSummary ? items.alertData.alertSummary : alertSummary" />
+                <AlertsChart ref="alertsChart" :item="summary?.alertData" />
             </div>
             <div class="col-md-6">
                 <DailyAlertsChart ref="dailyAlertsChart" :item="dailyItems?.dailyAlertData" />
@@ -24,7 +24,7 @@
 
         <div class="row mt-xl-5">
             <div class="col-md-6">
-                <PatrolPointDataChart ref="patrolPointDataChart" :item="items?.patrolPointData?.countSummary" />
+                <PatrolPointDataChart ref="patrolPointDataChart" :item="summary?.patrolPointData" />
             </div>
             <div class="col-md-6">
                 <DailyPatrolPointDataChart ref="dailyPatrolPointDataChart" :item="dailyItems?.dailyPatrolPointData" />
@@ -33,7 +33,7 @@
 
         <div class="row mt-xl-5">
             <div class="col-md-12">
-                <PatrolPointListChart ref="PatrolPointListChart" :items="items?.patrolPointData?.patrols" :periodStart="periodStart" :periodEnd="periodEnd" />
+                <PatrolPointListChart ref="PatrolPointListChart" :items="items" :periodStart="periodStart" :periodEnd="periodEnd" />
             </div>
         </div>
     </div>
@@ -45,7 +45,7 @@ import html2canvas from 'html2canvas'
 import moment from 'moment'
 
 export default {
-    props: ['items', 'dailyItems', 'periodStart', 'periodEnd'],
+    props: ['summary', 'dailyItems', 'items', 'periodStart', 'periodEnd'],
     components: {
         DailyPatrolDataChart: () => import('./Patrols/DailyPatrolDataChart.vue'),
         PatrolDataChart: () => import('./Patrols/PatrolDataChart.vue'),
@@ -58,10 +58,11 @@ export default {
     data() {
         return {
             isLoading: false,
-            alertSummary: {
-                SOSAlerts: null,
-                LowBatteryAlerts: null,
-                TotalAlerts: 0,
+            alertData: {
+                sosAlerts: null,
+                crashAlerts: null,
+                lowBatteryAlerts: null,
+                totalAlerts: 0,
             },
             moment: moment,
         }

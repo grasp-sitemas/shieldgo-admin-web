@@ -1499,5 +1499,13 @@
     "str.register.company.logo.crop": "Selecione a área da imagem que deseja manter",
     "str.btn.crop": "Recortar",
     "str.register.user.photo.hint": "Selecione uma imagem para o perfil",
-    "str.register.user.photo.crop": "Recorte a imagem"
+    "str.register.user.photo.crop": "Recorte a imagem",
+    "str.chart.sos.alert": "SOS",
+    "str.chart.low.battery.alert": "Bateria fraca",
+    "str.chart.crash.alert": "Impacto",
+    "str.alerts.daily": "Alertas diários",
+    "str.alerts.total": "Total de alertas",
+    "VISITED": "Visitado",
+    "NOT_VISITED": "Não visitado",
+    "str.patrol.point.performance.plan.date": "Data planejada"
 }

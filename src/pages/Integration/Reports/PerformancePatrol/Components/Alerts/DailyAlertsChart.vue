@@ -37,19 +37,31 @@ export default {
                 return dayData ? dayData.LowBatteryAlerts : 0
             })
 
+            const crashAlertsData = days.map(day => {
+                const dayData = this.item.find(alertData => alertData.Day === day)
+                return dayData ? dayData.CrashAlerts : 0
+            })
+
             return {
                 days,
                 datasets: [
                     {
-                        label: 'Alertas de SOS',
+                        label: this.$t('str.chart.sos.alert'),
                         data: sosAlertsData,
+                        fill: false,
+                        borderColor: 'rgba(75, 192, 192, 1)',
+                        borderWidth: 2,
+                    },
+                    {
+                        label: this.$t('str.chart.low.battery.alert'),
+                        data: lowBatteryAlertsData,
                         fill: false,
                         borderColor: 'rgba(255, 99, 132, 1)',
                         borderWidth: 2,
                     },
                     {
-                        label: 'Alertas de Bateria Baixa',
-                        data: lowBatteryAlertsData,
+                        label: this.$t('str.chart.crash.alert'),
+                        data: crashAlertsData,
                         fill: false,
                         borderColor: 'rgba(255, 206, 86, 1)',
                         borderWidth: 2,
@@ -96,7 +108,7 @@ export default {
                                 beginAtZero: true,
                                 scaleLabel: {
                                     display: true,
-                                    labelString: 'Total de Alertas',
+                                    labelString: this.$t('str.alerts.total'),
                                     fontColor: '#FFFFFF', // Cor do texto da label do eixo Y
                                 },
                                 ticks: {
@@ -111,7 +123,7 @@ export default {
                     },
                     title: {
                         display: true,
-                        text: 'Alertas Diários',
+                        text: this.$t('str.alerts.daily'),
                         fontColor: '#FFFFFF', // Cor das labels da legenda
                     },
                     legend: {

@@ -22,7 +22,10 @@
                 <span v-if="!isLoading && sortedPatrolPoints?.length === 0">{{ $t('str.table.subtitle.no.data') }}</span>
             </div>
             <template slot="table-row" slot-scope="props">
-                <span>
+                <span v-if="props.column.field === 'status'">
+                    <span class="badge" v-bind:class="props.formattedRow[props.column.field] === 'VISITED' ? 'bg-success' : 'bg-danger'"> {{ $t(props.formattedRow[props.column.field]) }} </span>
+                </span>
+                <span v-else>
                     {{ props.formattedRow[props.column.field] }}
                 </span>
             </template>
@@ -95,8 +98,8 @@ export default {
         initTable() {
             this.columns = [
                 {
-                    label: this.$t('str.patrol.point.performance.begin.time'),
-                    field: 'BeginTime',
+                    label: this.$t('str.patrol.point.performance.plan.date'),
+                    field: 'beginTime',
                     width: '10%',
                     sortable: true,
                     thClass: 'text-nowrap',
@@ -104,15 +107,7 @@ export default {
                 },
                 {
                     label: this.$t('str.patrol.point.performance.site.name'),
-                    field: 'SiteName',
-                    width: '10%',
-                    sortable: true,
-                    thClass: 'text-nowrap',
-                    tdClass: 'text-nowrap',
-                },
-                {
-                    label: this.$t('str.patrol.point.performance.patrol.time'),
-                    field: 'PatrolTime',
+                    field: 'siteName',
                     width: '10%',
                     sortable: true,
                     thClass: 'text-nowrap',
@@ -120,7 +115,15 @@ export default {
                 },
                 {
                     label: this.$t('str.patrol.point.performance.dept.name'),
-                    field: 'DeptName',
+                    field: 'deptName',
+                    width: '10%',
+                    sortable: true,
+                    thClass: 'text-nowrap',
+                    tdClass: 'text-nowrap',
+                },
+                {
+                    label: this.$t('str.patrol.point.performance.patrol.time'),
+                    field: 'scanDate',
                     width: '10%',
                     sortable: true,
                     thClass: 'text-nowrap',
@@ -128,7 +131,7 @@ export default {
                 },
                 {
                     label: this.$t('str.patrol.point.performance.status'),
-                    field: 'Status',
+                    field: 'status',
                     width: '10%',
                     sortable: true,
                     thClass: 'text-nowrap',
@@ -147,13 +150,25 @@ export default {
     computed: {
         sortedPatrolPoints() {
             if (!this.items) return []
-            return this.items.map(item => ({
-                BeginTime: item.BeginTime ? moment(item.BeginTime).utc(false).format('DD/MM/YYYY HH:mm:ss') : 'N/A',
-                SiteName: item.SiteName,
-                PatrolTime: item.PatrolTime ? moment(item.PatrolTime).utc(false).format('DD/MM/YYYY HH:mm:ss') : 'N/A',
-                DeptName: item.DeptName,
-                Status: this.$t(item.Status),
-            }))
+            const visited = this.items.filter(item => item.status === 'VISITED').sort((a, b) => moment(a.scanDate).diff(moment(b.scanDate)))
+            const notVisited = this.items.filter(item => item.status === 'NOT_VISITED').sort((a, b) => moment(a.beginTime).diff(moment(b.beginTime)))
+
+            return [
+                ...visited.map(item => ({
+                    beginTime: item.beginTime ? moment(item.beginTime).utc(false).format('DD/MM/YYYY HH:mm:ss') : 'N/A',
+                    siteName: item.siteName,
+                    deptName: item.deptName,
+                    scanDate: item.scanDate ? moment(item.scanDate).utc(false).format('DD/MM/YYYY HH:mm:ss') : 'N/A',
+                    status: item.status,
+                })),
+                ...notVisited.map(item => ({
+                    beginTime: item.beginTime ? moment(item.beginTime).utc(false).format('DD/MM/YYYY HH:mm:ss') : 'N/A',
+                    siteName: item.siteName,
+                    deptName: item.deptName,
+                    scanDate: item.scanDate ? moment(item.scanDate).utc(false).format('DD/MM/YYYY HH:mm:ss') : 'N/A',
+                    status: item.status,
+                })),
+            ]
         },
     },
 }

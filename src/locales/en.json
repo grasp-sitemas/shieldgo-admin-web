@@ -1499,5 +1499,13 @@
     "str.register.company.logo.crop": "Select the area of the image to keep",
     "str.btn.crop": "Crop Image",
     "str.register.user.photo.hint": "Click to change the photo",
-    "str.register.user.photo.crop": "Crop Image"
+    "str.register.user.photo.crop": "Crop Image",
+    "str.chart.sos.alert": "SOS alerts",
+    "str.chart.low.battery.alert": "Low battery",
+    "str.chart.crash.alert": "Crash",
+    "str.alerts.daily": "Daily",
+    "str.alerts.total": "Total",
+    "VISITED": "Visited",
+    "NOT_VISITED": "Not visited",
+    "str.patrol.point.performance.plan.date": "Plan date"
 }
